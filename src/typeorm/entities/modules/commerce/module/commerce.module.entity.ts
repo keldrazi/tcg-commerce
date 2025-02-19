@@ -12,6 +12,9 @@ export class CommerceModule {
     commerceModuleHandle: string;
 
     @Column('jsonb')
+    commerceModuleHandleOptions: string;
+
+    @Column('jsonb')
     commerceModuleRoles: string;
     
     @Column({type: 'boolean', default: false})

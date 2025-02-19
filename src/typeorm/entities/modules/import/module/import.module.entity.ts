@@ -11,6 +11,9 @@ export class ImportModule {
     @Column()
     importModuleHandle: string;
 
+    @Column('jsob')
+    importModuleHandleOptions: string;
+
     @Column('jsonb')
     importModuleRoles: string;
     
