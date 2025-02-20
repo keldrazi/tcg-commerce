@@ -35,8 +35,6 @@ export class ImportJob {
     @Column('jsob') //LOCATION | PROCESSEDED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS || CARD DATA
     importJobMetadata: string;
 
-    
-
     @CreateDateColumn()
     importJobCreateDate: Date;
 

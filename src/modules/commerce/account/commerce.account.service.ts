@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CommerceAccount } from 'src/typeorm/entities/modules/commerce/account/commerce.account.entity';
+import { CreateCommerceAccountDTO, CommerceAccountDTO } from './dto/commerce.account.dto';
 
 @Injectable()
 export class CommerceAccountService {
 
     constructor(
-        //@InjectRepository(TCGDatabaseUser) private tcgDatabaseUserRepository: Repository<TCGDatabaseUser>,
+        @InjectRepository(CommerceAccount) private commerceAccountRepository: Repository<CommerceAccount>,
     ) { }
 
     /*

@@ -16,7 +16,7 @@ export class CommerceAccount {
     @Column({unique: true})
     commerceAccountHandle: string;
 
-    @Column({type: 'boolean', default: false})
+    @Column({type: 'boolean', default: true})
     commerceAccountIsActive: boolean;
 
     @CreateDateColumn()
