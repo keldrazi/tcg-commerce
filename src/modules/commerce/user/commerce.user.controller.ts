@@ -1,22 +1,25 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CommerceUserService } from './commerce.user.service';
+import { CreateCommerceUserDTO } from './dto/commerce.user.dto';
 
 
 
 @Controller('commerce/user')
 export class CommerceUserController {
 
-    constructor() { }
+    constructor(
+        private commerceUserService: CommerceUserService,
+    ) { }
     
-    /*
-    @Post()
-    createUser(@Body() tcgDatabaseUserCreateDTO: TCGDatabaseUserCreateDTO) {
-        return this.tcgDatabaseUserService.createTCGDatbaseUser(tcgDatabaseUserCreateDTO);
+    @Get('/:commerceUserId')
+    async getCommerceUser(@Param('commerceUserId') commerceUserId: string) {
+        return await this.commerceUserService.getCommerceUser(commerceUserId);
     }
 
-    @Put(':id')
-    async updateUser(@Param('tcgDatabaseUserId') tcgDatabaseUserId: string, @Body() tcgDatabaseUserUpdateDTO: TCGDatabaseUserUpdateDTO) {
-        await this.tcgDatabaseUserService.updateTCGDatabaseUser(tcgDatabaseUserId, tcgDatabaseUserUpdateDTO);
+    @Post()
+    @UsePipes(new ValidationPipe())
+    async createCommerceUser(@Body() createCommerceUserDTO: CreateCommerceUserDTO) {
+        return this.commerceUserService.createCommerceUser(createCommerceUserDTO);
     }
-    */
 
 }

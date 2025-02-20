@@ -32,7 +32,7 @@ export class ImportJob {
     @Column({nullable: true})
     importJobOutputFileName: string;
 
-    @Column('jsob') //LOCATION | PROCESSEDED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS || CARD DATA
+    @Column('jsob') //LOCATION | PROCESSED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS
     importJobMetadata: string;
 
     @CreateDateColumn()

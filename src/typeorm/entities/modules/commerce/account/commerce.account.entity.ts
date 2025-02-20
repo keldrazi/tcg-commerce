@@ -13,6 +13,9 @@ export class CommerceAccount {
     @IsEmail()
     commerceAccountEmail: string;
 
+    @Column()
+    commerceAccountPhone: string;
+
     @Column({unique: true})
     commerceAccountHandle: string;
 

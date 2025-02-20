@@ -4,7 +4,7 @@ import { IsEmail, IsString, MinLength } from 'class-validator';
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm'
 
 @Entity('commerceUser')
-export class CommerceAccountUser {
+export class CommerceUser {
     @PrimaryGeneratedColumn('uuid')
     commerceUserId: string;
 

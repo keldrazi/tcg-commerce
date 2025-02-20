@@ -11,27 +11,42 @@ export class CommerceAccountService {
         @InjectRepository(CommerceAccount) private commerceAccountRepository: Repository<CommerceAccount>,
     ) { }
 
-    /*
-    getTCGDatabaseUsers() {
-        return this.tcgDatabaseUserRepository.find();
+    async getCommerceAccount(commerceAccountId: string) {
+        let commerceAccount = await this.commerceAccountRepository.findOne({ where: { commerceAccountId } });
+        
+        if (!commerceAccount) {
+            return null;
+        }
+
+        let commerceAccountDTO = new CommerceAccountDTO();
+        commerceAccountDTO.commerceAccountId = commerceAccount.commerceAccountId;
+        commerceAccountDTO.commerceAccountName = commerceAccount.commerceAccountName;
+        commerceAccountDTO.commerceAccountEmail = commerceAccount.commerceAccountEmail;
+        commerceAccountDTO.commerceAccountPhone = commerceAccount.commerceAccountPhone;
+        commerceAccountDTO.commerceAccountHandle = commerceAccount.commerceAccountHandle;
+        commerceAccountDTO.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
+        commerceAccountDTO.commerceAccountCreateDate = commerceAccount.commerceAccountCreateDate;
+        commerceAccountDTO.commerceAccountUpdateDate = commerceAccount.commerceAccountUpdateDate;
+
+        return commerceAccountDTO;
+        
     }
 
-    getTCGDatabaseUser(tcgDatabaseUserEmail: string): Promise<TCGDatabaseUser> {
-        return this.tcgDatabaseUserRepository.findOne({
-            where: {tcgDatabaseUserEmail: tcgDatabaseUserEmail}})
-    }
+    async createCommerceAccount(commerceAccount: CreateCommerceAccountDTO) {
+        let newCommerceAccount = this.commerceAccountRepository.create({ ...commerceAccount });
+        newCommerceAccount = await this.commerceAccountRepository.save(newCommerceAccount);
 
-    createTCGDatbaseUser(tcgDatabaseUser: TCGDatabaseUserCreateParams) {
-        const newTCGDatabaseUser = this.tcgDatabaseUserRepository.create({ ...tcgDatabaseUser});
-        return this.tcgDatabaseUserRepository.save(newTCGDatabaseUser);
-    }
+        let commerceAccountDTO = new CommerceAccountDTO();
+        commerceAccountDTO.commerceAccountId = newCommerceAccount.commerceAccountId;
+        commerceAccountDTO.commerceAccountName = newCommerceAccount.commerceAccountName;
+        commerceAccountDTO.commerceAccountEmail = newCommerceAccount.commerceAccountEmail;
+        commerceAccountDTO.commerceAccountPhone = newCommerceAccount.commerceAccountPhone;
+        commerceAccountDTO.commerceAccountHandle = newCommerceAccount.commerceAccountHandle;
+        commerceAccountDTO.commerceAccountIsActive = newCommerceAccount.commerceAccountIsActive;
+        commerceAccountDTO.commerceAccountCreateDate = newCommerceAccount.commerceAccountCreateDate;
+        commerceAccountDTO.commerceAccountUpdateDate = newCommerceAccount.commerceAccountUpdateDate;
 
-    updateTCGDatabaseUser(tcgDatabaseUserId: string, tcgDatabaseUser: TCGDatabaseUserUpdateParams) {
-        return this.tcgDatabaseUserRepository.update({ tcgDatabaseUserId }, { ...tcgDatabaseUser });
+        return commerceAccountDTO;
     }
-
-    deleteUser(tcgDatabaseUserId: string) {
-        return this.tcgDatabaseUserRepository.delete(tcgDatabaseUserId);
-    }
-    */
+    
 }

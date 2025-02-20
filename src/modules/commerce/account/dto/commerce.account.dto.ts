@@ -4,6 +4,7 @@ export class CommerceAccountDTO {
     commerceAccountId: string;
     commerceAccountName: string;
     commerceAccountEmail: string;
+    commerceAccountPhone: string;
     commerceAccountHandle: string;
     commerceAccountIsActive: boolean;
     commerceAccountCreateDate: Date;
@@ -16,6 +17,8 @@ export class CreateCommerceAccountDTO {
     @IsEmail()
     commerceAccountEmail: string;
     @IsString()
+    commerceAccountPhone: string;
+    @IsString()
     commerceAccountHandle: string;
 }
 
@@ -26,6 +29,8 @@ export class UpdateCommerceAccountDTO {
     commerceAccountName: string;
     @IsEmail()
     commerceAccountEmail: string;
+    @IsString()
+    commerceAccountPhone: string;
     @IsString()
     commerceAccountHandle: string;
 }
