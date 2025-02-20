@@ -14,7 +14,7 @@ export class ImportJob {
     @Column()
     importJobStatus: string;
 
-    @Column()
+    @Column({unique: true})
     importJobCode: string;
 
     @Column()
@@ -26,29 +26,16 @@ export class ImportJob {
     @Column()
     importJobInputFileName: string;
 
-    @Column({nullable: true})
-    importJobInputFileOriginalName: string;
-
     @Column()
-    importJobProcessedBy: string;
-
-    @Column({nullable: true})
-    importJobLocationName: string;
-
-    @Column({type: 'decimal'})
-    importJobTotalCost: number;
-
-    @Column({type: 'decimal'})
-    importJobTotalValue: number;
-
-    @Column({nullable: true})
-    importJobTotalCards: number;
-
-    @Column({type: 'decimal', nullable: true})
-    importJobCostOfGoods: number;
+    importJobInputFileOriginalName: string;
 
     @Column({nullable: true})
     importJobOutputFileName: string;
+
+    @Column('jsob') //LOCATION | PROCESSEDED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS || CARD DATA
+    importJobMetadata: string;
+
+    
 
     @CreateDateColumn()
     importJobCreateDate: Date;
