@@ -3,42 +3,42 @@ import { Exclude } from 'class-transformer';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm'
 
-@Entity('commerceAccountUser')
+@Entity('commerceUser')
 export class CommerceAccountUser {
     @PrimaryGeneratedColumn('uuid')
-    commerceAccountUserId: string;
+    commerceUserId: string;
 
     @Column()
     commerceAccountId: string;
 
     @Column()
-    commerceAccountUserName: string;
+    commerceUserName: string;
 
     @Column({unique: true})
     @IsEmail()
-    commerceAccountUserEmail: string;
+    commerceUserEmail: string;
 
     @Column()
     @Exclude()
     @IsString()
     @MinLength(8)
-    commerceAccountUserPassword: string;
+    commerceUserPassword: string;
 
     @Column('jsonb')
-    commerceAccountUserRoles: string;
+    commerceUserRoles: string;
 
     @Column({type: 'boolean', default: false})
-    commerceAccountUserIsActive: boolean;
+    commerceUserIsActive: boolean;
 
     @CreateDateColumn()
-    commerceAccountUserCreateDate: Date;
+    commerceUserCreateDate: Date;
 
     @UpdateDateColumn()
-    commerceAccountUserUpdateDate: Date; 
+    commerceUserUpdateDate: Date; 
 
     @BeforeInsert()
     async hashPassword(): Promise<void> {
-        this.commerceAccountUserPassword = await bcrypt.hash(this.commerceAccountUserPassword, 10);
+        this.commerceUserPassword = await bcrypt.hash(this.commerceUserPassword, 10);
     }
 
 } 

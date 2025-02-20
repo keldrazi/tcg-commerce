@@ -13,6 +13,9 @@ export class CommerceAccount {
     @IsEmail()
     commerceAccountEmail: string;
 
+    @Column({unique: true})
+    commerceAccountHandle: string;
+
     @Column({type: 'boolean', default: false})
     commerceAccountIsActive: boolean;
 
