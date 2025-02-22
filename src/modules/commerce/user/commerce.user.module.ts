@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommerceUserService } from './commerce.user.service';
 import { CommerceUserController } from './commerce.user.controller';
+import { CommerceUser } from 'src/typeorm/entities/modules/commerce/user/commerce.user.entity';
 
 @Module({
     imports: [
-        //TypeOrmModule.forFeature([TCGDatabaseUser])
+        TypeOrmModule.forFeature([CommerceUser])
     ],
     controllers: [CommerceUserController],
     providers: [CommerceUserService],
