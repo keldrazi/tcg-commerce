@@ -1,12 +1,12 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity('ProductCardOption')
-export class ProductCardType {
+export class ProductCardOption {
     @PrimaryGeneratedColumn('uuid')
     ProductCardOptionId: string;
 
     @Column()
-    ProductCardType: string;
+    ProductCardTypeName: string;
 
     @Column()
     ProductCardOptionName: string;

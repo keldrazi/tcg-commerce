@@ -23,6 +23,9 @@ export class ProductCardInventory {
     @Column({type: 'decimal'})
     ProductCardInventoryPrice: number;
 
+    @Column('jsonb')
+    ProductCardInventoryMetadata: string
+
     @CreateDateColumn()
     ProductCardInventoryCreateDate: Date;
 
