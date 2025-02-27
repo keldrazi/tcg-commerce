@@ -3,36 +3,36 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 @Entity('ProductCardItem')
 export class ProductCardItem {
     @PrimaryGeneratedColumn('uuid')
-    ProductCardItemId: string;
+    productCardItemId: string;
 
     @Column()
-    CommerceAccountId: string;
+    commerceAccountId: string;
     
     @Column()
-    ProductCardTCGDBId: string;
+    productCardItemTCGdbId: string;
 
     @Column()
-    ProductCardType: string;
+    productCardTypeName: string;
     
     @Column()
-    ProductCardSetAbbreviation: string;
+    productCardItemSetAbbreviation: string;
 
     @Column()
-    ProductCardName: string;
+    productCardItemName: string;
     
     @Column()
-    ProductCardCleanName: string;
+    productCardItemCleanName: string;
 
     @Column()
-    ProductCardImage: string;
+    productCardItemImage: string;
 
     @Column('jsonb')
-    ProductCardMetadata: string;
+    productCardItemMetadata: string;
 
     @CreateDateColumn()
-    ProductCardCreateDate: Date;
+    productCardItemCreateDate: Date;
 
     @UpdateDateColumn()
-    ProductCardUpdateDate: Date; 
+    productCardItemUpdateDate: Date; 
 
 }

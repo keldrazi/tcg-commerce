@@ -3,18 +3,18 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 @Entity('ProductCardType')
 export class ProductCardType {
     @PrimaryGeneratedColumn('uuid')
-    ProductCardTypeId: string;
+    productCardTypeId: string;
 
     @Column()
-    ProductCardTypeName: string;
+    productCardTypeName: string;
 
     @Column()
-    ProductCardTypeVendor: string;
+    productCardTypeVendor: string;
 
     @CreateDateColumn()
-    ProductCardTypeCreateDate: Date;
+    productCardTypeCreateDate: Date;
 
     @UpdateDateColumn()
-    ProductCardTypeUpdateDate: Date; 
+    productCardTypeUpdateDate: Date; 
 
 }

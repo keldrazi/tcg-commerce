@@ -3,15 +3,15 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 @Entity('ProductCardVariant')
 export class ProductCardVariant {
     @PrimaryGeneratedColumn('uuid')
-    ProductCardVariantId: string;
+    productCardVariantId: string;
 
     @Column()
-    ProductCardVariantName: string;
+    productCardVariantName: string;
 
     @CreateDateColumn()
-    ProductCardVariantCreateDate: Date;
+    productCardVariantCreateDate: Date;
 
     @UpdateDateColumn()
-    ProductCardVariantUpdateDate: Date; 
+    productCardVariantUpdateDate: Date; 
 
 }

@@ -2,16 +2,34 @@ import { IsEmail, IsString } from "class-validator";
 
 export class ProductCardItemDTO {
     productCardItemId: string;
-    productCardTypeName: string;
+    commerceAccountId: string;
+    productCardItemTCGdbId: string;
+    productTypeName: string;
+    productCardItemSetAbbreviation: string;
     productCardItemName: string;
+    productCardItemCleanName: string;
+    productCardItemImage: string;
+    productCardItemMetadata: string;
     
 }
 
 export class CreateProductCardItemDTO {
     @IsString()
-    productCardTypeName: string;
+    commerceAccountId: string;
+    @IsString()
+    productCardItemTCGdbId: string;
+    @IsString()
+    productTypeName: string;
+    @IsString()
+    productCardItemSetAbbreviation: string;
     @IsString()
     productCardItemName: string;
+    @IsString()
+    productCardItemCleanName: string;
+    @IsString()
+    productCardItemImage: string;
+    @IsString()
+    productCardItemMetadata: string;
    
 }
 
@@ -19,7 +37,19 @@ export class UpdateProductCardItemDTO {
     @IsString()
     productCardItemId: string;
     @IsString()
-    productCardTypeName: string;
+    commerceAccountId: string;
+    @IsString()
+    productCardItemTCGdbId: string;
+    @IsString()
+    productTypeName: string;
+    @IsString()
+    productCardItemSetAbbreviation: string;
     @IsString()
     productCardItemName: string;
+    @IsString()
+    productCardItemCleanName: string;
+    @IsString()
+    productCardItemImage: string;
+    @IsString()
+    productCardItemMetadata: string;
 }
