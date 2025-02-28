@@ -1,35 +1,35 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('ProductCardInventory')
+@Entity('productCardInventory')
 export class ProductCardInventory {
     @PrimaryGeneratedColumn('uuid')
-    ProductCardInventoryId: string;
+    productCardInventoryId: string;
 
     @Column()
-    CommerceAccountId: string;
+    commerceAccountId: string;
     
     @Column()
-    ProductCardItemId: string;
+    productCardItemId: string;
 
     @Column()
-    ProductCardOption: string;
+    productCardOption: string;
     
     @Column()
-    ProductCardVariant: string;
+    productCardVariant: string;
 
     @Column()
-    ProductCardInventoryQty: number;
+    productCardInventoryQty: number;
     
     @Column({type: 'decimal'})
-    ProductCardInventoryPrice: number;
+    productCardInventoryPrice: number;
 
     @Column('jsonb')
-    ProductCardInventoryMetadata: string
+    productCardInventoryMetadata: string
 
     @CreateDateColumn()
-    ProductCardInventoryCreateDate: Date;
+    productCardInventoryCreateDate: Date;
 
     @UpdateDateColumn()
-    ProductCardInventoryUpdateDate: Date; 
+    productCardInventoryUpdateDate: Date; 
 
 }
