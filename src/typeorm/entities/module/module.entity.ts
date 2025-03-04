@@ -12,6 +12,9 @@ export class Module {
     @Column()
     moduleHandle: string;
 
+    @Column()
+    moduleDescription: string;
+
     @Column({type: 'boolean', default: false})
     moduleIsActive: boolean;
 

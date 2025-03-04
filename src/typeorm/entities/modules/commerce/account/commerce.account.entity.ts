@@ -19,6 +19,9 @@ export class CommerceAccount {
     @Column({unique: true})
     commerceAccountHandle: string;
 
+    @Column('jsonb')
+    commerceAccountModules: string;
+
     @Column({type: 'boolean', default: true})
     commerceAccountIsActive: boolean;
 
