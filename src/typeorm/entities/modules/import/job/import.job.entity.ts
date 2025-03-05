@@ -35,6 +35,9 @@ export class ImportJob {
     @Column('jsob') //LOCATION | PROCESSED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS
     importJobMetadata: string;
 
+    @Column({type: 'boolean', default: false})
+    importJobIsPublished: boolean;
+
     @CreateDateColumn()
     importJobCreateDate: Date;
 

@@ -6,19 +6,10 @@ export class ImportModule {
     importModuleId: string;
 
     @Column()
-    importModuleName: string;
+    moduleId: string;
 
     @Column()
-    importModuleHandle: string;
-
-    @Column('jsob')
-    importModuleHandleOptions: string;
-
-    @Column('jsonb')
-    importModuleRoles: string;
-    
-    @Column({type: 'boolean', default: false})
-    importModuleIsActive: boolean;
+    commerceAccountId: string;
 
     @CreateDateColumn()
     importModuleCreateDate: Date;

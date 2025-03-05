@@ -12,6 +12,9 @@ export class ProductCardInventory {
     productCardItemId: string;
 
     @Column()
+    productLocationId: string;
+
+    @Column()
     productCardOption: string;
     
     @Column()
@@ -22,6 +25,12 @@ export class ProductCardInventory {
     
     @Column({type: 'decimal'})
     productCardInventoryPrice: number;
+
+    @Column({type: 'boolean', default: false})
+    productCardInventoryOverridePriceEnabled: boolean;
+
+    @Column({type: 'decimal'})
+    productCardInventoryOverridePrice: string;
 
     @Column('jsonb')
     productCardInventoryMetadata: string

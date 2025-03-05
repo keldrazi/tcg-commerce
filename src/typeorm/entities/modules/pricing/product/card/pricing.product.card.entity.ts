@@ -17,6 +17,12 @@ export class PricingProductCard {
     @Column()
     pricingProductCardPriceTypeOption: string;
 
+    @Column()
+    pricingProductCardPriceMinimumEnabled: boolean;
+
+    @Column({type: 'decimal', nullable: true})
+    pricingProductCardPriceMinimum: number;
+
     @Column('jsob')
     pricingProductCardRuleMetadata: string;
 

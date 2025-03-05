@@ -9,7 +9,10 @@ export class ImportCard {
     importJobId: string;
 
     @Column()
-    importCardTCGDBId: number;
+    importCardTCGDBId: string;
+
+    @Column()
+    importCardStatus: string;
 
     @Column()
     importCardName: string;
@@ -24,7 +27,7 @@ export class ImportCard {
     importCardPrinting: string;
 
     @Column()
-    importyCardQty: number;
+    importCardQty: number;
 
     @Column({type: 'decimal'})
     importCardPrice: number;
