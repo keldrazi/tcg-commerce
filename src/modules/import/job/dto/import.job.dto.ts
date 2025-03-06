@@ -1,9 +1,4 @@
-import { IsDate, IsEmail, IsString } from "class-validator";
-
-export class ImportJobsDTO {
-    commerceAccountId: string;
-    importJobDTOs: ImportJobDTO[];
-}
+import { IsDate, IsString } from "class-validator";
 
 export class ImportJobDTO {
     importJobId: string;

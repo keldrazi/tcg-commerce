@@ -33,7 +33,7 @@ export class ImportCardService {
             importCardDTO.importCardTCGDBId = importCard.importCardTCGDBId;
             importCardDTO.importCardStatus = importCard.importCardStatus;
             importCardDTO.importCardName = importCard.importCardName;
-            importCardDTO.importCardSet = importCard.importCardSet;
+            importCardDTO.importCardSetName = importCard.importCardSetName;
             importCardDTO.importCardCondition = importCard.importCardCondition;
             importCardDTO.importCardPrinting = importCard.importCardPrinting;
             importCardDTO.importCardQty = importCard.importCardQty;
@@ -65,7 +65,7 @@ export class ImportCardService {
         importCardDTO.importCardTCGDBId = importCard.importCardTCGDBId;
         importCardDTO.importCardStatus = importCard.importCardStatus;
         importCardDTO.importCardName = importCard.importCardName;
-        importCardDTO.importCardSet = importCard.importCardSet;
+        importCardDTO.importCardSetName = importCard.importCardSetName;
         importCardDTO.importCardCondition = importCard.importCardCondition;
         importCardDTO.importCardPrinting = importCard.importCardPrinting;
         importCardDTO.importCardQty = importCard.importCardQty;
@@ -96,7 +96,7 @@ export class ImportCardService {
         importCardDTO.importCardTCGDBId = importCard.importCardTCGDBId;
         importCardDTO.importCardStatus = importCard.importCardStatus;
         importCardDTO.importCardName = importCard.importCardName;
-        importCardDTO.importCardSet = importCard.importCardSet;
+        importCardDTO.importCardSetName = importCard.importCardSetName;
         importCardDTO.importCardCondition = importCard.importCardCondition;
         importCardDTO.importCardPrinting = importCard.importCardPrinting;
         importCardDTO.importCardQty = importCard.importCardQty;
@@ -127,7 +127,7 @@ export class ImportCardService {
         importCardDTO.importCardTCGDBId = newImportCard.importCardTCGDBId;
         importCardDTO.importCardStatus = newImportCard.importCardStatus;
         importCardDTO.importCardName = newImportCard.importCardName;
-        importCardDTO.importCardSet = newImportCard.importCardSet;
+        importCardDTO.importCardSetName = newImportCard.importCardSetName;
         importCardDTO.importCardCondition = newImportCard.importCardCondition;
         importCardDTO.importCardPrinting = newImportCard.importCardPrinting;
         importCardDTO.importCardQty = newImportCard.importCardQty;

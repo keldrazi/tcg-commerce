@@ -7,7 +7,7 @@ export class ImportCardDTO {
     importCardTCGDBId: string;
     importCardStatus: string;
     importCardName: string;
-    importCardSet: string;
+    importCardSetName: string;
     importCardCondition: string;
     importCardPrinting: string;
     importCardQty: number;
@@ -26,7 +26,7 @@ export class CreateImportCardDTO {
     @IsString()
     importCardName: string;
     @IsString()
-    importCardSet: string;
+    importCardSetName: string;
     @IsString()
     importCardCondition: string;
     @IsString()

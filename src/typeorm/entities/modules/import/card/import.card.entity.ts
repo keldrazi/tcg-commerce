@@ -18,7 +18,7 @@ export class ImportCard {
     importCardName: string;
 
     @Column()
-    importCardSet: string;
+    importCardSetName: string;
 
     @Column()
     importCardCondition: string;
