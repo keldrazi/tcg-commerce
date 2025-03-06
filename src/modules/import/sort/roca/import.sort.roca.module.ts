@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ImportSortRocaService } from "./import.sort.roca.service";
 import { UtilCSVModule } from 'src/modules/util/csv/util.csv.module';
 
