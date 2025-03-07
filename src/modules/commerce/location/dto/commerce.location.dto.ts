@@ -5,6 +5,9 @@ export class CommerceLocationDTO {
     commerceAccountId: string;
     commerceLocationName: string;
     commerceLocationAddress: string;
+    commerceLocationCity: string;
+    commerceLocationState: string;
+    commerceLocationZip: string;
     commerceLocationPhoneNumber: string;
     commerceLocationIsActive: boolean;
     commerceLocationCreateDate: Date;
@@ -18,6 +21,12 @@ export class CreateCommerceLocationDTO {
     commerceLocationName: string;
     @IsString()
     commerceLocationAddress: string;
+    @IsString()
+    commerceLocationCity: string;
+    @IsString()
+    commerceLocationState: string;
+    @IsString()
+    commerceLocationZip: string;
     @IsString()
     commerceLocationPhoneNumber: string;
     @IsString()
@@ -33,6 +42,12 @@ export class UpdateCommerceLocationDTO {
     commerceLocationName: string;
     @IsString()
     commerceLocationAddress: string;
+    @IsString()
+    commerceLocationCity: string;
+    @IsString()
+    commerceLocationState: string;
+    @IsString()
+    commerceLocationZip: string;
     @IsString()
     commerceLocationPhoneNumber: string;
     @IsString()

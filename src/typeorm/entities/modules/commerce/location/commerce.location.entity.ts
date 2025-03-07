@@ -20,13 +20,25 @@ export class CommerceLocation {
 
     @Column()
     @IsString()
+    commerceLocationCity: string;
+
+    @Column()
+    @IsString()
+    commerceLocationState: string;
+
+    @Column()
+    @IsString()
+    commerceLocationZip: string;
+
+    @Column()
+    @IsString()
     commerceLocationPhoneNumber: string;
 
     @Column({type: 'boolean', default: true})
     commerceLocationIsActive: boolean;
 
     @CreateDateColumn()
-    commerceLoationCreateDate: Date;
+    commerceLocationCreateDate: Date;
 
     @UpdateDateColumn()
     commerceLocationUpdateDate: Date; 
