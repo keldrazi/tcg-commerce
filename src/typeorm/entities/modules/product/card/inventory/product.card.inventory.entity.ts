@@ -12,7 +12,7 @@ export class ProductCardInventory {
     productCardItemId: string;
 
     @Column()
-    productLocationId: string;
+    commerceLocationId: string;
 
     @Column()
     productCardOption: string;
@@ -22,6 +22,12 @@ export class ProductCardInventory {
 
     @Column()
     productCardInventoryQty: number;
+
+    @Column()
+    productCardInventoryMaxQty: number;
+
+    @Column()
+    productCardInventoryReserveQty: number;
     
     @Column({type: 'decimal'})
     productCardInventoryPrice: number;
@@ -30,7 +36,7 @@ export class ProductCardInventory {
     productCardInventoryOverridePriceEnabled: boolean;
 
     @Column({type: 'decimal'})
-    productCardInventoryOverridePrice: string;
+    productCardInventoryOverridePrice: number;
 
     @Column('jsonb')
     productCardInventoryMetadata: string

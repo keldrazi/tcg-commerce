@@ -34,6 +34,9 @@ export class CommerceLocation {
     @IsString()
     commerceLocationPhoneNumber: string;
 
+    @Column({type: 'boolean', default: false})
+    commerceLocationIsDefault: boolean;
+
     @Column({type: 'boolean', default: true})
     commerceLocationIsActive: boolean;
 

@@ -9,12 +9,15 @@ export class CommerceAccount {
     @Column()
     commerceAccountName: string;
 
+    @Column()
+    commerceAccountContactName: string;
+
     @Column({unique: true})
     @IsEmail()
-    commerceAccountEmail: string;
+    commerceAccountContactEmail: string;
 
     @Column()
-    commerceAccountPhone: string;
+    commerceAccountContactPhone: string;
 
     @Column({unique: true})
     commerceAccountHandle: string;

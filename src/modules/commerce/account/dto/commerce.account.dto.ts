@@ -3,8 +3,9 @@ import { IsEmail, IsString } from "class-validator";
 export class CommerceAccountDTO {
     commerceAccountId: string;
     commerceAccountName: string;
-    commerceAccountEmail: string;
-    commerceAccountPhone: string;
+    commerceAccountContactName: string;
+    commerceAccountContactEmail: string;
+    commerceAccountContactPhone: string;
     commerceAccountHandle: string;
     commerceAccountIsActive: boolean;
     commerceAccountCreateDate: Date;
@@ -14,10 +15,12 @@ export class CommerceAccountDTO {
 export class CreateCommerceAccountDTO {
     @IsString()
     commerceAccountName: string;
-    @IsEmail()
-    commerceAccountEmail: string;
     @IsString()
-    commerceAccountPhone: string;
+    commerceAccountContact: string;
+    @IsEmail()
+    commerceAccountContactEmail: string;
+    @IsString()
+    commerceAccountContactPhone: string;
     @IsString()
     commerceAccountHandle: string;
 }
@@ -26,9 +29,11 @@ export class UpdateCommerceAccountDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
-    commerceAccountName: string;
+    commerceAccountContact: string;
     @IsEmail()
-    commerceAccountEmail: string;
+    commerceAccountContactEmail: string;
+    @IsString()
+    commerceAccountContactPhone: string;
     @IsString()
     commerceAccountPhone: string;
     @IsString()
