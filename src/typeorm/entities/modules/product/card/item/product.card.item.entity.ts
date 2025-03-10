@@ -12,7 +12,10 @@ export class ProductCardItem {
     productCardItemTCGdbId: string;
 
     @Column()
-    productCardTypeName: string;
+    productVendorName: string;
+
+    @Column()
+    productTypeName: string;
     
     @Column()
     productCardItemSetAbbreviation: string;

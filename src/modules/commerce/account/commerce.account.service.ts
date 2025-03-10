@@ -21,9 +21,11 @@ export class CommerceAccountService {
         let commerceAccountDTO = new CommerceAccountDTO();
         commerceAccountDTO.commerceAccountId = commerceAccount.commerceAccountId;
         commerceAccountDTO.commerceAccountName = commerceAccount.commerceAccountName;
-        commerceAccountDTO.commerceAccountEmail = commerceAccount.commerceAccountEmail;
-        commerceAccountDTO.commerceAccountPhone = commerceAccount.commerceAccountPhone;
+        commerceAccountDTO.commerceAccountContactName = commerceAccount.commerceAccountContactName;
+        commerceAccountDTO.commerceAccountContactEmail = commerceAccount.commerceAccountContactEmail;
+        commerceAccountDTO.commerceAccountContactPhone = commerceAccount.commerceAccountContactPhone;
         commerceAccountDTO.commerceAccountHandle = commerceAccount.commerceAccountHandle;
+        commerceAccountDTO.commerceAccountModules = commerceAccount.commerceAccountModules;
         commerceAccountDTO.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
         commerceAccountDTO.commerceAccountCreateDate = commerceAccount.commerceAccountCreateDate;
         commerceAccountDTO.commerceAccountUpdateDate = commerceAccount.commerceAccountUpdateDate;
@@ -37,14 +39,14 @@ export class CommerceAccountService {
         newCommerceAccount = await this.commerceAccountRepository.save(newCommerceAccount);
 
         let commerceAccountDTO = new CommerceAccountDTO();
-        commerceAccountDTO.commerceAccountId = newCommerceAccount.commerceAccountId;
-        commerceAccountDTO.commerceAccountName = newCommerceAccount.commerceAccountName;
-        commerceAccountDTO.commerceAccountEmail = newCommerceAccount.commerceAccountEmail;
-        commerceAccountDTO.commerceAccountPhone = newCommerceAccount.commerceAccountPhone;
-        commerceAccountDTO.commerceAccountHandle = newCommerceAccount.commerceAccountHandle;
-        commerceAccountDTO.commerceAccountIsActive = newCommerceAccount.commerceAccountIsActive;
-        commerceAccountDTO.commerceAccountCreateDate = newCommerceAccount.commerceAccountCreateDate;
-        commerceAccountDTO.commerceAccountUpdateDate = newCommerceAccount.commerceAccountUpdateDate;
+
+        commerceAccountDTO.commerceAccountName = commerceAccount.commerceAccountName;
+        commerceAccountDTO.commerceAccountContactName = commerceAccount.commerceAccountContactName;
+        commerceAccountDTO.commerceAccountContactEmail = commerceAccount.commerceAccountContactEmail;
+        commerceAccountDTO.commerceAccountContactPhone = commerceAccount.commerceAccountContactPhone;
+        commerceAccountDTO.commerceAccountHandle = commerceAccount.commerceAccountHandle;
+        commerceAccountDTO.commerceAccountModules = commerceAccount.commerceAccountModules;
+        commerceAccountDTO.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
 
         return commerceAccountDTO;
     }

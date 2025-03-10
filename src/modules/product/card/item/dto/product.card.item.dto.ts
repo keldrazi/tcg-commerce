@@ -1,9 +1,10 @@
-import { IsEmail, IsString } from "class-validator";
+import { IsString } from "class-validator";
 
 export class ProductCardItemDTO {
     productCardItemId: string;
     commerceAccountId: string;
     productCardItemTCGdbId: string;
+    productVendorName: string;
     productTypeName: string;
     productCardItemSetAbbreviation: string;
     productCardItemName: string;
@@ -18,6 +19,8 @@ export class CreateProductCardItemDTO {
     commerceAccountId: string;
     @IsString()
     productCardItemTCGdbId: string;
+    @IsString()
+    productVendorName: string;
     @IsString()
     productTypeName: string;
     @IsString()
@@ -40,6 +43,8 @@ export class UpdateProductCardItemDTO {
     commerceAccountId: string;
     @IsString()
     productCardItemTCGdbId: string;
+    @IsString()
+    productVendorName: string;
     @IsString()
     productTypeName: string;
     @IsString()

@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ProductCardTypeDTO } from './dto/product.card.type.dto';
-import { ProductCardTypeService } from './product.card.type.service';
+import { ProductVendorDTO } from './dto/product.vendor.dto';
+import { ProductVendorService } from './product.vendor.service';
 
 
 
-@Controller('product/card/type')
-export class ProductCardTypeController {
+@Controller('product/vendor')
+export class ProductVendorController {
 
     constructor(
-        private productCardTypeService: ProductCardTypeService,
+        private productVendorService: ProductVendorService,
     ) { }
     
     
