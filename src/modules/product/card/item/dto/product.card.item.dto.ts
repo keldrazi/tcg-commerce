@@ -6,10 +6,13 @@ export class ProductCardItemDTO {
     productCardItemTCGdbId: string;
     productVendorName: string;
     productTypeName: string;
+    productCardItemSetName: string;
     productCardItemSetAbbreviation: string;
+    productCardItemNumber: number;
     productCardItemName: string;
     productCardItemCleanName: string;
     productCardItemImage: string;
+    productCardItemExtendedData: string;
     productCardItemMetadata: string;
     
 }
@@ -24,13 +27,19 @@ export class CreateProductCardItemDTO {
     @IsString()
     productTypeName: string;
     @IsString()
+    productCardItemSetName: string;
+    @IsString()
     productCardItemSetAbbreviation: string;
+    @IsString()
+    productCardItemNumber: number;
     @IsString()
     productCardItemName: string;
     @IsString()
     productCardItemCleanName: string;
     @IsString()
     productCardItemImage: string;
+    @IsString()
+    productCardItemExtendedData: string;
     @IsString()
     productCardItemMetadata: string;
    
@@ -48,13 +57,19 @@ export class UpdateProductCardItemDTO {
     @IsString()
     productTypeName: string;
     @IsString()
+    productCardItemSetName: string;
+    @IsString()
     productCardItemSetAbbreviation: string;
+    @IsString()
+    productCardItemNumber: number;
     @IsString()
     productCardItemName: string;
     @IsString()
     productCardItemCleanName: string;
     @IsString()
     productCardItemImage: string;
+    @IsString()
+    productCardItemExtendedData: string;
     @IsString()
     productCardItemMetadata: string;
 }

@@ -11,6 +11,35 @@ export class ProductCardItemService {
         @InjectRepository(ProductCardItem) private productCardItemRepository: Repository<ProductCardItem>,
     ) { }
 
+    async getProductCardItemByProductCardItemId(productCardItemId: string) {
+        let productCardItem = await this.productCardItemRepository.findOne({ 
+            where: {
+                productCardItemId: productCardItemId
+            }
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardItem == null) {
+            return null;
+        }
+
+        let productCardItemDTO = new ProductCardItemDTO();
+        productCardItemDTO.productCardItemId = productCardItem.productCardItemId;
+        productCardItemDTO.commerceAccountId = productCardItem.commerceAccountId;
+        productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
+        productCardItemDTO.productVendorName = productCardItem.productVendorName;
+        productCardItemDTO.productTypeName = productCardItem.productTypeName;
+        productCardItemDTO.productCardItemSetName = productCardItem.productCardItemSetName;
+        productCardItemDTO.productCardItemSetAbbreviation = productCardItem.productCardItemSetAbbreviation;
+        productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
+        productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
+        productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
+        productCardItemDTO.productCardItemImage = productCardItem.productCardItemImage;
+        productCardItemDTO.productCardItemMetadata = productCardItem.productCardItemMetadata;
+       
+        return productCardItemDTO;
+    }
+
     async getProductCardItemByCommerceAccountIdAndTCGdbId(commerceAccountId: string, tcgdbId: string) {
         let productCardItem = await this.productCardItemRepository.findOne({ 
             where: {
@@ -30,7 +59,9 @@ export class ProductCardItemService {
         productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
         productCardItemDTO.productVendorName = productCardItem.productVendorName;
         productCardItemDTO.productTypeName = productCardItem.productTypeName;
+        productCardItemDTO.productCardItemSetName = productCardItem.productCardItemSetName;
         productCardItemDTO.productCardItemSetAbbreviation = productCardItem.productCardItemSetAbbreviation;
+        productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
         productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
         productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
         productCardItemDTO.productCardItemImage = productCardItem.productCardItemImage;
@@ -64,7 +95,9 @@ export class ProductCardItemService {
             productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
             productCardItemDTO.productVendorName = productCardItem.productVendorName;
             productCardItemDTO.productTypeName = productCardItem.productTypeName;
+            productCardItemDTO.productCardItemSetName = productCardItem.productCardItemSetName;
             productCardItemDTO.productCardItemSetAbbreviation = productCardItem.productCardItemSetAbbreviation;
+            productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
             productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
             productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
             productCardItemDTO.productCardItemImage = productCardItem.productCardItemImage;
@@ -102,7 +135,9 @@ export class ProductCardItemService {
             productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
             productCardItemDTO.productVendorName = productCardItem.productVendorName;
             productCardItemDTO.productTypeName = productCardItem.productTypeName;
+            productCardItemDTO.productCardItemSetName = productCardItem.productCardItemSetName;
             productCardItemDTO.productCardItemSetAbbreviation = productCardItem.productCardItemSetAbbreviation;
+            productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
             productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
             productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
             productCardItemDTO.productCardItemImage = productCardItem.productCardItemImage;
@@ -129,17 +164,7 @@ export class ProductCardItemService {
         let newProductCardItem = this.productCardItemRepository.create({ ...createProductCardItemDTO });
         newProductCardItem = await this.productCardItemRepository.save(newProductCardItem);
 
-        let productCardItemDTO = new ProductCardItemDTO();
-        productCardItemDTO.productCardItemId = newProductCardItem.productCardItemId;
-        productCardItemDTO.commerceAccountId = newProductCardItem.commerceAccountId;
-        productCardItemDTO.productCardItemTCGdbId = newProductCardItem.productCardItemTCGdbId;
-        productCardItemDTO.productVendorName = newProductCardItem.productVendorName;
-        productCardItemDTO.productTypeName = newProductCardItem.productTypeName;
-        productCardItemDTO.productCardItemSetAbbreviation = newProductCardItem.productCardItemSetAbbreviation;
-        productCardItemDTO.productCardItemName = newProductCardItem.productCardItemName;
-        productCardItemDTO.productCardItemCleanName = newProductCardItem.productCardItemCleanName;
-        productCardItemDTO.productCardItemImage = newProductCardItem.productCardItemImage;
-        productCardItemDTO.productCardItemMetadata = newProductCardItem.productCardItemMetadata;
+        let productCardItemDTO = this.getProductCardItemByProductCardItemId(newProductCardItem.productCardItemId);
        
         return productCardItemDTO;
     } 

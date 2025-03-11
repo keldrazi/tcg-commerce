@@ -16,9 +16,15 @@ export class ProductCardItem {
 
     @Column()
     productTypeName: string;
+
+    @Column()
+    productCardItemSetName: string;
     
     @Column()
     productCardItemSetAbbreviation: string;
+
+    @Column()
+    productCardItemNumber: number;
 
     @Column()
     productCardItemName: string;
@@ -28,6 +34,9 @@ export class ProductCardItem {
 
     @Column()
     productCardItemImage: string;
+
+    @Column('jsonb')
+    productCardItemExtendedData: string;
 
     @Column('jsonb')
     productCardItemMetadata: string;
