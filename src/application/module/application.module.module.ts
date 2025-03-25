@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CommerceLocationService } from './commerce.module.service';
-import { CommerceLocationController } from './commerce.module.controller';
+import { CommerceLocationService } from './application.module.service';
+import { CommerceLocationController } from './application.module.controller';
 import { CommerceLocation } from 'src/typeorm/entities/modules/commerce/location/commerce.location.entity';
 
 @Module({

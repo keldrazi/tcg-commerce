@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CommerceLocationService } from './commerce.module.service';
+import { CommerceLocationService } from './application.module.service';
 import { CreateCommerceLocationDTO } from './dto/commerce.module.dto';
 
 
