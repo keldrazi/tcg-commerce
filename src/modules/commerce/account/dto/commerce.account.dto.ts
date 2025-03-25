@@ -34,15 +34,13 @@ export class UpdateCommerceAccountDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
+    commerceAccountName: string;
+    @IsString()
     commerceAccountContactName: string;
     @IsEmail()
     commerceAccountContactEmail: string;
     @IsString()
     commerceAccountContactPhone: string;
-    @IsString()
-    commerceAccountPhone: string;
-    @IsString()
-    commerceAccountHandle: string;
     @IsString()
     commerceAccountModules: string;
     @IsBoolean()

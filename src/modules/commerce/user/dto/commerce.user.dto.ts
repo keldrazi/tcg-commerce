@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength } from "class-validator";
+import { IsBoolean, IsEmail, IsString, MinLength } from "class-validator";
 
 export class CommerceUserDTO {
     commerceUserId: string;
@@ -36,7 +36,6 @@ export class UpdateCommerceUserDTO {
     commerceUserEmail: string;
     @IsString()
     commerceUserRoles: string;
-    @IsString()
-    @MinLength(8)
-    commerceUserPassword: string;
+    @IsBoolean()
+    commerceUserIsActive: boolean;
 }

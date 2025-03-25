@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccount } from 'src/typeorm/entities/modules/commerce/account/commerce.account.entity';
-import { CreateCommerceAccountDTO, CommerceAccountDTO } from './dto/commerce.account.dto';
+import { CreateCommerceAccountDTO, UpdateCommerceAccountDTO, CommerceAccountDTO } from './dto/commerce.account.dto';
 
 @Injectable()
 export class CommerceAccountService {
@@ -14,6 +14,7 @@ export class CommerceAccountService {
     async getCommerceAccount(commerceAccountId: string) {
         let commerceAccount = await this.commerceAccountRepository.findOne({ where: { commerceAccountId } });
         
+         //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE ACCOUNT IS NULL;
         if (!commerceAccount) {
             return null;
         }
@@ -38,15 +39,34 @@ export class CommerceAccountService {
         let newCommerceAccount = this.commerceAccountRepository.create({ ...commerceAccount });
         newCommerceAccount = await this.commerceAccountRepository.save(newCommerceAccount);
 
-        let commerceAccountDTO = new CommerceAccountDTO();
+        let commerceAccountDTO = await this.getCommerceAccount(newCommerceAccount.commerceAccountId);
 
-        commerceAccountDTO.commerceAccountName = commerceAccount.commerceAccountName;
-        commerceAccountDTO.commerceAccountContactName = commerceAccount.commerceAccountContactName;
-        commerceAccountDTO.commerceAccountContactEmail = commerceAccount.commerceAccountContactEmail;
-        commerceAccountDTO.commerceAccountContactPhone = commerceAccount.commerceAccountContactPhone;
-        commerceAccountDTO.commerceAccountHandle = commerceAccount.commerceAccountHandle;
-        commerceAccountDTO.commerceAccountModules = commerceAccount.commerceAccountModules;
-        commerceAccountDTO.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
+        return commerceAccountDTO;
+    }
+
+    async updateCommerceAccount(commerceAccount: UpdateCommerceAccountDTO) {
+        let updateCommerceAccount = await this.commerceAccountRepository.findOne({ 
+            where: { 
+                commerceAccountId: commerceAccount.commerceAccountId 
+            } 
+        });
+
+         //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE ACCOUNT IS NULL;
+        if (!updateCommerceAccount) {
+            return null;
+        }
+
+        updateCommerceAccount.commerceAccountName = commerceAccount.commerceAccountName;
+        updateCommerceAccount.commerceAccountContactName = commerceAccount.commerceAccountContactName;
+        updateCommerceAccount.commerceAccountContactEmail = commerceAccount.commerceAccountContactEmail;
+        updateCommerceAccount.commerceAccountContactPhone = commerceAccount.commerceAccountContactPhone;
+        updateCommerceAccount.commerceAccountModules = commerceAccount.commerceAccountModules;
+        updateCommerceAccount.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
+        updateCommerceAccount.commerceAccountUpdateDate = new Date();
+
+        updateCommerceAccount = await this.commerceAccountRepository.save(updateCommerceAccount);
+
+        let commerceAccountDTO = await this.getCommerceAccount(updateCommerceAccount.commerceAccountId);
 
         return commerceAccountDTO;
     }

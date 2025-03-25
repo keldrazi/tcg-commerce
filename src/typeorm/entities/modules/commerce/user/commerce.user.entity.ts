@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm'
@@ -35,10 +34,4 @@ export class CommerceUser {
 
     @UpdateDateColumn()
     commerceUserUpdateDate: Date; 
-
-    @BeforeInsert()
-    async hashPassword(): Promise<void> {
-        this.commerceUserPassword = await bcrypt.hash(this.commerceUserPassword, 10);
-    }
-
 } 
