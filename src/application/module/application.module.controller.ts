@@ -1,30 +1,30 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CommerceLocationService } from './application.module.service';
-import { CreateCommerceLocationDTO } from './dto/commerce.module.dto';
+import { ApplicationModuleService } from './application.module.service';
+import { CreateApplicationModuleDTO } from './dto/application.module.dto';
 
 
 
-@Controller('commerce/location')
-export class CommerceLocationController {
+@Controller('application/module')
+export class ApplicationModuleController {
 
     constructor(
-        private commerceLocationService: CommerceLocationService,
+        private applicationModuleService: ApplicationModuleService,
     ) { }
     
-    @Get('/all/:commerceAccountId')
-    async getCommerceLocations(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceLocationService.getCommerceLocations(commerceAccountId);
+    @Get('/all')
+    async getApplicationModules() {
+        return await this.applicationModuleService.getApplicationModules();
     }
 
-    @Get('/:commerceLocationId')
-    async getCommerceLocation(@Param('commerceLocationId') commerceLocationId: string) {
-        return await this.commerceLocationService.getCommerceLocation(commerceLocationId);
+    @Get('/:moduleId')
+    async getApplicationModule(@Param('applicationModuleId') applicatioModuleId: string) {
+        return await this.applicationModuleService.getApplicationModule(applicatioModuleId);
     }
 
     @Post()
     @UsePipes(new ValidationPipe())
-    async createCommerceLocation(@Body() createCommerceLocationDTO: CreateCommerceLocationDTO) {
-        return this.commerceLocationService.createCommerceLocation(createCommerceLocationDTO);
+    async createApplicationModule(@Body() createApplicationModuleDTO: CreateApplicationModuleDTO) {
+        return this.applicationModuleService.createApplicationModule(createApplicationModuleDTO);
     }
 
 }

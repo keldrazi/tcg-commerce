@@ -6,13 +6,13 @@ export class CommerceModule {
     commerceModuleId: string;
 
     @Column()
-    commerceModuleName: string;
+    applicationModuleId: string;
 
     @Column()
-    commerceModuleHandle: string;
+    commerceAccountId: string;
 
     @Column('jsonb')
-    commerceModuleHandleOptions: string;
+    commerceModuleSettings: string;
 
     @Column('jsonb')
     commerceModuleRoles: string;

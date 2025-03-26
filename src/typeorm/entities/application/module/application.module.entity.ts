@@ -1,27 +1,32 @@
-import { IsEmail } from 'class-validator';
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('module')
-export class Module {
+@Entity('applicationModule')
+export class ApplicationModule {
     @PrimaryGeneratedColumn('uuid')
-    moduleId: string;
+    applicationModuleId: string;
 
     @Column()
-    moduleName: string;
+    applicationModuleName: string;
 
     @Column()
-    moduleHandle: string;
+    applicationModuleHandle: string;
 
     @Column()
-    moduleDescription: string;
+    applicationModuleDescription: string;
+
+    @Column('jsonb')
+    applicationModuleSettings: string;
+
+    @Column('jsonb')
+    applicationModuleRoles: string;
 
     @Column({type: 'boolean', default: false})
-    moduleIsActive: boolean;
+    applicationModuleIsActive: boolean;
 
     @CreateDateColumn()
-    moduleCreateDate: Date;
+    applicationModuleCreateDate: Date;
 
     @UpdateDateColumn()
-    moduleUpdateDate: Date; 
+    applicationModuleUpdateDate: Date; 
 
 } 

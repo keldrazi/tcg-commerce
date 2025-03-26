@@ -1,115 +1,77 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CommerceLocation } from 'src/typeorm/entities/modules/commerce/location/commerce.location.entity';
-import { CreateCommerceLocationDTO, CommerceLocationDTO, UpdateCommerceLocationDTO } from './dto/commerce.module.dto';
+import { CommerceModule } from 'src/typeorm/entities/modules/commerce/module/commerce.module.entity';
+import { CreateCommerceModuleDTO, CommerceModuleDTO } from './dto/commerce.module.dto';
 
 @Injectable()
-export class CommerceLocationService {
+export class CommerceModuleService {
 
     constructor(
-        @InjectRepository(CommerceLocation) private commerceLocationRepository: Repository<CommerceLocation>,
+        @InjectRepository(CommerceModule) private commerceModuleRepository: Repository<CommerceModule>,
     ) { }
 
-    async getCommerceLocation(commerceLocationId: string) {
-        let commerceLocation = await this.commerceLocationRepository.findOne({ 
+    async getCommerceModule(commerceModuleId: string) {
+        let commerceModule = await this.commerceModuleRepository.findOne({ 
             where: { 
-                commerceLocationId : commerceLocationId
+                commerceModuleId : commerceModuleId
             } 
         });
         
-        if (!commerceLocation) {
+        if (!commerceModule) {
             return null;
         }
 
-        let commerceLocationDTO = new CommerceLocationDTO();
-        commerceLocationDTO.commerceLocationId = commerceLocation.commerceLocationId;
-        commerceLocationDTO.commerceAccountId = commerceLocation.commerceAccountId;
-        commerceLocationDTO.commerceLocationName = commerceLocation.commerceLocationName;
-        commerceLocationDTO.commerceLocationAddress = commerceLocation.commerceLocationAddress;
-        commerceLocationDTO.commerceLocationCity = commerceLocation.commerceLocationCity;
-        commerceLocationDTO.commerceLocationState = commerceLocation.commerceLocationState;
-        commerceLocationDTO.commerceLocationZip = commerceLocation.commerceLocationZip;
-        commerceLocationDTO.commerceLocationPhoneNumber = commerceLocation.commerceLocationPhoneNumber;
-        commerceLocationDTO.commerceLocationIsActive = commerceLocation.commerceLocationIsActive;
-        commerceLocationDTO.commerceLocationCreateDate = commerceLocation.commerceLocationCreateDate;
-        commerceLocationDTO.commerceLocationUpdateDate = commerceLocation.commerceLocationUpdateDate;
+        let commerceModuleDTO = new CommerceModuleDTO();
+        commerceModuleDTO.commerceModuleId = commerceModule.commerceModuleId;
+        commerceModuleDTO.applicationModuleId = commerceModule.applicationModuleId;
+        commerceModuleDTO.commerceAccountId = commerceModule.commerceAccountId;
+        commerceModuleDTO.commerceModuleSettings = commerceModule.commerceModuleSettings;
+        commerceModuleDTO.commerceModuleRoles = commerceModule.commerceModuleRoles;
+        commerceModuleDTO.commerceModuleIsActive = commerceModule.commerceModuleIsActive;
+        commerceModuleDTO.commerceModuleCreateDate = commerceModule.commerceModuleCreateDate;
+        commerceModuleDTO.commerceModuleUpdateDate = commerceModule.commerceModuleUpdateDate;
 
-        return commerceLocationDTO;
+        return commerceModuleDTO;
         
     }
 
-    async getCommerceLocations(commerceAccountId: string) {
-        let commerceLocations = await this.commerceLocationRepository.find({ 
-            where: { 
-                commerceAccountId : commerceAccountId
-            } 
-        });
+    async getCommerceModules() {
+        let commerceModules = await this.commerceModuleRepository.find();
         
-        if (commerceLocations == null) {
+        if (commerceModules == null) {
             return [];
         }
 
-        let commerceLocationDTOs: CommerceLocationDTO[] = [];
+        let commerceModuleDTOs: CommerceModuleDTO[] = [];
 
-        for(let i = 0; i < commerceLocations.length; i++) {
-            let commerceLocation = commerceLocations[i];
-            let commerceLocationDTO = new CommerceLocationDTO();
-            commerceLocationDTO.commerceLocationId = commerceLocation.commerceLocationId;
-            commerceLocationDTO.commerceAccountId = commerceLocation.commerceAccountId;
-            commerceLocationDTO.commerceLocationName = commerceLocation.commerceLocationName;
-            commerceLocationDTO.commerceLocationAddress = commerceLocation.commerceLocationAddress;
-            commerceLocationDTO.commerceLocationCity = commerceLocation.commerceLocationCity;
-            commerceLocationDTO.commerceLocationState = commerceLocation.commerceLocationState;
-            commerceLocationDTO.commerceLocationZip = commerceLocation.commerceLocationZip;
-            commerceLocationDTO.commerceLocationPhoneNumber = commerceLocation.commerceLocationPhoneNumber;
-            commerceLocationDTO.commerceLocationIsActive = commerceLocation.commerceLocationIsActive;
-            commerceLocationDTO.commerceLocationCreateDate = commerceLocation.commerceLocationCreateDate;
-            commerceLocationDTO.commerceLocationUpdateDate = commerceLocation.commerceLocationUpdateDate;
+        for(let i = 0; i < commerceModules.length; i++) {
+            let commerceModule = commerceModules[i];
+            let commerceModuleDTO = new CommerceModuleDTO();
+            commerceModuleDTO.commerceModuleId = commerceModule.commerceModuleId;
+            commerceModuleDTO.applicationModuleId = commerceModule.applicationModuleId;
+            commerceModuleDTO.commerceAccountId = commerceModule.commerceAccountId;
+            commerceModuleDTO.commerceModuleSettings = commerceModule.commerceModuleSettings;
+            commerceModuleDTO.commerceModuleRoles = commerceModule.commerceModuleRoles;
+            commerceModuleDTO.commerceModuleIsActive = commerceModule.commerceModuleIsActive;
+            commerceModuleDTO.commerceModuleCreateDate = commerceModule.commerceModuleCreateDate;
+            commerceModuleDTO.commerceModuleUpdateDate = commerceModule.commerceModuleUpdateDate;
 
-            commerceLocationDTOs.push(commerceLocationDTO);
+            commerceModuleDTOs.push(commerceModuleDTO);
+
         }
-        
-        return commerceLocationDTOs;
+
+        return commerceModuleDTOs;
         
     }
 
-    async createCommerceLocation(createCommerceLocationDTO: CreateCommerceLocationDTO) {
-        let newCommerceLocation = this.commerceLocationRepository.create({ ...createCommerceLocationDTO });
-        newCommerceLocation = await this.commerceLocationRepository.save(newCommerceLocation);
+    async createCommerceModule(createCommerceModuleDTO: CreateCommerceModuleDTO) {
+        let newCommerceModule = this.commerceModuleRepository.create({ ...createCommerceModuleDTO });
+        newCommerceModule = await this.commerceModuleRepository.save(newCommerceModule);
 
-        let commerceLocationDTO = await this.getCommerceLocation(newCommerceLocation.commerceLocationId);
+        let commerceModuleDTO = await this.getCommerceModule(newCommerceModule.commerceModuleId);
 
-        return commerceLocationDTO;
-    }
-
-    async updateCommerceLocation(updateCommerceLocationDTO: UpdateCommerceLocationDTO) {
-        let commerceLocation = await this.commerceLocationRepository.findOne({
-            where: {
-                commerceLocationId: updateCommerceLocationDTO.commerceLocationId
-            }
-        });
-
-        //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE LOCATION IS NULL;
-        if(commerceLocation == null) {
-            return null;
-        }
-
-        commerceLocation.commerceAccountId = updateCommerceLocationDTO.commerceAccountId;
-        commerceLocation.commerceLocationName = updateCommerceLocationDTO.commerceLocationName;
-        commerceLocation.commerceLocationAddress = updateCommerceLocationDTO.commerceLocationAddress;
-        commerceLocation.commerceLocationCity = updateCommerceLocationDTO.commerceLocationCity;
-        commerceLocation.commerceLocationState = updateCommerceLocationDTO.commerceLocationState;
-        commerceLocation.commerceLocationZip = updateCommerceLocationDTO.commerceLocationZip;
-        commerceLocation.commerceLocationPhoneNumber = updateCommerceLocationDTO.commerceLocationPhoneNumber;
-        commerceLocation.commerceLocationIsActive = updateCommerceLocationDTO.commerceLocationIsActive;
-        commerceLocation.commerceLocationUpdateDate = new Date();
-
-        commerceLocation = await this.commerceLocationRepository.save(commerceLocation);
-
-        let commerceLocationDTO = await this.getCommerceLocation(commerceLocation.commerceLocationId);
-
-        return commerceLocationDTO;
+        return commerceModuleDTO;
     }
     
 }

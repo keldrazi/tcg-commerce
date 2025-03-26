@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CommerceLocationService } from './application.module.service';
-import { CommerceLocationController } from './application.module.controller';
-import { CommerceLocation } from 'src/typeorm/entities/modules/commerce/location/commerce.location.entity';
+import { ApplicationModuleService } from './application.module.service';
+import { ApplicationModuleController } from './application.module.controller';
+import { ApplicationModule } from 'src/typeorm/entities/application/module/application.module.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([CommerceLocation])
+        TypeOrmModule.forFeature([ApplicationModule])
     ],
-    controllers: [CommerceLocationController],
-    providers: [CommerceLocationService],
-    exports: [CommerceLocationService]
+    controllers: [ApplicationModuleController],
+    providers: [ApplicationModuleService],
+    exports: [ApplicationModuleService]
 })
-export class CommerceLocationModule {}
+export class ApplicationModuleModule {}
