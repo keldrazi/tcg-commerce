@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApplicationModule } from 'src/typeorm/entities/application/module/application.module.entity';
-import { CreateApplicationModuleDTO, ApplicationModuleDTO } from './dto/application.module.dto';
+import { CreateApplicationModuleDTO, UpdateApplicationModuleDTO, ApplicationModuleDTO } from './dto/application.module.dto';
 
 @Injectable()
 export class ApplicationModuleService {
@@ -72,6 +72,30 @@ export class ApplicationModuleService {
         newApplicationModule = await this.applicationModuleRepository.save(newApplicationModule);
 
         let applicationModuleDTO = await this.getApplicationModule(newApplicationModule.applicationModuleId);
+
+        return applicationModuleDTO;
+    }
+
+    async updateApplicationModule(updateApplicationModuleDTO: UpdateApplicationModuleDTO) {
+        let existingApplicationModule = await this.applicationModuleRepository.findOne({
+            where: {    
+                applicationModuleId: updateApplicationModuleDTO.applicationModuleId
+            }
+        });
+
+        //TO DO: THROW AN ERROR IF APPLICATION MODULE NOT FOUND;
+        if (!existingApplicationModule) {
+            return null; 
+        }
+
+        existingApplicationModule.applicationModuleDescription = updateApplicationModuleDTO.applicationModuleDescription;
+        existingApplicationModule.applicationModuleSettings = updateApplicationModuleDTO.applicationModuleSettings;
+        existingApplicationModule.applicationModuleRoles = updateApplicationModuleDTO.applicationModuleRoles;
+        existingApplicationModule.applicationModuleIsActive = updateApplicationModuleDTO.applicationModuleIsActive;
+
+        await this.applicationModuleRepository.save(existingApplicationModule);
+
+        let applicationModuleDTO = await this.getApplicationModule(existingApplicationModule.applicationModuleId);
 
         return applicationModuleDTO;
     }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceModule } from 'src/typeorm/entities/modules/commerce/module/commerce.module.entity';
-import { CreateCommerceModuleDTO, CommerceModuleDTO } from './dto/commerce.module.dto';
+import { CreateCommerceModuleDTO, UpdateCommerceModuleDTO, CommerceModuleDTO } from './dto/commerce.module.dto';
 
 @Injectable()
 export class CommerceModuleService {
@@ -18,6 +18,32 @@ export class CommerceModuleService {
             } 
         });
         
+        if (!commerceModule) {
+            return null;
+        }
+
+        let commerceModuleDTO = new CommerceModuleDTO();
+        commerceModuleDTO.commerceModuleId = commerceModule.commerceModuleId;
+        commerceModuleDTO.applicationModuleId = commerceModule.applicationModuleId;
+        commerceModuleDTO.commerceAccountId = commerceModule.commerceAccountId;
+        commerceModuleDTO.commerceModuleSettings = commerceModule.commerceModuleSettings;
+        commerceModuleDTO.commerceModuleRoles = commerceModule.commerceModuleRoles;
+        commerceModuleDTO.commerceModuleIsActive = commerceModule.commerceModuleIsActive;
+        commerceModuleDTO.commerceModuleCreateDate = commerceModule.commerceModuleCreateDate;
+        commerceModuleDTO.commerceModuleUpdateDate = commerceModule.commerceModuleUpdateDate;
+
+        return commerceModuleDTO;
+        
+    }
+
+    async getCommerceModuleByCommerceAccountId(commerceAccountId: string) {
+        let commerceModule = await this.commerceModuleRepository.findOne({ 
+            where: { 
+                commerceAccountId : commerceAccountId
+            } 
+        });
+        
+        //TO DO: RETURN AN ERROR IF COMMERCE MODULE NOT FOUND;
         if (!commerceModule) {
             return null;
         }
@@ -73,5 +99,30 @@ export class CommerceModuleService {
 
         return commerceModuleDTO;
     }
-    
+
+    async updateCommerceModule(updateCommerceModuleDTO: UpdateCommerceModuleDTO) {
+            
+        let existingCommerceModule = await this.commerceModuleRepository.findOne({ 
+            where: { 
+                commerceModuleId: updateCommerceModuleDTO.commerceModuleId
+            } 
+        });
+
+        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
+        if (!existingCommerceModule) {
+            return null; 
+        }
+
+        existingCommerceModule.commerceModuleSettings = updateCommerceModuleDTO.commerceModuleSettings;
+        existingCommerceModule.commerceModuleRoles = updateCommerceModuleDTO.commerceModuleRoles;
+        existingCommerceModule.commerceModuleIsActive = updateCommerceModuleDTO.commerceModuleIsActive;
+        existingCommerceModule.commerceModuleUpdateDate = new Date();
+        
+        await this.commerceModuleRepository.save(existingCommerceModule);
+
+        let commerceModuleDTO = await this.getCommerceModule(existingCommerceModule.commerceModuleId);
+        
+        return commerceModuleDTO;
+    }
+
 }

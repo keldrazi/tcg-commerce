@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CommerceModuleService } from './commerce.module.service';
-import { CreateCommerceModuleDTO } from './dto/commerce.module.dto';
+import { CreateCommerceModuleDTO, UpdateCommerceModuleDTO } from './dto/commerce.module.dto';
 
 
 
@@ -16,15 +16,26 @@ export class CommerceModuleController {
         return await this.commerceModuleService.getCommerceModules();
     }
 
-    @Get('/:moduleId')
-    async getCommerceModule(@Param('commerceModuleId') applicatioModuleId: string) {
-        return await this.commerceModuleService.getCommerceModule(applicatioModuleId);
+    @Get('/:commerceModuleId')
+    async getCommerceModule(@Param('commerceModuleId') commerceModuleId: string) {
+        return await this.commerceModuleService.getCommerceModule(commerceModuleId);
+    }
+
+    @Get('/commerceAccount/:commerceAccountId')
+    async getCommerceModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
+        return await this.commerceModuleService.getCommerceModuleByCommerceAccountId(commerceAccountId);
     }
 
     @Post()
     @UsePipes(new ValidationPipe())
     async createCommerceModule(@Body() createCommerceModuleDTO: CreateCommerceModuleDTO) {
         return this.commerceModuleService.createCommerceModule(createCommerceModuleDTO);
+    }
+
+    @Put()
+    @UsePipes(new ValidationPipe())
+    async updateCommerceModule(@Body() updateCommerceModuleDTO: UpdateCommerceModuleDTO) {
+        return this.commerceModuleService.updateCommerceModule(updateCommerceModuleDTO);
     }
 
 }

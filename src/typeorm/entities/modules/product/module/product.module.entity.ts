@@ -6,7 +6,7 @@ export class ProductModule {
     productModuleId: string;
 
     @Column()
-    moduleId: string;
+    applicationModuleId: string;
 
     @Column()
     commerceAccountId: string;

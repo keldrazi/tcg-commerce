@@ -6,7 +6,7 @@ export class PricingModule {
     pricingModuleId: string;
 
     @Column()
-    moduleId: string;
+    applicationModuleId: string;
 
     @Column()
     commerceAccountId: string;

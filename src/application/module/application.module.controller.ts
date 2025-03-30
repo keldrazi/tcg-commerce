@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApplicationModuleService } from './application.module.service';
-import { CreateApplicationModuleDTO } from './dto/application.module.dto';
+import { CreateApplicationModuleDTO, UpdateApplicationModuleDTO } from './dto/application.module.dto';
 
 
 
@@ -25,6 +25,12 @@ export class ApplicationModuleController {
     @UsePipes(new ValidationPipe())
     async createApplicationModule(@Body() createApplicationModuleDTO: CreateApplicationModuleDTO) {
         return this.applicationModuleService.createApplicationModule(createApplicationModuleDTO);
+    }
+
+    @Put()
+    @UsePipes(new ValidationPipe())
+    async updateApplicationModule(@Body() updateApplicationModuleDTO: UpdateApplicationModuleDTO) {
+        return this.applicationModuleService.updateApplicationModule(updateApplicationModuleDTO);
     }
 
 }
