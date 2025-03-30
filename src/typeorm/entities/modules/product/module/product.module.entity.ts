@@ -1,9 +1,9 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('pricingModule')
-export class PricingModule {
+@Entity('productModule')
+export class ProductModule {
     @PrimaryGeneratedColumn('uuid')
-    pricingModuleId: string;
+    productModuleId: string;
 
     @Column()
     moduleId: string;
@@ -12,18 +12,18 @@ export class PricingModule {
     commerceAccountId: string;
 
     @Column('jsonb')
-    pricingModuleSettings: string;
+    productModuleSettings: string;
 
     @Column('jsonb')
-    pricingModuleRoles: string;
+    productModuleRoles: string;
     
     @Column({type: 'boolean', default: false})
-    pricingModuleIsActive: boolean;
+    productModuleIsActive: boolean;
 
     @CreateDateColumn()
-    pricingModuleCreateDate: Date;
+    productModuleCreateDate: Date;
 
     @UpdateDateColumn()
-    pricingModuleUpdateDate: Date; 
+    productModuleUpdateDate: Date; 
 
 } 
