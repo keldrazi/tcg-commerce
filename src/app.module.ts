@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { DatabasePGModule } from './modules/database/pg/database.pg.module';
+import { DatabasePGModule } from './database/pg/database.pg.module';
 
 
 const NODE_ENV = process.env.NODE_ENV;
