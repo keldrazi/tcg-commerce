@@ -3,7 +3,7 @@ import { PokemonTCGPokemonSetController } from './pokemontcg.pokemon.set.control
 import { PokemonTCGPokemonSetService } from './pokemontcg.pokemon.set.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
-import { PokemonTCGPokemonSet } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemontcgtcg/pokemon/set/pokemontcg.pokemon.set.entity';
+import { PokemonTCGPokemonSet } from 'src/typeorm/entities/tcgdb/modules/pokemontcg/pokemon/set/pokemontcg.pokemon.set.entity';
 import { PokemonTCGAPISetModule } from 'src/tcgdb/modules/pokemontcg/api/set/pokemontcg.api.set.module';
 
 

@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { TCGPlayerPokemonPriceService } from './tcgplayer.pokemon.price.service';
 
-@Controller('tcgplayer/pokemon/price')
+@Controller('tcgdb/tcgplayer/pokemon/price')
 export class TCGPlayerPokemonPriceController {
     
     constructor(

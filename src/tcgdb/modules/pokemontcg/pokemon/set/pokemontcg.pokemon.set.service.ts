@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
-import { PokemonTCGPokemonSet } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemontcgtcg/pokemon/set/pokemontcg.pokemon.set.entity';
+import { PokemonTCGPokemonSet } from 'src/typeorm/entities/tcgdb/modules/pokemontcg/pokemon/set/pokemontcg.pokemon.set.entity';
 import { PokemonTCGAPISetService } from 'src/tcgdb/modules/pokemontcg/api/set/pokemontcg.api.set.service';
 
 @Injectable()

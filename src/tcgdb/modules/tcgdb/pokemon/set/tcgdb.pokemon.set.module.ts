@@ -4,7 +4,7 @@ import { TCGdbPokemonSetService } from './tcgdb.pokemon.set.service';
 import { TCGdbPokemonSetController } from './tcgdb.pokemon.set.controller';
 import { TCGPlayerPokemonSetModule } from 'src/tcgdb/modules/tcgplayer/pokemon/set/tcgplayer.pokemon.set.module';
 import { PokemonTCGPokemonSetModule } from 'src/tcgdb/modules/pokemontcg/pokemon/set/pokemontcg.pokemon.set.module';
-import { TCGdbPokemonSet } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemontcg/set/tcgdb.pokemon.set.entity';
+import { TCGdbPokemonSet } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemon/set/tcgdb.pokemon.set.entity';
 
 @Module({
     imports: [

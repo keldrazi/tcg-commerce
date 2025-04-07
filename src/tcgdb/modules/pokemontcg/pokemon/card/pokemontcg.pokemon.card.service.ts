@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { PokemonTCGPokemonCard } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemontcgtcg/pokemon/card/pokemontcg.pokemon.card.entity';
+import { PokemonTCGPokemonCard } from 'src/typeorm/entities/tcgdb/modules/pokemontcg/pokemon/card/pokemontcg.pokemon.card.entity';
 import { PokemonTCGPokemonSetService } from 'src/tcgdb/modules/pokemontcg/pokemon/set/pokemontcg.pokemon.set.service'
 import { PokemonTCGAPICardService } from 'src/tcgdb/modules/pokemontcg/api/card/pokemontcg.api.card.service';
 

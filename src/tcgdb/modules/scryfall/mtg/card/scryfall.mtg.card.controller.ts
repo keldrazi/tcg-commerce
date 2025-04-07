@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ScryfallMTGCardService } from './scryfall.mtg.card.service';
 
-@Controller('scryfall/mtg/card')
+@Controller('tcgdb/scryfall/mtg/card')
 export class ScryfallMTGCardController {
   constructor(
     private scryfallMTGCardService: ScryfallMTGCardService

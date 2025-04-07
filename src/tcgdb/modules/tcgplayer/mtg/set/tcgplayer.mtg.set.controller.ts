@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { TCGPlayerMTGSetService } from './tcgplayer.mtg.set.service';
 
-@Controller('tcgplayer/mtg/set')
+@Controller('tcgdb/tcgplayer/mtg/set')
 export class TCGPlayerMTGSetController {
     
     constructor(
