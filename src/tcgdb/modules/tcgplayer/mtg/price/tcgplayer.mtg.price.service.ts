@@ -104,6 +104,16 @@ export class TCGPlayerMTGPriceService {
 
         return tcgPlayerMTGPriceRecordCount;
     }
+
+    async deleteTCGPlayerMTGPricesIsProcessed() {
+        
+        this.tcgPlayerMTGPriceRepository.createQueryBuilder()
+            .delete()
+            .where("tcgPlayerMTGPriceIsProcessed = :isProcessed", { isProcessed: true })
+            .execute();
+
+        return true;
+    }
 }
 
 

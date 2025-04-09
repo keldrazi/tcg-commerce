@@ -49,7 +49,7 @@ export class TCGdbPokemonCardService {
             tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
             tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
             tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-            tcgdbPokemonCardExtendedData: tcgdbPokemonCard.tcgdbPokemonCardExtendedData,
+            tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
             tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
         }
 
@@ -85,7 +85,7 @@ export class TCGdbPokemonCardService {
             tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
             tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
             tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-            tcgdbPokemonCardExtendedData: tcgdbPokemonCard.tcgdbPokemonCardExtendedData,
+            tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
             tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
         };
 
@@ -119,7 +119,7 @@ export class TCGdbPokemonCardService {
                 tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
                 tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
                 tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-                tcgdbPokemonCardExtendedData: tcgdbPokemonCard.tcgdbPokemonCardExtendedData,
+                tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
                 tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
             };
 
@@ -162,7 +162,7 @@ export class TCGdbPokemonCardService {
                 tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
                 tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
                 tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-                tcgdbPokemonCardExtendedData: tcgdbPokemonCard.tcgdbPokemonCardExtendedData,
+                tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
                 tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
             };
 
@@ -210,7 +210,7 @@ export class TCGdbPokemonCardService {
                 tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
                 tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
                 tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-                tcgdbPokemonCardExtendedData: tcgdbPokemonCard.tcgdbPokemonCardExtendedData,
+                tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
                 tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
             };
 
@@ -246,7 +246,7 @@ export class TCGdbPokemonCardService {
                     tcgdbPokemonCardName: tcgPlayerPokemonCard.tcgPlayerPokemonCardName,
                     tcgdbPokemonCardCleanName: tcgPlayerPokemonCard.tcgPlayerPokemonCardCleanName,
                     tcgdbPokemonCardImageURL: tcgPlayerPokemonCard.tcgPlayerPokemonCardImageURL,
-                    tcgdbPokemonCardExtendedData: tcgPlayerPokemonCard.tcgPlayerPokemonCardExtendedData,
+                    tcgdbPokemonCardData: tcgPlayerPokemonCard.tcgPlayerPokemonCardData,
                     tcgdbPokemonCardTCGPlayerSKUs: tcgPlayerPokemonCard.tcgPlayerPokemonCardSKUs,
                 });
 

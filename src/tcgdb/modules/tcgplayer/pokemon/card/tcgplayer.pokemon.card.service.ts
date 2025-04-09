@@ -75,9 +75,14 @@ export class TCGPlayerPokemonCardService {
             if(tcgPlayerPokemonSet.tcgPlayerPokemonSetTotalCards > 0) {
                 tcgPlayerPokemonCards = await this.tcgPlayerAPICardService.getTCGPlayerAPICardsByGroupId(tcgPlayerPokemonSet.tcgPlayerPokemonSetGroupId.toString());
            
-
+                
                 for(let i = 0; i < tcgPlayerPokemonCards.length; i++) {
                     const tcgPlayerPokemonCard = tcgPlayerPokemonCards[i];
+
+                    if(tcgPlayerPokemonCard.extendedData == null) {
+                        tcgPlayerPokemonCard.extendedData = [];
+                    }
+
                     console.log(tcgPlayerPokemonCard.name);
                     const newTCGPlayerPokemonCard = this.tcgPlayerPokemonCardRepository.create({
                         tcgPlayerPokemonCardProductId: tcgPlayerPokemonCard.productId,
@@ -87,6 +92,7 @@ export class TCGPlayerPokemonCardService {
                         tcgPlayerPokemonCardCleanName: tcgPlayerPokemonCard.cleanName,
                         tcgPlayerPokemonCardImageURL: tcgPlayerPokemonCard.imageUrl,
                         tcgPlayerPokemonCardURL: tcgPlayerPokemonCard.url,
+                        tcgPlayerPokemonCardData: tcgPlayerPokemonCard.extendedData,
                         tcgPlayerPokemonCardModifiedOn: tcgPlayerPokemonCard.modifiedOn,
                     });
 

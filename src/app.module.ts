@@ -32,7 +32,8 @@ import { PokemonTCGPokemonSetModule } from './tcgdb/modules/pokemontcg/pokemon/s
 //TCDdb MTG Modules;
 import { TCGdbMTGCardModule } from './tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.module';
 import { TCGdbMTGSetModule } from './tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.module';
-import { TCGdbMTGPriceModule } from './tcgdb/modules/tcgdb/mtg/price/tcgdb.mtg.price.module';
+import { TCGdbMTGPriceCurrentModule } from './tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.module';
+import { TCGdbMTGPriceHistoryModule } from './tcgdb/modules/tcgdb/mtg/price/history/tcgdb.mtg.price.history.module';
 //TCGdb Pokemon Modules;
 import { TCGdbPokemonCardModule } from './tcgdb/modules/tcgdb/pokemon/card/tcgdb.pokemon.card.module';
 import { TCGdbPokemonSetModule } from './tcgdb/modules/tcgdb/pokemon/set/tcgdb.pokemon.set.module';
@@ -75,7 +76,8 @@ const NODE_ENV = process.env.NODE_ENV;
     //TCDdb MTG Modules;
     TCGdbMTGCardModule,
     TCGdbMTGSetModule,
-    TCGdbMTGPriceModule,
+    TCGdbMTGPriceCurrentModule,
+    TCGdbMTGPriceHistoryModule,
     //TCGdb Pokemon Modules;
     TCGdbPokemonCardModule,
     TCGdbPokemonSetModule,

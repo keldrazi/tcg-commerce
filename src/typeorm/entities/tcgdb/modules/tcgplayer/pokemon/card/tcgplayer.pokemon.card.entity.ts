@@ -31,7 +31,7 @@ export class TCGPlayerPokemonCard {
     tcgPlayerPokemonCardModifiedOn: Date;
 
     @Column('jsonb')
-    tcgPlayerPokemonCardExtendedData: string;
+    tcgPlayerPokemonCardData: string;
 
     @Column('jsonb')
     tcgPlayerPokemonCardSKUs: string;

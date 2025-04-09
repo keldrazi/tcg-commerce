@@ -101,6 +101,16 @@ export class TCGPlayerPokemonPriceService {
 
         return tcgPlayerPokemonPriceRecordCount;
     }
+
+    async deleteTCGPlayerPokemonPricesIsProcessed() {
+        
+        this.tcgPlayerPokemonPriceRepository.createQueryBuilder()
+            .delete()
+            .where("tcgPlayerPokemonPriceIsProcessed = :isProcessed", { isProcessed: true })
+            .execute();
+
+        return true;
+    }
 }
 
 

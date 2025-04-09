@@ -1,11 +1,11 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { TCGdbPokemonPriceService } from './tcgdb.pokemon.price.service';
+import { TCGdbPokemonPriceHistoryService } from './tcgdb.pokemon.price.history.service';
 
-@Controller('tcgdb/pokemon/price')
-export class TCGdbPokemonPriceController {
+@Controller('tcgdb/pokemon/current/price')
+export class TCGdbPokemonPriceHistoryController {
     
     constructor(
-        private tcgdbPokemonPriceService: TCGdbPokemonPriceService
+        private tcgdbPokemonPriceHistoryService: TCGdbPokemonPriceHistoryService
     ) {}
 
     /*

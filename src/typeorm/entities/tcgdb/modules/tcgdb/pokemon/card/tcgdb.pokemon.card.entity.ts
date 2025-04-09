@@ -24,7 +24,7 @@ export class TCGdbPokemonCard {
     tcgdbPokemonCardImageURL: string;
 
     @Column('jsonb')
-    tcgdbPokemonCardExtendedData: string;
+    tcgdbPokemonCardData: string;
 
     @Column('jsonb')
     tcgdbPokemonCardTCGPlayerSKUs: string
