@@ -37,7 +37,19 @@ import { TCGdbMTGPriceHistoryModule } from './tcgdb/modules/tcgdb/mtg/price/hist
 //TCGdb Pokemon Modules;
 import { TCGdbPokemonCardModule } from './tcgdb/modules/tcgdb/pokemon/card/tcgdb.pokemon.card.module';
 import { TCGdbPokemonSetModule } from './tcgdb/modules/tcgdb/pokemon/set/tcgdb.pokemon.set.module';
-import { TCGdbPokemonPriceModule } from './tcgdb/modules/tcgdb/pokemon/price/tcgdb.pokemon.price.module';
+import { TCGdbPokemonPriceCurrentModule } from './tcgdb/modules/tcgdb/pokemon/price/current/tcgdb.pokemon.price.current.module';
+import { TCGdbPokemonPriceHistoryModule } from './tcgdb/modules/tcgdb/pokemon/price/history/tcgdb.pokemon.price.history.module';
+//Application Module;
+import { ApplicationModuleModule } from './tcgcommerce/modules/application/module/application.module.module';
+//Commerce Modules;
+import { CommerceAccountModule } from './tcgcommerce/modules/commerce/account/commerce.account.module';
+import { CommerceLocationModule } from './tcgcommerce/modules/commerce/location/commerce.location.module';
+import { CommerceModuleModule } from './tcgcommerce/modules/commerce/module/commerce.module.module';
+import { CommerceUserModule } from './tcgcommerce/modules/commerce/user/commerce.user.module';
+//Product Modules;
+import { ProductVendorModule } from './tcgcommerce/modules/product/vendor/product.vendor.module';
+import { ProductLineModule } from './tcgcommerce/modules/product/line/product.line.module';
+import { ProductTypeModule } from './tcgcommerce/modules/product/type/product.type.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -81,7 +93,19 @@ const NODE_ENV = process.env.NODE_ENV;
     //TCGdb Pokemon Modules;
     TCGdbPokemonCardModule,
     TCGdbPokemonSetModule,
-    TCGdbPokemonPriceModule,
+    TCGdbPokemonPriceCurrentModule,
+    TCGdbPokemonPriceHistoryModule,
+    //Application Module;
+    ApplicationModuleModule,
+    //Commerce Modules;
+    CommerceAccountModule,
+    CommerceLocationModule,
+    CommerceModuleModule,
+    CommerceUserModule,
+    //Product Modules;
+    ProductVendorModule,
+    ProductLineModule,
+    ProductTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

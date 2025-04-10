@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateProductTypeDTO, ProductTypeDTO } from './dto/product.type.dto';
+import { CreateProductTypeDTO, UpdateProductTypeDTO, ProductTypeDTO } from './dto/product.type.dto';
 import { ProductType } from 'src/typeorm/entities/tcgcommerce/modules/product/type/product.type.entity';
 
 @Injectable()
@@ -10,6 +10,30 @@ export class ProductTypeService {
     constructor(
         @InjectRepository(ProductType) private productTypeRepository: Repository<ProductType>,
     ) { }
+
+    async getProductType(productTypeId: string) {
+        let productType = await this.productTypeRepository.findOne({ 
+            where: { 
+                productTypeId: productTypeId 
+            } 
+        });
+        
+        if (productType == null) {
+            return null;
+        }
+
+        let productTypeDTO = new ProductTypeDTO();
+        productTypeDTO.productTypeId = productType.productTypeId;
+        productTypeDTO.productVendorId = productType.productVendorId;
+        productTypeDTO.productLineId = productType.productLineId;
+        productTypeDTO.productTypeName = productType.productTypeName;
+        productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
+        productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
+        productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
+
+        return productTypeDTO;
+        
+    }
 
     async getProductTypes() {
         let productTypes = await this.productTypeRepository.find();
@@ -25,8 +49,13 @@ export class ProductTypeService {
             let productType = productTypes[i];
             let productTypeDTO = new ProductTypeDTO();
             productTypeDTO.productTypeId = productType.productTypeId;
+            productTypeDTO.productTypeId = productType.productTypeId
+            productTypeDTO.productLineId = productType.productLineId;
             productTypeDTO.productTypeName = productType.productTypeName;
-            productTypeDTO.productVendorId = productType.productVendorId
+            productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
+            productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
+            productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
+           
 
             productTypeDTOs.push(productTypeDTO);
         }
@@ -47,8 +76,13 @@ export class ProductTypeService {
 
         let productTypeDTO = new ProductTypeDTO();
         productTypeDTO.productTypeId = productType.productTypeId;
-        productTypeDTO.productTypeName = productType.productTypeName;
         productTypeDTO.productVendorId = productType.productVendorId;
+        productTypeDTO.productLineId = productType.productLineId;
+        productTypeDTO.productTypeName = productType.productTypeName;
+        productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
+        productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
+        productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
+
 
         return productTypeDTO;
         
@@ -67,13 +101,35 @@ export class ProductTypeService {
         let newProductType = this.productTypeRepository.create({ ...createProductTypeDTO });
         newProductType = await this.productTypeRepository.save(newProductType);
 
-        let productTypeDTO = new ProductTypeDTO();
-        productTypeDTO.productTypeId = newProductType.productTypeId;
-        productTypeDTO.productTypeName = newProductType.productTypeName;
-        productTypeDTO.productVendorId = newProductType.productVendorId;
-
+        let productTypeDTO = this.getProductType(newProductType.productTypeId);
+        
         return productTypeDTO;
         
+    }
+
+    async updateProductType(updateProductTypeDTO: UpdateProductTypeDTO) {
+                    
+        let existingProductType = await this.productTypeRepository.findOne({ 
+            where: { 
+                productTypeId: updateProductTypeDTO.productTypeId
+            } 
+        });
+
+        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
+        if (!existingProductType) {
+            return null; 
+        }
+
+        existingProductType.productTypeName = updateProductTypeDTO.productTypeName;
+        existingProductType.productTypeIsActive = updateProductTypeDTO.productTypeIsActive;
+        existingProductType.productTypeUpdateDate = new Date();
+        
+        await this.productTypeRepository.save(existingProductType);
+
+        let productTypeDTO = this.getProductType(existingProductType.productTypeId);
+
+        return productTypeDTO;
+    
     }
     
 }

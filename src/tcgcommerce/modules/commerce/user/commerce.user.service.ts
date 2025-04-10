@@ -98,7 +98,7 @@ export class CommerceUserService {
 
         updateCommerceUser = await this.commerceUserRepository.save(updateCommerceUser);
 
-        let commerceUserDTO = new CommerceUserDTO();
+        let commerceUserDTO = this.getCommerceUser(updateCommerceUser.commerceUserId);
 
         return commerceUserDTO;
     }

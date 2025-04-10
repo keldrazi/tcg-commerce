@@ -26,13 +26,13 @@ export class CommerceModuleController {
         return await this.commerceModuleService.getCommerceModuleByCommerceAccountId(commerceAccountId);
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createCommerceModule(@Body() createCommerceModuleDTO: CreateCommerceModuleDTO) {
         return this.commerceModuleService.createCommerceModule(createCommerceModuleDTO);
     }
 
-    @Put()
+    @Post('/update')
     @UsePipes(new ValidationPipe())
     async updateCommerceModule(@Body() updateCommerceModuleDTO: UpdateCommerceModuleDTO) {
         return this.commerceModuleService.updateCommerceModule(updateCommerceModuleDTO);

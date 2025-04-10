@@ -1,8 +1,11 @@
-import { IsString } from "class-validator";
+import { IsBoolean, IsString } from "class-validator";
 
 export class ProductVendorDTO {
     productVendorId: string;
     productVendorName: string;
+    productVendorIsActive: boolean;
+    productVendorCreateDate: Date;
+    productVendorUpdateDate: Date;
     
 }
 
@@ -17,5 +20,7 @@ export class UpdateProductVendorDTO {
     productVendorId: string;
     @IsString()
     productVendorName: string;
+    @IsBoolean()
+    productVendorIsActive: boolean;
     
 }

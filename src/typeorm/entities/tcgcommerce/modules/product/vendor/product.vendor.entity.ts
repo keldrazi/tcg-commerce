@@ -8,6 +8,9 @@ export class ProductVendor {
     @Column()
     productVendorName: string;
 
+    @Column({type: 'boolean', default: false})
+    productVendorIsActive: boolean;
+
     @CreateDateColumn()
     productVendorCreateDate: Date;
 

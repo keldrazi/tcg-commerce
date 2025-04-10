@@ -1,26 +1,26 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('productType')
-export class ProductType {
+@Entity('productLine')
+export class ProductLine {
     @PrimaryGeneratedColumn('uuid')
-    productTypeId: string;
+    productLineId: string;
 
     @Column()
     productVendorId: string;
 
     @Column()
-    productLineId: string;
+    productLineName: string;
 
     @Column()
-    productTypeName: string;
+    productLineCode: string;
 
     @Column({type: 'boolean', default: false})
-    productTypeIsActive: boolean;
+    productLineIsActive: boolean;
 
     @CreateDateColumn()
-    productTypeCreateDate: Date;
+    productLineCreateDate: Date;
 
     @UpdateDateColumn()
-    productTypeUpdateDate: Date; 
+    productLineUpdateDate: Date; 
 
 }

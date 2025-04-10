@@ -28,10 +28,6 @@ export class UpdateCommerceModuleDTO {
     @IsString()
     commerceModuleId: string;
     @IsString()
-    applicationModuleId: string;
-    @IsString()
-    commerceAccountId: string;
-    @IsString()
     commerceModuleSettings: string;
     @IsString()
     commerceModuleRoles: string;

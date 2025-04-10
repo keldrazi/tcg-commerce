@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength } from "class-validator";
+import { IsBoolean, IsEmail, IsString, MinLength } from "class-validator";
 
 export class CommerceLocationDTO {
     commerceLocationId: string;
@@ -29,7 +29,7 @@ export class CreateCommerceLocationDTO {
     commerceLocationZip: string;
     @IsString()
     commerceLocationPhoneNumber: string;
-    @IsString()
+    @IsBoolean()
     commerceLocationIsActive: boolean;
 }
 
@@ -50,6 +50,6 @@ export class UpdateCommerceLocationDTO {
     commerceLocationZip: string;
     @IsString()
     commerceLocationPhoneNumber: string;
-    @IsString()
+    @IsBoolean()
     commerceLocationIsActive: boolean;
 }

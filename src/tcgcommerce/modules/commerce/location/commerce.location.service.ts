@@ -75,6 +75,8 @@ export class CommerceLocationService {
     }
 
     async createCommerceLocation(createCommerceLocationDTO: CreateCommerceLocationDTO) {
+
+        //TO DO: ADD VALIDATION FOR UNIQUE CONSTRAINTS ON COMMERCE LOCATION NAME;
         let newCommerceLocation = this.commerceLocationRepository.create({ ...createCommerceLocationDTO });
         newCommerceLocation = await this.commerceLocationRepository.save(newCommerceLocation);
 
@@ -94,8 +96,8 @@ export class CommerceLocationService {
         if(commerceLocation == null) {
             return null;
         }
+        //TO DO: ADD VALIDATION FOR UNIQUE CONSTRAINTS ON COMMERCE LOCATION NAME;
 
-        commerceLocation.commerceAccountId = updateCommerceLocationDTO.commerceAccountId;
         commerceLocation.commerceLocationName = updateCommerceLocationDTO.commerceLocationName;
         commerceLocation.commerceLocationAddress = updateCommerceLocationDTO.commerceLocationAddress;
         commerceLocation.commerceLocationCity = updateCommerceLocationDTO.commerceLocationCity;

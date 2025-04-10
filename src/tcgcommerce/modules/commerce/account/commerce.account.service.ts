@@ -26,7 +26,6 @@ export class CommerceAccountService {
         commerceAccountDTO.commerceAccountContactEmail = commerceAccount.commerceAccountContactEmail;
         commerceAccountDTO.commerceAccountContactPhone = commerceAccount.commerceAccountContactPhone;
         commerceAccountDTO.commerceAccountHandle = commerceAccount.commerceAccountHandle;
-        commerceAccountDTO.commerceAccountModules = commerceAccount.commerceAccountModules;
         commerceAccountDTO.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
         commerceAccountDTO.commerceAccountCreateDate = commerceAccount.commerceAccountCreateDate;
         commerceAccountDTO.commerceAccountUpdateDate = commerceAccount.commerceAccountUpdateDate;
@@ -36,6 +35,8 @@ export class CommerceAccountService {
     }
 
     async createCommerceAccount(commerceAccount: CreateCommerceAccountDTO) {
+
+        //TO DO: ADD VALIDATION FOR UNIQUE CONSTRAINTS ON COMMERCE ACCOUNT NAME AND HANDLE;
         let newCommerceAccount = this.commerceAccountRepository.create({ ...commerceAccount });
         newCommerceAccount = await this.commerceAccountRepository.save(newCommerceAccount);
 
@@ -60,7 +61,6 @@ export class CommerceAccountService {
         updateCommerceAccount.commerceAccountContactName = commerceAccount.commerceAccountContactName;
         updateCommerceAccount.commerceAccountContactEmail = commerceAccount.commerceAccountContactEmail;
         updateCommerceAccount.commerceAccountContactPhone = commerceAccount.commerceAccountContactPhone;
-        updateCommerceAccount.commerceAccountModules = commerceAccount.commerceAccountModules;
         updateCommerceAccount.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
         updateCommerceAccount.commerceAccountUpdateDate = new Date();
 

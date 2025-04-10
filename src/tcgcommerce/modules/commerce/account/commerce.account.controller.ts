@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateCommerceAccountDTO } from './dto/commerce.account.dto';
+import { CreateCommerceAccountDTO, UpdateCommerceAccountDTO } from './dto/commerce.account.dto';
 import { CommerceAccountService } from './commerce.account.service';
 
 
@@ -17,10 +17,16 @@ export class CommerceAccountController {
         return await this.commerceAccountService.getCommerceAccount(commerceAccountId);
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createCommerceAccount(@Body() createCommerceAcountDTO: CreateCommerceAccountDTO) {
         return await this.commerceAccountService.createCommerceAccount(createCommerceAcountDTO);
+    }
+
+    @Post('/update')
+    @UsePipes(new ValidationPipe())
+    async updateCommerceAccount(@Body() updateCommerceAcountDTO: UpdateCommerceAccountDTO) {
+        return await this.commerceAccountService.updateCommerceAccount(updateCommerceAcountDTO);
     }
 
     /*

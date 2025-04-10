@@ -21,13 +21,13 @@ export class ApplicationModuleController {
         return await this.applicationModuleService.getApplicationModule(applicatioModuleId);
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createApplicationModule(@Body() createApplicationModuleDTO: CreateApplicationModuleDTO) {
         return this.applicationModuleService.createApplicationModule(createApplicationModuleDTO);
     }
 
-    @Put()
+    @Post('/update')
     @UsePipes(new ValidationPipe())
     async updateApplicationModule(@Body() updateApplicationModuleDTO: UpdateApplicationModuleDTO) {
         return this.applicationModuleService.updateApplicationModule(updateApplicationModuleDTO);
