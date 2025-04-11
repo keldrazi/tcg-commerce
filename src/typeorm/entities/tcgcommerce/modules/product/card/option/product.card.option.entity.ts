@@ -6,10 +6,19 @@ export class ProductCardOption {
     productCardOptionId: string;
 
     @Column()
-    productCardTypeName: string;
+    productVendorId: string;
+
+    @Column()
+    productLineId: string;
+
+    @Column()
+    productTypeId: string;
 
     @Column()
     productCardOptionName: string;
+
+    @Column({type: 'boolean', default: false})
+    productCardOptionIsActive: boolean;
 
     @CreateDateColumn()
     productCardOptionCreateDate: Date;

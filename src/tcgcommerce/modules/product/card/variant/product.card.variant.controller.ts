@@ -1,8 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ProductCardVariantDTO } from './dto/product.card.variant.dto';
+import { CreateProductCardVariantDTO, UpdateProductCardVariantDTO, ProductCardVariantDTO } from './dto/product.card.variant.dto';
 import { ProductCardVariantService } from './product.card.variant.service';
-
-
 
 @Controller('product/card/variant')
 export class ProductCardVariantController {
@@ -12,22 +10,22 @@ export class ProductCardVariantController {
     ) { }
     
     
-    /*@Get('/:commerceAccountId')
-    async getCommerceAccount(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountService.getCommerceAccount(commerceAccountId);
+    @Get()
+    async getProductCardVariants() {
+        return await this.productCardVariantService.getProductCardVariants();
     }
 
     @Post()
     @UsePipes(new ValidationPipe())
-    async createCommerceAccount(@Body() createCommerceAcountDTO: CreateCommerceAccountDTO) {
-        return await this.commerceAccountService.createCommerceAccount(createCommerceAcountDTO);
+    async createProductCardVariant(@Body() createProductCardVariantDTO: CreateProductCardVariantDTO) {
+        return await this.productCardVariantService.createProductCardVariant(createProductCardVariantDTO);
     }
 
-    /*
-    @Put(':id')
-    async updateUser(@Param('tcgDatabaseUserId') tcgDatabaseUserId: string, @Body() tcgDatabaseUserUpdateDTO: TCGDatabaseUserUpdateDTO) {
-        await this.tcgDatabaseUserService.updateTCGDatabaseUser(tcgDatabaseUserId, tcgDatabaseUserUpdateDTO);
+    @Put()
+    @UsePipes(new ValidationPipe())
+    async updateProductCardVariant(@Body() updateProductCardVariantDTO: UpdateProductCardVariantDTO) {
+        return await this.productCardVariantService.updateProductCardVariant(updateProductCardVariantDTO);
     }
-    */
+
 
 }

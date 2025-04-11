@@ -12,10 +12,13 @@ export class ProductCardItem {
     productCardItemTCGdbId: string;
 
     @Column()
-    productVendorName: string;
+    productVendorId: string;
 
     @Column()
-    productTypeName: string;
+    productLineId: string;
+
+    @Column()
+    productTypeId: string;
 
     @Column()
     productCardItemSetName: string;
@@ -40,6 +43,9 @@ export class ProductCardItem {
 
     @Column('jsonb')
     productCardItemMetadata: string;
+
+    @Column({type: 'boolean', default: true})
+    productCardItemIsActive: boolean;
 
     @CreateDateColumn()
     productCardItemCreateDate: Date;

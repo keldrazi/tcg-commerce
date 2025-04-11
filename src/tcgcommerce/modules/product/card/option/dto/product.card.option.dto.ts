@@ -1,25 +1,32 @@
-import { IsEmail, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsString } from "class-validator";
 
 export class ProductCardOptionDTO {
     productCardOptionId: string;
-    productCardTypeName: string;
+    productVendorId: string;
+    productLineId: string;
+    productTypeId: string;
     productCardOptionName: string;
-    
+    productCardOptionIsActive: boolean;
+    productCardOptionCreateDate: Date;
+    productCardOptionUpdateDate: Date; 
 }
 
 export class CreateProductCardOptionDTO {
     @IsString()
-    productCardTypeName: string;
+    productVendorName: string;
     @IsString()
-    productCardOptionName: string;
-   
+    productLineName: string;
+    @IsString()
+    productTypeName: string;
+    @IsString()
+    productCardOptionName: string;  
 }
 
 export class UpdateProductCardOptionDTO {
     @IsString()
     productCardOptionId: string;
     @IsString()
-    productCardTypeName: string;
-    @IsString()
     productCardOptionName: string;
+    @IsBoolean()
+    productCardOptionIsActive: boolean;
 }

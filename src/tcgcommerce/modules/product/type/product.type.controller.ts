@@ -17,6 +17,11 @@ export class ProductTypeController {
         return await this.productTypeService.getProductType(productTypeId);
     }
 
+    @Get('/vendor/:productVendorId/line/:productLineId')
+    async getProductTypesByProductVendorIdAndProductLineId(@Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string) {
+        return await this.productTypeService.getProductTypesByProductVendorIdAndProductLineId(productVendorId, productLineId);
+    }
+
     @Get('/all')
     async getProductTypes() {
         return await this.productTypeService.getProductTypes();
@@ -28,7 +33,7 @@ export class ProductTypeController {
         return await this.productTypeService.createProductType(createProductTypeDTO);
     }
 
-    @Post('/update')
+    @Put()
     @UsePipes(new ValidationPipe())
     async updateProductType(@Body() updateProductTypeDTO: UpdateProductTypeDTO) {
         return await this.productTypeService.updateProductType(updateProductTypeDTO);

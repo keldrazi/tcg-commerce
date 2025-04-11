@@ -8,6 +8,12 @@ export class ProductCardVariant {
     @Column()
     productCardVariantName: string;
 
+    @Column()
+    productCardVariantAbbreviation: string;
+
+    @Column({type: 'boolean', default: false})
+    productCardVariantIsActive: boolean;
+
     @CreateDateColumn()
     productCardVariantCreateDate: Date;
 

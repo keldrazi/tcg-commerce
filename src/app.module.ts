@@ -50,6 +50,9 @@ import { CommerceUserModule } from './tcgcommerce/modules/commerce/user/commerce
 import { ProductVendorModule } from './tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductLineModule } from './tcgcommerce/modules/product/line/product.line.module';
 import { ProductTypeModule } from './tcgcommerce/modules/product/type/product.type.module';
+import { ProductModuleModule } from './tcgcommerce/modules/product/module/product.module.module';
+//Product Card Modules;
+import { ProductCardVariantModule } from './tcgcommerce/modules/product/card/variant/product.card.variant.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -106,6 +109,9 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductVendorModule,
     ProductLineModule,
     ProductTypeModule,
+    ProductModuleModule,
+    //Product Card Modules;
+    ProductCardVariantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

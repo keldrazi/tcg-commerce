@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ProductCardItemDTO } from './dto/product.card.item.dto';
+import { CreateProductCardItemDTO, UpdateProductCardItemDTO, ProductCardItemDTO } from './dto/product.card.item.dto';
 import { ProductCardItemService } from './product.card.item.service';
 
 

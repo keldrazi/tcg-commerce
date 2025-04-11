@@ -35,6 +35,39 @@ export class ProductTypeService {
         
     }
 
+    async getProductTypesByProductVendorIdAndProductLineId(productVendorId: string, productLineId: string) {
+        let productTypes = await this.productTypeRepository.find({ 
+            where: { 
+                productVendorId: productVendorId,
+                productLineId: productLineId 
+            } 
+        });
+        
+        if (productTypes == null) {
+            return null;
+        }
+
+        let productTypeDTOs: ProductTypeDTO[] = [];
+
+        for(let i = 0; i < productTypes.length; i++) {
+            let productType = productTypes[i];
+            let productTypeDTO = new ProductTypeDTO();
+            productTypeDTO.productTypeId = productType.productTypeId;
+            productTypeDTO.productTypeId = productType.productTypeId
+            productTypeDTO.productLineId = productType.productLineId;
+            productTypeDTO.productTypeName = productType.productTypeName;
+            productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
+            productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
+            productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
+           
+
+            productTypeDTOs.push(productTypeDTO);
+        }
+
+        return productTypeDTOs;
+        
+    }
+
     async getProductTypes() {
         let productTypes = await this.productTypeRepository.find();
         

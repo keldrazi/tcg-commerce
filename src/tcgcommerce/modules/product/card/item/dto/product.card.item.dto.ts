@@ -1,11 +1,12 @@
-import { IsString } from "class-validator";
+import { IsBoolean, IsString } from "class-validator";
 
 export class ProductCardItemDTO {
     productCardItemId: string;
     commerceAccountId: string;
     productCardItemTCGdbId: string;
-    productVendorName: string;
-    productTypeName: string;
+    productVendorId: string;
+    productLineId: string;
+    productTypeId: string;
     productCardItemSetName: string;
     productCardItemSetAbbreviation: string;
     productCardItemNumber: number;
@@ -14,6 +15,9 @@ export class ProductCardItemDTO {
     productCardItemImage: string;
     productCardItemExtendedData: string;
     productCardItemMetadata: string;
+    productCardItemIsActive: boolean;
+    productCardItemCreateDate: Date;
+    productCardItemUpdateDate: Date;
     
 }
 
@@ -23,9 +27,11 @@ export class CreateProductCardItemDTO {
     @IsString()
     productCardItemTCGdbId: string;
     @IsString()
-    productVendorName: string;
+    productVendorId: string;
     @IsString()
-    productTypeName: string;
+    productLineId: string;
+    @IsString()
+    productTypeId: string;
     @IsString()
     productCardItemSetName: string;
     @IsString()
@@ -49,14 +55,6 @@ export class UpdateProductCardItemDTO {
     @IsString()
     productCardItemId: string;
     @IsString()
-    commerceAccountId: string;
-    @IsString()
-    productCardItemTCGdbId: string;
-    @IsString()
-    productVendorName: string;
-    @IsString()
-    productTypeName: string;
-    @IsString()
     productCardItemSetName: string;
     @IsString()
     productCardItemSetAbbreviation: string;
@@ -72,4 +70,6 @@ export class UpdateProductCardItemDTO {
     productCardItemExtendedData: string;
     @IsString()
     productCardItemMetadata: string;
+    @IsBoolean()
+    productCardItemIsActive: boolean;
 }
