@@ -13,11 +13,11 @@ export class ProductCardOptionDTO {
 
 export class CreateProductCardOptionDTO {
     @IsString()
-    productVendorName: string;
+    productVendorId: string;
     @IsString()
-    productLineName: string;
+    productLineId: string;
     @IsString()
-    productTypeName: string;
+    productTypeId: string;
     @IsString()
     productCardOptionName: string;  
 }

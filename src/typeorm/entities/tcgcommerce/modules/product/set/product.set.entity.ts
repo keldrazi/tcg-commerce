@@ -1,9 +1,9 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('productCardSet')
-export class ProductCardSet {
+@Entity('productSet')
+export class ProductSet {
     @PrimaryGeneratedColumn('uuid')
-    productCardSetId: string;
+    productSetId: string;
 
     @Column()
     productVendorId: string;
@@ -12,24 +12,24 @@ export class ProductCardSet {
     productLineId: string;
 
     @Column()
-    productCardSetName: string;
+    productSetName: string;
 
     @Column()
-    productCardSetAbbreviation: string;
+    productSetAbbreviation: string;
 
     @Column('jsonb')
-    productCardSetExtendedData: string;
+    productSetExtendedData: string;
 
     @Column('jsonb')
-    productCardSetMetadata: string;
+    productSetMetadata: string;
 
     @Column({type: 'boolean', default: false})
-    productCardSetIsActive: boolean;
+    productSetIsActive: boolean;
 
     @CreateDateColumn()
-    productCardSetCreateDate: Date;
+    productSetCreateDate: Date;
 
     @UpdateDateColumn()
-    productCardSetUpdateDate: Date; 
+    productSetUpdateDate: Date; 
 
 }
