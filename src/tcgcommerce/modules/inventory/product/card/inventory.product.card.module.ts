@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ProductCardInventoryService } from './inventory.product.card.service';
-import { ProductCardInventoryController } from './inventory.product.card.controller';
-import { ProductCardInventory } from 'src/typeorm/entities/tcgcommerce/modules/product/card/inventory/product.card.inventory.entity';
+import { InventoryProductCardService } from './inventory.product.card.service';
+import { InventoryProductCardController } from './inventory.product.card.controller';
+import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ProductCardInventory])
+        TypeOrmModule.forFeature([InventoryProductCard])
     ],
-    controllers: [ProductCardInventoryController],
-    providers: [ProductCardInventoryService],
-    exports: [ProductCardInventoryService]
+    controllers: [InventoryProductCardController],
+    providers: [InventoryProductCardService],
+    exports: [InventoryProductCardService]
 })
-export class ProductCardInventoryModule {}
+export class InventoryProductCardModule {}

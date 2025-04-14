@@ -1,50 +1,56 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('productCardInventory')
-export class ProductCardInventory {
+@Entity('inventoryProductCard')
+export class InventoryProductCard {
     @PrimaryGeneratedColumn('uuid')
-    productCardInventoryId: string;
+    inventoryProductCardId: string;
 
     @Column()
     commerceAccountId: string;
+
+    @Column()
+    commerceLocationId: string;
     
     @Column()
     productCardItemId: string;
 
     @Column()
-    commerceLocationId: string;
-
-    @Column()
-    productCardOption: string;
+    productCardOptionId: string;
     
     @Column()
-    productCardVariant: string;
+    productCardVariantId: string;
 
     @Column()
-    productCardInventoryQty: number;
+    inventoryProductCardSKU: string;
 
     @Column()
-    productCardInventoryMaxQty: number;
+    inventoryProductCardBarcode: string;
 
     @Column()
-    productCardInventoryReserveQty: number;
+    inventoryProductCardQty: number;
+
+    @Column()
+    inventoryProductCardMaxQty: number;
+
+    @Column()
+    inventoryProductCardReserveQty: number;
     
     @Column({type: 'decimal'})
-    productCardInventoryPrice: number;
+    inventoryProductCardPrice: number;
 
     @Column({type: 'boolean', default: false})
-    productCardInventoryOverridePriceEnabled: boolean;
+    inventoryProductCardOverridePriceEnabled: boolean;
 
     @Column({type: 'decimal'})
-    productCardInventoryOverridePrice: number;
+    inventoryProductCardOverridePrice: number;
 
     @Column('jsonb')
-    productCardInventoryMetadata: string
+    inventoryProductCardMetadata: string
 
     @CreateDateColumn()
-    productCardInventoryCreateDate: Date;
+    inventoryProductCardCreateDate: Date;
 
     @UpdateDateColumn()
-    productCardInventoryUpdateDate: Date; 
+    inventoryProductCardUpdateDate: Date; 
 
 }

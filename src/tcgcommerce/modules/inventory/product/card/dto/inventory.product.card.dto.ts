@@ -1,36 +1,39 @@
 import { IsBoolean, IsDecimal, IsEmail, IsNumber, IsString } from "class-validator";
 
-export class ProductCardInventorysDTO {
+export class InventoryProductCardsDTO {
     commerceAccountId: string;
     productCardItemId: string;
-    productCardInventoryDTOs: ProductCardInventoryDTO[];
+    inventoryProductCardDTOs: InventoryProductCardDTO[];
 }
 
-export class ProductCardInventoryDTO {
-    productCardInventoryId: string;
+export class InventoryProductCardDTO {
+    inventoryProductCardId: string;
     commerceAccountId: string;
     commerceLocationId: string;
     productCardItemId: string;
-    productCardOption: string;
-    productCardVariant: string;
-    productCardInventoryQty: number;
-    productCardInventoryMaxQty: number;
-    productCardInventoryReserveQty: number;
-    productCardInventoryPrice: number;
-    productCardInventoryOverridePriceEnabled: boolean;
-    productCardInventoryOverridePrice: number;
-    productCardInventoryMetadata: string;
-    productCardInventoryUpdateDate: Date; 
+    productCardOptionId: string;
+    productCardVariantId: string;
+    inventoryProductCardSKU: string;
+    inventoryProductCardBarcode: string;
+    inventoryProductCardQty: number;
+    inventoryProductCardMaxQty: number;
+    inventoryProductCardReserveQty: number;
+    inventoryProductCardPrice: number;
+    inventoryProductCardOverridePriceEnabled: boolean;
+    inventoryProductCardOverridePrice: number;
+    inventoryProductCardMetadata: string;
+    inventoryProductCardCreateDate: Date;
+    inventoryProductCardUpdateDate: Date; 
     
 }
 
-export class CreateProductCardInventorysDTO {
+export class CreateInventoryProductCardsDTO {
     commerceAccountId: string;
     productCardItemId: string;
-    createProductCardInventoryDTOs: CreateProductCardInventoryDTO[];
+    createInventoryProductCardDTOs: CreateInventoryProductCardDTO[];
 }
 
-export class CreateProductCardInventoryDTO {
+export class CreateInventoryProductCardDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
@@ -38,49 +41,50 @@ export class CreateProductCardInventoryDTO {
     @IsString()
     productCardItemId: string;
     @IsString()
-    productCardOption: string;
+    productCardOptionId: string;
     @IsString()
-    productCardVariant: string;
+    productCardVariantId: string;
     @IsNumber()
-    productCardInventoryQty: number;
+    inventoryProductCardQty: number;
     @IsNumber()
-    productCardInventoryMaxQty: number;
+    inventoryProductCardMaxQty: number;
     @IsNumber()
-    productCardInventoryReserveQty: number;
+    inventoryProductCardReserveQty: number;
     @IsDecimal()
-    productCardInventoryPrice: number;
+    inventoryProductCardPrice: number;
     @IsBoolean()
-    productCardInventoryOverridePriceEnabled: boolean;
+    inventoryProductCardOverridePriceEnabled: boolean;
     @IsNumber()
-    productCardInventoryOverridePrice: number;
+    inventoryProductCardOverridePrice: number;
     @IsString()
-    productCardInventoryMetadata: string;
+    inventoryProductCardMetadata: string;
    
 }
 
-export class UpdateProductCardInventorysDTO {
+export class UpdateInventoryProductCardsDTO {
     commerceAccountId: string;
     productCardItemId: string;
-    updateProductCardInventoryDTOs: UpdateProductCardInventoryDTO[];
+    updateInventoryProductCardDTOs: UpdateInventoryProductCardDTO[];
 }
 
-export class UpdateProductCardInventoryDTO {
+export class UpdateInventoryProductCardDTO {
     @IsString()
     productCardInventoryId: string;
     @IsString()
     commerceLocationId: string;
     @IsNumber()
-    productCardInventoryQty: number;
+    inventoryProductCardQty: number;
     @IsNumber()
-    productCardInventoryMaxQty: number;
+    inventoryProductCardMaxQty: number;
     @IsNumber()
-    productCardInventoryReserveQty: number;
+    inventoryProductCardReserveQty: number;
     @IsDecimal()
-    productCardInventoryPrice: number;
+    inventoryProductCardPrice: number;
     @IsBoolean()
-    productCardInventoryOverridePriceEnabled: boolean;
+    inventoryProductCardOverridePriceEnabled: boolean;
     @IsNumber()
-    productCardInventoryOverridePrice: number;
+    inventoryProductCardOverridePrice: number;
     @IsString()
-    productCardInventoryMetadata: string;
+    inventoryProductCardMetadata: string;
+   
 }
