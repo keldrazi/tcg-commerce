@@ -7,8 +7,7 @@ export class ProductCardItemDTO {
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
-    productCardItemSetName: string;
-    productCardItemSetAbbreviation: string;
+    productSetId: string;
     productCardItemNumber: number;
     productCardItemName: string;
     productCardItemCleanName: string;
@@ -33,9 +32,7 @@ export class CreateProductCardItemDTO {
     @IsString()
     productTypeId: string;
     @IsString()
-    productCardItemSetName: string;
-    @IsString()
-    productCardItemSetAbbreviation: string;
+    productSetId: string;
     @IsString()
     productCardItemNumber: number;
     @IsString()
@@ -54,10 +51,6 @@ export class CreateProductCardItemDTO {
 export class UpdateProductCardItemDTO {
     @IsString()
     productCardItemId: string;
-    @IsString()
-    productCardItemSetName: string;
-    @IsString()
-    productCardItemSetAbbreviation: string;
     @IsString()
     productCardItemNumber: number;
     @IsString()

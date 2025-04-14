@@ -28,6 +28,7 @@ export class ProductSetService {
         productSetDTO.productVendorId = productSet.productVendorId;
         productSetDTO.productLineId = productSet.productLineId;
         productSetDTO.productSetName = productSet.productSetName;
+        productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
         productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
         productSetDTO.productSetExtendedData = productSet.productSetExtendedData;
         productSetDTO.productSetMetadata = productSet.productSetMetadata;
@@ -62,6 +63,7 @@ export class ProductSetService {
             productSetDTO.productLineId = productSet.productLineId;
             productSetDTO.productSetName = productSet.productSetName;
             productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
+            productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
             productSetDTO.productSetExtendedData = productSet.productSetExtendedData;
             productSetDTO.productSetMetadata = productSet.productSetMetadata;
             productSetDTO.productSetIsActive = productSet.productSetIsActive;
@@ -93,6 +95,7 @@ export class ProductSetService {
         productSetDTO.productVendorId = productSet.productVendorId;
         productSetDTO.productLineId = productSet.productLineId;
         productSetDTO.productSetName = productSet.productSetName;
+        productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
         productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
         productSetDTO.productSetExtendedData = productSet.productSetExtendedData;
         productSetDTO.productSetMetadata = productSet.productSetMetadata;
@@ -139,6 +142,7 @@ export class ProductSetService {
 
         existingProductSet.productSetName = updateProductSetDTO.productSetName;
         existingProductSet.productSetAbbreviation = updateProductSetDTO.productSetAbbreviation;
+        existingProductSet.productSetReleaseDate = updateProductSetDTO.productSetReleaseDate;
         existingProductSet.productSetExtendedData = updateProductSetDTO.productSetExtendedData;
         existingProductSet.productSetMetadata = updateProductSetDTO.productSetMetadata;
         existingProductSet.productSetIsActive = updateProductSetDTO.productSetIsActive;

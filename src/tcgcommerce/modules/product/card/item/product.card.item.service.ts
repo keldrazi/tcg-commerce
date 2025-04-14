@@ -139,8 +139,7 @@ export class ProductCardItemService {
             productCardItemDTO.productVendorId = productCardItem.productVendorId;
             productCardItemDTO.productLineId = productCardItem.productLineId;
             productCardItemDTO.productTypeId = productCardItem.productTypeId;
-            productCardItemDTO.productCardItemSetName = productCardItem.productCardItemSetName;
-            productCardItemDTO.productCardItemSetAbbreviation = productCardItem.productCardItemSetAbbreviation;
+            productCardItemDTO.productSetId = productCardItem.productSetId;
             productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
             productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
             productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
@@ -186,8 +185,6 @@ export class ProductCardItemService {
             return null; 
         }
 
-        existingProductCardItem.productCardItemSetName = updateProductCardItemDTO.productCardItemSetName;
-        existingProductCardItem.productCardItemSetAbbreviation = updateProductCardItemDTO.productCardItemSetAbbreviation;
         existingProductCardItem.productCardItemNumber = updateProductCardItemDTO.productCardItemNumber;
         existingProductCardItem.productCardItemName = updateProductCardItemDTO.productCardItemName;
         existingProductCardItem.productCardItemCleanName = updateProductCardItemDTO.productCardItemCleanName;

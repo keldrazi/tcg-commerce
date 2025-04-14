@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ProductCardInventoryDTO } from './dto/product.card.inventory.dto';
-import { ProductCardInventoryService } from './product.card.inventory.service';
+import { ProductCardInventoryDTO } from './dto/inventory.product.card.dto';
+import { ProductCardInventoryService } from './inventory.product.card.service';
 
 
 

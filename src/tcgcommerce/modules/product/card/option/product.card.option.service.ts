@@ -103,7 +103,7 @@ export class ProductCardOptionService {
     async createProductCardOption(createProductCardOptionDTO: CreateProductCardOptionDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let productCardOption = await this.getProductCardOptionByName(createProductCardOptionDTO.productVendorName, createProductCardOptionDTO.productLineName, createProductCardOptionDTO.productTypeName, createProductCardOptionDTO.productCardOptionName);
+        let productCardOption = await this.getProductCardOptionByName(createProductCardOptionDTO.productVendorId, createProductCardOptionDTO.productLineId, createProductCardOptionDTO.productTypeId, createProductCardOptionDTO.productCardOptionName);
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productCardOption != null) {

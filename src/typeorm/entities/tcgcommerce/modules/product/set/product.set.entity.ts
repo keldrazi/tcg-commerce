@@ -17,6 +17,9 @@ export class ProductSet {
     @Column()
     productSetAbbreviation: string;
 
+    @Column()
+    productSetReleaseDate: Date;
+
     @Column('jsonb')
     productSetExtendedData: string;
 

@@ -21,11 +21,8 @@ export class ProductCardItem {
     productTypeId: string;
 
     @Column()
-    productCardItemSetName: string;
+    productSetId: string;
     
-    @Column()
-    productCardItemSetAbbreviation: string;
-
     @Column()
     productCardItemNumber: number;
 
@@ -37,6 +34,9 @@ export class ProductCardItem {
 
     @Column()
     productCardItemImage: string;
+
+    @Column({type: 'boolean', default: false})
+    productCardItemIsPresale: boolean;
 
     @Column('jsonb')
     productCardItemExtendedData: string;
