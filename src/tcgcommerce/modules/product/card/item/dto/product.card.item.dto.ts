@@ -12,6 +12,7 @@ export class ProductCardItemDTO {
     productCardItemName: string;
     productCardItemCleanName: string;
     productCardItemImage: string;
+    productCardItemIsPresale: boolean;
     productCardItemExtendedData: string;
     productCardItemMetadata: string;
     productCardItemIsActive: boolean;
@@ -41,10 +42,14 @@ export class CreateProductCardItemDTO {
     productCardItemCleanName: string;
     @IsString()
     productCardItemImage: string;
+    @IsBoolean()
+    productCardItemIsPresale: boolean;
     @IsString()
     productCardItemExtendedData: string;
     @IsString()
     productCardItemMetadata: string;
+    @IsBoolean()
+    productCardItemIsActive: boolean;
    
 }
 
@@ -59,6 +64,8 @@ export class UpdateProductCardItemDTO {
     productCardItemCleanName: string;
     @IsString()
     productCardItemImage: string;
+    @IsBoolean()
+    productCardItemIsPresale: boolean;
     @IsString()
     productCardItemExtendedData: string;
     @IsString()
