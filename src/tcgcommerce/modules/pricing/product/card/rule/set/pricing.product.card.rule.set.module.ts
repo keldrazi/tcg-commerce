@@ -13,4 +13,4 @@ import { PricingProductCardRuleSet } from 'src/typeorm/entities/tcgcommerce/modu
     providers: [PricingProductCardRuleSetService],
     exports: [PricingProductCardRuleSetService]
 })
-export class PricingProductCardModule {}
+export class PricingProductCardRuleSetModule {}
