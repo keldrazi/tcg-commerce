@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PricingProductCardDTO, PricingProductCardsDTO, CreatePricingProductCardDTO, UpdatePricingProductCardDTO } from './dto/pricing.product.card.dto';
-import { PricingProductCard } from 'src/typeorm/entities/tcgcommerce/modules/pricing/product/card/pricing.product.card.entity';
+import { PricingProductCard } from 'src/typeorm/entities/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.entity';
 
 @Injectable()
 export class PricingProductCardService {
