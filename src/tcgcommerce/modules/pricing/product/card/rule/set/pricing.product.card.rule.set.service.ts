@@ -8,11 +8,11 @@ import { PricingProductCardRuleSet } from 'src/typeorm/entities/tcgcommerce/modu
 export class PricingProductCardRuleSetService {
 
     constructor(
-        @InjectRepository(PricingProductCardRuleSet) private pricingProductCardRepository: Repository<PricingProductCardRuleSet>,
+        @InjectRepository(PricingProductCardRuleSet) private pricingProductCardRuleSetRepository: Repository<PricingProductCardRuleSet>,
     ) { }
 
     async getPricingProductCardRuleSet(pricingProductCardRuleSetId: string) {
-        let pricingProductCardRuleSet = await this.pricingProductCardRepository.findOne({
+        let pricingProductCardRuleSet = await this.pricingProductCardRuleSetRepository.findOne({
             where: {
                 pricingProductCardRuleSetId: pricingProductCardRuleSetId,
             }
@@ -42,7 +42,7 @@ export class PricingProductCardRuleSetService {
     }
 
     async getPricingProductCardRuleSets(commerceAccountId: string, productLineId: string) {
-        let pricingProductCardRuleSets = await this.pricingProductCardRepository.find({
+        let pricingProductCardRuleSets = await this.pricingProductCardRuleSetRepository.find({
             where: {
                 commerceAccountId: commerceAccountId,
                 productLineId: productLineId
@@ -80,8 +80,8 @@ export class PricingProductCardRuleSetService {
     
     async createPricingProductCardRuleSet(createPricingProductCardRuleSetDTO: CreatePricingProductCardRuleSetDTO) {
         
-        let newPricingProductCardRuleSet = this.pricingProductCardRepository.create({ ...createPricingProductCardRuleSetDTO });
-        newPricingProductCardRuleSet = await this.pricingProductCardRepository.save(newPricingProductCardRuleSet);
+        let newPricingProductCardRuleSet = this.pricingProductCardRuleSetRepository.create({ ...createPricingProductCardRuleSetDTO });
+        newPricingProductCardRuleSet = await this.pricingProductCardRuleSetRepository.save(newPricingProductCardRuleSet);
 
         let pricingProductCardRuleSetDTO = this.getPricingProductCardRuleSet(newPricingProductCardRuleSet.pricingProductCardRuleSetId);
 
@@ -91,7 +91,7 @@ export class PricingProductCardRuleSetService {
     async updatePricingProductCardRuleSet(updatePricingProductCardRuleSetDTO: UpdatePricingProductCardRuleSetDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let pricingProductCardRuleSet = await this.pricingProductCardRepository.findOne({
+        let pricingProductCardRuleSet = await this.pricingProductCardRuleSetRepository.findOne({
             where: {
                 pricingProductCardRuleSetId: updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetId
             }
@@ -111,7 +111,7 @@ export class PricingProductCardRuleSetService {
         pricingProductCardRuleSet.pricingProductCardRuleSetIsActive = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive;
         pricingProductCardRuleSet.pricingProductCardRuleSetUpdateDate = new Date();
         
-        pricingProductCardRuleSet = await this.pricingProductCardRepository.save(pricingProductCardRuleSet);
+        pricingProductCardRuleSet = await this.pricingProductCardRuleSetRepository.save(pricingProductCardRuleSet);
 
         let pricingProductCardDTO = this.getPricingProductCardRuleSet(pricingProductCardRuleSet.pricingProductCardRuleSetId);
 

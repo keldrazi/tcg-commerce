@@ -1,119 +1,99 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PricingProductCardRuleSetDTO, CreatePricingProductCardRuleSetDTO, UpdatePricingProductCardRuleSetDTO} from './dto/pricing.product.card.rule.type.dto';
-import { PricingProductCardRuleSet } from 'src/typeorm/entities/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.entity';
+import { PricingProductCardRuleTypeDTO, CreatePricingProductCardRuleTypeDTO, UpdatePricingProductCardRuleTypeDTO} from './dto/pricing.product.card.rule.type.dto';
+import { PricingProductCardRuleType } from 'src/typeorm/entities/tcgcommerce/modules/pricing/product/card/rule/type/pricing.product.card.rule.type.entity';
 
 @Injectable()
-export class PricingProductCardRuleSetService {
+export class PricingProductCardRuleTypeService {
 
     constructor(
-        @InjectRepository(PricingProductCardRuleSet) private pricingProductCardRepository: Repository<PricingProductCardRuleSet>,
+        @InjectRepository(PricingProductCardRuleType) private pricingProductCardRuleTypeRepository: Repository<PricingProductCardRuleType>,
     ) { }
 
-    async getPricingProductCardRuleSet(pricingProductCardRuleSetId: string) {
-        let pricingProductCardRuleSet = await this.pricingProductCardRepository.findOne({
+    async getPricingProductCardRuleType(pricingProductCardRuleTypeId: string) {
+        let pricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.findOne({
             where: {
-                pricingProductCardRuleSetId: pricingProductCardRuleSetId,
+                pricingProductCardRuleTypeId: pricingProductCardRuleTypeId,
             }
         });
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(pricingProductCardRuleSet == null) {
+        if(pricingProductCardRuleType == null) {
             return null;
         }
 
-        let pricingProductCardRuleSetDTO = new PricingProductCardRuleSetDTO();
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetId = pricingProductCardRuleSet.pricingProductCardRuleSetId;
-        pricingProductCardRuleSetDTO.commerceAccountId = pricingProductCardRuleSet.commerceAccountId;
-        pricingProductCardRuleSetDTO.productLineId = pricingProductCardRuleSet.productLineId;
-        pricingProductCardRuleSetDTO.pricingProductCardTypeId = pricingProductCardRuleSet.pricingProductCardTypeId;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleTypeId = pricingProductCardRuleSet.pricingProductCardRuleTypeId;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetName = pricingProductCardRuleSet.pricingProductCardRuleSetName;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimumEnabled = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimumEnabled;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimum = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimum;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata = pricingProductCardRuleSet.pricingProductCardRuleSetMetadata;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive = pricingProductCardRuleSet.pricingProductCardRuleSetIsActive;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetCreateDate = pricingProductCardRuleSet.pricingProductCardRuleSetCreateDate;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetUpdateDate = pricingProductCardRuleSet.pricingProductCardRuleSetUpdateDate;
+        let pricingProductCardRuleTypeDTO = new PricingProductCardRuleTypeDTO();
+        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId = pricingProductCardRuleType.pricingProductCardRuleTypeId;
+        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName = pricingProductCardRuleType.pricingProductCardRuleTypeName;
+        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata = pricingProductCardRuleType.pricingProductCardRuleTypeMetadata;
+        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive = pricingProductCardRuleType.pricingProductCardRuleTypeIsActive;
+        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeCreateDate = pricingProductCardRuleType.pricingProductCardRuleTypeCreateDate;
+        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeUpdateDate = pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate;
         
-        return pricingProductCardRuleSetDTO;
+        return pricingProductCardRuleTypeDTO;
 
     }
 
-    async getPricingProductCardRuleSets(commerceAccountId: string, productLineId: string) {
-        let pricingProductCardRuleSets = await this.pricingProductCardRepository.find({
-            where: {
-                commerceAccountId: commerceAccountId,
-                productLineId: productLineId
-            }
-        });
+    async getPricingProductCardRuleTypes() {
+        let pricingProductCardRuleTypes = await this.pricingProductCardRuleTypeRepository.find();
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(pricingProductCardRuleSets == null) {
+        if(pricingProductCardRuleTypes == null) {
             return null;
         }
 
-        let pricingProductCardRuleSetsDTO: PricingProductCardRuleSetDTO[] = [];
-        for(let i = 0; i < pricingProductCardRuleSets.length; i++) {
-            let pricingProductCardRuleSet = pricingProductCardRuleSets[i];
+        let pricingProductCardRuleTypesDTO: PricingProductCardRuleTypeDTO[] = [];
+        for(let i = 0; i < pricingProductCardRuleTypes.length; i++) {
+            let pricingProductCardRuleType = pricingProductCardRuleTypes[i];
         
-            let pricingProductCardRuleSetDTO = new PricingProductCardRuleSetDTO();
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetId = pricingProductCardRuleSet.pricingProductCardRuleSetId;
-            pricingProductCardRuleSetDTO.commerceAccountId = pricingProductCardRuleSet.commerceAccountId;
-            pricingProductCardRuleSetDTO.productLineId = pricingProductCardRuleSet.productLineId;
-            pricingProductCardRuleSetDTO.pricingProductCardTypeId = pricingProductCardRuleSet.pricingProductCardTypeId;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleTypeId = pricingProductCardRuleSet.pricingProductCardRuleTypeId;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetName = pricingProductCardRuleSet.pricingProductCardRuleSetName;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimumEnabled = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimumEnabled;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimum = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimum;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata = pricingProductCardRuleSet.pricingProductCardRuleSetMetadata;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive = pricingProductCardRuleSet.pricingProductCardRuleSetIsActive;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetCreateDate = pricingProductCardRuleSet.pricingProductCardRuleSetCreateDate;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetUpdateDate = pricingProductCardRuleSet.pricingProductCardRuleSetUpdateDate;
+            let pricingProductCardRuleTypeDTO = new PricingProductCardRuleTypeDTO();
+            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId = pricingProductCardRuleType.pricingProductCardRuleTypeId;
+            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName = pricingProductCardRuleType.pricingProductCardRuleTypeName;
+            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata = pricingProductCardRuleType.pricingProductCardRuleTypeMetadata;
+            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive = pricingProductCardRuleType.pricingProductCardRuleTypeIsActive;
+            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeCreateDate = pricingProductCardRuleType.pricingProductCardRuleTypeCreateDate;
+            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeUpdateDate = pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate;
             
-            pricingProductCardRuleSetsDTO.push(pricingProductCardRuleSetDTO);
+            pricingProductCardRuleTypesDTO.push(pricingProductCardRuleTypeDTO);
         }
 
-        return pricingProductCardRuleSetsDTO;
+        return pricingProductCardRuleTypesDTO;
     }
     
-    async createPricingProductCardRuleSet(createPricingProductCardRuleSetDTO: CreatePricingProductCardRuleSetDTO) {
+    async createPricingProductCardRuleType(createPricingProductCardRuleTypeDTO: CreatePricingProductCardRuleTypeDTO) {
         
-        let newPricingProductCardRuleSet = this.pricingProductCardRepository.create({ ...createPricingProductCardRuleSetDTO });
-        newPricingProductCardRuleSet = await this.pricingProductCardRepository.save(newPricingProductCardRuleSet);
+        let newPricingProductCardRuleType = this.pricingProductCardRuleTypeRepository.create({ ...createPricingProductCardRuleTypeDTO });
+        newPricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.save(newPricingProductCardRuleType);
 
-        let pricingProductCardRuleSetDTO = this.getPricingProductCardRuleSet(newPricingProductCardRuleSet.pricingProductCardRuleSetId);
+        let pricingProductCardRuleTypeDTO = this.getPricingProductCardRuleType(newPricingProductCardRuleType.pricingProductCardRuleTypeId);
 
-        return pricingProductCardRuleSetDTO;
+        return pricingProductCardRuleTypeDTO;
     }   
 
-    async updatePricingProductCardRuleSet(updatePricingProductCardRuleSetDTO: UpdatePricingProductCardRuleSetDTO) {
+    async updatePricingProductCardRuleType(updatePricingProductCardRuleTypeDTO: UpdatePricingProductCardRuleTypeDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let pricingProductCardRuleSet = await this.pricingProductCardRepository.findOne({
+        let pricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.findOne({
             where: {
-                pricingProductCardRuleSetId: updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetId
+                pricingProductCardRuleTypeId: updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId
             }
         });
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
-        if (pricingProductCardRuleSet == null) {
+        if (pricingProductCardRuleType == null) {
             return null;
         }
 
-        pricingProductCardRuleSet.pricingProductCardTypeId = updatePricingProductCardRuleSetDTO.pricingProductCardTypeId;
-        pricingProductCardRuleSet.pricingProductCardRuleTypeId = updatePricingProductCardRuleSetDTO.pricingProductCardRuleTypeId;
-        pricingProductCardRuleSet.pricingProductCardRuleSetName = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetName;
-        pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimumEnabled = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimumEnabled;
-        pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimum = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimum;
-        pricingProductCardRuleSet.pricingProductCardRuleSetMetadata = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata;
-        pricingProductCardRuleSet.pricingProductCardRuleSetIsActive = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive;
-        pricingProductCardRuleSet.pricingProductCardRuleSetUpdateDate = new Date();
+        pricingProductCardRuleType.pricingProductCardRuleTypeId = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId;
+        pricingProductCardRuleType.pricingProductCardRuleTypeName = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName;
+        pricingProductCardRuleType.pricingProductCardRuleTypeMetadata = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata;
+        pricingProductCardRuleType.pricingProductCardRuleTypeIsActive = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive;
+        pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate = new Date();
         
-        pricingProductCardRuleSet = await this.pricingProductCardRepository.save(pricingProductCardRuleSet);
+        pricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.save(pricingProductCardRuleType);
 
-        let pricingProductCardDTO = this.getPricingProductCardRuleSet(pricingProductCardRuleSet.pricingProductCardRuleSetId);
+        let pricingProductCardDTO = this.getPricingProductCardRuleType(pricingProductCardRuleType.pricingProductCardRuleTypeId);
 
         return pricingProductCardDTO;
         
