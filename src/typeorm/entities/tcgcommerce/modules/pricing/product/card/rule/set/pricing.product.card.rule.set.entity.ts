@@ -15,15 +15,18 @@ export class PricingProductCardRuleSet {
     pricingProductCardTypeId: string; //TCG Player Low;
     
     @Column()
-    pricingProductCardRuleSetTypeId: string; //Baseline;
+    pricingProductCardRuleTypeId: string; //Baseline;
 
     @Column()
-    pricingProductCardPriceMinimumEnabled: boolean;
+    pricingProductCardRuleSetName: string;
+
+    @Column()
+    pricingProductCardRuleSetPriceMinimumEnabled: boolean;
 
     @Column({type: 'decimal', nullable: true})
-    pricingProductCardPriceMinimum: number;
+    pricingProductCardRuleSetPriceMinimum: number;
 
-    @Column('jsob')
+    @Column('jsonb')
     pricingProductCardRuleSetMetadata: string;
 
     @Column({type: 'boolean', default: false})
