@@ -10,6 +10,7 @@ export class ImportJobDTO {
     importJobSortType: string;
     importJobInputFileName: string;
     importJobInputFileOriginalName: string;
+    importJobInputData: string;
     importJobOutputFileName: string;
     importJobMetadata: string;
     importJobIsPublished: boolean;
@@ -17,6 +18,7 @@ export class ImportJobDTO {
     importJobUpdateDate: Date;  
 }
 
+/* 
 export class CreateImportJobDTO {
     @IsString()
     commerceAccountId: string;
@@ -46,7 +48,6 @@ export class UpdateImportJobDTO {
     @IsString()
     importJobStatus: string;
     @IsString()
-    importJobOutputFileName: string;
-    @IsString()
     importJobMetadata: string;   
 }
+*/

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UtilCSVService } from 'src/tcgcommerce/modules/util/csv/util.csv.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { ImportSortDTO, ImportSortCardDTO } from '../dto/import.sort.dto';
+import { ImportSortDTO, ImportSortCardDTO } from '../../sort/dto/import.sort.dto';
 
 @Injectable()
 export class ImportSortRocaService {

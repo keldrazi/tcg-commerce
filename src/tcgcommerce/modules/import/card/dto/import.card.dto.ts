@@ -4,7 +4,7 @@ import { IsDecimal, IsNumber, IsString } from "class-validator";
 export class ImportCardDTO {
     importCardId: string;
     importJobId: string;
-    importCardTCGDBId: string;
+    importCardTCGdbId: string;
     importCardStatus: string;
     importCardName: string;
     importCardSetName: string;
@@ -43,6 +43,12 @@ export class UpdateImportCardDTO {
     importCardId: string;
     @IsString()
     importCardStatus: string;
+    @IsString()
+    importCardName: string;
+    @IsString()
+    importCardSetName: string;
+    @IsString()
+    importCardCondition: string;
     @IsNumber()
     importCardQty: number;  
     @IsDecimal()

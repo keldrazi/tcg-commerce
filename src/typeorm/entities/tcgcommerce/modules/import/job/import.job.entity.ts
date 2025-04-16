@@ -29,10 +29,13 @@ export class ImportJob {
     @Column()
     importJobInputFileOriginalName: string;
 
+    @Column('jsonb')
+    importJobInputData: string;
+
     @Column({nullable: true})
     importJobOutputFileName: string;
 
-    @Column('jsob') //LOCATION | PROCESSED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS
+    @Column('jsonb') //LOCATION | PROCESSED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS
     importJobMetadata: string;
 
     @Column({type: 'boolean', default: false})

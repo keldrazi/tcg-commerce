@@ -9,7 +9,7 @@ export class ImportCard {
     importJobId: string;
 
     @Column()
-    importCardTCGDBId: string;
+    importCardTCGdbId: string;
 
     @Column()
     importCardStatus: string;

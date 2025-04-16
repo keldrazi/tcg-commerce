@@ -30,7 +30,7 @@ export class ImportCardService {
             let importCardDTO = new ImportCardDTO();
             importCardDTO.importCardId = importCard.importCardId;
             importCardDTO.importJobId = importCard.importJobId;
-            importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
+            importCardDTO.importCardTCGDBId = importCard.importCardTCGDBId;
             importCardDTO.importCardStatus = importCard.importCardStatus;
             importCardDTO.importCardName = importCard.importCardName;
             importCardDTO.importCardSetName = importCard.importCardSetName;
@@ -62,7 +62,7 @@ export class ImportCardService {
         let importCardDTO = new ImportCardDTO();
         importCardDTO.importCardId = importCard.importCardId;
         importCardDTO.importJobId = importCard.importJobId;
-        importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
+        importCardDTO.importCardTCGDBId = importCard.importCardTCGDBId;
         importCardDTO.importCardStatus = importCard.importCardStatus;
         importCardDTO.importCardName = importCard.importCardName;
         importCardDTO.importCardSetName = importCard.importCardSetName;
@@ -81,7 +81,7 @@ export class ImportCardService {
         let importCard = await this.importCardRepository.findOne({
             where: {
                 importJobId: importJobId,
-                importCardTCGdbId: tcgdbId
+                importCardTCGDBId: tcgdbId
             }
         });
 
@@ -93,7 +93,7 @@ export class ImportCardService {
         let importCardDTO = new ImportCardDTO();
         importCardDTO.importCardId = importCard.importCardId;
         importCardDTO.importJobId = importCard.importJobId;
-        importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
+        importCardDTO.importCardTCGDBId = importCard.importCardTCGDBId;
         importCardDTO.importCardStatus = importCard.importCardStatus;
         importCardDTO.importCardName = importCard.importCardName;
         importCardDTO.importCardSetName = importCard.importCardSetName;
@@ -124,7 +124,7 @@ export class ImportCardService {
         let importCardDTO = new ImportCardDTO();
         importCardDTO.importCardId = newImportCard.importCardId;
         importCardDTO.importJobId = newImportCard.importJobId;
-        importCardDTO.importCardTCGdbId = newImportCard.importCardTCGdbId;
+        importCardDTO.importCardTCGDBId = newImportCard.importCardTCGDBId;
         importCardDTO.importCardStatus = newImportCard.importCardStatus;
         importCardDTO.importCardName = newImportCard.importCardName;
         importCardDTO.importCardSetName = newImportCard.importCardSetName;
@@ -153,10 +153,6 @@ export class ImportCardService {
             return null;
         }
 
-        importCard.importCardStatus = updateImportCardDTO.importCardStatus;
-        importCard.importCardName = updateImportCardDTO.importCardName;
-        importCard.importCardSetName = updateImportCardDTO.importCardSetName;
-        importCard.importCardCondition = updateImportCardDTO.importCardCondition;
         importCard.importCardStatus = updateImportCardDTO.importCardStatus;
         importCard.importCardQty = updateImportCardDTO.importCardQty;
         importCard.importCardPrice = updateImportCardDTO.importCardPrice;

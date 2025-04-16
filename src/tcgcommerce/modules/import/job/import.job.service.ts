@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ImportJob } from 'src/typeorm/entities/tcgcommerce/modules/import/job/import.job.entity';
-import { ImportJobDTO, CreateImportJobDTO, UpdateImportJobDTO } from './dto/import.job.dto';
+import { ImportJobDTO } from './dto/import.job.dto';
 import { get } from 'axios';
 
 @Injectable()
@@ -105,6 +105,7 @@ export class ImportJobService {
             
     }
 
+    /*
     async createImportJob(createImportJobDTO: CreateImportJobDTO) {
         
         //CHECK TO SEE IF THE IMPORT JOB EXISTS;
@@ -159,5 +160,6 @@ export class ImportJobService {
 
         return importJobDTO;
     }
+    */
     
 }

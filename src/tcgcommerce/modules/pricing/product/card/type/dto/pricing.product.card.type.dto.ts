@@ -1,35 +1,35 @@
 import { IsBoolean, IsString } from "class-validator";
 
-export class PricingProductCardRuleTypeDTO {
-    pricingProductCardRuleTypeId: string;
-    pricingProductCardRuleTypeName: string;
-    pricingProductCardRuleTypeDescription: string;
-    pricingProductCardRuleTypeMetadata: string;
-    pricingProductCardRuleTypeIsActive: boolean;
-    pricingProductCardRuleTypeCreateDate: Date; 
-    pricingProductCardRuleTypeUpdateDate: Date;
+export class PricingProductCardTypeDTO {
+    pricingProductCardTypeId: string;
+    pricingProductCardTypeName: string;
+    pricingProductCardTypeDescription: string;
+    pricingProductCardTypeMetadata: string;
+    pricingProductCardTypeIsActive: boolean;
+    pricingProductCardTypeCreateDate: Date; 
+    pricingProductCardTypeUpdateDate: Date;
 }
 
-export class CreatePricingProductCardRuleTypeDTO {
+export class CreatePricingProductCardTypeDTO {
     @IsString()
-    pricingProductCardRuleTypeName: string;
+    pricingProductCardTypeName: string;
     @IsString()
-    pricingProductCardRuleTypeDescription: string;
+    pricingProductCardTypeDescription: string;
     @IsString()
-    pricingProductCardRuleTypeMetadata: string;
+    pricingProductCardTypeMetadata: string;
     @IsBoolean()
-    pricingProductCardRuleTypeIsActive: boolean;
+    pricingProductCardTypeIsActive: boolean;
 }
 
-export class UpdatePricingProductCardRuleTypeDTO {
+export class UpdatePricingProductCardTypeDTO {
     @IsString()
-    pricingProductCardRuleTypeId: string;
+    pricingProductCardTypeId: string;
     @IsString()
-    pricingProductCardRuleTypeName: string;
+    pricingProductCardTypeName: string;
     @IsString()
-    pricingProductCardRuleTypeDescription: string;
+    pricingProductCardTypeDescription: string;
     @IsString()
-    pricingProductCardRuleTypeMetadata: string;
+    pricingProductCardTypeMetadata: string;
     @IsBoolean()
-    pricingProductCardRuleTypeIsActive: boolean;
+    pricingProductCardTypeIsActive: boolean;
 }

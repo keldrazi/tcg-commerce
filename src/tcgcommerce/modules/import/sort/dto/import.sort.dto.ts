@@ -1,5 +1,6 @@
 
 export class ImportSortDTO {
+    importJobId: string;
     importSortTotalCardQty: number;
     importSortTotalCardTCGPlayerMarketPrice: number;
     importSortTotalCardTCGPlayerLowPrice: number;

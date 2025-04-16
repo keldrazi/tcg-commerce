@@ -1,99 +1,99 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PricingProductCardRuleTypeDTO, CreatePricingProductCardRuleTypeDTO, UpdatePricingProductCardRuleTypeDTO} from './dto/pricing.product.card.type.dto';
-import { PricingProductCardRuleType } from 'src/typeorm/entities/tcgcommerce/modules/pricing/product/card/rule/type/pricing.product.card.rule.type.entity';
+import { PricingProductCardTypeDTO, CreatePricingProductCardTypeDTO, UpdatePricingProductCardTypeDTO} from './dto/pricing.product.card.type.dto';
+import { PricingProductCardType } from 'src/typeorm/entities/tcgcommerce/modules/pricing/product/card/type/pricing.product.card.type.entity';
 
 @Injectable()
-export class PricingProductCardRuleTypeService {
+export class PricingProductCardTypeService {
 
     constructor(
-        @InjectRepository(PricingProductCardRuleType) private pricingProductCardRuleTypeRepository: Repository<PricingProductCardRuleType>,
+        @InjectRepository(PricingProductCardType) private pricingProductCardTypeRepository: Repository<PricingProductCardType>,
     ) { }
 
-    async getPricingProductCardRuleType(pricingProductCardRuleTypeId: string) {
-        let pricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.findOne({
+    async getPricingProductCardType(pricingProductCardTypeId: string) {
+        let pricingProductCardType = await this.pricingProductCardTypeRepository.findOne({
             where: {
-                pricingProductCardRuleTypeId: pricingProductCardRuleTypeId,
+                pricingProductCardTypeId: pricingProductCardTypeId,
             }
         });
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(pricingProductCardRuleType == null) {
+        if(pricingProductCardType == null) {
             return null;
         }
 
-        let pricingProductCardRuleTypeDTO = new PricingProductCardRuleTypeDTO();
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId = pricingProductCardRuleType.pricingProductCardRuleTypeId;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName = pricingProductCardRuleType.pricingProductCardRuleTypeName;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata = pricingProductCardRuleType.pricingProductCardRuleTypeMetadata;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive = pricingProductCardRuleType.pricingProductCardRuleTypeIsActive;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeCreateDate = pricingProductCardRuleType.pricingProductCardRuleTypeCreateDate;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeUpdateDate = pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate;
+        let pricingProductCardTypeDTO = new PricingProductCardTypeDTO();
+        pricingProductCardTypeDTO.pricingProductCardTypeId = pricingProductCardType.pricingProductCardTypeId;
+        pricingProductCardTypeDTO.pricingProductCardTypeName = pricingProductCardType.pricingProductCardTypeName;
+        pricingProductCardTypeDTO.pricingProductCardTypeMetadata = pricingProductCardType.pricingProductCardTypeMetadata;
+        pricingProductCardTypeDTO.pricingProductCardTypeIsActive = pricingProductCardType.pricingProductCardTypeIsActive;
+        pricingProductCardTypeDTO.pricingProductCardTypeCreateDate = pricingProductCardType.pricingProductCardTypeCreateDate;
+        pricingProductCardTypeDTO.pricingProductCardTypeUpdateDate = pricingProductCardType.pricingProductCardTypeUpdateDate;
         
-        return pricingProductCardRuleTypeDTO;
+        return pricingProductCardTypeDTO;
 
     }
 
-    async getPricingProductCardRuleTypes() {
-        let pricingProductCardRuleTypes = await this.pricingProductCardRuleTypeRepository.find();
+    async getPricingProductCardTypes() {
+        let pricingProductCardTypes = await this.pricingProductCardTypeRepository.find();
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(pricingProductCardRuleTypes == null) {
+        if(pricingProductCardTypes == null) {
             return null;
         }
 
-        let pricingProductCardRuleTypesDTO: PricingProductCardRuleTypeDTO[] = [];
-        for(let i = 0; i < pricingProductCardRuleTypes.length; i++) {
-            let pricingProductCardRuleType = pricingProductCardRuleTypes[i];
+        let pricingProductCardTypesDTO: PricingProductCardTypeDTO[] = [];
+        for(let i = 0; i < pricingProductCardTypes.length; i++) {
+            let pricingProductCardType = pricingProductCardTypes[i];
         
-            let pricingProductCardRuleTypeDTO = new PricingProductCardRuleTypeDTO();
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId = pricingProductCardRuleType.pricingProductCardRuleTypeId;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName = pricingProductCardRuleType.pricingProductCardRuleTypeName;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata = pricingProductCardRuleType.pricingProductCardRuleTypeMetadata;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive = pricingProductCardRuleType.pricingProductCardRuleTypeIsActive;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeCreateDate = pricingProductCardRuleType.pricingProductCardRuleTypeCreateDate;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeUpdateDate = pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate;
+            let pricingProductCardTypeDTO = new PricingProductCardTypeDTO();
+            pricingProductCardTypeDTO.pricingProductCardTypeId = pricingProductCardType.pricingProductCardTypeId;
+            pricingProductCardTypeDTO.pricingProductCardTypeName = pricingProductCardType.pricingProductCardTypeName;
+            pricingProductCardTypeDTO.pricingProductCardTypeMetadata = pricingProductCardType.pricingProductCardTypeMetadata;
+            pricingProductCardTypeDTO.pricingProductCardTypeIsActive = pricingProductCardType.pricingProductCardTypeIsActive;
+            pricingProductCardTypeDTO.pricingProductCardTypeCreateDate = pricingProductCardType.pricingProductCardTypeCreateDate;
+            pricingProductCardTypeDTO.pricingProductCardTypeUpdateDate = pricingProductCardType.pricingProductCardTypeUpdateDate;
             
-            pricingProductCardRuleTypesDTO.push(pricingProductCardRuleTypeDTO);
+            pricingProductCardTypesDTO.push(pricingProductCardTypeDTO);
         }
 
-        return pricingProductCardRuleTypesDTO;
+        return pricingProductCardTypesDTO;
     }
     
-    async createPricingProductCardRuleType(createPricingProductCardRuleTypeDTO: CreatePricingProductCardRuleTypeDTO) {
+    async createPricingProductCardType(createPricingProductCardTypeDTO: CreatePricingProductCardTypeDTO) {
         
-        let newPricingProductCardRuleType = this.pricingProductCardRuleTypeRepository.create({ ...createPricingProductCardRuleTypeDTO });
-        newPricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.save(newPricingProductCardRuleType);
+        let newPricingProductCardType = this.pricingProductCardTypeRepository.create({ ...createPricingProductCardTypeDTO });
+        newPricingProductCardType = await this.pricingProductCardTypeRepository.save(newPricingProductCardType);
 
-        let pricingProductCardRuleTypeDTO = this.getPricingProductCardRuleType(newPricingProductCardRuleType.pricingProductCardRuleTypeId);
+        let pricingProductCardTypeDTO = this.getPricingProductCardType(newPricingProductCardType.pricingProductCardTypeId);
 
-        return pricingProductCardRuleTypeDTO;
+        return pricingProductCardTypeDTO;
     }   
 
-    async updatePricingProductCardRuleType(updatePricingProductCardRuleTypeDTO: UpdatePricingProductCardRuleTypeDTO) {
+    async updatePricingProductCardType(updatePricingProductCardTypeDTO: UpdatePricingProductCardTypeDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let pricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.findOne({
+        let pricingProductCardType = await this.pricingProductCardTypeRepository.findOne({
             where: {
-                pricingProductCardRuleTypeId: updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId
+                pricingProductCardTypeId: updatePricingProductCardTypeDTO.pricingProductCardTypeId
             }
         });
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
-        if (pricingProductCardRuleType == null) {
+        if (pricingProductCardType == null) {
             return null;
         }
 
-        pricingProductCardRuleType.pricingProductCardRuleTypeId = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId;
-        pricingProductCardRuleType.pricingProductCardRuleTypeName = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName;
-        pricingProductCardRuleType.pricingProductCardRuleTypeMetadata = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata;
-        pricingProductCardRuleType.pricingProductCardRuleTypeIsActive = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive;
-        pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate = new Date();
+        pricingProductCardType.pricingProductCardTypeId = updatePricingProductCardTypeDTO.pricingProductCardTypeId;
+        pricingProductCardType.pricingProductCardTypeName = updatePricingProductCardTypeDTO.pricingProductCardTypeName;
+        pricingProductCardType.pricingProductCardTypeMetadata = updatePricingProductCardTypeDTO.pricingProductCardTypeMetadata;
+        pricingProductCardType.pricingProductCardTypeIsActive = updatePricingProductCardTypeDTO.pricingProductCardTypeIsActive;
+        pricingProductCardType.pricingProductCardTypeUpdateDate = new Date();
         
-        pricingProductCardRuleType = await this.pricingProductCardRuleTypeRepository.save(pricingProductCardRuleType);
+        pricingProductCardType = await this.pricingProductCardTypeRepository.save(pricingProductCardType);
 
-        let pricingProductCardDTO = this.getPricingProductCardRuleType(pricingProductCardRuleType.pricingProductCardRuleTypeId);
+        let pricingProductCardDTO = this.getPricingProductCardType(pricingProductCardType.pricingProductCardTypeId);
 
         return pricingProductCardDTO;
         
