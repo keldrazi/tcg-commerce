@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 //Config Modules;
 import { ConfigModule } from '@nestjs/config';
 import { ConfigDatabasePGModule } from './config/database/pg/config.database.pg.module';
+import { ConfigEmailModule } from './config/email/config.email.module';
 
 //TCGPlayer API Modules;
 import { TCGPlayerAPICardModule } from './tcgdb/modules/tcgplayer/api/card/tcgplayer.api.card.module';
@@ -64,6 +65,7 @@ const NODE_ENV = process.env.NODE_ENV;
       isGlobal: true,
     }),
     ConfigDatabasePGModule,
+    ConfigEmailModule,
     //TCGPlayer API Modules;
     TCGPlayerAPICardModule,
     TCGPlayerAPISetModule,
