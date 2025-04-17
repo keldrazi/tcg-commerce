@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+//Config Modules;
 import { ConfigModule } from '@nestjs/config';
-import { DatabasePGModule } from './database/pg/database.pg.module';
+import { ConfigDatabasePGModule } from './config/database/pg/config.database.pg.module';
 
 //TCGPlayer API Modules;
 import { TCGPlayerAPICardModule } from './tcgdb/modules/tcgplayer/api/card/tcgplayer.api.card.module';
@@ -62,7 +63,7 @@ const NODE_ENV = process.env.NODE_ENV;
       envFilePath: !NODE_ENV ? '.env' : `.env.${NODE_ENV}`,
       isGlobal: true,
     }),
-    DatabasePGModule,
+    ConfigDatabasePGModule,
     //TCGPlayer API Modules;
     TCGPlayerAPICardModule,
     TCGPlayerAPISetModule,
