@@ -14,7 +14,12 @@ export class ProductSetController {
     
     @Get('vendor/:productVendorId/line/:productLineId')
     async getProductSetsByProductVendorNameAndProductLineNameAndProductTypeName(@Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string) {
-        return await this.productSetService.getProductSets(productVendorId, productLineId);
+        return await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendorId, productLineId);
+    }
+
+    @Get('create/:productLineName')
+    async createProductSetsByProductLineName(@Param('productLineName') productLineName: string) {
+        return await this.productSetService.createProductSetsByProductLineName(productLineName);
     }
 
     @Post()

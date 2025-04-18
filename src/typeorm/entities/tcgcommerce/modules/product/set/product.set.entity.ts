@@ -20,11 +20,8 @@ export class ProductSet {
     @Column()
     productSetReleaseDate: Date;
 
-    @Column('jsonb')
-    productSetExtendedData: string;
-
-    @Column('jsonb')
-    productSetMetadata: string;
+    @Column()
+    productSetTotalCards: number;
 
     @Column({type: 'boolean', default: false})
     productSetIsActive: boolean;

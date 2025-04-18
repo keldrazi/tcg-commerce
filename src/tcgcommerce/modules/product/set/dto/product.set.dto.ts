@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsString } from "class-validator";
+import { IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
 
 export class ProductSetDTO {
     productSetId: string;
@@ -7,8 +7,7 @@ export class ProductSetDTO {
     productSetName: string;
     productSetAbbreviation: string;
     productSetReleaseDate: Date;
-    productSetExtendedData: string;
-    productSetMetadata: string;
+    productSetTotalCards: number;
     productSetIsActive: boolean;
     productSetCreateDate: Date;
     productSetUpdateDate: Date; 
@@ -23,12 +22,10 @@ export class CreateProductSetDTO {
     productSetName: string;
     @IsString()
     productSetAbbreviation: string;  
+    @IsNumber()
+    productSetTotalCards: number;
     @IsDate()
     productSetReleaseDate: Date;
-    @IsString()
-    productSetExtendedData: string;
-    @IsString()
-    productSetMetadata: string;
 }
 
 export class UpdateProductSetDTO {
@@ -38,12 +35,10 @@ export class UpdateProductSetDTO {
     productSetName: string;
     @IsString()
     productSetAbbreviation: string; 
+    @IsNumber()
+    productSetTotalCards: number;
     @IsDate()
     productSetReleaseDate: Date; 
-    @IsString()
-    productSetExtendedData: string;
-    @IsString()
-    productSetMetadata: string;
     @IsBoolean()
     productSetIsActive: boolean;
 }

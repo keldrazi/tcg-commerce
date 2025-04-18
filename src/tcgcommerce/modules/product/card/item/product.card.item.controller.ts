@@ -4,7 +4,7 @@ import { ProductCardItemService } from './product.card.item.service';
 
 
 
-@Controller('product/card/option')
+@Controller('product/card/item')
 export class ProductCardItemController {
 
     constructor(
@@ -12,22 +12,14 @@ export class ProductCardItemController {
     ) { }
     
     
-    /*@Get('/:commerceAccountId')
-    async getCommerceAccount(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountService.getCommerceAccount(commerceAccountId);
+    @Get('/create/:productLineName')
+    async createProductCardItemsByProductLineName(@Param('productLineName') productLineName: string) {
+        return await this.productCardItemService.createProductCardItemsByProductLineName(productLineName);
     }
 
-    @Post()
-    @UsePipes(new ValidationPipe())
-    async createCommerceAccount(@Body() createCommerceAcountDTO: CreateCommerceAccountDTO) {
-        return await this.commerceAccountService.createCommerceAccount(createCommerceAcountDTO);
+    @Get('/set/:productSetId')
+    async getProductCardItemsByProductSetId(@Param('productSetId') productSetId: string) {
+        return await this.productCardItemService.getProductCardItemsByProductSetId(productSetId);
     }
-
-    /*
-    @Put(':id')
-    async updateUser(@Param('tcgDatabaseUserId') tcgDatabaseUserId: string, @Body() tcgDatabaseUserUpdateDTO: TCGDatabaseUserUpdateDTO) {
-        await this.tcgDatabaseUserService.updateTCGDatabaseUser(tcgDatabaseUserId, tcgDatabaseUserUpdateDTO);
-    }
-    */
 
 }

@@ -53,8 +53,11 @@ import { ProductVendorModule } from './tcgcommerce/modules/product/vendor/produc
 import { ProductLineModule } from './tcgcommerce/modules/product/line/product.line.module';
 import { ProductTypeModule } from './tcgcommerce/modules/product/type/product.type.module';
 import { ProductModuleModule } from './tcgcommerce/modules/product/module/product.module.module';
+import { ProductSetModule } from './tcgcommerce/modules/product/set/product.set.module';  
 //Product Card Modules;
 import { ProductCardVariantModule } from './tcgcommerce/modules/product/card/variant/product.card.variant.module';
+import { ProductCardOptionModule } from './tcgcommerce/modules/product/card/option/product.card.option.module';
+import { ProductCardItemModule } from './tcgcommerce/modules/product/card/item/product.card.item.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -113,8 +116,11 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductLineModule,
     ProductTypeModule,
     ProductModuleModule,
+    ProductSetModule,
     //Product Card Modules;
     ProductCardVariantModule,
+    ProductCardOptionModule,
+    ProductCardItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

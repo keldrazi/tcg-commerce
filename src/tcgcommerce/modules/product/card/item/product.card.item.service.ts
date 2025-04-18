@@ -3,12 +3,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductCardItemDTO, CreateProductCardItemDTO, UpdateProductCardItemDTO } from './dto/product.card.item.dto';
 import { ProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/product/card/item/product.card.item.entity';
+import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.service';
+import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 
 @Injectable()
 export class ProductCardItemService {
 
+    //CARD DATA;
+    private MTG_CARD_VENDOR_ID = "67d0735c-da47-480d-b3e2-651b9fc5a2d8"; //WoTC;
+    private MTG_CARD_LINE_ID = "1258359b-bb37-4323-8749-cd4fa40037f9"; //Magic: The Gathering;
+    private MTG_CARD_TYPE_ID = "5c9d4e87-f69b-46d3-94ba-bb00fda92c07"; //Single Card;
+
     constructor(
         @InjectRepository(ProductCardItem) private productCardItemRepository: Repository<ProductCardItem>,
+        private tcgdbMTGCardService: TCGdbMTGCardService,
+        private productSetService: ProductSetService,
     ) { }
 
     async getProductCardItemByProductCardItemId(productCardItemId: string) {
@@ -25,7 +34,6 @@ export class ProductCardItemService {
 
         let productCardItemDTO = new ProductCardItemDTO();
         productCardItemDTO.productCardItemId = productCardItem.productCardItemId;
-        productCardItemDTO.commerceAccountId = productCardItem.commerceAccountId;
         productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
         productCardItemDTO.productVendorId = productCardItem.productVendorId;
         productCardItemDTO.productLineId = productCardItem.productLineId;
@@ -38,6 +46,7 @@ export class ProductCardItemService {
         productCardItemDTO.productCardItemIsPresale = productCardItem.productCardItemIsPresale;
         productCardItemDTO.productCardItemExtendedData = productCardItem.productCardItemExtendedData;
         productCardItemDTO.productCardItemMetadata = productCardItem.productCardItemMetadata;
+        productCardItemDTO.productCardItemSKUs = productCardItem.productCardItemSKUs;
         productCardItemDTO.productCardItemIsActive = productCardItem.productCardItemIsActive;
         productCardItemDTO.productCardItemCreateDate = productCardItem.productCardItemCreateDate;
         productCardItemDTO.productCardItemUpdateDate = productCardItem.productCardItemUpdateDate;
@@ -46,10 +55,9 @@ export class ProductCardItemService {
         return productCardItemDTO;
     }
 
-    async getProductCardItemByCommerceAccountIdAndTCGdbId(commerceAccountId: string, tcgdbId: string) {
+    async getProductCardItemByTCGdbId(tcgdbId: string) {
         let productCardItem = await this.productCardItemRepository.findOne({ 
             where: {
-                commerceAccountId: commerceAccountId,
                 productCardItemTCGdbId: tcgdbId, 
             }
         });
@@ -61,7 +69,6 @@ export class ProductCardItemService {
 
         let productCardItemDTO = new ProductCardItemDTO();
         productCardItemDTO.productCardItemId = productCardItem.productCardItemId;
-        productCardItemDTO.commerceAccountId = productCardItem.commerceAccountId;
         productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
         productCardItemDTO.productVendorId = productCardItem.productVendorId;
         productCardItemDTO.productLineId = productCardItem.productLineId;
@@ -74,6 +81,7 @@ export class ProductCardItemService {
         productCardItemDTO.productCardItemIsPresale = productCardItem.productCardItemIsPresale;
         productCardItemDTO.productCardItemExtendedData = productCardItem.productCardItemExtendedData;
         productCardItemDTO.productCardItemMetadata = productCardItem.productCardItemMetadata;
+        productCardItemDTO.productCardItemSKUs = productCardItem.productCardItemSKUs;
         productCardItemDTO.productCardItemIsActive = productCardItem.productCardItemIsActive;
         productCardItemDTO.productCardItemCreateDate = productCardItem.productCardItemCreateDate;
         productCardItemDTO.productCardItemUpdateDate = productCardItem.productCardItemUpdateDate;
@@ -81,12 +89,11 @@ export class ProductCardItemService {
         return productCardItemDTO;
     }
 
-    async getProductCardItemsByCommerceAccountIdAndProductlINEId(commerceAccountId: string, productLineId: string) {
+    async getProductCardItemsByProductLineId(productLineId: string) {
         //TO DO: ADD LIMITS AND OFFSETS;
         
         let productCardItems = await this.productCardItemRepository.find({ 
             where: {
-                commerceAccountId: commerceAccountId,
                 productLineId: productLineId, 
             }
         });
@@ -102,7 +109,6 @@ export class ProductCardItemService {
             let productCardItem = productCardItems[i];
             let productCardItemDTO = new ProductCardItemDTO();
             productCardItemDTO.productCardItemId = productCardItem.productCardItemId;
-            productCardItemDTO.commerceAccountId = productCardItem.commerceAccountId;
             productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
             productCardItemDTO.productVendorId = productCardItem.productVendorId;
             productCardItemDTO.productLineId = productCardItem.productLineId;
@@ -115,6 +121,7 @@ export class ProductCardItemService {
             productCardItemDTO.productCardItemIsPresale = productCardItem.productCardItemIsPresale;
             productCardItemDTO.productCardItemExtendedData = productCardItem.productCardItemExtendedData;
             productCardItemDTO.productCardItemMetadata = productCardItem.productCardItemMetadata;
+            productCardItemDTO.productCardItemSKUs = productCardItem.productCardItemSKUs;
             productCardItemDTO.productCardItemIsActive = productCardItem.productCardItemIsActive;
             productCardItemDTO.productCardItemCreateDate = productCardItem.productCardItemCreateDate;
             productCardItemDTO.productCardItemUpdateDate = productCardItem.productCardItemUpdateDate;
@@ -127,13 +134,12 @@ export class ProductCardItemService {
         return productCardItemDTOs;
     }
 
-    async getProductCardItemsByCommerceAccountIdAndSetId(commerceAccountId: string, setId: string) {
+    async getProductCardItemsByProductSetId(productSetId: string) {
         //TO DO: ADD LIMITS AND OFFSETS;
         
         let productCardItems = await this.productCardItemRepository.find({ 
             where: {
-                commerceAccountId: commerceAccountId,
-                productSetId: setId, 
+                productSetId: productSetId, 
             }
         });
 
@@ -148,7 +154,6 @@ export class ProductCardItemService {
             let productCardItem = productCardItems[i];
             let productCardItemDTO = new ProductCardItemDTO();
             productCardItemDTO.productCardItemId = productCardItem.productCardItemId;
-            productCardItemDTO.commerceAccountId = productCardItem.commerceAccountId;
             productCardItemDTO.productCardItemTCGdbId = productCardItem.productCardItemTCGdbId;
             productCardItemDTO.productVendorId = productCardItem.productVendorId;
             productCardItemDTO.productLineId = productCardItem.productLineId;
@@ -161,6 +166,7 @@ export class ProductCardItemService {
             productCardItemDTO.productCardItemIsPresale = productCardItem.productCardItemIsPresale;
             productCardItemDTO.productCardItemExtendedData = productCardItem.productCardItemExtendedData;
             productCardItemDTO.productCardItemMetadata = productCardItem.productCardItemMetadata;
+            productCardItemDTO.productCardItemSKUs = productCardItem.productCardItemSKUs;
             productCardItemDTO.productCardItemIsActive = productCardItem.productCardItemIsActive;
             productCardItemDTO.productCardItemCreateDate = productCardItem.productCardItemCreateDate;
             productCardItemDTO.productCardItemUpdateDate = productCardItem.productCardItemUpdateDate;
@@ -176,7 +182,7 @@ export class ProductCardItemService {
     async createProductCardItem(createProductCardItemDTO: CreateProductCardItemDTO) {
 
         //CHECK TO SEE IF THE PRDUCT CARD ITEM ALREADY EXISTS;
-        let productCardItem = await this.getProductCardItemByCommerceAccountIdAndTCGdbId(createProductCardItemDTO.commerceAccountId, createProductCardItemDTO.productCardItemTCGdbId);
+        let productCardItem = await this.getProductCardItemByTCGdbId(createProductCardItemDTO.productCardItemTCGdbId);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if(productCardItem != null) {
@@ -210,6 +216,8 @@ export class ProductCardItemService {
         existingProductCardItem.productCardItemImage = updateProductCardItemDTO.productCardItemImage;
         existingProductCardItem.productCardItemExtendedData = updateProductCardItemDTO.productCardItemExtendedData;
         existingProductCardItem.productCardItemMetadata = updateProductCardItemDTO.productCardItemMetadata;
+        existingProductCardItem.productCardItemSKUs = updateProductCardItemDTO.productCardItemSKUs;
+        existingProductCardItem.productCardItemIsActive = updateProductCardItemDTO.productCardItemIsActive;
         existingProductCardItem.productCardItemUpdateDate = new Date();
         
         await this.productCardItemRepository.save(existingProductCardItem);
@@ -218,4 +226,76 @@ export class ProductCardItemService {
        
         return productCardItemDTO;
     } 
+
+
+    
+    async createProductCardItemsByProductLineName(productLineName: string) {
+        
+        if (productLineName == 'mtg') {
+            return this.createTCGdbMTGProductCardItems();
+        } else {
+            return null;
+        }
+    }
+
+    //TCGdb MTG CREATE CARD ITEM;
+    async createTCGdbMTGProductCardItems() {
+        let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(this.MTG_CARD_VENDOR_ID, this.MTG_CARD_LINE_ID);
+
+        let productCardItemRecordCount = 0;
+
+        if(productSets == null) {
+            return null;
+        }
+        for(let i = 0; i < productSets.length; i++) {
+            let productSet = productSets[i];
+            
+            let tcgdbMTGSetCards = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetAbbreviation(productSet.productSetAbbreviation);
+
+            if(tcgdbMTGSetCards == null) {
+                return null;
+            }
+
+            for(let j = 0; j < tcgdbMTGSetCards.tcgdbMTGCards.length; j++) {
+                let tcgdbMTGCard = tcgdbMTGSetCards.tcgdbMTGCards[j];
+
+                //CHECK TO SEE IF THE CARD EXISTS;
+                let productCardItemCheck = await this.getProductCardItemByTCGdbId(tcgdbMTGCard.tcgdbMTGCardId);
+                
+                //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
+                if (productCardItemCheck != null) {
+                    continue;
+                }
+
+                let productCardItemMetadata = "[]";
+                
+                if (tcgdbMTGCard.tcgdbMTGCardScryfallData != null) {
+                    productCardItemMetadata = tcgdbMTGCard.tcgdbMTGCardScryfallData;
+                }
+
+                const newProductCardItem = this.productCardItemRepository.create({
+                    productCardItemTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
+                    productVendorId: this.MTG_CARD_VENDOR_ID,
+                    productLineId: this.MTG_CARD_LINE_ID,
+                    productTypeId: this.MTG_CARD_TYPE_ID,
+                    productSetId: productSet.productSetId,
+                    productCardItemNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
+                    productCardItemName: tcgdbMTGCard.tcgdbMTGCardName,
+                    productCardItemCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
+                    productCardItemImage: tcgdbMTGCard.tcgdbMTGCardImageURL,
+                    productCardItemExtendedData: tcgdbMTGCard.tcgdbMTGCardTCGPlayerData,
+                    productCardItemMetadata: productCardItemMetadata,
+                    productCardItemSKUs: tcgdbMTGCard.tcgdbMTGCardTCGPlayerSKUs,
+                    productCardItemIsPresale: false,
+                    productCardItemIsActive: true,
+                });
+
+                await this.productCardItemRepository.save(newProductCardItem);
+
+                productCardItemRecordCount++;
+            }
+        }
+
+        return productCardItemRecordCount;
+    }
 }

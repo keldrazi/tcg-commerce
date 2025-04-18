@@ -3,12 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductSetDTO, CreateProductSetDTO, UpdateProductSetDTO } from './dto/product.set.dto';
 import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set/product.set.entity';
+import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.service';
 
 @Injectable()
 export class ProductSetService {
 
+    //SET DATA;
+    private MTG_SET_VENDOR_ID = "67d0735c-da47-480d-b3e2-651b9fc5a2d8"; //WoTC;
+    private MTG_SET_LINE_ID = "1258359b-bb37-4323-8749-cd4fa40037f9"; //Magic: The Gathering;
+    
+
     constructor(
         @InjectRepository(ProductSet) private productSetRepository: Repository<ProductSet>,
+        private tcgdbMTGSetService: TCGdbMTGSetService,
     ) { }
 
     async getProductSet(productSetId: string) {
@@ -30,8 +37,7 @@ export class ProductSetService {
         productSetDTO.productSetName = productSet.productSetName;
         productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
         productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
-        productSetDTO.productSetExtendedData = productSet.productSetExtendedData;
-        productSetDTO.productSetMetadata = productSet.productSetMetadata;
+        productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
         productSetDTO.productSetIsActive = productSet.productSetIsActive;
         productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
         productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
@@ -40,7 +46,7 @@ export class ProductSetService {
 
     }
 
-    async getProductSets(productVendorId: string, productLineId: string) {
+    async getProductSetsByProductVendorIdAndProductLineId(productVendorId: string, productLineId: string) {
         let productSets = await this.productSetRepository.find({
             where: {
                 productVendorId: productVendorId,
@@ -64,8 +70,7 @@ export class ProductSetService {
             productSetDTO.productSetName = productSet.productSetName;
             productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
             productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
-            productSetDTO.productSetExtendedData = productSet.productSetExtendedData;
-            productSetDTO.productSetMetadata = productSet.productSetMetadata;
+            productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
             productSetDTO.productSetIsActive = productSet.productSetIsActive;
             productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
             productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
@@ -97,14 +102,11 @@ export class ProductSetService {
         productSetDTO.productSetName = productSet.productSetName;
         productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
         productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
-        productSetDTO.productSetExtendedData = productSet.productSetExtendedData;
-        productSetDTO.productSetMetadata = productSet.productSetMetadata;
+        productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
         productSetDTO.productSetIsActive = productSet.productSetIsActive;
         productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
         productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
             
-           
-
         return productSetDTO;
     }
     
@@ -143,8 +145,7 @@ export class ProductSetService {
         existingProductSet.productSetName = updateProductSetDTO.productSetName;
         existingProductSet.productSetAbbreviation = updateProductSetDTO.productSetAbbreviation;
         existingProductSet.productSetReleaseDate = updateProductSetDTO.productSetReleaseDate;
-        existingProductSet.productSetExtendedData = updateProductSetDTO.productSetExtendedData;
-        existingProductSet.productSetMetadata = updateProductSetDTO.productSetMetadata;
+        existingProductSet.productSetTotalCards = updateProductSetDTO.productSetTotalCards;
         existingProductSet.productSetIsActive = updateProductSetDTO.productSetIsActive;
         existingProductSet.productSetUpdateDate = new Date();
         
@@ -154,5 +155,50 @@ export class ProductSetService {
 
         return productSetDTO;
     
+    }
+
+    async createProductSetsByProductLineName(productLineName: string) {
+        //TO DO: CREATE PRODUCT SETS FOR ALL VENDORS;
+        if (productLineName == "mtg") {
+            return this.createTCGdbMTGProductSets();
+        } else {
+            return null;
+        }
+    }
+
+    //TCGdb MTG PRODUCT SET CREATION;
+    async createTCGdbMTGProductSets() {
+
+        let tcgdbMTGSets = await this.tcgdbMTGSetService.getTCGdbMTGSets();
+        let productSetDTOs: ProductSetDTO[] = [];
+
+        for(let i = 0; i < tcgdbMTGSets.length; i++) {
+            let tcgdbMTGSet = tcgdbMTGSets[i];
+
+            //CHECK TO SEE IF THE SET EXISTS;
+            let productSet = await this.getProductSetByName(this.MTG_SET_VENDOR_ID, this.MTG_SET_LINE_ID, tcgdbMTGSet.tcgdbMTGSetName);
+            
+            //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
+            if (productSet != null) {
+                continue;
+            }
+
+            let newProductSet = this.productSetRepository.create({
+                productVendorId: this.MTG_SET_VENDOR_ID,
+                productLineId: this.MTG_SET_LINE_ID,
+                productSetName: tcgdbMTGSet.tcgdbMTGSetName,
+                productSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
+                productSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
+                productSetReleaseDate: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
+                productSetIsActive: true,
+            });
+
+            let productSetDTO = await this.productSetRepository.save(newProductSet);
+            productSetDTOs.push(productSetDTO);
+
+        }
+
+        return productSetDTOs;
+
     }
 }

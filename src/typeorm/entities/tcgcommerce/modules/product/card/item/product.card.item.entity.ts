@@ -6,9 +6,6 @@ export class ProductCardItem {
     productCardItemId: string;
 
     @Column()
-    commerceAccountId: string;
-    
-    @Column()
     productCardItemTCGdbId: string;
 
     @Column()
@@ -24,7 +21,7 @@ export class ProductCardItem {
     productSetId: string;
     
     @Column()
-    productCardItemNumber: number;
+    productCardItemNumber: string;
 
     @Column()
     productCardItemName: string;
@@ -43,6 +40,9 @@ export class ProductCardItem {
 
     @Column('jsonb')
     productCardItemMetadata: string;
+
+    @Column('jsonb')
+    productCardItemSKUs: string;
 
     @Column({type: 'boolean', default: true})
     productCardItemIsActive: boolean;
