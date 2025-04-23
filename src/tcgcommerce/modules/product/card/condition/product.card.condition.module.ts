@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ProductCardVariantService } from './product.card.condition.service';
-import { ProductCardVariantController } from './product.card.condition.controller';
-import { ProductCardVariant } from 'src/typeorm/entities/tcgcommerce/modules/product/card/variant/product.card.variant.entity';
+import { ProductCardConditionService } from './product.card.condition.service';
+import { ProductCardConditionController } from './product.card.condition.controller';
+import { ProductCardCondition } from 'src/typeorm/entities/tcgcommerce/modules/product/card/condition/product.card.condition.entity';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ProductCardVariant])
+        TypeOrmModule.forFeature([ProductCardCondition])
     ],
-    controllers: [ProductCardVariantController],
-    providers: [ProductCardVariantService],
-    exports: [ProductCardVariantService]
+    controllers: [ProductCardConditionController],
+    providers: [ProductCardConditionService],
+    exports: [ProductCardConditionService]
 })
-export class ProductCardVariantModule {}
+export class ProductCardConditionModule {}

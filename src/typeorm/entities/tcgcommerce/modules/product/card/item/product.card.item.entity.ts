@@ -19,6 +19,9 @@ export class ProductCardItem {
 
     @Column()
     productSetId: string;
+
+    @Column()
+    productCardRarityAbbreviation: string;
     
     @Column()
     productCardItemNumber: string;

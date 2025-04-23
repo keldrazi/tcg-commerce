@@ -39,6 +39,7 @@ export class ProductCardItemService {
         productCardItemDTO.productLineId = productCardItem.productLineId;
         productCardItemDTO.productTypeId = productCardItem.productTypeId;
         productCardItemDTO.productSetId = productCardItem.productSetId;
+        productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
         productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
         productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
         productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
@@ -74,6 +75,7 @@ export class ProductCardItemService {
         productCardItemDTO.productLineId = productCardItem.productLineId;
         productCardItemDTO.productTypeId = productCardItem.productTypeId;
         productCardItemDTO.productSetId = productCardItem.productSetId;
+        productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
         productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
         productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
         productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
@@ -114,6 +116,7 @@ export class ProductCardItemService {
             productCardItemDTO.productLineId = productCardItem.productLineId;
             productCardItemDTO.productTypeId = productCardItem.productTypeId;
             productCardItemDTO.productSetId = productCardItem.productSetId;
+            productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
             productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
             productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
             productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
@@ -159,6 +162,7 @@ export class ProductCardItemService {
             productCardItemDTO.productLineId = productCardItem.productLineId;
             productCardItemDTO.productTypeId = productCardItem.productTypeId;
             productCardItemDTO.productSetId = productCardItem.productSetId;
+            productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
             productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
             productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
             productCardItemDTO.productCardItemCleanName = productCardItem.productCardItemCleanName;
