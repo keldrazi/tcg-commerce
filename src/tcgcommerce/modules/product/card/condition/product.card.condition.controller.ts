@@ -15,6 +15,11 @@ export class ProductCardConditionController {
         return await this.productCardConditionService.getProductCardConditions();
     }
 
+    @Get('/create/:productLineName')
+    async createProductCardConditionsByProductLineName(@Param('productLineName') productLineName: string) {
+        return await this.productCardConditionService.createProductCardConditionsByProductLineName(productLineName);
+    }
+
     @Post()
     @UsePipes(new ValidationPipe())
     async createProductCardCondition(@Body() createProductCardConditionDTO: CreateProductCardConditionDTO) {
@@ -26,6 +31,8 @@ export class ProductCardConditionController {
     async updateProductCardCondition(@Body() updateProductCardConditionDTO: UpdateProductCardConditionDTO) {
         return await this.productCardConditionService.updateProductCardCondition(updateProductCardConditionDTO);
     }
+
+
 
 
 }

@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardPrintingDTO, ProductCardPrintingDTO, UpdateProductCardPrintingDTO } from './dto/product.card.printing.dto';
 import { ProductCardPrinting } from 'src/typeorm/entities/tcgcommerce/modules/product/card/printing/product.card.printing.entity';
+import { TCGdbMTGPrintingService } from 'src/tcgdb/modules/tcgdb/mtg/printing/tcgdb.mtg.printing.service';
 
 @Injectable()
 export class ProductCardPrintingService {
 
     constructor(
         @InjectRepository(ProductCardPrinting) private productCardPrintingRepository: Repository<ProductCardPrinting>,
+        private tcgdbMTGPrintingService: TCGdbMTGPrintingService,
     ) { }
 
     async getProductCardPrinting(productCardPrintingId: string) {
@@ -26,7 +28,6 @@ export class ProductCardPrintingService {
         let productCardPrintingDTO = new ProductCardPrintingDTO();
         productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
         productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-        productCardPrintingDTO.productCardPrintingAbbreviation = productCardPrinting.productCardPrintingAbbreviation;
         productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
         productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
         productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
@@ -54,7 +55,6 @@ export class ProductCardPrintingService {
             let productCardPrintingDTO = new ProductCardPrintingDTO();
             productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
             productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-            productCardPrintingDTO.productCardPrintingAbbreviation = productCardPrinting.productCardPrintingAbbreviation;
             productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
             productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
             productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
@@ -80,7 +80,6 @@ export class ProductCardPrintingService {
         let productCardPrintingDTO = new ProductCardPrintingDTO();
         productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
         productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-        productCardPrintingDTO.productCardPrintingAbbreviation = productCardPrinting.productCardPrintingAbbreviation;
         productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
         productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
         productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
@@ -123,7 +122,6 @@ export class ProductCardPrintingService {
         }
 
         existingProductCardPrinting.productCardPrintingName = updateProductCardPrintingDTO.productCardPrintingName;
-        existingProductCardPrinting.productCardPrintingAbbreviation = updateProductCardPrintingDTO.productCardPrintingAbbreviation;
         existingProductCardPrinting.productCardPrintingDisplayOrder = updateProductCardPrintingDTO.productCardPrintingDisplayOrder;
         existingProductCardPrinting.productCardPrintingIsActive = updateProductCardPrintingDTO.productCardPrintingIsActive;
         existingProductCardPrinting.productCardPrintingUpdateDate = new Date();
@@ -135,5 +133,41 @@ export class ProductCardPrintingService {
         return productCardPrintingDTO;
     
     }
+
+    //BULK CREATE PRODUCT CARD PRINTINGS;
+    async createProductCardPrintingsByProductLineName(productLineName: string) {
+        //TO DO: CREATE PRODUCT CARD PRINTINGS;
+        if (productLineName == "mtg") {
+            return this.createTCGdbMTGProductCardPrintings();
+        } else {
+            return null;
+        }
+    }
+
+    async createTCGdbMTGProductCardPrintings() {
+
+        let tcgdbMTGProductCardPrintings = await this.tcgdbMTGPrintingService.getTCGdbMTGPrintings();
+        let productCardPrintingRecordCount = 0;
+
+        if (tcgdbMTGProductCardPrintings == null) {
+            return null;
+        }
+
+        for(let i = 0; i < tcgdbMTGProductCardPrintings.length; i++) {
+            let tcgdbMTGProductCardPrinting = tcgdbMTGProductCardPrintings[i];
+            
+            let createProductCardPrintingDTO = new CreateProductCardPrintingDTO();
+            createProductCardPrintingDTO.productCardPrintingName = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName;
+            createProductCardPrintingDTO.productCardPrintingDisplayOrder = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingDisplayOrder;
+            createProductCardPrintingDTO.productCardPrintingIsActive = true;
+            
+            await this.createProductCardPrinting(createProductCardPrintingDTO);
+
+            productCardPrintingRecordCount++; 
+        }
+
+        return productCardPrintingRecordCount;
+    }
+    
     
 }

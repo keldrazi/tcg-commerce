@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardLanguageDTO, ProductCardLanguageDTO, UpdateProductCardLanguageDTO } from './dto/product.card.language.dto';
 import { ProductCardLanguage } from 'src/typeorm/entities/tcgcommerce/modules/product/card/language/product.card.language.entity';
+import { TCGdbMTGLanguageService } from 'src/tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.service';
 
 @Injectable()
 export class ProductCardLanguageService {
 
     constructor(
         @InjectRepository(ProductCardLanguage) private productCardLanguageRepository: Repository<ProductCardLanguage>,
+        private tcgdbMTGLanguageService: TCGdbMTGLanguageService,
     ) { }
 
     async getProductCardLanguage(productCardLanguageId: string) {
@@ -126,6 +128,42 @@ export class ProductCardLanguageService {
 
         return productCardLanguageDTO;
     
+    }
+
+    //BULK CREATE PRODUCT CARD LANGAUGES;
+    async createProductCardLanguagesByProductLineName(productLineName: string) {
+        //TO DO: CREATE PRODUCT CARD LANGUAGES;
+        if (productLineName == "mtg") {
+            return this.createTCGdbMTGProductCardLanguages();
+        } else {
+            return null;
+        }
+    }
+
+    async createTCGdbMTGProductCardLanguages() {
+
+        let tcgdbMTGProductCardLanguages = await this.tcgdbMTGLanguageService.getTCGdbMTGLanguages();
+        let productCardLanguageRecordCount = 0;
+
+        if (tcgdbMTGProductCardLanguages == null) {
+            return null;
+        }
+
+        for(let i = 0; i < tcgdbMTGProductCardLanguages.length; i++) {
+            let tcgdbMTGProductCardLanguage = tcgdbMTGProductCardLanguages[i];
+            
+            let createProductCardLanguageDTO = new CreateProductCardLanguageDTO();
+            createProductCardLanguageDTO.productCardLanguageName = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageName;
+            createProductCardLanguageDTO.productCardLanguageAbbreviation = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageAbbreviation;
+            createProductCardLanguageDTO.productCardLanguageIsActive = true;
+            
+            await this.createProductCardLanguage(createProductCardLanguageDTO);
+
+            productCardLanguageRecordCount++; 
+        }
+
+        return productCardLanguageRecordCount;
+
     }
     
 }

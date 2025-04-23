@@ -15,6 +15,11 @@ export class ProductCardPrintingController {
         return await this.productCardPrintingService.getProductCardPrintings();
     }
 
+    @Get('/create/:productLineName')
+    async createProductCardPrintingsByProductLineName(@Param('productLineName') productLineName: string) {
+        return await this.productCardPrintingService.createProductCardPrintingsByProductLineName(productLineName);
+    }  
+
     @Post()
     @UsePipes(new ValidationPipe())
     async createProductCardPrinting(@Body() createProductCardPrintingDTO: CreateProductCardPrintingDTO) {

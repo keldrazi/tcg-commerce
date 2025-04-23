@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardRarityDTO, ProductCardRarityDTO, UpdateProductCardRarityDTO } from './dto/product.card.rarity.dto';
 import { ProductCardRarity } from 'src/typeorm/entities/tcgcommerce/modules/product/card/rarity/product.card.rarity.entity';
+import { TCGdbMTGRarityService } from 'src/tcgdb/modules/tcgdb/mtg/rarity/tcgdb.mtg.rarity.service';
 
 @Injectable()
 export class ProductCardRarityService {
 
     constructor(
         @InjectRepository(ProductCardRarity) private productCardRarityRepository: Repository<ProductCardRarity>,
+        private tcgdbMTGRarityService: TCGdbMTGRarityService
     ) { }
 
     async getProductCardRarity(productCardRarityId: string) {
@@ -127,5 +129,41 @@ export class ProductCardRarityService {
         return productCardRarityDTO;
     
     }
+
+    //BULK CREATE PRODUCT CARD LANGAUGES;
+        async createProductCardRaritiesByProductLineName(productLineName: string) {
+            //TO DO: CREATE PRODUCT CARD LANGUAGES;
+            if (productLineName == "mtg") {
+                return this.createTCGdbMTGProductCardRarities();
+            } else {
+                return null;
+            }
+        }
+    
+        async createTCGdbMTGProductCardRarities() {
+    
+            let tcgdbMTGProductCardRarities = await this.tcgdbMTGRarityService.getTCGdbMTGRarities();
+            let productCardRarityRecordCount = 0;
+    
+            if (tcgdbMTGProductCardRarities == null) {
+                return null;
+            }
+    
+            for(let i = 0; i < tcgdbMTGProductCardRarities.length; i++) {
+                let tcgdbMTGProductCardRarity = tcgdbMTGProductCardRarities[i];
+                
+                let createProductCardRarityDTO = new CreateProductCardRarityDTO();
+                createProductCardRarityDTO.productCardRarityName = tcgdbMTGProductCardRarity.tcgdbMTGRarityName;
+                createProductCardRarityDTO.productCardRarityAbbreviation = tcgdbMTGProductCardRarity.tcgdbMTGRarityAbbreviation;
+                createProductCardRarityDTO.productCardRarityIsActive = true;
+                
+                await this.createProductCardRarity(createProductCardRarityDTO);
+    
+                productCardRarityRecordCount++; 
+            }
+    
+            return productCardRarityRecordCount;
+    
+        }
     
 }

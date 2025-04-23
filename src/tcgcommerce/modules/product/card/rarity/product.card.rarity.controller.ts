@@ -15,6 +15,11 @@ export class ProductCardRarityController {
         return await this.productCardRarityService.getProductCardRaritys();
     }
 
+    @Get('/create/:productLineName')
+    async createProductCardRaritiesByProductLineName(@Param('productLineName') productLineName: string) {
+        return await this.productCardRarityService.createProductCardRaritiesByProductLineName(productLineName);
+    }
+
     @Post()
     @UsePipes(new ValidationPipe())
     async createProductCardRarity(@Body() createProductCardRarityDTO: CreateProductCardRarityDTO) {

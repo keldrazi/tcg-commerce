@@ -9,9 +9,6 @@ export class ProductCardPrinting {
     productCardPrintingName: string;
 
     @Column()
-    productCardPrintingAbbreviation: string;
-
-    @Column()
     productCardPrintingDisplayOrder: number;
 
     @Column({type: 'boolean', default: false})

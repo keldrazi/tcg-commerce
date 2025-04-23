@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardConditionDTO, ProductCardConditionDTO, UpdateProductCardConditionDTO } from './dto/product.card.condition.dto';
 import { ProductCardCondition } from 'src/typeorm/entities/tcgcommerce/modules/product/card/condition/product.card.condition.entity';
+import { TCGdbMTGConditionService } from 'src/tcgdb/modules/tcgdb/mtg/condition/tcgdb.mtg.condition.service';
 
 @Injectable()
 export class ProductCardConditionService {
 
     constructor(
         @InjectRepository(ProductCardCondition) private productCardConditionRepository: Repository<ProductCardCondition>,
+        private tcgdbMTGConditionService: TCGdbMTGConditionService,
     ) { }
 
     async getProductCardCondition(productCardConditionId: string) {
@@ -134,6 +136,43 @@ export class ProductCardConditionService {
 
         return productCardConditionDTO;
     
+    }
+
+    //BULK CREATE PRODUCT CARD CONDITIONS;
+    async createProductCardConditionsByProductLineName(productLineName: string) {
+        //TO DO: CREATE PRODUCT CARD CONDITIONS;
+        if (productLineName == "mtg") {
+            return this.createTCGdbMTGProductCardConditions();
+        } else {
+            return null;
+        }
+    }
+
+    async createTCGdbMTGProductCardConditions() {
+
+        let tcgdbMTGProductCardConditions = await this.tcgdbMTGConditionService.getTCGdbMTGConditions();
+        let productCardConditionRecordCount = 0;
+
+        if (tcgdbMTGProductCardConditions == null) {
+            return null;
+        }
+
+        for(let i = 0; i < tcgdbMTGProductCardConditions.length; i++) {
+            let tcgdbMTGProductCardCondition = tcgdbMTGProductCardConditions[i];
+            
+            let createProductCardConditionDTO = new CreateProductCardConditionDTO();
+            createProductCardConditionDTO.productCardConditionName = tcgdbMTGProductCardCondition.tcgdbMTGConditionName;
+            createProductCardConditionDTO.productCardConditionAbbreviation = tcgdbMTGProductCardCondition.tcgdbMTGConditionAbbreviation;
+            createProductCardConditionDTO.productCardConditionDisplayOrder = tcgdbMTGProductCardCondition.tcgdbMTGConditionDisplayOrder;
+            createProductCardConditionDTO.productCardConditionIsActive = true;
+            
+            await this.createProductCardCondition(createProductCardConditionDTO);
+
+            productCardConditionRecordCount++; 
+        }
+
+        return productCardConditionRecordCount;
+
     }
     
 }
