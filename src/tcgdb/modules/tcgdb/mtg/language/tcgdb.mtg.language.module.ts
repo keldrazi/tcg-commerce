@@ -1,20 +1,18 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TCGdbMTGSetService } from './tcgdb.mtg.language.service';
-import { TCGdbMTGSetController } from "./tcgdb.mtg.language.controller";
-import { TCGPlayerMTGSetModule } from 'src/tcgdb/modules/tcgplayer/mtg/set/tcgplayer.mtg.set.module';
-import { ScryfallMTGSetModule } from "src/tcgdb/modules/scryfall/mtg/set/scryfall.mtg.set.module";
-import { TCGdbMTGSet } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.entity";
+import { TCGdbMTGLanguageService } from './tcgdb.mtg.language.service';
+import { TCGdbMTGLanguageController } from "./tcgdb.mtg.language.controller";
+import { TCGPlayerMTGLanguageModule } from 'src/tcgdb/modules/tcgplayer/mtg/language/tcgplayer.mtg.language.module';
+import { TCGdbMTGLanguage } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([TCGdbMTGSet]),
-        ScryfallMTGSetModule,
-        TCGPlayerMTGSetModule,
+        TypeOrmModule.forFeature([TCGdbMTGLanguage]),
+        TCGPlayerMTGLanguageModule,
     ], 
-    controllers: [TCGdbMTGSetController],
-    providers: [TCGdbMTGSetService],
-    exports: [TCGdbMTGSetService],
+    controllers: [TCGdbMTGLanguageController],
+    providers: [TCGdbMTGLanguageService],
+    exports: [TCGdbMTGLanguageService],
 })
 
-export class TCGdbMTGSetModule {}
+export class TCGdbMTGLanguageModule {}

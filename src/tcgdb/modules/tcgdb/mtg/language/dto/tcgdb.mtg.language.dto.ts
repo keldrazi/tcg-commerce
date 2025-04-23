@@ -1,10 +1,9 @@
 
-export class TCGdbMTGSetDTO {
-    tcgdbMTGSetId: string;
-    tcgdbMTGSetTCGPlayerId: number;
-    tcgdbMTGSetScryfallId: string;
-    tcgdbMTGSetAbbreviation: string;
-    tcgdbMTGSetName: string;
-    tcgdbMTGSetPublishedOn: Date;
-    tcgdbMTGSetTotalCards: number;
+export class TCGdbMTGLanguageDTO {
+    tcgdbMTGLanguageId: string;
+    tcgdbMTGLanguageTCGPlayerId: number;
+    tcgdbMTGLanguageName: string;
+    tcgdbMTGLanguageAbbreviation: string;
+    tcgdbMTGLanguageCreateDate: Date;
+    tcgdbMTGLanguageUpdateDate: Date;
 }

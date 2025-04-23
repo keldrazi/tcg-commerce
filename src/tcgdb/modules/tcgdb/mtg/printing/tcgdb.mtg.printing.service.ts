@@ -1,187 +1,80 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TCGPlayerMTGSetService } from 'src/tcgdb/modules/tcgplayer/mtg/set/tcgplayer.mtg.set.service';
-import { ScryfallMTGSetService } from 'src/tcgdb/modules/scryfall/mtg/set/scryfall.mtg.set.service';
-import { TCGdbMTGSetDTO } from './dto/tcgdb.mtg.printing.dto';
-import { TCGdbMTGSet } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.entity';
+import { TCGPlayerMTGPrintingService } from 'src/tcgdb/modules/tcgplayer/mtg/printing/tcgplayer.mtg.printing.service';
+import { TCGdbMTGPrintingDTO } from './dto/tcgdb.mtg.printing.dto';
+import { TCGdbMTGPrinting } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/printing/tcgdb.mtg.printing.entity';
 
 @Injectable()
-export class TCGdbMTGSetService {
+export class TCGdbMTGPrintingService {
 
     constructor(
-        @InjectRepository(TCGdbMTGSet) private tcgdbMTGSetRepository: Repository<TCGdbMTGSet>, 
-        private tcgPlayerMTGSetService: TCGPlayerMTGSetService,
-        private scryfallMTGSetService: ScryfallMTGSetService,
+        @InjectRepository(TCGdbMTGPrinting) private tcgdbMTGPrintingRepository: Repository<TCGdbMTGPrinting>, 
+        private tcgPlayerMTGPrintingService: TCGPlayerMTGPrintingService,
     ) {}
     
-    async getTCGdbMTGSets() {
+    async getTCGdbMTGPrintings() {
         
-        let tcgdbMTGSetDTOs: TCGdbMTGSetDTO[] = [];
+        let tcgdbMTGPrintingDTOs: TCGdbMTGPrintingDTO[] = [];
 
         //GET ALL TCGDB SETS;
-        const tcgdbMTGSets = await this.tcgdbMTGSetRepository.find();
+        const tcgdbMTGPrintings = await this.tcgdbMTGPrintingRepository.find();
 
-        for(let i=0; i < tcgdbMTGSets.length; i++) {
-            const tcgdbMTGSet = tcgdbMTGSets[i];
+        for(let i=0; i < tcgdbMTGPrintings.length; i++) {
+            const tcgdbMTGPrinting = tcgdbMTGPrintings[i];
             
-            let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-                tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-                tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-                tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-                tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-                tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-                tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-                tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
+            let tcgdbMTGPrintingDTO: TCGdbMTGPrintingDTO = {
+                tcgdbMTGPrintingId: tcgdbMTGPrinting.tcgdbMTGPrintingId,
+                tcgdbMTGPrintingTCGPlayerId: tcgdbMTGPrinting.tcgdbMTGPrintingTCGPlayerId,
+                tcgdbMTGPrintingName: tcgdbMTGPrinting.tcgdbMTGPrintingName,
+                tcgdbMTGPrintingDisplayOrder: tcgdbMTGPrinting.tcgdbMTGPrintingDisplayOrder,
+                tcgdbMTGPrintingCreateDate: tcgdbMTGPrinting.tcgdbMTGPrintingCreateDate,
+                tcgdbMTGPrintingUpdateDate: tcgdbMTGPrinting.tcgdbMTGPrintingUpdateDate,
             }
 
-            tcgdbMTGSetDTOs.push(tcgdbMTGSetDTO);
+            tcgdbMTGPrintingDTOs.push(tcgdbMTGPrintingDTO);
         }
 
-        return tcgdbMTGSetDTOs;
+        return tcgdbMTGPrintingDTOs;
     }
 
-    async getTCGdbMTGSetByTCGdbId(tcgdbId: string) {
-
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
+    async getTCGdbMTGPrintingByTCGPlayerId(tcgPlayerId: number) {
+        let tcgdbMTGPrinting = await this.tcgdbMTGPrintingRepository.findOne({
             where: {
-                tcgdbMTGSetId: tcgdbId,
+                tcgdbMTGPrintingTCGPlayerId: tcgPlayerId,
             }
-        })
+        });
 
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-
-        return tcgdbMTGSetDTO;
-    }
-    
-    async getTCGdbMTGSetByTCGPlayerId(tcgPlayerId: number) {
-
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetTCGPlayerId: tcgPlayerId,
-            }
-        })
-
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-        
-        return tcgdbMTGSetDTO;
+        return tcgdbMTGPrinting;
     }
 
-    
-    async getTCGdbMTGSetBySetAbbreviation(setAbbreviation: string) {
-
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetAbbreviation: setAbbreviation,
-            }
-        })
-
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-
-        return tcgdbMTGSetDTO;
+    async createTCGdbMTGPrintings() {
         
-    }
+        let tcgdbMTGPrintingRecordCount = 0;
 
-    async getTCGdbMTGSetBySetName(setName: string) {
-        
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetName: setName,
-            }
-        })
+        let tcgPlayerMTGPrintings = await this.tcgPlayerMTGPrintingService.getTCGPlayerMTGPrintings();
 
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-
-        return tcgdbMTGSetDTO;
-    }
-    
-
-    async createTCGdbMTGSets() {
-        
-        let tcgdbMTGSetRecordCount = 0;
-
-        let tcgPlayerMTGSets = await this.tcgPlayerMTGSetService.getTCGPlayerMTGSets();
-
-        for(let i=0; i < tcgPlayerMTGSets.length; i++) {
-            let tcgPlayerMTGSet = tcgPlayerMTGSets[i];
+        for(let i=0; i < tcgPlayerMTGPrintings.length; i++) {
+            let tcgPlayerMTGPrinting = tcgPlayerMTGPrintings[i];
 
             //CHECK TO SEE IF THE SET EXISTS;
-            let tcgdbMTGSet = await this.getTCGdbMTGSetByTCGPlayerId(tcgPlayerMTGSet.tcgPlayerMTGSetGroupId);
+            let tcgdbMTGPrinting = await this.getTCGdbMTGPrintingByTCGPlayerId(tcgPlayerMTGPrinting.tcgPlayerMTGPrintingId);
 
             //SET DOESN'T EXIST - CREATE IT;
-            if(tcgdbMTGSet == null) {
-                const newTCGdgMTGSet = this.tcgdbMTGSetRepository.create({
-                    tcgdbMTGSetTCGPlayerId: tcgPlayerMTGSet.tcgPlayerMTGSetGroupId,
-                    tcgdbMTGSetAbbreviation: tcgPlayerMTGSet.tcgPlayerMTGSetAbbreviation,
-                    tcgdbMTGSetName: tcgPlayerMTGSet.tcgPlayerMTGSetName,
-                    tcgdbMTGSetPublishedOn: tcgPlayerMTGSet.tcgPlayerMTGSetPublishedOn,
-                    tcgdbMTGSetTotalCards: tcgPlayerMTGSet.tcgPlayerMTGSetTotalCards,
+            if(tcgdbMTGPrinting == null) {
+                const newTCGdgMTGPrinting = this.tcgdbMTGPrintingRepository.create({
+                    tcgdbMTGPrintingTCGPlayerId: tcgPlayerMTGPrinting.tcgPlayerMTGPrintingId,
+                    tcgdbMTGPrintingName: tcgPlayerMTGPrinting.tcgPlayerMTGPrintingName,
+                    tcgdbMTGPrintingDisplayOrder: tcgPlayerMTGPrinting.tcgPlayerMTGPrintingDisplayOrder
                 });
 
-                let scryfallMTGSet = await this.scryfallMTGSetService.getScryfallMTGSetByTCGPlayerId(tcgPlayerMTGSet.tcgPlayerMTGSetGroupId);
+                await this.tcgdbMTGPrintingRepository.save(newTCGdgMTGPrinting);
 
-                if(scryfallMTGSet != null) {
-                    newTCGdgMTGSet.tcgdbMTGSetScryfallId = scryfallMTGSet.scryfallMTGSetScryfallId;
-                }
-
-                await this.tcgdbMTGSetRepository.save(newTCGdgMTGSet);
-
-                tcgdbMTGSetRecordCount++;
+                tcgdbMTGPrintingRecordCount++;
             }
         }
 
-        return tcgdbMTGSetRecordCount;
+        return tcgdbMTGPrintingRecordCount;
 
     }
 }

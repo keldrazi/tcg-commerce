@@ -1,187 +1,80 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TCGPlayerMTGSetService } from 'src/tcgdb/modules/tcgplayer/mtg/set/tcgplayer.mtg.set.service';
-import { ScryfallMTGSetService } from 'src/tcgdb/modules/scryfall/mtg/set/scryfall.mtg.set.service';
-import { TCGdbMTGSetDTO } from './dto/tcgdb.mtg.language.dto';
-import { TCGdbMTGSet } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.entity';
+import { TCGPlayerMTGLanguageService } from 'src/tcgdb/modules/tcgplayer/mtg/language/tcgplayer.mtg.language.service';
+import { TCGdbMTGLanguageDTO } from './dto/tcgdb.mtg.language.dto';
+import { TCGdbMTGLanguage } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.entity';
 
 @Injectable()
-export class TCGdbMTGSetService {
+export class TCGdbMTGLanguageService {
 
     constructor(
-        @InjectRepository(TCGdbMTGSet) private tcgdbMTGSetRepository: Repository<TCGdbMTGSet>, 
-        private tcgPlayerMTGSetService: TCGPlayerMTGSetService,
-        private scryfallMTGSetService: ScryfallMTGSetService,
+        @InjectRepository(TCGdbMTGLanguage) private tcgdbMTGLanguageRepository: Repository<TCGdbMTGLanguage>, 
+        private tcgPlayerMTGLanguageService: TCGPlayerMTGLanguageService,
     ) {}
     
-    async getTCGdbMTGSets() {
+    async getTCGdbMTGLanguages() {
         
-        let tcgdbMTGSetDTOs: TCGdbMTGSetDTO[] = [];
+        let tcgdbMTGLanguageDTOs: TCGdbMTGLanguageDTO[] = [];
 
         //GET ALL TCGDB SETS;
-        const tcgdbMTGSets = await this.tcgdbMTGSetRepository.find();
+        const tcgdbMTGLanguages = await this.tcgdbMTGLanguageRepository.find();
 
-        for(let i=0; i < tcgdbMTGSets.length; i++) {
-            const tcgdbMTGSet = tcgdbMTGSets[i];
+        for(let i=0; i < tcgdbMTGLanguages.length; i++) {
+            const tcgdbMTGLanguage = tcgdbMTGLanguages[i];
             
-            let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-                tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-                tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-                tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-                tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-                tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-                tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-                tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
+            let tcgdbMTGLanguageDTO: TCGdbMTGLanguageDTO = {
+                tcgdbMTGLanguageId: tcgdbMTGLanguage.tcgdbMTGLanguageId,
+                tcgdbMTGLanguageTCGPlayerId: tcgdbMTGLanguage.tcgdbMTGLanguageTCGPlayerId,
+                tcgdbMTGLanguageName: tcgdbMTGLanguage.tcgdbMTGLanguageName,
+                tcgdbMTGLanguageAbbreviation: tcgdbMTGLanguage.tcgdbMTGLanguageAbbreviation,
+                tcgdbMTGLanguageCreateDate: tcgdbMTGLanguage.tcgdbMTGLanguageCreateDate,
+                tcgdbMTGLanguageUpdateDate: tcgdbMTGLanguage.tcgdbMTGLanguageUpdateDate,
             }
 
-            tcgdbMTGSetDTOs.push(tcgdbMTGSetDTO);
+            tcgdbMTGLanguageDTOs.push(tcgdbMTGLanguageDTO);
         }
 
-        return tcgdbMTGSetDTOs;
+        return tcgdbMTGLanguageDTOs;
     }
 
-    async getTCGdbMTGSetByTCGdbId(tcgdbId: string) {
-
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
+    async getTCGdbMTGLanguageByTCGPlayerId(tcgPlayerId: number) {
+        let tcgdbMTGLanguage = await this.tcgdbMTGLanguageRepository.findOne({
             where: {
-                tcgdbMTGSetId: tcgdbId,
+                tcgdbMTGLanguageTCGPlayerId: tcgPlayerId,
             }
-        })
+        });
 
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-
-        return tcgdbMTGSetDTO;
-    }
-    
-    async getTCGdbMTGSetByTCGPlayerId(tcgPlayerId: number) {
-
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetTCGPlayerId: tcgPlayerId,
-            }
-        })
-
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-        
-        return tcgdbMTGSetDTO;
+        return tcgdbMTGLanguage;
     }
 
-    
-    async getTCGdbMTGSetBySetAbbreviation(setAbbreviation: string) {
-
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetAbbreviation: setAbbreviation,
-            }
-        })
-
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-
-        return tcgdbMTGSetDTO;
+    async createTCGdbMTGLanguages() {
         
-    }
+        let tcgdbMTGLanguageRecordCount = 0;
 
-    async getTCGdbMTGSetBySetName(setName: string) {
-        
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetName: setName,
-            }
-        })
+        let tcgPlayerMTGLanguages = await this.tcgPlayerMTGLanguageService.getTCGPlayerMTGLanguages();
 
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
-
-        return tcgdbMTGSetDTO;
-    }
-    
-
-    async createTCGdbMTGSets() {
-        
-        let tcgdbMTGSetRecordCount = 0;
-
-        let tcgPlayerMTGSets = await this.tcgPlayerMTGSetService.getTCGPlayerMTGSets();
-
-        for(let i=0; i < tcgPlayerMTGSets.length; i++) {
-            let tcgPlayerMTGSet = tcgPlayerMTGSets[i];
+        for(let i=0; i < tcgPlayerMTGLanguages.length; i++) {
+            let tcgPlayerMTGLanguage = tcgPlayerMTGLanguages[i];
 
             //CHECK TO SEE IF THE SET EXISTS;
-            let tcgdbMTGSet = await this.getTCGdbMTGSetByTCGPlayerId(tcgPlayerMTGSet.tcgPlayerMTGSetGroupId);
+            let tcgdbMTGLanguage = await this.getTCGdbMTGLanguageByTCGPlayerId(tcgPlayerMTGLanguage.tcgPlayerMTGLanguageId);
 
             //SET DOESN'T EXIST - CREATE IT;
-            if(tcgdbMTGSet == null) {
-                const newTCGdgMTGSet = this.tcgdbMTGSetRepository.create({
-                    tcgdbMTGSetTCGPlayerId: tcgPlayerMTGSet.tcgPlayerMTGSetGroupId,
-                    tcgdbMTGSetAbbreviation: tcgPlayerMTGSet.tcgPlayerMTGSetAbbreviation,
-                    tcgdbMTGSetName: tcgPlayerMTGSet.tcgPlayerMTGSetName,
-                    tcgdbMTGSetPublishedOn: tcgPlayerMTGSet.tcgPlayerMTGSetPublishedOn,
-                    tcgdbMTGSetTotalCards: tcgPlayerMTGSet.tcgPlayerMTGSetTotalCards,
+            if(tcgdbMTGLanguage == null) {
+                const newTCGdgMTGLanguage = this.tcgdbMTGLanguageRepository.create({
+                    tcgdbMTGLanguageTCGPlayerId: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageId,
+                    tcgdbMTGLanguageName: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageName,
+                    tcgdbMTGLanguageAbbreviation: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageAbbreviation
                 });
 
-                let scryfallMTGSet = await this.scryfallMTGSetService.getScryfallMTGSetByTCGPlayerId(tcgPlayerMTGSet.tcgPlayerMTGSetGroupId);
+                await this.tcgdbMTGLanguageRepository.save(newTCGdgMTGLanguage);
 
-                if(scryfallMTGSet != null) {
-                    newTCGdgMTGSet.tcgdbMTGSetScryfallId = scryfallMTGSet.scryfallMTGSetScryfallId;
-                }
-
-                await this.tcgdbMTGSetRepository.save(newTCGdgMTGSet);
-
-                tcgdbMTGSetRecordCount++;
+                tcgdbMTGLanguageRecordCount++;
             }
         }
 
-        return tcgdbMTGSetRecordCount;
+        return tcgdbMTGLanguageRecordCount;
 
     }
 }

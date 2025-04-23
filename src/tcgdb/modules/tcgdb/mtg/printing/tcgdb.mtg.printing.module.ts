@@ -1,20 +1,18 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TCGdbMTGSetService } from './tcgdb.mtg.printing.service';
-import { TCGdbMTGSetController } from "./tcgdb.mtg.printing.controller";
-import { TCGPlayerMTGSetModule } from 'src/tcgdb/modules/tcgplayer/mtg/set/tcgplayer.mtg.set.module';
-import { ScryfallMTGSetModule } from "src/tcgdb/modules/scryfall/mtg/set/scryfall.mtg.set.module";
-import { TCGdbMTGSet } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.entity";
+import { TCGdbMTGPrintingService } from './tcgdb.mtg.printing.service';
+import { TCGdbMTGPrintingController } from "./tcgdb.mtg.printing.controller";
+import { TCGPlayerMTGPrintingModule } from 'src/tcgdb/modules/tcgplayer/mtg/printing/tcgplayer.mtg.printing.module';
+import { TCGdbMTGPrinting } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/printing/tcgdb.mtg.printing.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([TCGdbMTGSet]),
-        ScryfallMTGSetModule,
-        TCGPlayerMTGSetModule,
+        TypeOrmModule.forFeature([TCGdbMTGPrinting]),
+        TCGPlayerMTGPrintingModule,
     ], 
-    controllers: [TCGdbMTGSetController],
-    providers: [TCGdbMTGSetService],
-    exports: [TCGdbMTGSetService],
+    controllers: [TCGdbMTGPrintingController],
+    providers: [TCGdbMTGPrintingService],
+    exports: [TCGdbMTGPrintingService],
 })
 
-export class TCGdbMTGSetModule {}
+export class TCGdbMTGPrintingModule {}
