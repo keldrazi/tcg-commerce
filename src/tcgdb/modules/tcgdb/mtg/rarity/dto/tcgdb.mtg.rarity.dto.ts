@@ -1,9 +1,9 @@
 
-export class TCGdbMTGLanguageDTO {
-    tcgdbMTGLanguageId: string;
-    tcgdbMTGLanguageTCGPlayerId: number;
-    tcgdbMTGLanguageName: string;
-    tcgdbMTGLanguageAbbreviation: string;
-    tcgdbMTGLanguageCreateDate: Date;
-    tcgdbMTGLanguageUpdateDate: Date;
+export class TCGdbMTGRarityDTO {
+    tcgdbMTGRarityId: string;
+    tcgdbMTGRarityTCGPlayerId: number;
+    tcgdbMTGRarityName: string;
+    tcgdbMTGRarityAbbreviation: string;
+    tcgdbMTGRarityCreateDate: Date;
+    tcgdbMTGRarityUpdateDate: Date;
 }

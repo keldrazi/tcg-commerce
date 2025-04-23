@@ -28,6 +28,7 @@ export class TCGdbMTGConditionService {
                 tcgdbMTGConditionTCGPlayerId: tcgdbMTGCondition.tcgdbMTGConditionTCGPlayerId,
                 tcgdbMTGConditionName: tcgdbMTGCondition.tcgdbMTGConditionName,
                 tcgdbMTGConditionAbbreviation: tcgdbMTGCondition.tcgdbMTGConditionAbbreviation,
+                tcgdbMTGConditionDisplayOrder: tcgdbMTGCondition.tcgdbMTGConditionDisplayOrder,
                 tcgdbMTGConditionCreateDate: tcgdbMTGCondition.tcgdbMTGConditionCreateDate,
                 tcgdbMTGConditionUpdateDate: tcgdbMTGCondition.tcgdbMTGConditionUpdateDate,
             }
@@ -65,7 +66,8 @@ export class TCGdbMTGConditionService {
                 const newTCGdgMTGCondition = this.tcgdbMTGConditionRepository.create({
                     tcgdbMTGConditionTCGPlayerId: tcgPlayerMTGCondition.tcgPlayerMTGConditionId,
                     tcgdbMTGConditionName: tcgPlayerMTGCondition.tcgPlayerMTGConditionName,
-                    tcgdbMTGConditionAbbreviation: tcgPlayerMTGCondition.tcgPlayerMTGConditionAbbreviation
+                    tcgdbMTGConditionAbbreviation: tcgPlayerMTGCondition.tcgPlayerMTGConditionAbbreviation,
+                    tcgdbMTGConditionDisplayOrder: tcgPlayerMTGCondition.tcgPlayerMTGConditionDisplayOrder,
                 });
 
                 await this.tcgdbMTGConditionRepository.save(newTCGdgMTGCondition);

@@ -18,7 +18,7 @@ export class TCGPlayerAPIRarityService {
 
         let rarityDataResult: any[] = [];
 
-        const url = 'https://api.tcgplayer.com/catalog/categories/' + categoryId + '/raritys';
+        const url = 'https://api.tcgplayer.com/catalog/categories/' + categoryId + '/rarities';
         const headers = { 'Authorization': 'Bearer ' + accessToken };
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
@@ -28,10 +28,8 @@ export class TCGPlayerAPIRarityService {
             );
 
         let data = await lastValueFrom(response);
-        rarityDataResult.push(data.results);
-            
         
-        let rarityData = rarityDataResult;
+        let rarityData = data.results;
 
         return rarityData;
     }

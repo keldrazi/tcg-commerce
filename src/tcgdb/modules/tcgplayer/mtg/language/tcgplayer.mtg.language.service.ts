@@ -47,7 +47,7 @@ export class TCGPlayerMTGLanguageService {
             const tcgPlayerMTGLanguage: any = tcgPlayerMTGLanguages[i];
             
             //CHECK TO SEE IF THE SET EXISTS;
-            const tcgPlayerMTGLanguageCheck = await this.getTCGPlayerMTGLanguageByLanguageName(tcgPlayerMTGLanguage.languageName);
+            const tcgPlayerMTGLanguageCheck = await this.getTCGPlayerMTGLanguageByLanguageName(tcgPlayerMTGLanguage.name);
 
             //SET DOESN'T EXIST - CREATE SET;
             if(tcgPlayerMTGLanguageCheck == null) {

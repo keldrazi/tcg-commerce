@@ -28,10 +28,8 @@ export class TCGPlayerAPIPrintingService {
             );
 
         let data = await lastValueFrom(response);
-        printingDataResult.push(data.results);
-            
-        
-        let printingData = printingDataResult;
+       
+        let printingData = data.results;
 
         return printingData;
     }

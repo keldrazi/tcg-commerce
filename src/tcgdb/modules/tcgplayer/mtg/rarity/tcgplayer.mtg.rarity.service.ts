@@ -37,7 +37,7 @@ export class TCGPlayerMTGRarityService {
             const tcgPlayerMTGRarity: any = tcgPlayerMTGRarities[i];
             
             //CHECK TO SEE IF THE SET EXISTS;
-            const tcgPlayerMTGRarityCheck = await this.getTCGPlayerMTGRarityByRarityDBValue(tcgPlayerMTGRarity.rarityDBValue);
+            const tcgPlayerMTGRarityCheck = await this.getTCGPlayerMTGRarityByRarityDBValue(tcgPlayerMTGRarity.dbValue);
 
             //SET DOESN'T EXIST - CREATE SET;
             if(tcgPlayerMTGRarityCheck == null) {

@@ -9,10 +9,10 @@ export class TCGdbMTGRarity {
     tcgdbMTGRarityTCGPlayerId: number;
  
     @Column()
-    tcgdbMTGRarityDisplayName: string;
+    tcgdbMTGRarityName: string;
 
     @Column()
-    tcgdbMTGRarityDBValue: string;
+    tcgdbMTGRarityAbbreviation: string;
 
     @CreateDateColumn()
     tcgdbMTGRarityCreateDate: Date;

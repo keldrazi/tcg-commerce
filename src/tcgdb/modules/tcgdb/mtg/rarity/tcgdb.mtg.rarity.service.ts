@@ -1,80 +1,80 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TCGPlayerMTGLanguageService } from 'src/tcgdb/modules/tcgplayer/mtg/language/tcgplayer.mtg.language.service';
-import { TCGdbMTGLanguageDTO } from './dto/tcgdb.mtg.rarity.dto';
-import { TCGdbMTGLanguage } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.entity';
+import { TCGPlayerMTGRarityService } from 'src/tcgdb/modules/tcgplayer/mtg/rarity/tcgplayer.mtg.rarity.service';
+import { TCGdbMTGRarityDTO } from './dto/tcgdb.mtg.rarity.dto';
+import { TCGdbMTGRarity } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/rarity/tcgdb.mtg.rarity.entity';
 
 @Injectable()
-export class TCGdbMTGLanguageService {
+export class TCGdbMTGRarityService {
 
     constructor(
-        @InjectRepository(TCGdbMTGLanguage) private tcgdbMTGLanguageRepository: Repository<TCGdbMTGLanguage>, 
-        private tcgPlayerMTGLanguageService: TCGPlayerMTGLanguageService,
+        @InjectRepository(TCGdbMTGRarity) private tcgdbMTGRarityRepository: Repository<TCGdbMTGRarity>, 
+        private tcgPlayerMTGRarityService: TCGPlayerMTGRarityService,
     ) {}
     
-    async getTCGdbMTGLanguages() {
+    async getTCGdbMTGRarities() {
         
-        let tcgdbMTGLanguageDTOs: TCGdbMTGLanguageDTO[] = [];
+        let tcgdbMTGRarityDTOs: TCGdbMTGRarityDTO[] = [];
 
         //GET ALL TCGDB SETS;
-        const tcgdbMTGLanguages = await this.tcgdbMTGLanguageRepository.find();
+        const tcgdbMTGRaritys = await this.tcgdbMTGRarityRepository.find();
 
-        for(let i=0; i < tcgdbMTGLanguages.length; i++) {
-            const tcgdbMTGLanguage = tcgdbMTGLanguages[i];
+        for(let i=0; i < tcgdbMTGRaritys.length; i++) {
+            const tcgdbMTGRarity = tcgdbMTGRaritys[i];
             
-            let tcgdbMTGLanguageDTO: TCGdbMTGLanguageDTO = {
-                tcgdbMTGLanguageId: tcgdbMTGLanguage.tcgdbMTGLanguageId,
-                tcgdbMTGLanguageTCGPlayerId: tcgdbMTGLanguage.tcgdbMTGLanguageTCGPlayerId,
-                tcgdbMTGLanguageName: tcgdbMTGLanguage.tcgdbMTGLanguageName,
-                tcgdbMTGLanguageAbbreviation: tcgdbMTGLanguage.tcgdbMTGLanguageAbbreviation,
-                tcgdbMTGLanguageCreateDate: tcgdbMTGLanguage.tcgdbMTGLanguageCreateDate,
-                tcgdbMTGLanguageUpdateDate: tcgdbMTGLanguage.tcgdbMTGLanguageUpdateDate,
+            let tcgdbMTGRarityDTO: TCGdbMTGRarityDTO = {
+                tcgdbMTGRarityId: tcgdbMTGRarity.tcgdbMTGRarityId,
+                tcgdbMTGRarityTCGPlayerId: tcgdbMTGRarity.tcgdbMTGRarityTCGPlayerId,
+                tcgdbMTGRarityName: tcgdbMTGRarity.tcgdbMTGRarityName,
+                tcgdbMTGRarityAbbreviation: tcgdbMTGRarity.tcgdbMTGRarityAbbreviation,
+                tcgdbMTGRarityCreateDate: tcgdbMTGRarity.tcgdbMTGRarityCreateDate,
+                tcgdbMTGRarityUpdateDate: tcgdbMTGRarity.tcgdbMTGRarityUpdateDate,
             }
 
-            tcgdbMTGLanguageDTOs.push(tcgdbMTGLanguageDTO);
+            tcgdbMTGRarityDTOs.push(tcgdbMTGRarityDTO);
         }
 
-        return tcgdbMTGLanguageDTOs;
+        return tcgdbMTGRarityDTOs;
     }
 
-    async getTCGdbMTGLanguageByTCGPlayerId(tcgPlayerId: number) {
-        let tcgdbMTGLanguage = await this.tcgdbMTGLanguageRepository.findOne({
+    async getTCGdbMTGRarityByTCGPlayerId(tcgPlayerId: number) {
+        let tcgdbMTGRarity = await this.tcgdbMTGRarityRepository.findOne({
             where: {
-                tcgdbMTGLanguageTCGPlayerId: tcgPlayerId,
+                tcgdbMTGRarityTCGPlayerId: tcgPlayerId,
             }
         });
 
-        return tcgdbMTGLanguage;
+        return tcgdbMTGRarity;
     }
 
-    async createTCGdbMTGLanguages() {
+    async createTCGdbMTGRarities() {
         
-        let tcgdbMTGLanguageRecordCount = 0;
+        let tcgdbMTGRarityRecordCount = 0;
 
-        let tcgPlayerMTGLanguages = await this.tcgPlayerMTGLanguageService.getTCGPlayerMTGLanguages();
+        let tcgPlayerMTGRaritys = await this.tcgPlayerMTGRarityService.getTCGPlayerMTGRarities();
 
-        for(let i=0; i < tcgPlayerMTGLanguages.length; i++) {
-            let tcgPlayerMTGLanguage = tcgPlayerMTGLanguages[i];
+        for(let i=0; i < tcgPlayerMTGRaritys.length; i++) {
+            let tcgPlayerMTGRarity = tcgPlayerMTGRaritys[i];
 
             //CHECK TO SEE IF THE SET EXISTS;
-            let tcgdbMTGLanguage = await this.getTCGdbMTGLanguageByTCGPlayerId(tcgPlayerMTGLanguage.tcgPlayerMTGLanguageId);
+            let tcgdbMTGRarity = await this.getTCGdbMTGRarityByTCGPlayerId(tcgPlayerMTGRarity.tcgPlayerMTGRarityId);
 
             //SET DOESN'T EXIST - CREATE IT;
-            if(tcgdbMTGLanguage == null) {
-                const newTCGdgMTGLanguage = this.tcgdbMTGLanguageRepository.create({
-                    tcgdbMTGLanguageTCGPlayerId: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageId,
-                    tcgdbMTGLanguageName: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageName,
-                    tcgdbMTGLanguageAbbreviation: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageAbbreviation
+            if(tcgdbMTGRarity == null) {
+                const newTCGdgMTGRarity = this.tcgdbMTGRarityRepository.create({
+                    tcgdbMTGRarityTCGPlayerId: tcgPlayerMTGRarity.tcgPlayerMTGRarityId,
+                    tcgdbMTGRarityName: tcgPlayerMTGRarity.tcgPlayerMTGRarityDisplayText,
+                    tcgdbMTGRarityAbbreviation: tcgPlayerMTGRarity.tcgPlayerMTGRarityDBValue
                 });
 
-                await this.tcgdbMTGLanguageRepository.save(newTCGdgMTGLanguage);
+                await this.tcgdbMTGRarityRepository.save(newTCGdgMTGRarity);
 
-                tcgdbMTGLanguageRecordCount++;
+                tcgdbMTGRarityRecordCount++;
             }
         }
 
-        return tcgdbMTGLanguageRecordCount;
+        return tcgdbMTGRarityRecordCount;
 
     }
 }

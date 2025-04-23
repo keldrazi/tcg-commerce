@@ -28,10 +28,8 @@ export class TCGPlayerAPILanguageService {
             );
 
         let data = await lastValueFrom(response);
-        languageDataResult.push(data.results);
-            
         
-        let languageData = languageDataResult;
+        let languageData = data.results;
 
         return languageData;
     }

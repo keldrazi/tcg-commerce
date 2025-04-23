@@ -10,11 +10,19 @@ import { ConfigEmailModule } from './config/email/config.email.module';
 import { TCGPlayerAPICardModule } from './tcgdb/modules/tcgplayer/api/card/tcgplayer.api.card.module';
 import { TCGPlayerAPISetModule } from './tcgdb/modules/tcgplayer/api/set/tcgplayer.api.set.module';
 import { TCGPlayerAPIPriceModule } from './tcgdb/modules/tcgplayer/api/price/tcgplayer.api.price.module';
+import { TCGPlayerAPIConditionModule } from './tcgdb/modules/tcgplayer/api/condition/tcgplayer.api.condition.module';
+import { TCGPlayerAPILanguageModule } from './tcgdb/modules/tcgplayer/api/language/tcgplayer.api.language.module';
+import { TCGPlayerAPIPrintingModule } from './tcgdb/modules/tcgplayer/api/printing/tcgplayer.api.printing.module';
+import { TCGPlayerAPIRarityModule } from './tcgdb/modules/tcgplayer/api/rarity/tcgplayer.api.rarity.module';
 import { TCGPlayerAPIUtilModule } from './tcgdb/modules/tcgplayer/api/util/tcgplayer.api.util.module';
 //TCGPlayer MTG Modules;
 import { TCGPlayerMTGCardModule } from './tcgdb/modules/tcgplayer/mtg/card/tcgplayer.mtg.card.module';
 import { TCGPlayerMTGSetModule } from './tcgdb/modules/tcgplayer/mtg/set/tcgplayer.mtg.set.module';
 import { TCGPlayerMTGPriceModule } from './tcgdb/modules/tcgplayer/mtg/price/tcgplayer.mtg.price.module';
+import { TCGPlayerMTGConditionModule } from './tcgdb/modules/tcgplayer/mtg/condition/tcgplayer.mtg.condition.module';
+import { TCGPlayerMTGLanguageModule } from './tcgdb/modules/tcgplayer/mtg/language/tcgplayer.mtg.language.module';
+import { TCGPlayerMTGPrintingModule } from './tcgdb/modules/tcgplayer/mtg/printing/tcgplayer.mtg.printing.module';
+import { TCGPlayerMTGRarityModule } from './tcgdb/modules/tcgplayer/mtg/rarity/tcgplayer.mtg.rarity.module';
 //TCGPlayer Pokemon Modules;
 import { TCGPlayerPokemonCardModule } from './tcgdb/modules/tcgplayer/pokemon/card/tcgplayer.pokemon.card.module';
 import { TCGPlayerPokemonSetModule } from './tcgdb/modules/tcgplayer/pokemon/set/tcgplayer.pokemon.set.module';
@@ -36,6 +44,10 @@ import { TCGdbMTGCardModule } from './tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.car
 import { TCGdbMTGSetModule } from './tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.module';
 import { TCGdbMTGPriceCurrentModule } from './tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.module';
 import { TCGdbMTGPriceHistoryModule } from './tcgdb/modules/tcgdb/mtg/price/history/tcgdb.mtg.price.history.module';
+import { TCGdbMTGConditionModule } from './tcgdb/modules/tcgdb/mtg/condition/tcgdb.mtg.condition.module';
+import { TCGdbMTGLanguageModule } from './tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.module';
+import { TCGdbMTGPrintingModule } from './tcgdb/modules/tcgdb/mtg/printing/tcgdb.mtg.printing.module';
+import { TCGdbMTGRarityModule } from './tcgdb/modules/tcgdb/mtg/rarity/tcgdb.mtg.rarity.module';
 //TCGdb Pokemon Modules;
 import { TCGdbPokemonCardModule } from './tcgdb/modules/tcgdb/pokemon/card/tcgdb.pokemon.card.module';
 import { TCGdbPokemonSetModule } from './tcgdb/modules/tcgdb/pokemon/set/tcgdb.pokemon.set.module';
@@ -55,9 +67,11 @@ import { ProductTypeModule } from './tcgcommerce/modules/product/type/product.ty
 import { ProductModuleModule } from './tcgcommerce/modules/product/module/product.module.module';
 import { ProductSetModule } from './tcgcommerce/modules/product/set/product.set.module';  
 //Product Card Modules;
-import { ProductCardVariantModule } from './tcgcommerce/modules/product/card/variant/product.card.variant.module';
-import { ProductCardOptionModule } from './tcgcommerce/modules/product/card/option/product.card.option.module';
 import { ProductCardItemModule } from './tcgcommerce/modules/product/card/item/product.card.item.module';
+import { ProductCardConditionModule } from './tcgcommerce/modules/product/card/condition/product.card.condition.module';
+import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/language/product.card.language.module';
+import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
+import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -73,11 +87,19 @@ const NODE_ENV = process.env.NODE_ENV;
     TCGPlayerAPICardModule,
     TCGPlayerAPISetModule,
     TCGPlayerAPIPriceModule,
+    TCGPlayerAPIConditionModule,
+    TCGPlayerAPILanguageModule,
+    TCGPlayerAPIPrintingModule,
+    TCGPlayerAPIRarityModule,
     TCGPlayerAPIUtilModule,
     //TCGPlayer MTG Modules;
     TCGPlayerMTGCardModule,
     TCGPlayerMTGSetModule,
     TCGPlayerMTGPriceModule,
+    TCGPlayerMTGConditionModule,
+    TCGPlayerMTGLanguageModule,
+    TCGPlayerMTGPrintingModule,
+    TCGPlayerMTGRarityModule,
     //TCGPlayer Pokemon Modules;
     TCGPlayerPokemonCardModule,
     TCGPlayerPokemonSetModule,
@@ -99,6 +121,10 @@ const NODE_ENV = process.env.NODE_ENV;
     TCGdbMTGSetModule,
     TCGdbMTGPriceCurrentModule,
     TCGdbMTGPriceHistoryModule,
+    TCGdbMTGConditionModule,
+    TCGdbMTGLanguageModule,
+    TCGdbMTGPrintingModule,
+    TCGdbMTGRarityModule,
     //TCGdb Pokemon Modules;
     TCGdbPokemonCardModule,
     TCGdbPokemonSetModule,
@@ -118,9 +144,11 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductModuleModule,
     ProductSetModule,
     //Product Card Modules;
-    ProductCardVariantModule,
-    ProductCardOptionModule,
     ProductCardItemModule,
+    ProductCardConditionModule,
+    ProductCardLanguageModule,
+    ProductCardPrintingModule,
+    ProductCardRarityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

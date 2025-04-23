@@ -28,11 +28,9 @@ export class TCGPlayerAPIConditionService {
             );
 
         let data = await lastValueFrom(response);
-        conditionDataResult.push(data.results);
-            
         
-        let conditionData = conditionDataResult;
-
+        let conditionData = data.results;
+        
         return conditionData;
     }
 }

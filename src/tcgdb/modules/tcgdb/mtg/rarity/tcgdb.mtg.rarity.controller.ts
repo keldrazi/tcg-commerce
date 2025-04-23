@@ -1,21 +1,21 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { TCGdbMTGLanguageService } from './tcgdb.mtg.rarity.service';
+import { TCGdbMTGRarityService } from './tcgdb.mtg.rarity.service';
 
-@Controller('tcgdb/mtg/language')
-export class TCGdbMTGLanguageController {
+@Controller('tcgdb/mtg/rarity')
+export class TCGdbMTGRarityController {
     
     constructor(
-        private tcgdbMTGLanguageService: TCGdbMTGLanguageService
+        private tcgdbMTGRarityService: TCGdbMTGRarityService
     ) {}
 
     @Get('/all')
-    async getTCGdbMTGLanguages() {
-        return this.tcgdbMTGLanguageService.getTCGdbMTGLanguages();
+    async getTCGdbMTGRaritys() {
+        return this.tcgdbMTGRarityService.getTCGdbMTGRarities();
     }
 
     @Get('/create')
-    async createLanguages() {
-        return this.tcgdbMTGLanguageService.createTCGdbMTGLanguages();
+    async createRaritys() {
+        return this.tcgdbMTGRarityService.createTCGdbMTGRarities();
     }
 
 

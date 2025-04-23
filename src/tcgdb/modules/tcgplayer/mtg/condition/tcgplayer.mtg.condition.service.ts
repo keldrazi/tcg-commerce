@@ -42,17 +42,16 @@ export class TCGPlayerMTGConditionService {
 
         let tcgPlayerMTGConditionRecordCount = 0;
         let tcgPlayerMTGConditions = await this.tcgPlayerAPIConditionService.getTCGPlayerAPIConditionsByCategoryId(this.tcgPlayerMTGCategoryId);
-        
         for(let i = 0; i < tcgPlayerMTGConditions.length; i++) {
-            const tcgPlayerMTGCondition: any = tcgPlayerMTGConditions[i];
+            let tcgPlayerMTGCondition = tcgPlayerMTGConditions[i];
             
-            //CHECK TO SEE IF THE SET EXISTS;
-            const tcgPlayerMTGConditionCheck = await this.getTCGPlayerMTGConditionByConditionName(tcgPlayerMTGCondition.conditionName);
-
-            //SET DOESN'T EXIST - CREATE SET;
+            //CHECK TO SEE IF THE CONDITION EXISTS;
+            let tcgPlayerMTGConditionCheck = await this.getTCGPlayerMTGConditionByConditionName(tcgPlayerMTGCondition.name);
+            
+            //CONDITION DOESN'T EXIST - CREATE CONDITION;
             if(tcgPlayerMTGConditionCheck == null) {
-            
-                const newTCGPlayerMTGCondition = this.tcgPlayerMTGConditionRepository.create({
+                
+                let newTCGPlayerMTGCondition = this.tcgPlayerMTGConditionRepository.create({
                     tcgPlayerMTGConditionId: tcgPlayerMTGCondition.conditionId,
                     tcgPlayerMTGConditionName: tcgPlayerMTGCondition.name,
                     tcgPlayerMTGConditionAbbreviation: tcgPlayerMTGCondition.abbreviation,

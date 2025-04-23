@@ -1,18 +1,18 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TCGdbMTGLanguageService } from './tcgdb.mtg.rarity.service';
-import { TCGdbMTGLanguageController } from "./tcgdb.mtg.rarity.controller";
-import { TCGPlayerMTGLanguageModule } from 'src/tcgdb/modules/tcgplayer/mtg/language/tcgplayer.mtg.language.module';
-import { TCGdbMTGLanguage } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.entity";
+import { TCGdbMTGRarityService } from './tcgdb.mtg.rarity.service';
+import { TCGdbMTGRarityController } from "./tcgdb.mtg.rarity.controller";
+import { TCGPlayerMTGRarityModule } from 'src/tcgdb/modules/tcgplayer/mtg/rarity/tcgplayer.mtg.rarity.module';
+import { TCGdbMTGRarity } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/rarity/tcgdb.mtg.rarity.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([TCGdbMTGLanguage]),
-        TCGPlayerMTGLanguageModule,
+        TypeOrmModule.forFeature([TCGdbMTGRarity]),
+        TCGPlayerMTGRarityModule,
     ], 
-    controllers: [TCGdbMTGLanguageController],
-    providers: [TCGdbMTGLanguageService],
-    exports: [TCGdbMTGLanguageService],
+    controllers: [TCGdbMTGRarityController],
+    providers: [TCGdbMTGRarityService],
+    exports: [TCGdbMTGRarityService],
 })
 
-export class TCGdbMTGLanguageModule {}
+export class TCGdbMTGRarityModule {}
