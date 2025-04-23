@@ -1,0 +1,72 @@
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
+import { TCGPlayerMTGCondition } from 'src/typeorm/entities/tcgdb/modules/tcgplayer/mtg/condition/tcgplayer.mtg.condition.entity';
+import { Repository } from 'typeorm';
+import { TCGPlayerAPIConditionService } from 'src/tcgdb/modules/tcgplayer/api/condition/tcgplayer.api.condition.service';
+
+@Injectable()
+export class TCGPlayerMTGConditionService {
+
+    constructor(
+        @InjectRepository(TCGPlayerMTGCondition) private tcgPlayerMTGConditionRepository: Repository<TCGPlayerMTGCondition>, 
+        private tcgPlayerAPIConditionService: TCGPlayerAPIConditionService,
+    ) {}
+
+    private tcgPlayerMTGCategoryId = '1';
+
+    async getTCGPlayerMTGConditions() {
+        return await this.tcgPlayerMTGConditionRepository.find();
+    }
+
+    async getTCGPlayerMTGConditionByConditionAbbreviation(conditionAbbreviation: string) {
+        let tcgPlayerMTGCondition = await this.tcgPlayerMTGConditionRepository.findOne({
+            where: {
+                tcgPlayerMTGConditionAbbreviation: conditionAbbreviation,
+            }
+        });
+
+        return tcgPlayerMTGCondition;
+    }
+
+    async getTCGPlayerMTGConditionByConditionName(conditionName: string) {
+        let tcgPlayerCondition = await this.tcgPlayerMTGConditionRepository.findOne({
+            where: {
+                tcgPlayerMTGConditionName: conditionName,
+            }
+        });
+
+        return tcgPlayerCondition;
+    }
+
+    async createTCGPlayerMTGConditions() {
+
+        let tcgPlayerMTGConditionRecordCount = 0;
+        let tcgPlayerMTGConditions = await this.tcgPlayerAPIConditionService.getTCGPlayerAPIConditionsByCategoryId(this.tcgPlayerMTGCategoryId);
+        
+        for(let i = 0; i < tcgPlayerMTGConditions.length; i++) {
+            const tcgPlayerMTGCondition: any = tcgPlayerMTGConditions[i];
+            
+            //CHECK TO SEE IF THE SET EXISTS;
+            const tcgPlayerMTGConditionCheck = await this.getTCGPlayerMTGConditionByConditionName(tcgPlayerMTGCondition.conditionName);
+
+            //SET DOESN'T EXIST - CREATE SET;
+            if(tcgPlayerMTGConditionCheck == null) {
+            
+                const newTCGPlayerMTGCondition = this.tcgPlayerMTGConditionRepository.create({
+                    tcgPlayerMTGConditionId: tcgPlayerMTGCondition.conditionId,
+                    tcgPlayerMTGConditionName: tcgPlayerMTGCondition.name,
+                    tcgPlayerMTGConditionAbbreviation: tcgPlayerMTGCondition.abbreviation,
+                    tcgPlayerMTGConditionDisplayOrder: tcgPlayerMTGCondition.displayOrder,
+                });
+
+                await this.tcgPlayerMTGConditionRepository.save(newTCGPlayerMTGCondition);
+
+                tcgPlayerMTGConditionRecordCount++;
+            }
+        }
+        
+        return tcgPlayerMTGConditionRecordCount;
+    }
+}
+
+
