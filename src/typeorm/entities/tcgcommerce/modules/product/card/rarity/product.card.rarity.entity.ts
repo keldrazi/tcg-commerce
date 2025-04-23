@@ -1,23 +1,23 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('productCardVariant')
-export class ProductCardVariant {
+@Entity('productCardRarity')
+export class ProductCardRarity {
     @PrimaryGeneratedColumn('uuid')
-    productCardVariantId: string;
+    productCardRarityId: string;
 
     @Column()
-    productCardVariantName: string;
+    productCardRarityName: string;
 
     @Column()
-    productCardVariantAbbreviation: string;
+    productCardRarityAbbreviation: string;
 
     @Column({type: 'boolean', default: false})
-    productCardVariantIsActive: boolean;
+    productCardRarityIsActive: boolean;
 
     @CreateDateColumn()
-    productCardVariantCreateDate: Date;
+    productCardRarityCreateDate: Date;
 
     @UpdateDateColumn()
-    productCardVariantUpdateDate: Date; 
+    productCardRarityUpdateDate: Date; 
 
 }

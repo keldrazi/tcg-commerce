@@ -14,6 +14,8 @@ export class CreateProductCardRarityDTO {
     productCardRarityName: string;
     @IsString()
     productCardRarityAbbreviation: string;
+    @IsBoolean()
+    productCardRarityIsActive: boolean;
 }
 
 export class UpdateProductCardRarityDTO {

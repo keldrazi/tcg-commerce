@@ -1,0 +1,139 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateProductCardConditionDTO, ProductCardConditionDTO, UpdateProductCardConditionDTO } from './dto/product.card.condition.dto';
+import { ProductCardCondition } from 'src/typeorm/entities/tcgcommerce/modules/product/card/condition/product.card.condition.entity';
+
+@Injectable()
+export class ProductCardConditionService {
+
+    constructor(
+        @InjectRepository(ProductCardCondition) private productCardConditionRepository: Repository<ProductCardCondition>,
+    ) { }
+
+    async getProductCardCondition(productCardConditionId: string) {
+        let productCardCondition = await this.productCardConditionRepository.findOne({
+            where: { 
+                productCardConditionId: productCardConditionId 
+            } 
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardCondition == null) {
+            return null;
+        }
+
+        let productCardConditionDTO = new ProductCardConditionDTO();
+        productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+        productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
+        productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+        productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
+        productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
+        productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
+        productCardConditionDTO.productCardConditionUpdateDate = productCardCondition.productCardConditionUpdateDate;
+
+        return productCardConditionDTO;
+    }
+    
+    async getProductCardConditions() {
+        let productCardConditions = await this.productCardConditionRepository.find({
+            order: { 
+                productCardConditionDisplayOrder: 'ASC' 
+            }
+        });
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardConditions == null) {
+            return null;
+        }
+        
+        let productCardConditionDTOs: ProductCardConditionDTO[] = [];
+
+        for(let i = 0; i < productCardConditions.length; i++) {
+            let productCardCondition = productCardConditions[i];
+            let productCardConditionDTO = new ProductCardConditionDTO();
+            productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+            productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
+            productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+            productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
+            productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
+            productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
+            productCardConditionDTO.productCardConditionUpdateDate = productCardCondition.productCardConditionUpdateDate;
+            
+            productCardConditionDTOs.push(productCardConditionDTO);
+        }
+
+        return productCardConditionDTOs;
+    }
+
+    async getProductCardConditionByName(name: string) {
+        let productCardCondition = await this.productCardConditionRepository.findOne({ 
+            where: { 
+                productCardConditionName: name 
+            } 
+        });
+        
+        if (productCardCondition == null) {
+            return null;
+        }
+
+        let productCardConditionDTO = new ProductCardConditionDTO();
+        productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+        productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
+        productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+        productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
+        productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
+        productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
+        productCardConditionDTO.productCardConditionUpdateDate = productCardCondition.productCardConditionUpdateDate;
+
+        return productCardConditionDTO;
+        
+    }
+
+    async createProductCardCondition(createProductCardConditionDTO: CreateProductCardConditionDTO) {
+
+        //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;
+        let productCardCondition = await this.getProductCardConditionByName(createProductCardConditionDTO.productCardConditionName);
+        
+        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
+        if (productCardCondition != null) {
+            return null;
+        }
+        
+        let newProductCardCondition = this.productCardConditionRepository.create({ ...createProductCardConditionDTO });
+        newProductCardCondition = await this.productCardConditionRepository.save(newProductCardCondition);
+
+        let productCardConditionDTO = this.getProductCardCondition(newProductCardCondition.productCardConditionId);
+        
+        return productCardConditionDTO;
+        
+    }
+
+    async updateProductCardCondition(updateProductCardConditionDTO: UpdateProductCardConditionDTO) {
+                        
+        let existingProductCardCondition = await this.productCardConditionRepository.findOne({ 
+            where: { 
+                productCardConditionId: updateProductCardConditionDTO.productCardConditionId
+            } 
+        });
+
+        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
+        if (!existingProductCardCondition) {
+            return null; 
+        }
+
+        existingProductCardCondition.productCardConditionName = updateProductCardConditionDTO.productCardConditionName;
+        existingProductCardCondition.productCardConditionAbbreviation = updateProductCardConditionDTO.productCardConditionAbbreviation;
+        existingProductCardCondition.productCardConditionDisplayOrder = updateProductCardConditionDTO.productCardConditionDisplayOrder;
+        existingProductCardCondition.productCardConditionIsActive = updateProductCardConditionDTO.productCardConditionIsActive;
+        existingProductCardCondition.productCardConditionUpdateDate = new Date();
+        
+        await this.productCardConditionRepository.save(existingProductCardCondition);
+
+        let productCardConditionDTO = this.getProductCardCondition(existingProductCardCondition.productCardConditionId);
+
+        return productCardConditionDTO;
+    
+    }
+    
+}

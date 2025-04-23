@@ -1,130 +1,130 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateProductCardVariantDTO, ProductCardVariantDTO, UpdateProductCardVariantDTO } from './dto/product.card.rarity.dto';
-import { ProductCardVariant } from 'src/typeorm/entities/tcgcommerce/modules/product/card/variant/product.card.variant.entity';
+import { CreateProductCardRarityDTO, ProductCardRarityDTO, UpdateProductCardRarityDTO } from './dto/product.card.rarity.dto';
+import { ProductCardRarity } from 'src/typeorm/entities/tcgcommerce/modules/product/card/rarity/product.card.rarity.entity';
 
 @Injectable()
-export class ProductCardVariantService {
+export class ProductCardRarityService {
 
     constructor(
-        @InjectRepository(ProductCardVariant) private productCardVariantRepository: Repository<ProductCardVariant>,
+        @InjectRepository(ProductCardRarity) private productCardRarityRepository: Repository<ProductCardRarity>,
     ) { }
 
-    async getProductCardVariant(productCardVariantId: string) {
-        let productCardVariant = await this.productCardVariantRepository.findOne({
+    async getProductCardRarity(productCardRarityId: string) {
+        let productCardRarity = await this.productCardRarityRepository.findOne({
             where: { 
-                productCardVariantId: productCardVariantId 
+                productCardRarityId: productCardRarityId 
             } 
         });
 
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(productCardVariant == null) {
+        if(productCardRarity == null) {
             return null;
         }
 
-        let productCardVariantDTO = new ProductCardVariantDTO();
-        productCardVariantDTO.productCardVariantId = productCardVariant.productCardVariantId;
-        productCardVariantDTO.productCardVariantName = productCardVariant.productCardVariantName;
-        productCardVariantDTO.productCardVariantAbbreviation = productCardVariant.productCardVariantAbbreviation;
-        productCardVariantDTO.productCardVariantIsActive = productCardVariant.productCardVariantIsActive;
-        productCardVariantDTO.productCardVariantCreateDate = productCardVariant.productCardVariantCreateDate;
-        productCardVariantDTO.productCardVariantUpdateDate = productCardVariant.productCardVariantUpdateDate;
+        let productCardRarityDTO = new ProductCardRarityDTO();
+        productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
+        productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
+        productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
+        productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
+        productCardRarityDTO.productCardRarityCreateDate = productCardRarity.productCardRarityCreateDate;
+        productCardRarityDTO.productCardRarityUpdateDate = productCardRarity.productCardRarityUpdateDate;
 
-        return productCardVariantDTO;
+        return productCardRarityDTO;
     }
     
-    async getProductCardVariants() {
-        let productCardVariants = await this.productCardVariantRepository.find();
+    async getProductCardRaritys() {
+        let productCardRaritys = await this.productCardRarityRepository.find();
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(productCardVariants == null) {
+        if(productCardRaritys == null) {
             return null;
         }
         
-        let productCardVariantDTOs: ProductCardVariantDTO[] = [];
+        let productCardRarityDTOs: ProductCardRarityDTO[] = [];
 
-        for(let i = 0; i < productCardVariants.length; i++) {
-            let productCardVariant = productCardVariants[i];
-            let productCardVariantDTO = new ProductCardVariantDTO();
-            productCardVariantDTO.productCardVariantId = productCardVariant.productCardVariantId;
-            productCardVariantDTO.productCardVariantName = productCardVariant.productCardVariantName;
-            productCardVariantDTO.productCardVariantAbbreviation = productCardVariant.productCardVariantAbbreviation;
-            productCardVariantDTO.productCardVariantIsActive = productCardVariant.productCardVariantIsActive;
-            productCardVariantDTO.productCardVariantCreateDate = productCardVariant.productCardVariantCreateDate;
-            productCardVariantDTO.productCardVariantUpdateDate = productCardVariant.productCardVariantUpdateDate;
+        for(let i = 0; i < productCardRaritys.length; i++) {
+            let productCardRarity = productCardRaritys[i];
+            let productCardRarityDTO = new ProductCardRarityDTO();
+            productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
+            productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
+            productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
+            productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
+            productCardRarityDTO.productCardRarityCreateDate = productCardRarity.productCardRarityCreateDate;
+            productCardRarityDTO.productCardRarityUpdateDate = productCardRarity.productCardRarityUpdateDate;
             
-            productCardVariantDTOs.push(productCardVariantDTO);
+            productCardRarityDTOs.push(productCardRarityDTO);
         }
 
-        return productCardVariantDTOs;
+        return productCardRarityDTOs;
     }
 
-    async getProductCardVariantByName(name: string) {
-        let productCardVariant = await this.productCardVariantRepository.findOne({ 
+    async getProductCardRarityByName(name: string) {
+        let productCardRarity = await this.productCardRarityRepository.findOne({ 
             where: { 
-                productCardVariantName: name 
+                productCardRarityName: name 
             } 
         });
         
-        if (productCardVariant == null) {
+        if (productCardRarity == null) {
             return null;
         }
 
-        let productCardVariantDTO = new ProductCardVariantDTO();
-        productCardVariantDTO.productCardVariantId = productCardVariant.productCardVariantId;
-        productCardVariantDTO.productCardVariantName = productCardVariant.productCardVariantName;
-        productCardVariantDTO.productCardVariantAbbreviation = productCardVariant.productCardVariantAbbreviation;
-        productCardVariantDTO.productCardVariantIsActive = productCardVariant.productCardVariantIsActive;
-        productCardVariantDTO.productCardVariantCreateDate = productCardVariant.productCardVariantCreateDate;
-        productCardVariantDTO.productCardVariantUpdateDate = productCardVariant.productCardVariantUpdateDate;
+        let productCardRarityDTO = new ProductCardRarityDTO();
+        productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
+        productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
+        productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
+        productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
+        productCardRarityDTO.productCardRarityCreateDate = productCardRarity.productCardRarityCreateDate;
+        productCardRarityDTO.productCardRarityUpdateDate = productCardRarity.productCardRarityUpdateDate;
 
-        return productCardVariantDTO;
+        return productCardRarityDTO;
         
     }
 
-    async createProductCardVariant(createProductCardVariantDTO: CreateProductCardVariantDTO) {
+    async createProductCardRarity(createProductCardRarityDTO: CreateProductCardRarityDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;
-        let productCardVariant = await this.getProductCardVariantByName(createProductCardVariantDTO.productCardVariantName);
+        let productCardRarity = await this.getProductCardRarityByName(createProductCardRarityDTO.productCardRarityName);
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (productCardVariant != null) {
+        if (productCardRarity != null) {
             return null;
         }
         
-        let newProductCardVariant = this.productCardVariantRepository.create({ ...createProductCardVariantDTO });
-        newProductCardVariant = await this.productCardVariantRepository.save(newProductCardVariant);
+        let newProductCardRarity = this.productCardRarityRepository.create({ ...createProductCardRarityDTO });
+        newProductCardRarity = await this.productCardRarityRepository.save(newProductCardRarity);
 
-        let productCardVariantDTO = this.getProductCardVariant(newProductCardVariant.productCardVariantId);
+        let productCardRarityDTO = this.getProductCardRarity(newProductCardRarity.productCardRarityId);
         
-        return productCardVariantDTO;
+        return productCardRarityDTO;
         
     }
 
-    async updateProductCardVariant(updateProductCardVariantDTO: UpdateProductCardVariantDTO) {
+    async updateProductCardRarity(updateProductCardRarityDTO: UpdateProductCardRarityDTO) {
                         
-        let existingProductCardVariant = await this.productCardVariantRepository.findOne({ 
+        let existingProductCardRarity = await this.productCardRarityRepository.findOne({ 
             where: { 
-                productCardVariantId: updateProductCardVariantDTO.productCardVariantId
+                productCardRarityId: updateProductCardRarityDTO.productCardRarityId
             } 
         });
 
         //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!existingProductCardVariant) {
+        if (!existingProductCardRarity) {
             return null; 
         }
 
-        existingProductCardVariant.productCardVariantName = updateProductCardVariantDTO.productCardVariantName;
-        existingProductCardVariant.productCardVariantAbbreviation = updateProductCardVariantDTO.productCardVariantAbbreviation;
-        existingProductCardVariant.productCardVariantIsActive = updateProductCardVariantDTO.productCardVariantIsActive;
-        existingProductCardVariant.productCardVariantUpdateDate = new Date();
+        existingProductCardRarity.productCardRarityName = updateProductCardRarityDTO.productCardRarityName;
+        existingProductCardRarity.productCardRarityAbbreviation = updateProductCardRarityDTO.productCardRarityAbbreviation;
+        existingProductCardRarity.productCardRarityIsActive = updateProductCardRarityDTO.productCardRarityIsActive;
+        existingProductCardRarity.productCardRarityUpdateDate = new Date();
         
-        await this.productCardVariantRepository.save(existingProductCardVariant);
+        await this.productCardRarityRepository.save(existingProductCardRarity);
 
-        let productCardVariantDTO = this.getProductCardVariant(existingProductCardVariant.productCardVariantId);
+        let productCardRarityDTO = this.getProductCardRarity(existingProductCardRarity.productCardRarityId);
 
-        return productCardVariantDTO;
+        return productCardRarityDTO;
     
     }
     

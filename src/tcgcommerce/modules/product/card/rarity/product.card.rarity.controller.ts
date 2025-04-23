@@ -1,30 +1,30 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateProductCardVariantDTO, UpdateProductCardVariantDTO, ProductCardVariantDTO } from './dto/product.card.rarity.dto';
-import { ProductCardVariantService } from './product.card.rarity.service';
+import { CreateProductCardRarityDTO, UpdateProductCardRarityDTO, ProductCardRarityDTO } from './dto/product.card.rarity.dto';
+import { ProductCardRarityService } from './product.card.rarity.service';
 
-@Controller('product/card/variant')
-export class ProductCardVariantController {
+@Controller('product/card/rarity')
+export class ProductCardRarityController {
 
     constructor(
-        private productCardVariantService: ProductCardVariantService,
+        private productCardRarityService: ProductCardRarityService,
     ) { }
     
     
     @Get()
-    async getProductCardVariants() {
-        return await this.productCardVariantService.getProductCardVariants();
+    async getProductCardRaritys() {
+        return await this.productCardRarityService.getProductCardRaritys();
     }
 
     @Post()
     @UsePipes(new ValidationPipe())
-    async createProductCardVariant(@Body() createProductCardVariantDTO: CreateProductCardVariantDTO) {
-        return await this.productCardVariantService.createProductCardVariant(createProductCardVariantDTO);
+    async createProductCardRarity(@Body() createProductCardRarityDTO: CreateProductCardRarityDTO) {
+        return await this.productCardRarityService.createProductCardRarity(createProductCardRarityDTO);
     }
 
     @Put()
     @UsePipes(new ValidationPipe())
-    async updateProductCardVariant(@Body() updateProductCardVariantDTO: UpdateProductCardVariantDTO) {
-        return await this.productCardVariantService.updateProductCardVariant(updateProductCardVariantDTO);
+    async updateProductCardRarity(@Body() updateProductCardRarityDTO: UpdateProductCardRarityDTO) {
+        return await this.productCardRarityService.updateProductCardRarity(updateProductCardRarityDTO);
     }
 
 

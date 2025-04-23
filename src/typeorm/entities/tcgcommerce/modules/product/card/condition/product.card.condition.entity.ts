@@ -11,6 +11,9 @@ export class ProductCardCondition {
     @Column()
     productCardConditionAbbreviation: string;
 
+    @Column()
+    productCardConditionDisplayOrder: number;
+
     @Column({type: 'boolean', default: false})
     productCardConditionIsActive: boolean;
 

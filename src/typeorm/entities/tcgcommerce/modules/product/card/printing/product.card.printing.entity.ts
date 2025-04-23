@@ -11,6 +11,9 @@ export class ProductCardPrinting {
     @Column()
     productCardPrintingAbbreviation: string;
 
+    @Column()
+    productCardPrintingDisplayOrder: number;
+
     @Column({type: 'boolean', default: false})
     productCardPrintingIsActive: boolean;
 
