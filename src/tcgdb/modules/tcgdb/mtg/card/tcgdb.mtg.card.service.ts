@@ -38,6 +38,7 @@ export class TCGdbMTGCardService {
             tcgdbMTGCardScryfallId: tcgdbMTGCard.tcgdbMTGCardScryfallId,
             tcgdbMTGCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
             tcgdbMTGCardSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+            tcgdbMTGCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
             tcgdbMTGCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
             tcgdbMTGCardName: tcgdbMTGCard.tcgdbMTGCardName,
             tcgdbMTGCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
@@ -70,6 +71,7 @@ export class TCGdbMTGCardService {
             tcgdbMTGCardScryfallId: tcgdbMTGCard.tcgdbMTGCardScryfallId,
             tcgdbMTGCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
             tcgdbMTGCardSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+            tcgdbMTGCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
             tcgdbMTGCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
             tcgdbMTGCardName: tcgdbMTGCard.tcgdbMTGCardName,
             tcgdbMTGCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
@@ -109,6 +111,7 @@ export class TCGdbMTGCardService {
             tcgdbMTGCardScryfallId: tcgdbMTGCard.tcgdbMTGCardScryfallId,
             tcgdbMTGCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
             tcgdbMTGCardSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+            tcgdbMTGCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
             tcgdbMTGCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
             tcgdbMTGCardName: tcgdbMTGCard.tcgdbMTGCardName,
             tcgdbMTGCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
@@ -146,6 +149,7 @@ export class TCGdbMTGCardService {
                 tcgdbMTGCardScryfallId: tcgdbMTGCard.tcgdbMTGCardScryfallId,
                 tcgdbMTGCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
                 tcgdbMTGCardSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+                tcgdbMTGCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
                 tcgdbMTGCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
                 tcgdbMTGCardName: tcgdbMTGCard.tcgdbMTGCardName,
                 tcgdbMTGCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
@@ -193,6 +197,7 @@ export class TCGdbMTGCardService {
                 tcgdbMTGCardScryfallId: tcgdbMTGCard.tcgdbMTGCardScryfallId,
                 tcgdbMTGCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
                 tcgdbMTGCardSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+                tcgdbMTGCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
                 tcgdbMTGCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
                 tcgdbMTGCardName: tcgdbMTGCard.tcgdbMTGCardName,
                 tcgdbMTGCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
@@ -244,6 +249,7 @@ export class TCGdbMTGCardService {
                 tcgdbMTGCardScryfallId: tcgdbMTGCard.tcgdbMTGCardScryfallId,
                 tcgdbMTGCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
                 tcgdbMTGCardSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+                tcgdbMTGCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
                 tcgdbMTGCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
                 tcgdbMTGCardName: tcgdbMTGCard.tcgdbMTGCardName,
                 tcgdbMTGCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
@@ -287,12 +293,16 @@ export class TCGdbMTGCardService {
                 }
 
                 let tcgdbMTGCardNumber = "0";
+                let tcgdbMTGCardRarityAbbreviation = "U";
+
                 try{
                     let tcgPlayerMTGCardData: any = tcgPlayerMTGCard.tcgPlayerMTGCardData;
                     
                    if(tcgPlayerMTGCardData != null) {
                         let tcgdbMTGCardNumberObject = tcgPlayerMTGCardData.extendedData.find(item => item.name === 'Number');
                         tcgdbMTGCardNumber = tcgdbMTGCardNumberObject ? tcgdbMTGCardNumberObject.value : "0";
+                        let tcgdbMTGCardRarityObject = tcgPlayerMTGCardData.extendedData.find(item => item.name === 'Rarity');
+                        tcgdbMTGCardRarityAbbreviation = tcgdbMTGCardRarityObject ? tcgdbMTGCardRarityObject.value : "U";
                     }
                 }
                 catch(error) {
@@ -303,6 +313,7 @@ export class TCGdbMTGCardService {
                     tcgdbMTGCardTCGPlayerId: tcgPlayerMTGCard.tcgPlayerMTGCardProductId,
                     tcgdbMTGCardSetName: tcgdbMTGSetName,
                     tcgdbMTGCardSetAbbreviation: tcgPlayerMTGCard.tcgPlayerMTGCardSetAbbreviation,
+                    tcgdbMTGCardRarityAbbreviation: tcgdbMTGCardRarityAbbreviation,
                     tcgdbMTGCardNumber: tcgdbMTGCardNumber,
                     tcgdbMTGCardName: tcgPlayerMTGCard.tcgPlayerMTGCardName,
                     tcgdbMTGCardCleanName: tcgPlayerMTGCard.tcgPlayerMTGCardCleanName,

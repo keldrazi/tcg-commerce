@@ -18,6 +18,9 @@ export class TCGdbMTGCard {
     tcgdbMTGCardSetAbbreviation: string;
 
     @Column({nullable: true})
+    tcgdbMTGCardRarityAbbreviation: string;
+
+    @Column({nullable: true})
     tcgdbMTGCardNumber: string;
 
     @Column()
