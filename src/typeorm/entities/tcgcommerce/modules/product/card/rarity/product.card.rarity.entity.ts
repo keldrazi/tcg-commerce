@@ -6,6 +6,9 @@ export class ProductCardRarity {
     productCardRarityId: string;
 
     @Column()
+    productLineId: string;
+
+    @Column()
     productCardRarityName: string;
 
     @Column()

@@ -6,6 +6,9 @@ export class ProductCardLanguage {
     productCardLanguageId: string;
 
     @Column()
+    productLineId: string;
+
+    @Column()
     productCardLanguageName: string;
 
     @Column()

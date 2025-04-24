@@ -6,6 +6,9 @@ export class ProductCardPrinting {
     productCardPrintingId: string;
 
     @Column()
+    productLineId: string;
+
+    @Column()
     productCardPrintingName: string;
 
     @Column()

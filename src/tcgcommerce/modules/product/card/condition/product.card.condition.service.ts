@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateProductCardConditionDTO, ProductCardConditionDTO, UpdateProductCardConditionDTO } from './dto/product.card.condition.dto';
 import { ProductCardCondition } from 'src/typeorm/entities/tcgcommerce/modules/product/card/condition/product.card.condition.entity';
 import { TCGdbMTGConditionService } from 'src/tcgdb/modules/tcgdb/mtg/condition/tcgdb.mtg.condition.service';
+import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 
 @Injectable()
 export class ProductCardConditionService {
@@ -11,6 +12,7 @@ export class ProductCardConditionService {
     constructor(
         @InjectRepository(ProductCardCondition) private productCardConditionRepository: Repository<ProductCardCondition>,
         private tcgdbMTGConditionService: TCGdbMTGConditionService,
+        private productLineService: ProductLineService
     ) { }
 
     async getProductCardCondition(productCardConditionId: string) {
@@ -27,6 +29,7 @@ export class ProductCardConditionService {
 
         let productCardConditionDTO = new ProductCardConditionDTO();
         productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+        productCardConditionDTO.productLineId = productCardCondition.productLineId;
         productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
         productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
         productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
@@ -55,6 +58,7 @@ export class ProductCardConditionService {
             let productCardCondition = productCardConditions[i];
             let productCardConditionDTO = new ProductCardConditionDTO();
             productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+            productCardConditionDTO.productLineId = productCardCondition.productLineId;
             productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
             productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
             productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
@@ -68,10 +72,46 @@ export class ProductCardConditionService {
         return productCardConditionDTOs;
     }
 
-    async getProductCardConditionByName(name: string) {
+    async getProductCardConditionsByProductLineId(productLineId: string) {
+        let productCardConditions = await this.productCardConditionRepository.find({
+            where: { 
+                productLineId: productLineId 
+            },
+            order: { 
+                productCardConditionDisplayOrder: 'ASC' 
+            }
+        });
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardConditions == null) {
+            return null;
+        }
+        
+        let productCardConditionDTOs: ProductCardConditionDTO[] = [];
+
+        for(let i = 0; i < productCardConditions.length; i++) {
+            let productCardCondition = productCardConditions[i];
+            let productCardConditionDTO = new ProductCardConditionDTO();
+            productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+            productCardConditionDTO.productLineId = productCardCondition.productLineId;
+            productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
+            productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+            productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
+            productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
+            productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
+            productCardConditionDTO.productCardConditionUpdateDate = productCardCondition.productCardConditionUpdateDate;
+            
+            productCardConditionDTOs.push(productCardConditionDTO);
+        }
+
+        return productCardConditionDTOs;
+    }
+
+    async getProductCardConditionByNameAndProductLineId(name: string, productLineId: string) {
         let productCardCondition = await this.productCardConditionRepository.findOne({ 
             where: { 
-                productCardConditionName: name 
+                productCardConditionName: name,
+                productLineId: productLineId 
             } 
         });
         
@@ -81,6 +121,7 @@ export class ProductCardConditionService {
 
         let productCardConditionDTO = new ProductCardConditionDTO();
         productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+        productCardConditionDTO.productLineId = productCardCondition.productLineId;
         productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
         productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
         productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
@@ -95,7 +136,7 @@ export class ProductCardConditionService {
     async createProductCardCondition(createProductCardConditionDTO: CreateProductCardConditionDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;
-        let productCardCondition = await this.getProductCardConditionByName(createProductCardConditionDTO.productCardConditionName);
+        let productCardCondition = await this.getProductCardConditionByNameAndProductLineId(createProductCardConditionDTO.productCardConditionName, createProductCardConditionDTO.productLineId);
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productCardCondition != null) {
@@ -150,17 +191,29 @@ export class ProductCardConditionService {
 
     async createTCGdbMTGProductCardConditions() {
 
+        //GET THE PRODUCT LINE BY CODE;
+        let productLine = await this.productLineService.getProductLineByCode("MTG");
+        
+        if (productLine == null) {
+            return null;
+        }
+
+        let productLineId = productLine.productLineId;
+
+        //GET THE TCGDB MTG PRODUCT CARD CONDITIONS;
         let tcgdbMTGProductCardConditions = await this.tcgdbMTGConditionService.getTCGdbMTGConditions();
-        let productCardConditionRecordCount = 0;
 
         if (tcgdbMTGProductCardConditions == null) {
             return null;
         }
 
+        let productCardConditionRecordCount = 0;
+
         for(let i = 0; i < tcgdbMTGProductCardConditions.length; i++) {
             let tcgdbMTGProductCardCondition = tcgdbMTGProductCardConditions[i];
             
             let createProductCardConditionDTO = new CreateProductCardConditionDTO();
+            createProductCardConditionDTO.productLineId = productLineId;
             createProductCardConditionDTO.productCardConditionName = tcgdbMTGProductCardCondition.tcgdbMTGConditionName;
             createProductCardConditionDTO.productCardConditionAbbreviation = tcgdbMTGProductCardCondition.tcgdbMTGConditionAbbreviation;
             createProductCardConditionDTO.productCardConditionDisplayOrder = tcgdbMTGProductCardCondition.tcgdbMTGConditionDisplayOrder;

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateProductCardLanguageDTO, ProductCardLanguageDTO, UpdateProductCardLanguageDTO } from './dto/product.card.language.dto';
 import { ProductCardLanguage } from 'src/typeorm/entities/tcgcommerce/modules/product/card/language/product.card.language.entity';
 import { TCGdbMTGLanguageService } from 'src/tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.service';
+import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 
 @Injectable()
 export class ProductCardLanguageService {
@@ -11,6 +12,7 @@ export class ProductCardLanguageService {
     constructor(
         @InjectRepository(ProductCardLanguage) private productCardLanguageRepository: Repository<ProductCardLanguage>,
         private tcgdbMTGLanguageService: TCGdbMTGLanguageService,
+        private productLineService: ProductLineService
     ) { }
 
     async getProductCardLanguage(productCardLanguageId: string) {
@@ -27,6 +29,7 @@ export class ProductCardLanguageService {
 
         let productCardLanguageDTO = new ProductCardLanguageDTO();
         productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+        productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
         productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
         productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
         productCardLanguageDTO.productCardLanguageIsActive = productCardLanguage.productCardLanguageIsActive;
@@ -50,6 +53,7 @@ export class ProductCardLanguageService {
             let productCardLanguage = productCardLanguages[i];
             let productCardLanguageDTO = new ProductCardLanguageDTO();
             productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+            productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
             productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
             productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
             productCardLanguageDTO.productCardLanguageIsActive = productCardLanguage.productCardLanguageIsActive;
@@ -62,10 +66,11 @@ export class ProductCardLanguageService {
         return productCardLanguageDTOs;
     }
 
-    async getProductCardLanguageByName(name: string) {
+    async getProductCardLanguageByNameAndProductLineId(name: string, productLineId: string) {
         let productCardLanguage = await this.productCardLanguageRepository.findOne({ 
             where: { 
-                productCardLanguageName: name 
+                productCardLanguageName: name,
+                productLineId: productLineId 
             } 
         });
         
@@ -75,6 +80,7 @@ export class ProductCardLanguageService {
 
         let productCardLanguageDTO = new ProductCardLanguageDTO();
         productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+        productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
         productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
         productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
         productCardLanguageDTO.productCardLanguageIsActive = productCardLanguage.productCardLanguageIsActive;
@@ -88,7 +94,7 @@ export class ProductCardLanguageService {
     async createProductCardLanguage(createProductCardLanguageDTO: CreateProductCardLanguageDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;
-        let productCardLanguage = await this.getProductCardLanguageByName(createProductCardLanguageDTO.productCardLanguageName);
+        let productCardLanguage = await this.getProductCardLanguageByNameAndProductLineId(createProductCardLanguageDTO.productCardLanguageName, createProductCardLanguageDTO.productLineId);
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productCardLanguage != null) {
@@ -142,17 +148,29 @@ export class ProductCardLanguageService {
 
     async createTCGdbMTGProductCardLanguages() {
 
-        let tcgdbMTGProductCardLanguages = await this.tcgdbMTGLanguageService.getTCGdbMTGLanguages();
-        let productCardLanguageRecordCount = 0;
+        //GET THE PRODUCT LINE ID FOR MTG;
+        let productLine = await this.productLineService.getProductLineByCode("MTG");
 
+        if (productLine == null) {
+            return null;
+        }
+        
+        //GET THE PRODUCT CARD LANGUAGES FROM TCGDB;
+        let tcgdbMTGProductCardLanguages = await this.tcgdbMTGLanguageService.getTCGdbMTGLanguages();
+        
         if (tcgdbMTGProductCardLanguages == null) {
             return null;
         }
+
+        let productCardLanguageRecordCount = 0;
+
+        
 
         for(let i = 0; i < tcgdbMTGProductCardLanguages.length; i++) {
             let tcgdbMTGProductCardLanguage = tcgdbMTGProductCardLanguages[i];
             
             let createProductCardLanguageDTO = new CreateProductCardLanguageDTO();
+            createProductCardLanguageDTO.productLineId = productLine.productLineId;
             createProductCardLanguageDTO.productCardLanguageName = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageName;
             createProductCardLanguageDTO.productCardLanguageAbbreviation = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageAbbreviation;
             createProductCardLanguageDTO.productCardLanguageIsActive = true;

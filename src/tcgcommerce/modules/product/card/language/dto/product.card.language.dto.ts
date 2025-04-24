@@ -2,6 +2,7 @@ import { IsBoolean, IsString } from "class-validator";
 
 export class ProductCardLanguageDTO {
     productCardLanguageId: string;
+    productLineId: string;
     productCardLanguageName: string;
     productCardLanguageAbbreviation: string;
     productCardLanguageIsActive: boolean;
@@ -10,6 +11,8 @@ export class ProductCardLanguageDTO {
 }
 
 export class CreateProductCardLanguageDTO {
+    @IsString()
+    productLineId: string;
     @IsString()
     productCardLanguageName: string;
     @IsString()
@@ -21,6 +24,8 @@ export class CreateProductCardLanguageDTO {
 export class UpdateProductCardLanguageDTO {
     @IsString()
     productCardLanguageId: string;
+    @IsString()
+    productLineId: string;
     @IsString()
     productCardLanguageName: string;
     @IsString()

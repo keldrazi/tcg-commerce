@@ -30,7 +30,7 @@ export class ProductCardItemService {
         //TO DO: CREATE AN ERROR TO RETURN;
         if(productCardItem == null) {
             return null;
-        }
+        } 
 
         let productCardItemDTO = new ProductCardItemDTO();
         productCardItemDTO.productCardItemId = productCardItem.productCardItemId;
@@ -247,7 +247,7 @@ export class ProductCardItemService {
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(this.MTG_CARD_VENDOR_ID, this.MTG_CARD_LINE_ID);
 
         let productCardItemRecordCount = 0;
-
+        
         if(productSets == null) {
             return null;
         }
@@ -283,6 +283,7 @@ export class ProductCardItemService {
                     productLineId: this.MTG_CARD_LINE_ID,
                     productTypeId: this.MTG_CARD_TYPE_ID,
                     productSetId: productSet.productSetId,
+                    productCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
                     productCardItemNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
                     productCardItemName: tcgdbMTGCard.tcgdbMTGCardName,
                     productCardItemCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,

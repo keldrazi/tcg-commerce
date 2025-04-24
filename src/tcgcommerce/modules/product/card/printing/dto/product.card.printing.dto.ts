@@ -2,6 +2,7 @@ import { IsBoolean, IsNumber, IsString } from "class-validator";
 
 export class ProductCardPrintingDTO {
     productCardPrintingId: string;
+    productLineId: string;
     productCardPrintingName: string;
     productCardPrintingDisplayOrder: number;
     productCardPrintingIsActive: boolean;
@@ -10,6 +11,8 @@ export class ProductCardPrintingDTO {
 }
 
 export class CreateProductCardPrintingDTO {
+    @IsString()
+    productLineId: string;
     @IsString()
     productCardPrintingName: string;
     @IsNumber()
@@ -21,6 +24,8 @@ export class CreateProductCardPrintingDTO {
 export class UpdateProductCardPrintingDTO {
     @IsString()
     productCardPrintingId: string;
+    @IsString()
+    productLineId: string;
     @IsString()
     productCardPrintingName: string;
     @IsNumber()

@@ -114,6 +114,29 @@ export class ProductLineService {
         return productLineDTO;
         
     }
+
+    async getProductLineByCode(code: string) {
+        let productLine = await this.productLineRepository.findOne({ 
+            where: { 
+                productLineCode: code 
+            } 
+        });
+        
+        if (productLine == null) {
+            return null;
+        }
+
+        let productLineDTO = new ProductLineDTO();
+        productLineDTO.productLineId = productLine.productLineId;
+        productLineDTO.productVendorId = productLine.productVendorId;
+        productLineDTO.productLineName = productLine.productLineName;
+        productLineDTO.productLineCode = productLine.productLineCode;
+        productLineDTO.productLineIsActive = productLine.productLineIsActive;
+        productLineDTO.productLineUpdateDate = productLine.productLineUpdateDate;
+        
+        return productLineDTO;
+        
+    }
     
     async createProductLine(createProductLineDTO: CreateProductLineDTO) {
     

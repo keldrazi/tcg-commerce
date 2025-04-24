@@ -6,6 +6,9 @@ export class ProductCardCondition {
     productCardConditionId: string;
 
     @Column()
+    productLineId: string;
+
+    @Column()
     productCardConditionName: string;
 
     @Column()

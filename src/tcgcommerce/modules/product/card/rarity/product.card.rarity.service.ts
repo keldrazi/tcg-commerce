@@ -4,13 +4,15 @@ import { Repository } from 'typeorm';
 import { CreateProductCardRarityDTO, ProductCardRarityDTO, UpdateProductCardRarityDTO } from './dto/product.card.rarity.dto';
 import { ProductCardRarity } from 'src/typeorm/entities/tcgcommerce/modules/product/card/rarity/product.card.rarity.entity';
 import { TCGdbMTGRarityService } from 'src/tcgdb/modules/tcgdb/mtg/rarity/tcgdb.mtg.rarity.service';
+import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 
 @Injectable()
 export class ProductCardRarityService {
 
     constructor(
         @InjectRepository(ProductCardRarity) private productCardRarityRepository: Repository<ProductCardRarity>,
-        private tcgdbMTGRarityService: TCGdbMTGRarityService
+        private tcgdbMTGRarityService: TCGdbMTGRarityService,
+        private productLineService: ProductLineService
     ) { }
 
     async getProductCardRarity(productCardRarityId: string) {
@@ -27,6 +29,7 @@ export class ProductCardRarityService {
 
         let productCardRarityDTO = new ProductCardRarityDTO();
         productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
+        productCardRarityDTO.productLineId = productCardRarity.productLineId;
         productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
         productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
         productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
@@ -50,6 +53,7 @@ export class ProductCardRarityService {
             let productCardRarity = productCardRaritys[i];
             let productCardRarityDTO = new ProductCardRarityDTO();
             productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
+            productCardRarityDTO.productLineId = productCardRarity.productLineId;
             productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
             productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
             productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
@@ -62,10 +66,11 @@ export class ProductCardRarityService {
         return productCardRarityDTOs;
     }
 
-    async getProductCardRarityByName(name: string) {
+    async getProductCardRarityByNameAndProductLineId(name: string, productLineId: string) {
         let productCardRarity = await this.productCardRarityRepository.findOne({ 
             where: { 
-                productCardRarityName: name 
+                productCardRarityName: name,
+                productLineId: productLineId 
             } 
         });
         
@@ -75,6 +80,7 @@ export class ProductCardRarityService {
 
         let productCardRarityDTO = new ProductCardRarityDTO();
         productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
+        productCardRarityDTO.productLineId = productCardRarity.productLineId;
         productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
         productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
         productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
@@ -88,7 +94,7 @@ export class ProductCardRarityService {
     async createProductCardRarity(createProductCardRarityDTO: CreateProductCardRarityDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;
-        let productCardRarity = await this.getProductCardRarityByName(createProductCardRarityDTO.productCardRarityName);
+        let productCardRarity = await this.getProductCardRarityByNameAndProductLineId(createProductCardRarityDTO.productCardRarityName, createProductCardRarityDTO.productLineId);
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productCardRarity != null) {
@@ -131,39 +137,48 @@ export class ProductCardRarityService {
     }
 
     //BULK CREATE PRODUCT CARD LANGAUGES;
-        async createProductCardRaritiesByProductLineName(productLineName: string) {
-            //TO DO: CREATE PRODUCT CARD LANGUAGES;
-            if (productLineName == "mtg") {
-                return this.createTCGdbMTGProductCardRarities();
-            } else {
-                return null;
-            }
+    async createProductCardRaritiesByProductLineName(productLineName: string) {
+        //TO DO: CREATE PRODUCT CARD LANGUAGES;
+        if (productLineName == "mtg") {
+            return this.createTCGdbMTGProductCardRarities();
+        } else {
+            return null;
         }
-    
-        async createTCGdbMTGProductCardRarities() {
-    
-            let tcgdbMTGProductCardRarities = await this.tcgdbMTGRarityService.getTCGdbMTGRarities();
-            let productCardRarityRecordCount = 0;
-    
-            if (tcgdbMTGProductCardRarities == null) {
-                return null;
-            }
-    
-            for(let i = 0; i < tcgdbMTGProductCardRarities.length; i++) {
-                let tcgdbMTGProductCardRarity = tcgdbMTGProductCardRarities[i];
-                
-                let createProductCardRarityDTO = new CreateProductCardRarityDTO();
-                createProductCardRarityDTO.productCardRarityName = tcgdbMTGProductCardRarity.tcgdbMTGRarityName;
-                createProductCardRarityDTO.productCardRarityAbbreviation = tcgdbMTGProductCardRarity.tcgdbMTGRarityAbbreviation;
-                createProductCardRarityDTO.productCardRarityIsActive = true;
-                
-                await this.createProductCardRarity(createProductCardRarityDTO);
-    
-                productCardRarityRecordCount++; 
-            }
-    
-            return productCardRarityRecordCount;
-    
+    }
+
+    async createTCGdbMTGProductCardRarities() {
+
+        //GET THE PRODUCT LINE ID FOR MTG;
+        let productLine = await this.productLineService.getProductLineByCode("MTG");
+
+        if (productLine == null) {
+            return null;
         }
+
+        //GET THE PRODUCT CARD RARITIES FROM TCGDB;
+        let tcgdbMTGProductCardRarities = await this.tcgdbMTGRarityService.getTCGdbMTGRarities();
+        
+        if (tcgdbMTGProductCardRarities == null) {
+            return null;
+        }
+
+        let productCardRarityRecordCount = 0;
+
+        for(let i = 0; i < tcgdbMTGProductCardRarities.length; i++) {
+            let tcgdbMTGProductCardRarity = tcgdbMTGProductCardRarities[i];
+            
+            let createProductCardRarityDTO = new CreateProductCardRarityDTO();
+            createProductCardRarityDTO.productCardRarityName = tcgdbMTGProductCardRarity.tcgdbMTGRarityName;
+            createProductCardRarityDTO.productCardRarityAbbreviation = tcgdbMTGProductCardRarity.tcgdbMTGRarityAbbreviation;
+            createProductCardRarityDTO.productCardRarityIsActive = true;
+            
+            await this.createProductCardRarity(createProductCardRarityDTO);
+
+            productCardRarityRecordCount++; 
+        }
+
+        return productCardRarityRecordCount;
+
+    }
     
 }
