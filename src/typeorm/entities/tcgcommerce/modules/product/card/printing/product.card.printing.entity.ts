@@ -6,6 +6,9 @@ export class ProductCardPrinting {
     productCardPrintingId: string;
 
     @Column()
+    productCardPrintingTCGPlayerId: number;
+
+    @Column()
     productLineId: string;
 
     @Column()

@@ -39,6 +39,7 @@ export class ProductCardItemService {
         productCardItemDTO.productLineId = productCardItem.productLineId;
         productCardItemDTO.productTypeId = productCardItem.productTypeId;
         productCardItemDTO.productSetId = productCardItem.productSetId;
+        productCardItemDTO.productSetAbbreviation = productCardItem.productSetAbbreviation;
         productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
         productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
         productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
@@ -75,6 +76,7 @@ export class ProductCardItemService {
         productCardItemDTO.productLineId = productCardItem.productLineId;
         productCardItemDTO.productTypeId = productCardItem.productTypeId;
         productCardItemDTO.productSetId = productCardItem.productSetId;
+        productCardItemDTO.productSetAbbreviation = productCardItem.productSetAbbreviation;
         productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
         productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
         productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
@@ -116,6 +118,7 @@ export class ProductCardItemService {
             productCardItemDTO.productLineId = productCardItem.productLineId;
             productCardItemDTO.productTypeId = productCardItem.productTypeId;
             productCardItemDTO.productSetId = productCardItem.productSetId;
+            productCardItemDTO.productSetAbbreviation = productCardItem.productSetAbbreviation;
             productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
             productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
             productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
@@ -162,6 +165,7 @@ export class ProductCardItemService {
             productCardItemDTO.productLineId = productCardItem.productLineId;
             productCardItemDTO.productTypeId = productCardItem.productTypeId;
             productCardItemDTO.productSetId = productCardItem.productSetId;
+            productCardItemDTO.productSetAbbreviation = productCardItem.productSetAbbreviation;
             productCardItemDTO.productCardRarityAbbreviation = productCardItem.productCardRarityAbbreviation;
             productCardItemDTO.productCardItemNumber = productCardItem.productCardItemNumber;
             productCardItemDTO.productCardItemName = productCardItem.productCardItemName;
@@ -214,6 +218,7 @@ export class ProductCardItemService {
             return null; 
         }
 
+        existingProductCardItem.productSetAbbreviation = updateProductCardItemDTO.productSetAbbreviation;
         existingProductCardItem.productCardItemNumber = updateProductCardItemDTO.productCardItemNumber;
         existingProductCardItem.productCardItemName = updateProductCardItemDTO.productCardItemName;
         existingProductCardItem.productCardItemCleanName = updateProductCardItemDTO.productCardItemCleanName;
@@ -283,6 +288,7 @@ export class ProductCardItemService {
                     productLineId: this.MTG_CARD_LINE_ID,
                     productTypeId: this.MTG_CARD_TYPE_ID,
                     productSetId: productSet.productSetId,
+                    productSetAbbreviation: productSet.productSetAbbreviation,
                     productCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
                     productCardItemNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
                     productCardItemName: tcgdbMTGCard.tcgdbMTGCardName,

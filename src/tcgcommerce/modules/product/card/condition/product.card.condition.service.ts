@@ -29,6 +29,7 @@ export class ProductCardConditionService {
 
         let productCardConditionDTO = new ProductCardConditionDTO();
         productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+        productCardConditionDTO.productCardConditionTCGPlayerId = productCardCondition.productCardConditionTCGPlayerId;
         productCardConditionDTO.productLineId = productCardCondition.productLineId;
         productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
         productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
@@ -58,6 +59,54 @@ export class ProductCardConditionService {
             let productCardCondition = productCardConditions[i];
             let productCardConditionDTO = new ProductCardConditionDTO();
             productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+            productCardConditionDTO.productCardConditionTCGPlayerId = productCardCondition.productCardConditionTCGPlayerId;
+            productCardConditionDTO.productLineId = productCardCondition.productLineId;
+            productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
+            productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+            productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
+            productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
+            productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
+            productCardConditionDTO.productCardConditionUpdateDate = productCardCondition.productCardConditionUpdateDate;
+            
+            productCardConditionDTOs.push(productCardConditionDTO);
+        }
+
+        return productCardConditionDTOs;
+    }
+
+    async getProductCardConditionsByProductLineCode(productLineCode: string) {
+        
+        productLineCode = productLineCode.toUpperCase();
+        
+        let productLine = await this.productLineService.getProductLineByCode(productLineCode);
+
+        if (productLine == null) {
+            return null;
+        }
+
+        let productLineId = productLine.productLineId;
+        
+        let productCardConditions = await this.productCardConditionRepository.find({
+            where: { 
+                productLineId: productLineId 
+            },
+            order: { 
+                productCardConditionDisplayOrder: 'ASC' 
+            }
+        });
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardConditions == null) {
+            return null;
+        }
+        
+        let productCardConditionDTOs: ProductCardConditionDTO[] = [];
+
+        for(let i = 0; i < productCardConditions.length; i++) {
+            let productCardCondition = productCardConditions[i];
+            let productCardConditionDTO = new ProductCardConditionDTO();
+            productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+            productCardConditionDTO.productCardConditionTCGPlayerId = productCardCondition.productCardConditionTCGPlayerId;
             productCardConditionDTO.productLineId = productCardCondition.productLineId;
             productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
             productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
@@ -93,6 +142,7 @@ export class ProductCardConditionService {
             let productCardCondition = productCardConditions[i];
             let productCardConditionDTO = new ProductCardConditionDTO();
             productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+            productCardConditionDTO.productCardConditionTCGPlayerId = productCardCondition.productCardConditionTCGPlayerId;
             productCardConditionDTO.productLineId = productCardCondition.productLineId;
             productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
             productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
@@ -121,6 +171,7 @@ export class ProductCardConditionService {
 
         let productCardConditionDTO = new ProductCardConditionDTO();
         productCardConditionDTO.productCardConditionId = productCardCondition.productCardConditionId;
+        productCardConditionDTO.productCardConditionTCGPlayerId = productCardCondition.productCardConditionTCGPlayerId;
         productCardConditionDTO.productLineId = productCardCondition.productLineId;
         productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
         productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
@@ -214,6 +265,7 @@ export class ProductCardConditionService {
             
             let createProductCardConditionDTO = new CreateProductCardConditionDTO();
             createProductCardConditionDTO.productLineId = productLineId;
+            createProductCardConditionDTO.productCardConditionTCGPlayerId = tcgdbMTGProductCardCondition.tcgdbMTGConditionTCGPlayerId;
             createProductCardConditionDTO.productCardConditionName = tcgdbMTGProductCardCondition.tcgdbMTGConditionName;
             createProductCardConditionDTO.productCardConditionAbbreviation = tcgdbMTGProductCardCondition.tcgdbMTGConditionAbbreviation;
             createProductCardConditionDTO.productCardConditionDisplayOrder = tcgdbMTGProductCardCondition.tcgdbMTGConditionDisplayOrder;

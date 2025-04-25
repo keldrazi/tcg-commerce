@@ -15,10 +15,13 @@ export class InventoryProductCard {
     productCardItemId: string;
 
     @Column()
-    productCardOptionId: string;
+    productCardPrintingName: string;
     
     @Column()
-    productCardVariantId: string;
+    productCardConditionAbbreviation: string;
+
+    @Column()
+    productCardLanguageAbbreviation: string;
 
     @Column()
     inventoryProductCardSKU: string;

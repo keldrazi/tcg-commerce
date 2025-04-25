@@ -6,6 +6,9 @@ export class ProductCardLanguage {
     productCardLanguageId: string;
 
     @Column()
+    productCardLanguageTCGPlayerId: number;
+
+    @Column()
     productLineId: string;
 
     @Column()

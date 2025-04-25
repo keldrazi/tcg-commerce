@@ -15,6 +15,11 @@ export class ProductCardConditionController {
         return await this.productCardConditionService.getProductCardConditions();
     }
 
+    @Get('/code/:productLineCode')
+    async getProductCardConditionsByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productCardConditionService.getProductCardConditionsByProductLineCode(productLineCode);
+    }
+
     @Get('/create/:productLineName')
     async createProductCardConditionsByProductLineName(@Param('productLineName') productLineName: string) {
         return await this.productCardConditionService.createProductCardConditionsByProductLineName(productLineName);

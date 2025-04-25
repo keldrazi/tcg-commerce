@@ -29,6 +29,7 @@ export class ProductCardLanguageService {
 
         let productCardLanguageDTO = new ProductCardLanguageDTO();
         productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+        productCardLanguageDTO.productCardLanguageTCGPlayerId = productCardLanguage.productCardLanguageTCGPlayerId;
         productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
         productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
         productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
@@ -53,6 +54,50 @@ export class ProductCardLanguageService {
             let productCardLanguage = productCardLanguages[i];
             let productCardLanguageDTO = new ProductCardLanguageDTO();
             productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+            productCardLanguageDTO.productCardLanguageTCGPlayerId = productCardLanguage.productCardLanguageTCGPlayerId;
+            productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
+            productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
+            productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
+            productCardLanguageDTO.productCardLanguageIsActive = productCardLanguage.productCardLanguageIsActive;
+            productCardLanguageDTO.productCardLanguageCreateDate = productCardLanguage.productCardLanguageCreateDate;
+            productCardLanguageDTO.productCardLanguageUpdateDate = productCardLanguage.productCardLanguageUpdateDate;
+            
+            productCardLanguageDTOs.push(productCardLanguageDTO);
+        }
+
+        return productCardLanguageDTOs;
+    }
+
+    async getProductCardLanguagesByProductLineCode(productLineCode: string) {
+        
+        productLineCode = productLineCode.toUpperCase();
+        
+        let productLine = await this.productLineService.getProductLineByCode(productLineCode);
+
+        if (productLine == null) {
+            return null;
+        }
+
+        let productLineId = productLine.productLineId;
+
+        let productCardLanguages = await this.productCardLanguageRepository.find({
+            where: { 
+                productLineId: productLineId 
+            }
+        });
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardLanguages == null) {
+            return null;
+        }
+        
+        let productCardLanguageDTOs: ProductCardLanguageDTO[] = [];
+
+        for(let i = 0; i < productCardLanguages.length; i++) {
+            let productCardLanguage = productCardLanguages[i];
+            let productCardLanguageDTO = new ProductCardLanguageDTO();
+            productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+            productCardLanguageDTO.productCardLanguageTCGPlayerId = productCardLanguage.productCardLanguageTCGPlayerId;
             productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
             productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
             productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
@@ -80,6 +125,7 @@ export class ProductCardLanguageService {
 
         let productCardLanguageDTO = new ProductCardLanguageDTO();
         productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+        productCardLanguageDTO.productCardLanguageTCGPlayerId = productCardLanguage.productCardLanguageTCGPlayerId;
         productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
         productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
         productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
@@ -164,12 +210,11 @@ export class ProductCardLanguageService {
 
         let productCardLanguageRecordCount = 0;
 
-        
-
         for(let i = 0; i < tcgdbMTGProductCardLanguages.length; i++) {
             let tcgdbMTGProductCardLanguage = tcgdbMTGProductCardLanguages[i];
             
             let createProductCardLanguageDTO = new CreateProductCardLanguageDTO();
+            createProductCardLanguageDTO.productCardLanguageTCGPlayerId = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageTCGPlayerId;
             createProductCardLanguageDTO.productLineId = productLine.productLineId;
             createProductCardLanguageDTO.productCardLanguageName = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageName;
             createProductCardLanguageDTO.productCardLanguageAbbreviation = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageAbbreviation;

@@ -15,6 +15,11 @@ export class ProductCardLanguageController {
         return await this.productCardLanguageService.getProductCardLanguages();
     }
 
+    @Get('/code/:productLineCode')
+    async getProductCardLanguagesByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productCardLanguageService.getProductCardLanguagesByProductLineCode(productLineCode);
+    }
+
     @Get('/create/:productLineName')
     async createProductCardLanguagesByProductLineName(@Param('productLineName') productLineName: string) {
         return await this.productCardLanguageService.createProductCardLanguagesByProductLineName(productLineName);

@@ -11,8 +11,13 @@ export class ProductCardRarityController {
     
     
     @Get()
-    async getProductCardRaritys() {
-        return await this.productCardRarityService.getProductCardRaritys();
+    async getProductCardRarities() {
+        return await this.productCardRarityService.getProductCardRarities();
+    }
+
+    @Get('/code/:productLineCode')
+    async getProductCardRaritiesByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productCardRarityService.getProductCardRaritiesByProductLineCode(productLineCode);
     }
 
     @Get('/create/:productLineName')

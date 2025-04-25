@@ -6,6 +6,9 @@ export class ProductCardCondition {
     productCardConditionId: string;
 
     @Column()
+    productCardConditionTCGPlayerId: number;
+
+    @Column()
     productLineId: string;
 
     @Column()
