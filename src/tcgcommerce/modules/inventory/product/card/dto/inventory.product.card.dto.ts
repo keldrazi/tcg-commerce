@@ -11,8 +11,9 @@ export class InventoryProductCardDTO {
     commerceAccountId: string;
     commerceLocationId: string;
     productCardItemId: string;
-    productCardOptionId: string;
-    productCardVariantId: string;
+    productCardPrintingName: string;
+    productCardConditionAbbreviation: string;
+    productCardLanguageAbbreviation: string;
     inventoryProductCardSKU: string;
     inventoryProductCardBarcode: string;
     inventoryProductCardQty: number;
@@ -41,9 +42,11 @@ export class CreateInventoryProductCardDTO {
     @IsString()
     productCardItemId: string;
     @IsString()
-    productCardOptionId: string;
+    productCardPrintingName: string;
     @IsString()
-    productCardVariantId: string;
+    productCardConditionAbbreviation: string;
+    @IsString()
+    productCardLanguageAbbreviation: string;
     @IsNumber()
     inventoryProductCardQty: number;
     @IsNumber()

@@ -80,6 +80,40 @@ export class ProductSetService {
 
         return productSetDTOs;
     }
+
+    async getProductSetsByProductLineId(productLineId: string) {
+        let productSets = await this.productSetRepository.find({
+            where: {
+                productLineId: productLineId,
+            }
+        });
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productSets == null) {
+            return null;
+        }
+        
+        let productSetDTOs: ProductSetDTO[] = [];
+
+        for(let i = 0; i < productSets.length; i++) {
+            let productSet = productSets[i];
+            let productSetDTO = new ProductSetDTO();
+            productSetDTO.productSetId = productSet.productSetId;
+            productSetDTO.productVendorId = productSet.productVendorId;
+            productSetDTO.productLineId = productSet.productLineId;
+            productSetDTO.productSetName = productSet.productSetName;
+            productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
+            productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
+            productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
+            productSetDTO.productSetIsActive = productSet.productSetIsActive;
+            productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
+            productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
+            
+            productSetDTOs.push(productSetDTO);
+        }
+
+        return productSetDTOs;
+    }
     
     async getProductSetByName(productVendorId: string, productLineId: string, productSetName: string) {
         let productSet = await this.productSetRepository.findOne({

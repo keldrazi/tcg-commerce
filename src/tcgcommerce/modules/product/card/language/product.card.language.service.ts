@@ -137,6 +137,64 @@ export class ProductCardLanguageService {
         
     }
 
+    async getProductCardLanguageByAbbreviationAndProductLineId(abbrecviation: string, productLineId: string) {
+        let productCardLanguage = await this.productCardLanguageRepository.findOne({ 
+            where: { 
+                productCardLanguageAbbreviation: abbrecviation,
+                productLineId: productLineId 
+            } 
+        });
+        
+        if (productCardLanguage == null) {
+            return null;
+        }
+
+        let productCardLanguageDTO = new ProductCardLanguageDTO();
+        productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+        productCardLanguageDTO.productCardLanguageTCGPlayerId = productCardLanguage.productCardLanguageTCGPlayerId;
+        productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
+        productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
+        productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
+        productCardLanguageDTO.productCardLanguageIsActive = productCardLanguage.productCardLanguageIsActive;
+        productCardLanguageDTO.productCardLanguageCreateDate = productCardLanguage.productCardLanguageCreateDate;
+        productCardLanguageDTO.productCardLanguageUpdateDate = productCardLanguage.productCardLanguageUpdateDate;
+
+        return productCardLanguageDTO;
+        
+    }
+
+    async getProductCardLanguagesByProductLineId(productLineId: string) {
+        let productCardLanguages = await this.productCardLanguageRepository.find({ 
+            where: { 
+                productLineId: productLineId 
+            } 
+        });
+        
+        if (productCardLanguages == null) {
+            return null;
+        }
+
+        let productCardLanguageDTOs: ProductCardLanguageDTO[] = [];
+
+        for(let i = 0; i < productCardLanguages.length; i++) {
+            let productCardLanguage = productCardLanguages[i];
+            let productCardLanguageDTO = new ProductCardLanguageDTO();
+            productCardLanguageDTO.productCardLanguageId = productCardLanguage.productCardLanguageId;
+            productCardLanguageDTO.productCardLanguageTCGPlayerId = productCardLanguage.productCardLanguageTCGPlayerId;
+            productCardLanguageDTO.productLineId = productCardLanguage.productLineId;
+            productCardLanguageDTO.productCardLanguageName = productCardLanguage.productCardLanguageName;
+            productCardLanguageDTO.productCardLanguageAbbreviation = productCardLanguage.productCardLanguageAbbreviation;
+            productCardLanguageDTO.productCardLanguageIsActive = productCardLanguage.productCardLanguageIsActive;
+            productCardLanguageDTO.productCardLanguageCreateDate = productCardLanguage.productCardLanguageCreateDate;
+            productCardLanguageDTO.productCardLanguageUpdateDate = productCardLanguage.productCardLanguageUpdateDate;
+            
+            productCardLanguageDTOs.push(productCardLanguageDTO);
+        }
+
+        return productCardLanguageDTOs;
+        
+    }
+
     async createProductCardLanguage(createProductCardLanguageDTO: CreateProductCardLanguageDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;

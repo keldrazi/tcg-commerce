@@ -8,7 +8,7 @@ import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/i
 export class InventoryProductCardService {
 
     //VENDOR DATA;
-    /*private MTG_SET_VENDOR_ID = "67d0735c-da47-480d-b3e2-651b9fc5a2d8"; //WoTC;
+    private MTG_SET_VENDOR_ID = "67d0735c-da47-480d-b3e2-651b9fc5a2d8"; //WoTC;
     private MTG_SET_LINE_ID = "1258359b-bb37-4323-8749-cd4fa40037f9"; //Magic: The Gathering;
 
     constructor(
@@ -32,8 +32,9 @@ export class InventoryProductCardService {
         inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
         inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
         inventoryProductCardDTO.productCardItemId = inventoryProductCard.productCardItemId;
-        inventoryProductCardDTO.productCardOptionId = inventoryProductCard.productCardOptionId;
-        inventoryProductCardDTO.productCardVariantId = inventoryProductCard.productCardVariantId;
+        inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
+        inventoryProductCardDTO.productCardConditionAbbreviation = inventoryProductCard.productCardConditionAbbreviation;
+        inventoryProductCardDTO.productCardLanguageAbbreviation = inventoryProductCard.productCardLanguageAbbreviation;
         inventoryProductCardDTO.inventoryProductCardSKU = inventoryProductCard.inventoryProductCardSKU;
         inventoryProductCardDTO.inventoryProductCardBarcode = inventoryProductCard.inventoryProductCardBarcode;
         inventoryProductCardDTO.inventoryProductCardQty = inventoryProductCard.inventoryProductCardQty;
@@ -72,8 +73,9 @@ export class InventoryProductCardService {
             inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
             inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
             inventoryProductCardDTO.productCardItemId = inventoryProductCard.productCardItemId;
-            inventoryProductCardDTO.productCardOptionId = inventoryProductCard.productCardOptionId;
-            inventoryProductCardDTO.productCardVariantId = inventoryProductCard.productCardVariantId;
+            inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
+            inventoryProductCardDTO.productCardConditionAbbreviation = inventoryProductCard.productCardConditionAbbreviation;
+            inventoryProductCardDTO.productCardLanguageAbbreviation = inventoryProductCard.productCardLanguageAbbreviation;
             inventoryProductCardDTO.inventoryProductCardSKU = inventoryProductCard.inventoryProductCardSKU;
             inventoryProductCardDTO.inventoryProductCardBarcode = inventoryProductCard.inventoryProductCardBarcode;
             inventoryProductCardDTO.inventoryProductCardQty = inventoryProductCard.inventoryProductCardQty;
@@ -187,25 +189,4 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
         
     }
-
-    //BULK LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/LOCATION;
-    //BULK LOAD INVENTORY PRODUCT CARDS BY PRODUCT LINE;
-    async createInventoryProductCardsByProductLineName(productLineName: string, commerceAccountId:string, commerceLocationId:string) {
-        //TO DO: CREATE INVENTORY PRODUCT CARD FOR PRODUCT LINE;
-        if (productLineName == "mtg") {
-            return this.createMTGInventoryProductCards(commerceAccountId, commerceLocationId);
-        } else {
-            return null;
-        }
-    }
-
-    //MTG INVENTORY PRODUCT CARD BY SET CREATION;
-    async createMTGInventoryProductCards(commerceAccountId: string, commerceLocationId: string) {
-
-
-
-    }
-
-    */
-    
 }

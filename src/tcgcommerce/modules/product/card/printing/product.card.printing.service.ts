@@ -86,6 +86,42 @@ export class ProductCardPrintingService {
         return productCardPrintingDTOs;
     }
 
+    async getProductCardPrintingsByProductLineId(productLineId: string) {
+
+        let productCardPrintings = await this.productCardPrintingRepository.find({
+            where: { 
+                productLineId: productLineId 
+            },
+            order: { 
+                productCardPrintingDisplayOrder: 'ASC' 
+            }
+        });
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardPrintings == null) {
+            return null;
+        }
+        
+        let productCardPrintingDTOs: ProductCardPrintingDTO[] = [];
+
+        for(let i = 0; i < productCardPrintings.length; i++) {
+            let productCardPrinting = productCardPrintings[i];
+            let productCardPrintingDTO = new ProductCardPrintingDTO();
+            productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
+            productCardPrintingDTO.productCardPrintingTCGPlayerId = productCardPrinting.productCardPrintingTCGPlayerId;
+            productCardPrintingDTO.productLineId = productCardPrinting.productLineId;
+            productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
+            productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
+            productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
+            productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
+            productCardPrintingDTO.productCardPrintingUpdateDate = productCardPrinting.productCardPrintingUpdateDate;
+            
+            productCardPrintingDTOs.push(productCardPrintingDTO);
+        }
+
+        return productCardPrintingDTOs;
+    }
+
     
 
     async getProductCardPrintings() {
