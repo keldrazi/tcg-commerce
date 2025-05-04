@@ -31,6 +31,7 @@ export class TCGdbMTGPriceCurrentService {
             let tcgdbMTGPriceCurrent = tcgdbMTGPriceCurrents[i];
 
             let tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO = {
+                tcgdbMTGPriceCurrentId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentId,
                 tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
                 tcgdbMTGPriceCurrentTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
                 tcgdbMTGPriceCurrentSetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
@@ -40,6 +41,8 @@ export class TCGdbMTGPriceCurrentService {
                 tcgdbMTGPriceCurrentMarketPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice,
                 tcgdbMTGPriceCurrentDirectLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentDirectLowPrice,
                 tcgdbMTGPriceCurrentSubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName,
+                tcgdbMTGPriceCurrentCreateDate: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentCreateDate,
+                tcgdbMTGPriceCurrentUpdateDate: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentUpdateDate
             }
 
             tcgdbMTGPriceCurrentDTOs.push(tcgdbMTGPriceCurrentDTO);
@@ -51,6 +54,42 @@ export class TCGdbMTGPriceCurrentService {
         }
 
         return tcgdbMTGPriceCurrentsDTO;
+
+    } 
+
+    async getTCGdbMTGPricesCurrentBySetAbbreviation(setAbbreviation: string) {
+        
+        const tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentRepository.find({
+            where: {
+                tcgdbMTGPriceCurrentSetAbbreviation: setAbbreviation,
+            }
+        });
+
+        let tcgdbMTGPriceCurrentDTOs: TCGdbMTGPriceCurrentDTO[] = [];
+
+        for(let i = 0; i < tcgdbMTGPriceCurrents.length; i++) {
+            let tcgdbMTGPriceCurrent = tcgdbMTGPriceCurrents[i];
+
+            let tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO = {
+                tcgdbMTGPriceCurrentId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentId,
+                tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
+                tcgdbMTGPriceCurrentTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
+                tcgdbMTGPriceCurrentSetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
+                tcgdbMTGPriceCurrentLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice,
+                tcgdbMTGPriceCurrentMidPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMidPrice,
+                tcgdbMTGPriceCurrentHighPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentHighPrice,
+                tcgdbMTGPriceCurrentMarketPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice,
+                tcgdbMTGPriceCurrentDirectLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentDirectLowPrice,
+                tcgdbMTGPriceCurrentSubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName,
+                tcgdbMTGPriceCurrentCreateDate: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentCreateDate,
+                tcgdbMTGPriceCurrentUpdateDate: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentUpdateDate
+            }
+
+            tcgdbMTGPriceCurrentDTOs.push(tcgdbMTGPriceCurrentDTO);
+
+        }
+
+        return tcgdbMTGPriceCurrentDTOs;
 
     } 
     
@@ -93,8 +132,8 @@ export class TCGdbMTGPriceCurrentService {
             });
 
             await this.tcgdbMTGPriceCurrentRepository.save(newTCGdbMTGPrice);
-
             await this.tcgdbMTGPriceHistoryService.createTCGdbMTGPricesHistory(tcgdbMTGCard, tcgPlayerMTGPrice);
+            
             tcgdbMTGPriceCurrentRecordCount++;
         }
 

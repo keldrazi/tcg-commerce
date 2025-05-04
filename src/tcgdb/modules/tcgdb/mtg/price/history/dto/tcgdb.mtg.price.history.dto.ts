@@ -3,6 +3,7 @@ export class TCGdbMTGPricesHistoryDTO {
 }
 
 export class TCGdbMTGPriceHistoryDTO {
+    tcgdbMTGPriceHistoryId: string;
     tcgdbMTGCardId: string;
     tcgdbMTGPriceHistoryTCGPlayerId: number;
     tcgdbMTGPriceHistorySetAbbreviation: string;
@@ -12,4 +13,6 @@ export class TCGdbMTGPriceHistoryDTO {
     tcgdbMTGPriceHistoryMarketPrice: number;
     tcgdbMTGPriceHistoryDirectLowPrice: number;
     tcgdbMTGPriceHistorySubTypeName: string;
+    tcgdbMTGPriceHistoryCreateDate: Date;
+    tcgdbMTGPriceHistoryUpdateDate: Date;
 }

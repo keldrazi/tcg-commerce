@@ -1,0 +1,196 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.service';
+import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.service';
+import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
+import { TCGdbMTGPriceHistoryService } from 'src/tcgdb/modules/tcgdb/mtg/price/history/tcgdb.mtg.price.history.service';
+import { TCGdbMTGPricesChangeDailyDTO, TCGdbMTGPriceChangeDailyDTO, CreateTCGdbMTGPriceChangeDailyDTO } from './dto/tcgdb.mtg.price.change.daily.dto';
+import { TCGdbMTGPriceChangeDaily } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.entity';
+import { TCGdbMTGPriceHistoryDTO } from 'src/tcgdb/modules/tcgdb/mtg/price/history/dto/tcgdb.mtg.price.history.dto';
+import { TCGdbMTGPriceCurrentDTO } from 'src/tcgdb/modules/tcgdb/mtg/price/current/dto/tcgdb.mtg.price.current.dto';
+
+@Injectable()
+export class TCGdbMTGPriceChangeDailyService {
+
+    constructor(
+        @InjectRepository(TCGdbMTGPriceChangeDaily) private tcgdbMTGPriceChangeDailyRepository: Repository<TCGdbMTGPriceChangeDaily>, 
+        private tcgdbMTGCardService: TCGdbMTGCardService,
+        private tcgdbMTGSetService: TCGdbMTGSetService,
+        private tcgdbMTGPriceHistoryService: TCGdbMTGPriceHistoryService,
+        private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
+    ) {}
+
+    async getTCGdbMTGPriceChangeDailyBySet(setAbbreviation: string) {
+        let tcgdbMTGPriceChangeDailys = await this.tcgdbMTGPriceChangeDailyRepository.find({
+            where: {
+                tcgdbMTGPriceChangeDailySetAbbreviation: setAbbreviation,
+            }
+        });
+
+        let tcgdbMTGPriceChangeDailyDTOs: TCGdbMTGPriceChangeDailyDTO[] = [];
+
+        for(let i = 0; i < tcgdbMTGPriceChangeDailys.length; i++) {
+            let tcgdbMTGPriceChangeDaily = tcgdbMTGPriceChangeDailys[i];
+
+            let tcgdbMTGPriceChangeDailyDTO: TCGdbMTGPriceChangeDailyDTO = {
+                tcgdbMTGPriceChangeDailyId: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyId,
+                tcgdbMTGCardId: tcgdbMTGPriceChangeDaily.tcgdbMTGCardId,
+                tcgdbMTGPriceChangeDailyTCGPlayerId: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyTCGPlayerId,
+                tcgdbMTGPriceChangeDailySetAbbreviation: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailySetAbbreviation,
+                tcgdbMTGPriceChangeDailyCurrentLowPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentLowPrice,
+                tcgdbMTGPriceChangeDailyPreviousLowPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousLowPrice,
+                tcgdbMTGPriceChangeDailyLowPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyLowPriceDifference,
+                tcgdbMTGPriceChangeDailyLowPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyLowPricePercentage,
+                tcgdbMTGPriceChangeDailyCurrentMidPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentMidPrice,
+                tcgdbMTGPriceChangeDailyPreviousMidPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousMidPrice,
+                tcgdbMTGPriceChangeDailyMidPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMidPriceDifference,
+                tcgdbMTGPriceChangeDailyMidPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMidPricePercentage,
+                tcgdbMTGPriceChangeDailyCurrentHighPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentHighPrice,
+                tcgdbMTGPriceChangeDailyPreviousHighPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousHighPrice,
+                tcgdbMTGPriceChangeDailyHighPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyHighPriceDifference,
+                tcgdbMTGPriceChangeDailyHighPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyHighPricePercentage,
+                tcgdbMTGPriceChangeDailyCurrentMarketPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentMarketPrice,
+                tcgdbMTGPriceChangeDailyPreviousMarketPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousMarketPrice,
+                tcgdbMTGPriceChangeDailyMarketPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMarketPriceDifference,
+                tcgdbMTGPriceChangeDailyMarketPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMarketPricePercentage,
+                tcgdbMTGPriceChangeDailySubTypeName: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailySubTypeName
+            }
+
+            tcgdbMTGPriceChangeDailyDTOs.push(tcgdbMTGPriceChangeDailyDTO);
+        }
+
+        return tcgdbMTGPriceChangeDailyDTOs;
+
+    }
+    
+    async createTCGdbMTGPriceChangeDailyBySet() {
+
+        let createTCGdbMTGPriceChangeDailyRecordCount = 0;
+
+        //GET ALL TCGDB SETS;
+        const tcgdbMTGSets = await this.tcgdbMTGSetService.getTCGdbMTGSets();
+        
+        for(let i=0; i < tcgdbMTGSets.length; i++) {
+            const tcgdbMTGSet = tcgdbMTGSets[i];
+            
+            //GET YESTERDAYS DATE;
+            let priceHistoryDate = new Date();
+            priceHistoryDate.setDate(priceHistoryDate.getDate() - 1); // yesterday
+
+            //CURRENT PRICES;
+            let tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetAbbreviation(tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+
+            if(tcgdbMTGPriceCurrents.length == 0) {
+                console.log("No current prices for set: " + tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+                continue;
+            }
+
+            //HISTORY PRICES;
+            let tcgdbMTGPriceHistorys = await this.tcgdbMTGPriceHistoryService.getTCGdbMTGPricesHistoryBySetAbbreviationAndDate(tcgdbMTGSet.tcgdbMTGSetAbbreviation, priceHistoryDate);
+
+            if(tcgdbMTGPriceHistorys.length == 0) {
+                console.log("No history prices for set: " + tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+                continue;
+            }
+
+            for(let j=0; j < tcgdbMTGPriceCurrents.length; j++) {
+                let tcgdbMTGPriceCurrent = tcgdbMTGPriceCurrents[j];
+                let searchCriteria: Partial<TCGdbMTGPriceHistoryDTO> = {
+                    tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
+                    tcgdbMTGPriceHistoryTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
+                    tcgdbMTGPriceHistorySubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName
+                }
+
+                let tcgdbMTGPriceHistory = await this.findTCGdbMTGPriceHistory(tcgdbMTGPriceHistorys, searchCriteria);
+                if(tcgdbMTGPriceHistory) {
+                    try {
+                        await this.createTCGdbMTGPriceChangeDaily(tcgdbMTGPriceCurrent, tcgdbMTGPriceHistory);
+                        createTCGdbMTGPriceChangeDailyRecordCount++;
+                    }
+                    catch (error) {
+                        console.log("Error creating TCGdbMTGPriceChangeDaily: " + error);
+                        continue;
+                    }
+                }
+            }
+
+        }
+
+        return createTCGdbMTGPriceChangeDailyRecordCount;
+
+    }
+
+    async findTCGdbMTGPriceHistory(tcgdbMTGPriceHistorys: TCGdbMTGPriceHistoryDTO[], searchCriteria: Partial<TCGdbMTGPriceHistoryDTO>) {
+        return tcgdbMTGPriceHistorys.find(dto =>
+            Object.keys(searchCriteria).every(key => dto[key as keyof TCGdbMTGPriceHistoryDTO] === searchCriteria[key as keyof TCGdbMTGPriceHistoryDTO])
+          ); 
+    }
+
+    async createTCGdbMTGPriceChangeDaily(tcgdbMTGPriceCurrent: TCGdbMTGPriceCurrentDTO, tcgdbMTGPriceHistory: TCGdbMTGPriceHistoryDTO) {
+        
+        let tcgdbMTGPriceChangeDailyLowPriceDifference = 0;
+        let tcgdbMTGPriceChangeDailyLowPricePercentage = 0;
+
+        if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice != null) {
+            tcgdbMTGPriceChangeDailyLowPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice;
+            tcgdbMTGPriceChangeDailyLowPricePercentage = (tcgdbMTGPriceChangeDailyLowPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice) * 100;
+        }
+        
+        let tcgdbMTGPriceChangeDailyMidPriceDifference = 0;
+        let tcgdbMTGPriceChangeDailyMidPricePercentage = 0;
+
+        if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMidPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice != null) {
+            tcgdbMTGPriceChangeDailyMidPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMidPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice;
+            tcgdbMTGPriceChangeDailyMidPricePercentage = (tcgdbMTGPriceChangeDailyMidPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice) * 100;
+        }
+
+        let tcgdbMTGPriceChangeDailyHighPriceDifference = 0;
+        let tcgdbMTGPriceChangeDailyHighPricePercentage = 0;
+
+        if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentHighPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice != null) {
+            tcgdbMTGPriceChangeDailyHighPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentHighPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice;
+            tcgdbMTGPriceChangeDailyHighPricePercentage = (tcgdbMTGPriceChangeDailyHighPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice) * 100;
+        }
+
+        let tcgdbMTGPriceChangeDailyMarketPriceDifference = 0;
+        let tcgdbMTGPriceChangeDailyMarketPricePercentage = 0;
+
+        if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice != null) {
+            tcgdbMTGPriceChangeDailyMarketPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice;
+            tcgdbMTGPriceChangeDailyMarketPricePercentage = (tcgdbMTGPriceChangeDailyMarketPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice) * 100;
+        }
+        
+        
+        let CreateTCGdbMTGPriceChangeDailyDTO: CreateTCGdbMTGPriceChangeDailyDTO = {
+            tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
+            tcgdbMTGPriceChangeDailyTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
+            tcgdbMTGPriceChangeDailySetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
+            tcgdbMTGPriceChangeDailyCurrentLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice,
+            tcgdbMTGPriceChangeDailyPreviousLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice,
+            tcgdbMTGPriceChangeDailyLowPriceDifference: tcgdbMTGPriceChangeDailyLowPriceDifference,
+            tcgdbMTGPriceChangeDailyLowPricePercentage: tcgdbMTGPriceChangeDailyLowPricePercentage,
+            tcgdbMTGPriceChangeDailyCurrentMidPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMidPrice,
+            tcgdbMTGPriceChangeDailyPreviousMidPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice,
+            tcgdbMTGPriceChangeDailyMidPriceDifference: tcgdbMTGPriceChangeDailyMidPriceDifference,
+            tcgdbMTGPriceChangeDailyMidPricePercentage: tcgdbMTGPriceChangeDailyMidPricePercentage,
+            tcgdbMTGPriceChangeDailyCurrentHighPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentHighPrice,
+            tcgdbMTGPriceChangeDailyPreviousHighPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice,
+            tcgdbMTGPriceChangeDailyHighPriceDifference: tcgdbMTGPriceChangeDailyHighPriceDifference,
+            tcgdbMTGPriceChangeDailyHighPricePercentage: tcgdbMTGPriceChangeDailyHighPricePercentage,
+            tcgdbMTGPriceChangeDailyCurrentMarketPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice,
+            tcgdbMTGPriceChangeDailyPreviousMarketPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice,
+            tcgdbMTGPriceChangeDailyMarketPriceDifference: tcgdbMTGPriceChangeDailyMarketPriceDifference,
+            tcgdbMTGPriceChangeDailyMarketPricePercentage: tcgdbMTGPriceChangeDailyMarketPricePercentage,
+            tcgdbMTGPriceChangeDailySubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName
+        }
+
+        const newTCGdbMTGPriceChangeDaily = this.tcgdbMTGPriceChangeDailyRepository.create(CreateTCGdbMTGPriceChangeDailyDTO);
+        await this.tcgdbMTGPriceChangeDailyRepository.save(newTCGdbMTGPriceChangeDaily);
+
+        return true;
+        
+    } 
+}
+
+

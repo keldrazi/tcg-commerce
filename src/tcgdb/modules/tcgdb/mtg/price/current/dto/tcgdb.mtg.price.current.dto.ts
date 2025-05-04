@@ -3,6 +3,7 @@ export class TCGdbMTGPricesCurrentDTO {
 }
 
 export class TCGdbMTGPriceCurrentDTO {
+    tcgdbMTGPriceCurrentId: string;
     tcgdbMTGCardId: string;
     tcgdbMTGPriceCurrentTCGPlayerId: number;
     tcgdbMTGPriceCurrentSetAbbreviation: string;
@@ -12,4 +13,6 @@ export class TCGdbMTGPriceCurrentDTO {
     tcgdbMTGPriceCurrentMarketPrice: number;
     tcgdbMTGPriceCurrentDirectLowPrice: number;
     tcgdbMTGPriceCurrentSubTypeName: string;
+    tcgdbMTGPriceCurrentCreateDate: Date;
+    tcgdbMTGPriceCurrentUpdateDate: Date;
 }
