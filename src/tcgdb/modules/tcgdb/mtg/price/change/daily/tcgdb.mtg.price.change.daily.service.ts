@@ -63,8 +63,15 @@ export class TCGdbMTGPriceChangeDailyService {
         return tcgdbMTGPriceChangeDailyDTOs;
 
     }
-    
+
     async createTCGdbMTGPriceChangeDailyBySet() {
+
+
+        //REMOVE ALL TCGDB PRICE CHANGE DAILY RECORDS;
+        await this.tcgdbMTGPriceChangeDailyRepository.createQueryBuilder()
+            .delete()
+            .from(TCGdbMTGPriceChangeDaily)
+            .execute();
 
         let createTCGdbMTGPriceChangeDailyRecordCount = 0;
 
@@ -134,7 +141,10 @@ export class TCGdbMTGPriceChangeDailyService {
 
         if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice != null) {
             tcgdbMTGPriceChangeDailyLowPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice;
+            tcgdbMTGPriceChangeDailyLowPriceDifference = parseFloat(tcgdbMTGPriceChangeDailyLowPriceDifference.toFixed(2));
             tcgdbMTGPriceChangeDailyLowPricePercentage = (tcgdbMTGPriceChangeDailyLowPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice) * 100;
+            tcgdbMTGPriceChangeDailyLowPricePercentage = parseFloat(tcgdbMTGPriceChangeDailyLowPricePercentage.toFixed(2));
+            
         }
         
         let tcgdbMTGPriceChangeDailyMidPriceDifference = 0;
@@ -142,7 +152,9 @@ export class TCGdbMTGPriceChangeDailyService {
 
         if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMidPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice != null) {
             tcgdbMTGPriceChangeDailyMidPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMidPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice;
+            tcgdbMTGPriceChangeDailyMidPriceDifference = parseFloat(tcgdbMTGPriceChangeDailyMidPriceDifference.toFixed(2));
             tcgdbMTGPriceChangeDailyMidPricePercentage = (tcgdbMTGPriceChangeDailyMidPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice) * 100;
+            tcgdbMTGPriceChangeDailyMidPricePercentage = parseFloat(tcgdbMTGPriceChangeDailyMidPricePercentage.toFixed(2));
         }
 
         let tcgdbMTGPriceChangeDailyHighPriceDifference = 0;
@@ -150,7 +162,9 @@ export class TCGdbMTGPriceChangeDailyService {
 
         if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentHighPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice != null) {
             tcgdbMTGPriceChangeDailyHighPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentHighPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice;
+            tcgdbMTGPriceChangeDailyHighPriceDifference = parseFloat(tcgdbMTGPriceChangeDailyHighPriceDifference.toFixed(2));
             tcgdbMTGPriceChangeDailyHighPricePercentage = (tcgdbMTGPriceChangeDailyHighPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice) * 100;
+            tcgdbMTGPriceChangeDailyHighPricePercentage = parseFloat(tcgdbMTGPriceChangeDailyHighPricePercentage.toFixed(2));
         }
 
         let tcgdbMTGPriceChangeDailyMarketPriceDifference = 0;
@@ -158,7 +172,9 @@ export class TCGdbMTGPriceChangeDailyService {
 
         if(tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice != null && tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice != null) {
             tcgdbMTGPriceChangeDailyMarketPriceDifference = tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice - tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice;
+            tcgdbMTGPriceChangeDailyMarketPriceDifference = parseFloat(tcgdbMTGPriceChangeDailyMarketPriceDifference.toFixed(2));
             tcgdbMTGPriceChangeDailyMarketPricePercentage = (tcgdbMTGPriceChangeDailyMarketPriceDifference / tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice) * 100;
+            tcgdbMTGPriceChangeDailyMarketPricePercentage =  parseFloat(tcgdbMTGPriceChangeDailyMarketPricePercentage.toFixed(2));
         }
         
         

@@ -44,6 +44,7 @@ import { TCGdbMTGCardModule } from './tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.car
 import { TCGdbMTGSetModule } from './tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.module';
 import { TCGdbMTGPriceCurrentModule } from './tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.module';
 import { TCGdbMTGPriceHistoryModule } from './tcgdb/modules/tcgdb/mtg/price/history/tcgdb.mtg.price.history.module';
+import { TCGdbMTGPriceChangeDailyModule } from './tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.module';
 import { TCGdbMTGConditionModule } from './tcgdb/modules/tcgdb/mtg/condition/tcgdb.mtg.condition.module';
 import { TCGdbMTGLanguageModule } from './tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.module';
 import { TCGdbMTGPrintingModule } from './tcgdb/modules/tcgdb/mtg/printing/tcgdb.mtg.printing.module';
@@ -121,6 +122,7 @@ const NODE_ENV = process.env.NODE_ENV;
     TCGdbMTGSetModule,
     TCGdbMTGPriceCurrentModule,
     TCGdbMTGPriceHistoryModule,
+    TCGdbMTGPriceChangeDailyModule,
     TCGdbMTGConditionModule,
     TCGdbMTGLanguageModule,
     TCGdbMTGPrintingModule,

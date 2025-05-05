@@ -8,17 +8,16 @@ export class TCGdbMTGPriceChangeDailyController {
         private tcgdbMTGPriceChangeDailyService: TCGdbMTGPriceChangeDailyService
     ) {}
 
-    /*
-    @Get('/tcgplayer/card/id/:id')
-    async getTCGdbPricesByTCGPlayerId(@Param('id') tcgPlayerId: number) {
-        return this.tcgdbMTGPriceService.getTCGdbMTGPricesByTCGPlayerId(tcgPlayerId);
-    }
-    */
 
-    /*@Get('/create')
-    async createTCGdbMTGPricesCurrent() {
-        return this.tcgdbMTGPriceCurrentService.createTCGdbMTGPricesCurrent();
+    @Get('/set/:setAbbreviation')
+    async getTCGdbMTGPriceChangeDailyBySet(@Param('setAbbreviation') setAbbreviation: string) {
+        return await this.tcgdbMTGPriceChangeDailyService.getTCGdbMTGPriceChangeDailyBySet(setAbbreviation);
     }
-    */
+
+    @Get('/create')
+    async createTCGdbMTGPriceChangeDailyBySet() {
+        return await this.tcgdbMTGPriceChangeDailyService.createTCGdbMTGPriceChangeDailyBySet();
+    }
+
 
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { TCGPlayerMTGPriceService } from 'src/tcgdb/modules/tcgplayer/mtg/price/tcgplayer.mtg.price.service';
 import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.service';
 import { TCGdbMTGPricesHistoryDTO, TCGdbMTGPriceHistoryDTO } from './dto/tcgdb.mtg.price.history.dto';
@@ -102,10 +102,16 @@ export class TCGdbMTGPriceHistoryService {
 
     async getTCGdbMTGPricesHistoryBySetAbbreviationAndDate(setAbbreviation: string, priceHistoryDate: Date) {
         
+        let startOfDay = new Date(priceHistoryDate);
+        startOfDay.setHours(0, 0, 0, 0); // Set to 12:00:00 am
+
+        const endOfDay = new Date(priceHistoryDate);
+        endOfDay.setHours(23, 59, 59, 999); // Set to 11:59:59 pm
+
         const tcgdbMTGPriceHistorys = await this.tcgdbMTGPriceHistoryRepository.find({
             where: {
                 tcgdbMTGPriceHistorySetAbbreviation: setAbbreviation,
-                tcgdbMTGPriceHistoryCreateDate: priceHistoryDate,
+                tcgdbMTGPriceHistoryCreateDate: Between(startOfDay, endOfDay),
             }
         });
 
