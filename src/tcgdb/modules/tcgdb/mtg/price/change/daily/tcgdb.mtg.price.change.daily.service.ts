@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.service';
 import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.service';
 import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
 import { TCGdbMTGPriceHistoryService } from 'src/tcgdb/modules/tcgdb/mtg/price/history/tcgdb.mtg.price.history.service';
@@ -15,7 +14,6 @@ export class TCGdbMTGPriceChangeDailyService {
 
     constructor(
         @InjectRepository(TCGdbMTGPriceChangeDaily) private tcgdbMTGPriceChangeDailyRepository: Repository<TCGdbMTGPriceChangeDaily>, 
-        private tcgdbMTGCardService: TCGdbMTGCardService,
         private tcgdbMTGSetService: TCGdbMTGSetService,
         private tcgdbMTGPriceHistoryService: TCGdbMTGPriceHistoryService,
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,

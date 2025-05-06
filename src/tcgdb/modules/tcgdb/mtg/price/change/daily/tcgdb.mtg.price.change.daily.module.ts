@@ -4,7 +4,6 @@ import { TCGdbMTGPriceChangeDailyController } from './tcgdb.mtg.price.change.dai
 import { TCGdbMTGPriceChangeDailyService } from './tcgdb.mtg.price.change.daily.service';
 import { TCGdbMTGPriceCurrentModule } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.module';
 import { TCGdbMTGPriceHistoryModule } from 'src/tcgdb/modules/tcgdb/mtg/price/history/tcgdb.mtg.price.history.module';
-import { TCGdbMTGCardModule } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.module';
 import { TCGdbMTGSetModule} from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.module';
 import { TCGdbMTGPriceChangeDaily } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.entity";
 
@@ -12,7 +11,6 @@ import { TCGdbMTGPriceChangeDaily } from "src/typeorm/entities/tcgdb/modules/tcg
     imports: [
         TypeOrmModule.forFeature([TCGdbMTGPriceChangeDaily]),
         TCGdbMTGPriceCurrentModule,
-        TCGdbMTGCardModule,
         TCGdbMTGPriceHistoryModule,
         TCGdbMTGSetModule,
     ], 
