@@ -74,6 +74,9 @@ import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/la
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
 
+//System Modules;
+import { UtilScheduleTaskPriceModule } from './system/modules/util/schedule/task/price/util.schedule.task.price.module';
+
 const NODE_ENV = process.env.NODE_ENV;
 
 @Module({
@@ -151,6 +154,8 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductCardLanguageModule,
     ProductCardPrintingModule,
     ProductCardRarityModule,
+    //System Modules;
+    UtilScheduleTaskPriceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
