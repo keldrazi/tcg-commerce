@@ -1,22 +1,22 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TCGdbMTGPriceChangeWeeklyController } from './tcgdb.mtg.price.change.monthly.controller';
-import { TCGdbMTGPriceChangeWeeklyService } from './tcgdb.mtg.price.change.monthly.service';
+import { TCGdbMTGPriceChangeMonthlyController } from './tcgdb.mtg.price.change.monthly.controller';
+import { TCGdbMTGPriceChangeMonthlyService } from './tcgdb.mtg.price.change.monthly.service';
 import { TCGdbMTGPriceCurrentModule } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.module';
 import { TCGdbMTGPriceHistoryModule } from 'src/tcgdb/modules/tcgdb/mtg/price/history/tcgdb.mtg.price.history.module';
 import { TCGdbMTGSetModule} from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.module';
-import { TCGdbMTGPriceChangeWeekly } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/price/change/weekly/tcgdb.mtg.price.change.weekly.entity";
+import { TCGdbMTGPriceChangeMonthly } from "src/typeorm/entities/tcgdb/modules/tcgdb/mtg/price/change/monthly/tcgdb.mtg.price.change.monthly.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([TCGdbMTGPriceChangeWeekly]),
+        TypeOrmModule.forFeature([TCGdbMTGPriceChangeMonthly]),
         TCGdbMTGPriceCurrentModule,
         TCGdbMTGPriceHistoryModule,
         TCGdbMTGSetModule,
     ], 
-    controllers: [TCGdbMTGPriceChangeWeeklyController],
-    providers: [TCGdbMTGPriceChangeWeeklyService],
-    exports: [TCGdbMTGPriceChangeWeeklyService],
+    controllers: [TCGdbMTGPriceChangeMonthlyController],
+    providers: [TCGdbMTGPriceChangeMonthlyService],
+    exports: [TCGdbMTGPriceChangeMonthlyService],
 })
 
-export class TCGdbMTGPriceChangeWeeklyModule {}
+export class TCGdbMTGPriceChangeMonthlyModule {}
