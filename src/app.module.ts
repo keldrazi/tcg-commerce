@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ScheduleModule } from '@nestjs/schedule';
 //Config Modules;
 import { ConfigModule } from '@nestjs/config';
 import { ConfigDatabasePGModule } from './config/database/pg/config.database.pg.module';
@@ -87,6 +88,7 @@ const NODE_ENV = process.env.NODE_ENV;
     }),
     ConfigDatabasePGModule,
     ConfigEmailModule,
+    ScheduleModule.forRoot(),
     //TCGPlayer API Modules;
     TCGPlayerAPICardModule,
     TCGPlayerAPISetModule,

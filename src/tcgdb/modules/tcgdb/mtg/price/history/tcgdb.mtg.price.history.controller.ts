@@ -1,8 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { TCGdbMTGPriceHistoryService } from './tcgdb.mtg.price.history.service';
-import { TCGdbMTGCard } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.entity';
 
-@Controller('tcgdb/mtg/price/current')
+@Controller('tcgdb/mtg/price/history')
 export class TCGdbMTGPriceHistoryController {
     
     constructor(
