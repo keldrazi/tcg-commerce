@@ -31,12 +31,14 @@ export class InventoryBatchProductCardService {
     async createBatchInventoryProductCards(productLineCode: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
         productLineCode = productLineCode.toUpperCase();
         let productLineId = await this.getProductLineIdByCode(productLineCode);
+         //TO DO: CREATE AN ERROR TO RETURN;
         if (productLineId == null) {
             return null;
         }
 
         //GET THE PRODUCT SETS;
         let productSets = await this.getProductSetsByProductLineId(productLineId);
+         //TO DO: CREATE AN ERROR TO RETURN;
         if (productSets == null) {
             return null;
         }
@@ -45,6 +47,7 @@ export class InventoryBatchProductCardService {
         let productCardLanguageId = await this.getProductCardLanguageIdByAbbreviationAndProductLineId(productCardLanguageAbbreviation, productLineId);
         let productCardPrintings = await this.getProductCardPrintingsByProductLineId(productLineId);
 
+         //TO DO: CREATE AN ERROR TO RETURN;
         if (productCardConditions == null || productCardLanguageId == null || productCardPrintings == null) {
             return null;
         }
@@ -66,10 +69,7 @@ export class InventoryBatchProductCardService {
                 let productCardItemSKUs = productCardItem.productCardItemSKUs;
                 
             }
-
         }
-
-
     }
 
 

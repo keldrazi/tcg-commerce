@@ -27,29 +27,40 @@ export class InventoryProductCardService {
             return null;
         }
 
-        let inventoryProductCardDTO = new InventoryProductCardDTO();
-        inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
-        inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
-        inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
-        inventoryProductCardDTO.productCardItemId = inventoryProductCard.productCardItemId;
-        inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
-        inventoryProductCardDTO.productCardConditionAbbreviation = inventoryProductCard.productCardConditionAbbreviation;
-        inventoryProductCardDTO.productCardLanguageAbbreviation = inventoryProductCard.productCardLanguageAbbreviation;
-        inventoryProductCardDTO.inventoryProductCardSKU = inventoryProductCard.inventoryProductCardSKU;
-        inventoryProductCardDTO.inventoryProductCardBarcode = inventoryProductCard.inventoryProductCardBarcode;
-        inventoryProductCardDTO.inventoryProductCardQty = inventoryProductCard.inventoryProductCardQty;
-        inventoryProductCardDTO.inventoryProductCardMaxQty = inventoryProductCard.inventoryProductCardMaxQty;
-        inventoryProductCardDTO.inventoryProductCardReserveQty = inventoryProductCard.inventoryProductCardReserveQty;
-        inventoryProductCardDTO.inventoryProductCardPrice = inventoryProductCard.inventoryProductCardPrice;
-        inventoryProductCardDTO.inventoryProductCardOverridePriceEnabled = inventoryProductCard.inventoryProductCardOverridePriceEnabled;
-        inventoryProductCardDTO.inventoryProductCardOverridePrice = inventoryProductCard.inventoryProductCardOverridePrice;
-        inventoryProductCardDTO.inventoryProductCardMetadata = inventoryProductCard.inventoryProductCardMetadata;
-        inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
-        inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
+        let inventoryProductCardDTO: InventoryProductCardDTO = ({ ...inventoryProductCard});
         
         return inventoryProductCardDTO;
     }
     
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductCardItemId(commerceAccountId: string, commerceLocationId: string, productCardItemId: string) {
+        let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
+            where: {
+                commerceAccountId: commerceAccountId,
+                commerceLocationId: commerceLocationId,
+                productCardItemId: productCardItemId, 
+            }
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(inventoryProductCards == null) {
+            return null;
+        }
+
+        let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
+
+        for(let i=0; i < inventoryProductCards.length; i++) {
+            let inventoryProductCard = inventoryProductCards[i];
+            let inventoryProductCardDTO: InventoryProductCardDTO = ({ ...inventoryProductCard});
+            
+            inventoryProductCardDTOs.push(inventoryProductCardDTO);
+        }
+        
+        let inventoryProductCardsDTO = new InventoryProductCardsDTO();
+        inventoryProductCardsDTO.inventoryProductCardDTOs = inventoryProductCardDTOs;
+        
+        return inventoryProductCardsDTO;
+    }
+
     async getInventoryProductCardsByCommerceAccountIdAndProductCardItemId(commerceAccountId: string, productCardItemId: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
@@ -67,26 +78,64 @@ export class InventoryProductCardService {
 
         for(let i=0; i < inventoryProductCards.length; i++) {
             let inventoryProductCard = inventoryProductCards[i];
-            let inventoryProductCardDTO = new InventoryProductCardDTO();
+            let inventoryProductCardDTO: InventoryProductCardDTO = ({ ...inventoryProductCard});
 
-            inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
-            inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
-            inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
-            inventoryProductCardDTO.productCardItemId = inventoryProductCard.productCardItemId;
-            inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
-            inventoryProductCardDTO.productCardConditionAbbreviation = inventoryProductCard.productCardConditionAbbreviation;
-            inventoryProductCardDTO.productCardLanguageAbbreviation = inventoryProductCard.productCardLanguageAbbreviation;
-            inventoryProductCardDTO.inventoryProductCardSKU = inventoryProductCard.inventoryProductCardSKU;
-            inventoryProductCardDTO.inventoryProductCardBarcode = inventoryProductCard.inventoryProductCardBarcode;
-            inventoryProductCardDTO.inventoryProductCardQty = inventoryProductCard.inventoryProductCardQty;
-            inventoryProductCardDTO.inventoryProductCardMaxQty = inventoryProductCard.inventoryProductCardMaxQty;
-            inventoryProductCardDTO.inventoryProductCardReserveQty = inventoryProductCard.inventoryProductCardReserveQty;
-            inventoryProductCardDTO.inventoryProductCardPrice = inventoryProductCard.inventoryProductCardPrice;
-            inventoryProductCardDTO.inventoryProductCardOverridePriceEnabled = inventoryProductCard.inventoryProductCardOverridePriceEnabled;
-            inventoryProductCardDTO.inventoryProductCardOverridePrice = inventoryProductCard.inventoryProductCardOverridePrice;
-            inventoryProductCardDTO.inventoryProductCardMetadata = inventoryProductCard.inventoryProductCardMetadata;
-            inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
-            inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
+            inventoryProductCardDTOs.push(inventoryProductCardDTO);
+        }
+        
+        let inventoryProductCardsDTO = new InventoryProductCardsDTO();
+        inventoryProductCardsDTO.inventoryProductCardDTOs = inventoryProductCardDTOs;
+        
+        return inventoryProductCardsDTO;
+    }
+
+    async getInventoryProductCardsByCommerceAccountIdAndProductSetAbbreviation(commerceAccountId: string, productSetAbbreviation: string) {
+        let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
+            where: {
+                commerceAccountId: commerceAccountId,
+                productSetAbbreviation: productSetAbbreviation,
+            }
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(inventoryProductCards == null) {
+            return null;
+        }
+
+        let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
+
+        for(let i=0; i < inventoryProductCards.length; i++) {
+            let inventoryProductCard = inventoryProductCards[i];
+            let inventoryProductCardDTO: InventoryProductCardDTO = ({ ...inventoryProductCard});
+
+            inventoryProductCardDTOs.push(inventoryProductCardDTO);
+        }
+        
+        let inventoryProductCardsDTO = new InventoryProductCardsDTO();
+        inventoryProductCardsDTO.inventoryProductCardDTOs = inventoryProductCardDTOs;
+        
+        return inventoryProductCardsDTO;
+    }
+
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndCommerceLocationIdProductSetAbbreviation(commerceAccountId: string, commerceLocationId: string, productSetAbbreviation: string) {
+        let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
+            where: {
+                commerceAccountId: commerceAccountId,
+                commerceLocationId: commerceLocationId,
+                productSetAbbreviation: productSetAbbreviation,
+            }
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(inventoryProductCards == null) {
+            return null;
+        }
+
+        let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
+
+        for(let i=0; i < inventoryProductCards.length; i++) {
+            let inventoryProductCard = inventoryProductCards[i];
+            let inventoryProductCardDTO: InventoryProductCardDTO = ({ ...inventoryProductCard});
 
             inventoryProductCardDTOs.push(inventoryProductCardDTO);
         }
@@ -134,13 +183,6 @@ export class InventoryProductCardService {
 
     async updateInventoryProductCard(updateInventoryProductCardsDTO: UpdateInventoryProductCardsDTO) {
 
-        //GET THE PRODUCT CARD INVENTORYS TO UPDATE;
-        let inventoryProductCard = await this.getInventoryProductCardsByCommerceAccountIdAndProductCardItemId(updateInventoryProductCardsDTO.commerceAccountId, updateInventoryProductCardsDTO.productCardItemId);
-
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(inventoryProductCard == null) {
-            return null;
-        }
 
         //UPDATE THE PRODUCT CARD INVENTORYS;
         let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
@@ -151,7 +193,7 @@ export class InventoryProductCardService {
             //GET THE PRODUCT CARD INVENTORY TO UPDATE;
             let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
                 where: {
-                    inventoryProductCardId: updateInventoryProductCardDTO.productCardInventoryId
+                    inventoryProductCardId: updateInventoryProductCardDTO.inventoryProductCardId
                 }
             });
 

@@ -6,6 +6,12 @@ export class InventoryProductCard {
     inventoryProductCardId: string;
 
     @Column()
+    productVendorId: string;
+
+    @Column()
+    productLineId: string;
+
+    @Column()
     commerceAccountId: string;
 
     @Column()
@@ -13,6 +19,9 @@ export class InventoryProductCard {
     
     @Column()
     productCardItemId: string;
+
+    @Column()
+    productSetAbbreviation: string;
 
     @Column()
     productCardPrintingName: string;
@@ -23,13 +32,12 @@ export class InventoryProductCard {
     @Column()
     productCardLanguageAbbreviation: string;
 
-    @Column()
+    @Column({ nullable: true })
     inventoryProductCardSKU: string;
 
-    @Column()
+    @Column({ nullable: true })
     inventoryProductCardBarcode: string;
 
-    @Column()
     inventoryProductCardQty: number;
 
     @Column()
