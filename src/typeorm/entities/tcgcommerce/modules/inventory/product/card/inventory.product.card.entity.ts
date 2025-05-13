@@ -56,7 +56,7 @@ export class InventoryProductCard {
     inventoryProductCardOverridePrice: number;
 
     @Column('jsonb')
-    inventoryProductCardMetadata: string
+    inventoryProductCardMetadata: string //(TCG Player SKU, TCG Player Clean Name);
 
     @CreateDateColumn()
     inventoryProductCardCreateDate: Date;

@@ -14,6 +14,9 @@ export class TCGdbMTGCondition {
     @Column()
     tcgdbMTGConditionAbbreviation: string;
 
+    @Column({type: 'decimal'})
+    tcgdbMTGConditionPriceFactor: number;
+
     @Column()
     tcgdbMTGConditionDisplayOrder: number;
 

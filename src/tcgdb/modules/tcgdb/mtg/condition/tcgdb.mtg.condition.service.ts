@@ -28,6 +28,7 @@ export class TCGdbMTGConditionService {
                 tcgdbMTGConditionTCGPlayerId: tcgdbMTGCondition.tcgdbMTGConditionTCGPlayerId,
                 tcgdbMTGConditionName: tcgdbMTGCondition.tcgdbMTGConditionName,
                 tcgdbMTGConditionAbbreviation: tcgdbMTGCondition.tcgdbMTGConditionAbbreviation,
+                tcgdbMTGConditionPriceFactor: tcgdbMTGCondition.tcgdbMTGConditionPriceFactor,
                 tcgdbMTGConditionDisplayOrder: tcgdbMTGCondition.tcgdbMTGConditionDisplayOrder,
                 tcgdbMTGConditionCreateDate: tcgdbMTGCondition.tcgdbMTGConditionCreateDate,
                 tcgdbMTGConditionUpdateDate: tcgdbMTGCondition.tcgdbMTGConditionUpdateDate,
@@ -60,13 +61,33 @@ export class TCGdbMTGConditionService {
 
             //CHECK TO SEE IF THE SET EXISTS;
             let tcgdbMTGCondition = await this.getTCGdbMTGConditionByTCGPlayerId(tcgPlayerMTGCondition.tcgPlayerMTGConditionId);
+            let tcgdbMTGConditionPriceFactor = 1;
 
+            switch(tcgPlayerMTGCondition.tcgPlayerMTGConditionAbbreviation) {
+                case 'NM':
+                    tcgdbMTGConditionPriceFactor = 1;
+                    break;
+                case 'LP':
+                    tcgdbMTGConditionPriceFactor = 0.9;
+                    break;
+                case 'MP':
+                    tcgdbMTGConditionPriceFactor = 0.8;
+                    break;
+                case 'HP':
+                    tcgdbMTGConditionPriceFactor = 0.6;
+                    break;
+                case 'DM':
+                    tcgdbMTGConditionPriceFactor = 0.5;
+                    break;
+
+            }
             //SET DOESN'T EXIST - CREATE IT;
             if(tcgdbMTGCondition == null) {
                 const newTCGdgMTGCondition = this.tcgdbMTGConditionRepository.create({
                     tcgdbMTGConditionTCGPlayerId: tcgPlayerMTGCondition.tcgPlayerMTGConditionId,
                     tcgdbMTGConditionName: tcgPlayerMTGCondition.tcgPlayerMTGConditionName,
                     tcgdbMTGConditionAbbreviation: tcgPlayerMTGCondition.tcgPlayerMTGConditionAbbreviation,
+                    tcgdbMTGConditionPriceFactor: tcgdbMTGConditionPriceFactor,
                     tcgdbMTGConditionDisplayOrder: tcgPlayerMTGCondition.tcgPlayerMTGConditionDisplayOrder,
                 });
 

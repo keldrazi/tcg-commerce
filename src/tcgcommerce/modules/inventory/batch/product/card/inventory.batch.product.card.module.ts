@@ -9,6 +9,7 @@ import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.se
 import { ProductCardConditionModule } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.module';
 import { ProductCardLanguageModule } from 'src/tcgcommerce/modules/product/card/language/product.card.language.module';
 import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.module';
+import { TCGdbMTGPriceCurrentModule } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/
         ProductCardConditionModule,
         ProductCardLanguageModule,
         ProductCardPrintingModule,
+        TCGdbMTGPriceCurrentModule,
     ],
     controllers: [InventoryBatchProductCardController],
     providers: [InventoryBatchProductCardService],

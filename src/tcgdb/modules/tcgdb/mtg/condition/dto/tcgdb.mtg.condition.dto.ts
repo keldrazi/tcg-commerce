@@ -4,6 +4,7 @@ export class TCGdbMTGConditionDTO {
     tcgdbMTGConditionTCGPlayerId: number;
     tcgdbMTGConditionName: string;
     tcgdbMTGConditionAbbreviation: string;
+    tcgdbMTGConditionPriceFactor: number;
     tcgdbMTGConditionDisplayOrder: number;
     tcgdbMTGConditionCreateDate: Date;
     tcgdbMTGConditionUpdateDate: Date;

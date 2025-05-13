@@ -33,8 +33,6 @@ export class CreateInventoryBatchProductCardDTO {
     productCardPrintingName: string;
     productCardConditionAbbreviation: string;
     productCardLanguageAbbreviation: string;
-    inventoryProductCardSKU: string;
-    inventoryProductCardBarcode: string;
     inventoryProductCardQty: number;
     inventoryProductCardMaxQty: number;
     inventoryProductCardReserveQty: number;

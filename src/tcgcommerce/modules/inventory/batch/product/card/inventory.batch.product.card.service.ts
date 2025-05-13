@@ -14,6 +14,8 @@ import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card
 @Injectable()
 export class InventoryBatchProductCardService {
 
+    
+
     constructor(
         @InjectRepository(InventoryProductCard) private inventoryProductCardRepository: Repository<InventoryProductCard>,
         private productCardItemService: ProductCardItemService,
@@ -28,14 +30,8 @@ export class InventoryBatchProductCardService {
 
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
-    async createBatchInventoryProductCards(productLineCode: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
-        productLineCode = productLineCode.toUpperCase();
-        let productLineId = await this.getProductLineIdByCode(productLineCode);
-         //TO DO: CREATE AN ERROR TO RETURN;
-        if (productLineId == null) {
-            return null;
-        }
-
+    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+        
         //GET THE PRODUCT SETS;
         let productSets = await this.getProductSetsByProductLineId(productLineId);
          //TO DO: CREATE AN ERROR TO RETURN;
@@ -66,8 +62,44 @@ export class InventoryBatchProductCardService {
             //LOOP OVER THE PRODUCT CARD ITEMS AND CREATE THE INVENTORY PRODUCT CARDS;
             for (let j = 0; j < productCardItems.length; j++) {
                 let productCardItem = productCardItems[j];
-                let productCardItemSKUs = productCardItem.productCardItemSKUs;
                 
+                //LOOP OVER EACH PRODUCT CARD PRINTING;
+                for(let k = 0; k < productCardPrintings.length; k++) {
+                    let productCardPrinting = productCardPrintings[k];
+
+                    //LOOP OVER EACH PRODUCT CARD CONDITION;
+                    for(let l = 0; l < productCardConditions.length; l++) {
+                        let productCardCondition = productCardConditions[l];
+                        let tcgPlayerCleanName = productCardItem.productCardItemCleanName;
+                        let tcgPlayerSKU = await this.getProductCardItemSKUByIds(productCardItem.productCardItemSKUs, productCardLanguageId, productCardPrinting.productCardPrintingId, productCardCondition.productCardConditionId);
+                        
+                        
+                        /*
+                        //CREATE THE INVENTORY PRODUCT CARD;
+                        let inventoryProductCard = new InventoryBatchProductCardDTO();
+                        inventoryProductCard.productVendorId = productVendorId;
+                        inventoryProductCard.productLineId = productLineId;
+                        inventoryProductCard.commerceAccountId = commerceAccountId;
+                        inventoryProductCard.commerceLocationId = commerceLocationId;
+                        inventoryProductCard.productCardItemId = productCardItem.productCardItemId;
+                        inventoryProductCard.productSetAbbreviation = productSet.productSetAbbreviation;
+                        inventoryProductCard.productCardPrintingName = productCardPrinting.productCardPrintingName;
+                        inventoryProductCard.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+                        inventoryProductCard.productCardLanguageAbbreviation = productCardLanguageAbbreviation;
+
+                        //SET THE INVENTORY PRODUCT CARD DEFAULT VALUES;
+                        inventoryProductCard.inventoryProductCardQty = 0;
+                        inventoryProductCard.inventoryProductCardMaxQty = 0;
+                        inventoryProductCard.inventoryProductCardReserveQty = 0;
+                        inventoryProductCard.inventoryProductCardPrice = 0.00;
+                        inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
+                        inventoryProductCard.inventoryProductCardOverridePrice = 0.00;
+
+                        */
+                    }
+                }
+
+                //productCardItemCleanName
             }
         }
     }
@@ -124,12 +156,16 @@ export class InventoryBatchProductCardService {
         return productCardPrintings;
     }
 
-    async getProductCardItemSKUsByProductCardLanguageId(productCardItemSKUs: string, productCardLanguageId: string) {
+    async getProductCardItemSKUByIds(productCardItemSKUs: string, productCardLanguageId: string, productCardPrintingId: string, productCardConditionId: string) {
         
         let productCardItemSKUsJson = JSON.parse(productCardItemSKUs);
-        productCardItemSKUs = productCardItemSKUsJson.filter(item => item.languageId === productCardLanguageId);
+        let productCardItemSKU = productCardItemSKUsJson.filter(item => 
+            item.languageId === productCardLanguageId &&
+            item.printingId === productCardPrintingId &&
+            item.conditionId === productCardConditionId
+        );
 
-        return productCardItemSKUs;
+        return productCardItemSKU;
     }
 
  

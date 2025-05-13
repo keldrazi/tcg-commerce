@@ -33,6 +33,7 @@ export class ProductCardConditionService {
         productCardConditionDTO.productLineId = productCardCondition.productLineId;
         productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
         productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+        productCardConditionDTO.productCardConditionPriceFactor = productCardCondition.productCardConditionPriceFactor;
         productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
         productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
         productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
@@ -63,6 +64,7 @@ export class ProductCardConditionService {
             productCardConditionDTO.productLineId = productCardCondition.productLineId;
             productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
             productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+            productCardConditionDTO.productCardConditionPriceFactor = productCardCondition.productCardConditionPriceFactor;
             productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
             productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
             productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
@@ -110,6 +112,7 @@ export class ProductCardConditionService {
             productCardConditionDTO.productLineId = productCardCondition.productLineId;
             productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
             productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+            productCardConditionDTO.productCardConditionPriceFactor = productCardCondition.productCardConditionPriceFactor;
             productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
             productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
             productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
@@ -146,6 +149,7 @@ export class ProductCardConditionService {
             productCardConditionDTO.productLineId = productCardCondition.productLineId;
             productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
             productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+            productCardConditionDTO.productCardConditionPriceFactor = productCardCondition.productCardConditionPriceFactor;
             productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
             productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
             productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
@@ -175,6 +179,7 @@ export class ProductCardConditionService {
         productCardConditionDTO.productLineId = productCardCondition.productLineId;
         productCardConditionDTO.productCardConditionName = productCardCondition.productCardConditionName;
         productCardConditionDTO.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+        productCardConditionDTO.productCardConditionPriceFactor = productCardCondition.productCardConditionPriceFactor;
         productCardConditionDTO.productCardConditionDisplayOrder = productCardCondition.productCardConditionDisplayOrder;
         productCardConditionDTO.productCardConditionIsActive = productCardCondition.productCardConditionIsActive;
         productCardConditionDTO.productCardConditionCreateDate = productCardCondition.productCardConditionCreateDate;
@@ -218,6 +223,7 @@ export class ProductCardConditionService {
 
         existingProductCardCondition.productCardConditionName = updateProductCardConditionDTO.productCardConditionName;
         existingProductCardCondition.productCardConditionAbbreviation = updateProductCardConditionDTO.productCardConditionAbbreviation;
+        existingProductCardCondition.productCardConditionPriceFactor = updateProductCardConditionDTO.productCardConditionPriceFactor;
         existingProductCardCondition.productCardConditionDisplayOrder = updateProductCardConditionDTO.productCardConditionDisplayOrder;
         existingProductCardCondition.productCardConditionIsActive = updateProductCardConditionDTO.productCardConditionIsActive;
         existingProductCardCondition.productCardConditionUpdateDate = new Date();
@@ -268,6 +274,7 @@ export class ProductCardConditionService {
             createProductCardConditionDTO.productCardConditionTCGPlayerId = tcgdbMTGProductCardCondition.tcgdbMTGConditionTCGPlayerId;
             createProductCardConditionDTO.productCardConditionName = tcgdbMTGProductCardCondition.tcgdbMTGConditionName;
             createProductCardConditionDTO.productCardConditionAbbreviation = tcgdbMTGProductCardCondition.tcgdbMTGConditionAbbreviation;
+            createProductCardConditionDTO.productCardConditionPriceFactor = tcgdbMTGProductCardCondition.tcgdbMTGConditionPriceFactor;
             createProductCardConditionDTO.productCardConditionDisplayOrder = tcgdbMTGProductCardCondition.tcgdbMTGConditionDisplayOrder;
             createProductCardConditionDTO.productCardConditionIsActive = true;
             

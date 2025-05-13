@@ -6,6 +6,7 @@ export class ProductCardConditionDTO {
     productLineId: string;
     productCardConditionName: string;
     productCardConditionAbbreviation: string;
+    productCardConditionPriceFactor: number;
     productCardConditionDisplayOrder: number;
     productCardConditionIsActive: boolean;
     productCardConditionCreateDate: Date;
@@ -21,6 +22,8 @@ export class CreateProductCardConditionDTO {
     productCardConditionName: string;
     @IsString()
     productCardConditionAbbreviation: string;
+    @IsNumber()
+    productCardConditionPriceFactor: number;
     @IsNumber()
     productCardConditionDisplayOrder: number;
     @IsBoolean()
@@ -38,6 +41,8 @@ export class UpdateProductCardConditionDTO {
     productCardConditionName: string;
     @IsString()
     productCardConditionAbbreviation: string;
+    @IsNumber()
+    productCardConditionPriceFactor: number;
     @IsNumber()
     productCardConditionDisplayOrder: number;
     @IsBoolean()
