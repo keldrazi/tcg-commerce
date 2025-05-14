@@ -9,22 +9,13 @@ export class PricingProductCardRuleSet {
     commerceAccountId: string;
 
     @Column()
-    productLineId: string;
+    pricingProductCardTypeId: string;
 
-    @Column()
-    pricingProductCardTypeId: string; //MTG
-    
     @Column()
     pricingProductCardRuleTypeId: string; //Base Prcing
 
     @Column()
     pricingProductCardRuleSetName: string;
-
-    @Column()
-    pricingProductCardRuleSetPriceMinimumEnabled: boolean;
-
-    @Column({type: 'decimal', nullable: true})
-    pricingProductCardRuleSetPriceMinimum: number;
 
     @Column('jsonb')
     pricingProductCardRuleSetMetadata: string;

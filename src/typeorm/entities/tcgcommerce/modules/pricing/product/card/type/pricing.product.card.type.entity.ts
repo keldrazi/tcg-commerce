@@ -4,15 +4,18 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class PricingProductCardType {
     @PrimaryGeneratedColumn('uuid')
     pricingProductCardTypeId: string;
+
+    @Column()
+    productVendorId: string;
+
+    @Column()
+    productLineId: string;
    
     @Column()
     pricingProductCardTypeName: string;
 
     @Column()
     pricingProductCardTypeDescription: string;
-
-    @Column('jsonb')
-    pricingProductCardTypeMetadata: string;
 
     @Column({type: 'boolean', default: false})
     pricingProductCardTypeIsActive: boolean;

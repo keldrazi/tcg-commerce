@@ -26,12 +26,9 @@ export class PricingProductCardRuleSetService {
         let pricingProductCardRuleSetDTO = new PricingProductCardRuleSetDTO();
         pricingProductCardRuleSetDTO.pricingProductCardRuleSetId = pricingProductCardRuleSet.pricingProductCardRuleSetId;
         pricingProductCardRuleSetDTO.commerceAccountId = pricingProductCardRuleSet.commerceAccountId;
-        pricingProductCardRuleSetDTO.productLineId = pricingProductCardRuleSet.productLineId;
         pricingProductCardRuleSetDTO.pricingProductCardTypeId = pricingProductCardRuleSet.pricingProductCardTypeId;
         pricingProductCardRuleSetDTO.pricingProductCardRuleTypeId = pricingProductCardRuleSet.pricingProductCardRuleTypeId;
         pricingProductCardRuleSetDTO.pricingProductCardRuleSetName = pricingProductCardRuleSet.pricingProductCardRuleSetName;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimumEnabled = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimumEnabled;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimum = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimum;
         pricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata = pricingProductCardRuleSet.pricingProductCardRuleSetMetadata;
         pricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive = pricingProductCardRuleSet.pricingProductCardRuleSetIsActive;
         pricingProductCardRuleSetDTO.pricingProductCardRuleSetCreateDate = pricingProductCardRuleSet.pricingProductCardRuleSetCreateDate;
@@ -41,11 +38,12 @@ export class PricingProductCardRuleSetService {
 
     }
 
-    async getPricingProductCardRuleSets(commerceAccountId: string, productLineId: string) {
+    async getPricingProductCardRuleSets(commerceAccountId: string, pricingProductCardTypeId: string) {
         let pricingProductCardRuleSets = await this.pricingProductCardRuleSetRepository.find({
             where: {
                 commerceAccountId: commerceAccountId,
-                productLineId: productLineId
+                pricingProductCardTypeId: pricingProductCardTypeId
+                
             }
         });
         
@@ -61,12 +59,9 @@ export class PricingProductCardRuleSetService {
             let pricingProductCardRuleSetDTO = new PricingProductCardRuleSetDTO();
             pricingProductCardRuleSetDTO.pricingProductCardRuleSetId = pricingProductCardRuleSet.pricingProductCardRuleSetId;
             pricingProductCardRuleSetDTO.commerceAccountId = pricingProductCardRuleSet.commerceAccountId;
-            pricingProductCardRuleSetDTO.productLineId = pricingProductCardRuleSet.productLineId;
             pricingProductCardRuleSetDTO.pricingProductCardTypeId = pricingProductCardRuleSet.pricingProductCardTypeId;
             pricingProductCardRuleSetDTO.pricingProductCardRuleTypeId = pricingProductCardRuleSet.pricingProductCardRuleTypeId;
             pricingProductCardRuleSetDTO.pricingProductCardRuleSetName = pricingProductCardRuleSet.pricingProductCardRuleSetName;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimumEnabled = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimumEnabled;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimum = pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimum;
             pricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata = pricingProductCardRuleSet.pricingProductCardRuleSetMetadata;
             pricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive = pricingProductCardRuleSet.pricingProductCardRuleSetIsActive;
             pricingProductCardRuleSetDTO.pricingProductCardRuleSetCreateDate = pricingProductCardRuleSet.pricingProductCardRuleSetCreateDate;
@@ -105,8 +100,6 @@ export class PricingProductCardRuleSetService {
         pricingProductCardRuleSet.pricingProductCardTypeId = updatePricingProductCardRuleSetDTO.pricingProductCardTypeId;
         pricingProductCardRuleSet.pricingProductCardRuleTypeId = updatePricingProductCardRuleSetDTO.pricingProductCardRuleTypeId;
         pricingProductCardRuleSet.pricingProductCardRuleSetName = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetName;
-        pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimumEnabled = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimumEnabled;
-        pricingProductCardRuleSet.pricingProductCardRuleSetPriceMinimum = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetPriceMinimum;
         pricingProductCardRuleSet.pricingProductCardRuleSetMetadata = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata;
         pricingProductCardRuleSet.pricingProductCardRuleSetIsActive = updatePricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive;
         pricingProductCardRuleSet.pricingProductCardRuleSetUpdateDate = new Date();
