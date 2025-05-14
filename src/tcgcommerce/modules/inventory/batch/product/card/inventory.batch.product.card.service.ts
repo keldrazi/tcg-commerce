@@ -9,6 +9,7 @@ import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.s
 import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
 import { ProductCardLanguageService } from 'src/tcgcommerce/modules/product/card/language/product.card.language.service';
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
+import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
 
 
 @Injectable()
@@ -24,6 +25,7 @@ export class InventoryBatchProductCardService {
         private productCardConditionService: ProductCardConditionService,
         private productCardLanguageService: ProductCardLanguageService,
         private productCardPrintingService: ProductCardPrintingService,
+        private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
     ) { }
 
     
@@ -62,10 +64,13 @@ export class InventoryBatchProductCardService {
             //LOOP OVER THE PRODUCT CARD ITEMS AND CREATE THE INVENTORY PRODUCT CARDS;
             for (let j = 0; j < productCardItems.length; j++) {
                 let productCardItem = productCardItems[j];
-                
+                //GET THE CURRENT TCGDB PRICES;
+                let productCardItemPrice = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentByCardId(productCardItem.productCardItemTCGdbId);
+
                 //LOOP OVER EACH PRODUCT CARD PRINTING;
                 for(let k = 0; k < productCardPrintings.length; k++) {
                     let productCardPrinting = productCardPrintings[k];
+
 
                     //LOOP OVER EACH PRODUCT CARD CONDITION;
                     for(let l = 0; l < productCardConditions.length; l++) {
@@ -73,7 +78,7 @@ export class InventoryBatchProductCardService {
                         let tcgPlayerCleanName = productCardItem.productCardItemCleanName;
                         let tcgPlayerSKU = await this.getProductCardItemSKUByIds(productCardItem.productCardItemSKUs, productCardLanguageId, productCardPrinting.productCardPrintingId, productCardCondition.productCardConditionId);
                         
-                        
+
                         /*
                         //CREATE THE INVENTORY PRODUCT CARD;
                         let inventoryProductCard = new InventoryBatchProductCardDTO();

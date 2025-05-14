@@ -12,10 +12,10 @@ export class PricingProductCardRuleSet {
     productLineId: string;
 
     @Column()
-    pricingProductCardTypeId: string; //TCG Player Low;
+    pricingProductCardTypeId: string; //MTG
     
     @Column()
-    pricingProductCardRuleTypeId: string; //Baseline;
+    pricingProductCardRuleTypeId: string; //Base Prcing
 
     @Column()
     pricingProductCardRuleSetName: string;
