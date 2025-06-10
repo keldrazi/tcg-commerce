@@ -1,0 +1,19 @@
+
+{
+    "metadata":{
+        "fields": [
+            {
+                "id": "base_price_level",
+                "value": "tcgplayer_low"
+            },
+            {
+                "id": "minimum_price_enabled",
+                "value": true
+            },
+            {
+                "id": "minimum_price",
+                "value": 0.49
+            }
+        ]
+    }
+}

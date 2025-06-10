@@ -1,0 +1,88 @@
+{
+    "metadata": {
+        "fields": [
+            {
+                "id": "base_price_level",
+                "type": "select",
+                "label": "Base Price Level",
+                "information": "Select the base price level for cards.",
+                "options": [
+                    {
+                        "value": "tcgplayer_low",
+                        "label": "TCG Player Low"
+                    },
+                    {
+                        "value": "tcgplayer_market",
+                        "label": "TCG Player Market"
+                    }
+                ],
+                "default": "tcgplayer_low",
+                "validation": [
+                    {
+                        "type": "required",
+                        "message": "Base Price Level is required."
+                    }
+                ],
+                "enabled": true
+            },
+            {
+                "id": "rounding_price_enabled",
+                "type": "radio",
+                "label": "Rounding Price Enabled",
+                "information": "Enable or disable the rounding price setting for cards.",
+                "options": [
+                    {
+                        "value": true,
+                        "label": "Enabled"
+                    },
+                    {
+                        "value": false,
+                        "label": "Disabled"
+                    }
+                ],
+                "default": false,
+                "enabled": true
+            },
+            {
+                "id": "minimum_price_enabled",
+                "type": "radio",
+                "label": "Minimum Price Enabled",
+                "information": "Enable or disable the minimum price setting for cards.",
+                "options": [
+                    {
+                        "value": true,
+                        "label": "Enabled"
+                    },
+                    {
+                        "value": false,
+                        "label": "Disabled"
+                    }
+                ],
+                "default": false,
+                "enabled": true,
+                "enables": [
+                    "minimum_price"
+                ]
+            },
+            {
+                "id": "minimum_price",
+                "type": "textbox",
+                "label": "Minimum Price",
+                "sub_label": "$",
+                "information": "Set the minimum price for cards when minimum price is enabled.",
+                "default": 0.49,
+                "validation": [
+                    {
+                        "type": "required",
+                        "message": "Minimum Price is required."
+                    },
+                    {
+                        "type": "number",
+                        "message": "Minimum Price must be a number."
+                    }
+                ],
+                "enabled": false
+            }
+        ]   
+    }
+}
