@@ -2,21 +2,21 @@
     "metadata": {
         "fields": [
             {
-                "id": "base_price_level",
+                "id": "base-price-level",
                 "type": "select",
                 "label": "Base Price Level",
                 "information": "Select the base price level for cards.",
                 "options": [
                     {
-                        "value": "tcgplayer_low",
+                        "value": "tcgplayer-low",
                         "label": "TCG Player Low"
                     },
                     {
-                        "value": "tcgplayer_market",
+                        "value": "tcgplayer-market",
                         "label": "TCG Player Market"
                     }
                 ],
-                "default": "tcgplayer_low",
+                "default": "tcgplayer-low",
                 "validation": [
                     {
                         "type": "required",
@@ -26,25 +26,7 @@
                 "enabled": true
             },
             {
-                "id": "rounding_price_enabled",
-                "type": "radio",
-                "label": "Rounding Price Enabled",
-                "information": "Enable or disable the rounding price setting for cards.",
-                "options": [
-                    {
-                        "value": true,
-                        "label": "Enabled"
-                    },
-                    {
-                        "value": false,
-                        "label": "Disabled"
-                    }
-                ],
-                "default": false,
-                "enabled": true
-            },
-            {
-                "id": "minimum_price_enabled",
+                "id": "minimum-price-enabled",
                 "type": "radio",
                 "label": "Minimum Price Enabled",
                 "information": "Enable or disable the minimum price setting for cards.",
@@ -61,14 +43,14 @@
                 "default": false,
                 "enabled": true,
                 "enables": [
-                    "minimum_price"
+                    "minimum-price"
                 ]
             },
             {
-                "id": "minimum_price",
+                "id": "minimum-price",
                 "type": "textbox",
                 "label": "Minimum Price",
-                "sub_label": "$",
+                "sub-label": "$",
                 "information": "Set the minimum price for cards when minimum price is enabled.",
                 "default": 0.49,
                 "validation": [
@@ -82,6 +64,24 @@
                     }
                 ],
                 "enabled": false
+            },
+            {
+                "id": "rounding-price-enabled",
+                "type": "radio",
+                "label": "Rounding Price Enabled",
+                "information": "Enable or disable the rounding price setting for cards.",
+                "options": [
+                    {
+                        "value": true,
+                        "label": "Enabled"
+                    },
+                    {
+                        "value": false,
+                        "label": "Disabled"
+                    }
+                ],
+                "default": false,
+                "enabled": true
             }
         ]   
     }

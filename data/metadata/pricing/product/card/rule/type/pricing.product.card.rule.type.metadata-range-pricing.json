@@ -2,17 +2,17 @@
     "metadata": {
         "fields": [
             {
-                "id": "pricing_range_rule",
-                "type": "field_set",
+                "id": "pricing-range-rule",
+                "type": "field-set",
                 "label": "Pricing Range Rule",
                 "information": "Pricing range rule determines how card prices are set based on minimum and maximum values.",
                 "enabled": true,
-                "fields": [
+                "field-set": [
                     {
-                        "id": "pricing_range_minimum_price",
+                        "id": "pricing-range-minimum-price",
                         "type": "textbox",
                         "label": "Range Minimum Price",
-                        "sub_label": "$",
+                        "sub-label": "$",
                         "information": "Enter the minimum price for cards in the range.",
                         "default": 0.00,
                         "validation": [
@@ -25,22 +25,22 @@
                                 "message": "Rage minimum price must be a number."
                             },
                             {
-                                "type": "greater_than",
+                                "type": "greater-than",
                                 "value": 0,
                                 "message": "Rage minimum price must be greater than zero."
                             },
                             {
-                                "type": "less_than",
-                                "id": "pricing_range_maximum_price",
+                                "type": "less-than",
+                                "id": "pricing-range-maximum-price",
                                 "message": "Rage minimum price must be less than the range maximum price."
                             }
                         ]
                     },
                     {
-                        "id": "pricing_range_maximum_price",
+                        "id": "pricing-range-maximum-price",
                         "type": "textbox",
                         "label": "Range Maximum Price",
-                        "sub_label": "$",
+                        "sub-label": "$",
                         "information": "Enter the maximum price for cards in the range.",
                         "default": 0.00,
                         "validation": [
@@ -53,51 +53,53 @@
                                 "message": "Range maximum price must be a number."
                             },
                             {
-                                "type": "greater_than",
+                                "type": "greater-than",
                                 "value": 0,
                                 "message": "Range maximum price must be greater than zero."
                             },
                             {
-                                "type": "greater_than",
-                                "id": "pricing_range_mininum_price",
+                                "type": "greater-than",
+                                "id": "pricing-range-mininum-price",
                                 "message": "Range maximum price must be greater than the range minimum price."
                             }
 
                         ]
                     },
                     {
-                        "id": "pricing_range_type",
+                        "id": "pricing-range-type",
                         "type": "select",
                         "label": "Range Type",
                         "information": "Select the price range type.",
                         "options": [
                             {
-                                "value": "pricing_range_set_price",
+                                "value": "pricing-range-set",
                                 "label": "Set Price",
                                 "enables": [
-                                    "pricing_range_price"
+                                    "pricing-range-set-price"
                                 ]
                             },
                             {
-                                "value": "price_range_add_additional_amount",
-                                "label": "Add Additional Amount",
-                                "enables": "pricing_range_additional_amount"
+                                "value": "pricing-range-additional",
+                                "label": "Add Additional Price",
+                                "enables": [
+                                    "pricing-range-additional-price"
+                                ]
                             }
                         ],
-                        "default": "tcgplayer_low",
+                        "default": "pricing-range-set-price",
                         "validation": [
                             {
                                 "type": "required",
-                                "message": "Base Price Level is required."
+                                "message": "Range type is required."
                             }
                         ],
                         "enabled": true
                     },
                     {
-                        "id": "pricing_range_price",
+                        "id": "pricing-range-set-price",
                         "type": "textbox",
                         "label": "Range Price",
-                        "sub_label": "$",
+                        "sub-label": "$",
                         "information": "Enter the price for cards in the price range.",
                         "default": 0.00,
                         "validation": [
@@ -110,9 +112,33 @@
                                 "message": "Range price must be a number."
                             },
                             {
-                                "type": "greater_than",
+                                "type": "greater-than",
                                 "value": 0,
                                 "message": "Range price must be greater than zero."
+                            }
+                        ],
+                        "enabled": false
+                    },
+                    {
+                        "id": "pricing-range-additional-price",
+                        "type": "textbox",
+                        "label": "Additional Price",
+                        "sub-label": "$",
+                        "information": "Enter the additional amount to add to the price range.",
+                        "default": 0.00,
+                        "validation": [
+                            {
+                                "type": "required",
+                                "message": "Additional price is required."
+                            },
+                            {
+                                "type": "number",
+                                "message": "Additional price must be a number."
+                            },
+                            {
+                                "type": "greater-than",
+                                "value": 0,
+                                "message": "Additional price must be greater than zero."
                             }
                         ],
                         "enabled": false
