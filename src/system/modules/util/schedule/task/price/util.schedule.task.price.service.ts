@@ -3,6 +3,9 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { TCGPlayerMTGPriceService } from 'src/tcgdb/modules/tcgplayer/mtg/price/tcgplayer.mtg.price.service'
 import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
 import { TCGdbMTGPriceChangeDailyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.service';
+import { TCGdbMTGPriceChangeWeeklyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/weekly/tcgdb.mtg.price.change.weekly.service';
+import { TCGdbMTGPriceChangeMonthlyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/monthly/tcgdb.mtg.price.change.monthly.service';
+import { TCGdbMTGPriceChangeYearlyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/yearly/tcgdb.mtg.price.change.yearly.service';
 
 
 
@@ -16,12 +19,12 @@ export class UtilScheduleTaskPriceService {
     private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService;
     @Inject(TCGdbMTGPriceChangeDailyService)
     private tcgdbMTGPriceChangeDailyService: TCGdbMTGPriceChangeDailyService;
-
-    /*
-    public EVERY_DAY_AT_1AM = '0 01 * * *';
-    public EVERY_DAY_AT_130AM = '30 01 * * *';
-    public EVERY_DAY_AT_2AM = '0 02 * * *';
-    */
+    @Inject(TCGdbMTGPriceChangeWeeklyService)
+    private tcgdbMTGPriceChangeWeeklyService: TCGdbMTGPriceChangeWeeklyService;
+    @Inject(TCGdbMTGPriceChangeMonthlyService)
+    private tcgdbMTGPriceChangeMonthlyService: TCGdbMTGPriceChangeMonthlyService;   
+    @Inject(TCGdbMTGPriceChangeYearlyService)
+    private tcgdbMTGPriceChangeYearlyService: TCGdbMTGPriceChangeYearlyService;
     
     @Cron(CronExpression.EVERY_DAY_AT_1AM)
     async updateTCGPlayerMTGPrices() {
@@ -33,6 +36,15 @@ export class UtilScheduleTaskPriceService {
 
         const tcgdbMTGPriceChangeDailyRecordCount = await this.tcgdbMTGPriceChangeDailyService.createTCGdbMTGPriceChangeDailyBySet();
         console.log(`TCGdb MTG Price Change Daily Updated: ${tcgdbMTGPriceChangeDailyRecordCount}`);
+
+        const tcgdbMTGPriceChangeWeeklyRecordCount = await this.tcgdbMTGPriceChangeWeeklyService.createTCGdbMTGPriceChangeWeeklyBySet();
+        console.log(`TCGdb MTG Price Change Weekly Updated: ${tcgdbMTGPriceChangeWeeklyRecordCount}`);
+
+        const tcgdbMTGPriceChangeMonthlyRecordCount = await this.tcgdbMTGPriceChangeMonthlyService.createTCGdbMTGPriceChangeMonthlyBySet();
+        console.log(`TCGdb MTG Price Change Monthly Updated: ${tcgdbMTGPriceChangeMonthlyRecordCount}`);
+        
+        const tcgdbMTGPriceChangeYearlyRecordCount = await this.tcgdbMTGPriceChangeYearlyService.createTCGdbMTGPriceChangeYearlyBySet();
+        console.log(`TCGdb MTG Price Change Yearly Updated: ${tcgdbMTGPriceChangeYearlyRecordCount}`);
     }
     
     
