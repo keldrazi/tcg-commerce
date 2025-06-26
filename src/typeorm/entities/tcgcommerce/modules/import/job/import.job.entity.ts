@@ -9,19 +9,22 @@ export class ImportJob {
     commerceAccountId: string;
 
     @Column()
-    importJobDate: Date;
+    productVendorName: string;
 
     @Column()
-    importJobStatus: string;
+    productLineName: string;
+
+    @Column()
+    importSortTypeName: string;
+
+    @Column()
+    importJobDate: Date;
 
     @Column({unique: true})
     importJobCode: string;
 
     @Column()
-    importJobType: string;
-
-    @Column()
-    importJobSortType: string;
+    importJobStatus: string;    
 
     @Column()
     importJobInputFileName: string;
@@ -29,11 +32,11 @@ export class ImportJob {
     @Column()
     importJobInputFileOriginalName: string;
 
-    @Column('jsonb')
-    importJobInputData: string;
-
     @Column({nullable: true})
     importJobOutputFileName: string;
+
+    @Column('jsonb') //CARD DATA;
+    importJobSortData: string;
 
     @Column('jsonb') //LOCATION | PROCESSED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS
     importJobMetadata: string;

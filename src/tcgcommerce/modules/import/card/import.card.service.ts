@@ -31,9 +31,8 @@ export class ImportCardService {
             importCardDTO.importCardId = importCard.importCardId;
             importCardDTO.importJobId = importCard.importJobId;
             importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
-            importCardDTO.importCardStatus = importCard.importCardStatus;
-            importCardDTO.importCardName = importCard.importCardName;
             importCardDTO.importCardSetName = importCard.importCardSetName;
+            importCardDTO.importCardName = importCard.importCardName;
             importCardDTO.importCardCondition = importCard.importCardCondition;
             importCardDTO.importCardPrinting = importCard.importCardPrinting;
             importCardDTO.importCardQty = importCard.importCardQty;
@@ -63,9 +62,8 @@ export class ImportCardService {
         importCardDTO.importCardId = importCard.importCardId;
         importCardDTO.importJobId = importCard.importJobId;
         importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
-        importCardDTO.importCardStatus = importCard.importCardStatus;
-        importCardDTO.importCardName = importCard.importCardName;
         importCardDTO.importCardSetName = importCard.importCardSetName;
+        importCardDTO.importCardName = importCard.importCardName;
         importCardDTO.importCardCondition = importCard.importCardCondition;
         importCardDTO.importCardPrinting = importCard.importCardPrinting;
         importCardDTO.importCardQty = importCard.importCardQty;
@@ -77,7 +75,7 @@ export class ImportCardService {
             
     }
 
-    async getImportCardByImportCardIdAndTCGdbId(importJobId: string, tcgdbId: string) {
+    async getImportCardByImportJobIdAndTCGdbId(importJobId: string, tcgdbId: string) {
         let importCard = await this.importCardRepository.findOne({
             where: {
                 importJobId: importJobId,
@@ -94,9 +92,8 @@ export class ImportCardService {
         importCardDTO.importCardId = importCard.importCardId;
         importCardDTO.importJobId = importCard.importJobId;
         importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
-        importCardDTO.importCardStatus = importCard.importCardStatus;
-        importCardDTO.importCardName = importCard.importCardName;
         importCardDTO.importCardSetName = importCard.importCardSetName;
+        importCardDTO.importCardName = importCard.importCardName;
         importCardDTO.importCardCondition = importCard.importCardCondition;
         importCardDTO.importCardPrinting = importCard.importCardPrinting;
         importCardDTO.importCardQty = importCard.importCardQty;
@@ -111,7 +108,7 @@ export class ImportCardService {
     async createImportCard(createImportCardDTO: CreateImportCardDTO) {
         
         //CHECK TO SEE IF THE IMPORT JOB EXISTS;
-        let importCard = await this.getImportCardByImportCardIdAndTCGdbId(createImportCardDTO.importJobId, createImportCardDTO.importCardTCGDBId);
+        let importCard = await this.getImportCardByImportJobIdAndTCGdbId(createImportCardDTO.importJobId, createImportCardDTO.importCardTCGDBId);
                 
         //TO DO: RETURN AN ERROR FOR DUPLICATE IMPORT CARD;
         if (importCard != null) {
@@ -125,8 +122,6 @@ export class ImportCardService {
         importCardDTO.importCardId = newImportCard.importCardId;
         importCardDTO.importJobId = newImportCard.importJobId;
         importCardDTO.importCardTCGdbId = newImportCard.importCardTCGdbId;
-        importCardDTO.importCardStatus = newImportCard.importCardStatus;
-        importCardDTO.importCardName = newImportCard.importCardName;
         importCardDTO.importCardSetName = newImportCard.importCardSetName;
         importCardDTO.importCardCondition = newImportCard.importCardCondition;
         importCardDTO.importCardPrinting = newImportCard.importCardPrinting;
@@ -139,7 +134,7 @@ export class ImportCardService {
         
     }
 
-    async updateImportJob(updateImportCardDTO: UpdateImportCardDTO) {
+    async updateImportCard(updateImportCardDTO: UpdateImportCardDTO) {
 
         //CHECK TO SEE IF THE IMPORT JOB EXISTS;
         let importCard = await this.importCardRepository.findOne({
@@ -153,11 +148,9 @@ export class ImportCardService {
             return null;
         }
 
-        importCard.importCardStatus = updateImportCardDTO.importCardStatus;
         importCard.importCardName = updateImportCardDTO.importCardName;
         importCard.importCardSetName = updateImportCardDTO.importCardSetName;
         importCard.importCardCondition = updateImportCardDTO.importCardCondition;
-        importCard.importCardStatus = updateImportCardDTO.importCardStatus;
         importCard.importCardQty = updateImportCardDTO.importCardQty;
         importCard.importCardPrice = updateImportCardDTO.importCardPrice;
 

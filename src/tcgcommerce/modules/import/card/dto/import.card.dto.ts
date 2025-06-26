@@ -5,7 +5,6 @@ export class ImportCardDTO {
     importCardId: string;
     importJobId: string;
     importCardTCGdbId: string;
-    importCardStatus: string;
     importCardName: string;
     importCardSetName: string;
     importCardCondition: string;
@@ -21,8 +20,6 @@ export class CreateImportCardDTO {
     importJobId: string;
     @IsString()
     importCardTCGDBId: string;
-    @IsString()
-    importCardStatus: string;
     @IsString()
     importCardName: string;
     @IsString()
@@ -42,13 +39,13 @@ export class UpdateImportCardDTO {
     @IsString()
     importCardId: string;
     @IsString()
-    importCardStatus: string;
+    importCardSetName: string;
     @IsString()
     importCardName: string;
     @IsString()
-    importCardSetName: string;
-    @IsString()
     importCardCondition: string;
+    @IsString()
+    importCardPrinting: string;
     @IsNumber()
     importCardQty: number;  
     @IsDecimal()

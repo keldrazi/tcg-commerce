@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ImportJob } from 'src/typeorm/entities/tcgcommerce/modules/import/job/import.job.entity';
-import { ImportJobDTO } from './dto/import.job.dto';
+import { ImportJobDTO, CreateImportJobDTO, UpdateImportJobDTO } from './dto/import.job.dto';
 import { get } from 'axios';
 
 @Injectable()
@@ -31,15 +31,19 @@ export class ImportJobService {
             let importJobDTO = new ImportJobDTO();
             importJobDTO.importJobId = importJob.importJobId;
             importJobDTO.commerceAccountId = importJob.commerceAccountId;
-            importJobDTO.importJobType = importJob.importJobType;
+            importJobDTO.productVendorName = importJob.productVendorName;
+            importJobDTO.productLineName = importJob.productLineName;
+            importJobDTO.importSortTypeName = importJob.importSortTypeName; //ROCA
             importJobDTO.importJobStatus = importJob.importJobStatus;
             importJobDTO.importJobCode = importJob.importJobCode;
-            importJobDTO.importJobSortType = importJob.importJobSortType;
             importJobDTO.importJobInputFileName = importJob.importJobInputFileName;
             importJobDTO.importJobInputFileOriginalName = importJob.importJobInputFileOriginalName;
             importJobDTO.importJobOutputFileName = importJob.importJobOutputFileName;
+            importJobDTO.importJobSortData = importJob.importJobSortData; //CARD DATA;
             importJobDTO.importJobMetadata = importJob.importJobMetadata;
             importJobDTO.importJobIsPublished = importJob.importJobIsPublished;
+            importJobDTO.importJobCreateDate = importJob.importJobCreateDate;
+            importJobDTO.importJobUpdateDate = importJob.importJobUpdateDate;
             
             importJobDTOs.push(importJobDTO);
         }
@@ -62,15 +66,19 @@ export class ImportJobService {
         let importJobDTO = new ImportJobDTO();
         importJobDTO.importJobId = importJob.importJobId;
         importJobDTO.commerceAccountId = importJob.commerceAccountId;
-        importJobDTO.importJobType = importJob.importJobType;
+        importJobDTO.productVendorName = importJob.productVendorName;
+        importJobDTO.productLineName = importJob.productLineName;
+        importJobDTO.importSortTypeName = importJob.importSortTypeName; //ROCA
         importJobDTO.importJobStatus = importJob.importJobStatus;
         importJobDTO.importJobCode = importJob.importJobCode;
-        importJobDTO.importJobSortType = importJob.importJobSortType;
         importJobDTO.importJobInputFileName = importJob.importJobInputFileName;
         importJobDTO.importJobInputFileOriginalName = importJob.importJobInputFileOriginalName;
         importJobDTO.importJobOutputFileName = importJob.importJobOutputFileName;
+        importJobDTO.importJobSortData = importJob.importJobSortData; //CARD DATA;
         importJobDTO.importJobMetadata = importJob.importJobMetadata;
         importJobDTO.importJobIsPublished = importJob.importJobIsPublished;
+        importJobDTO.importJobCreateDate = importJob.importJobCreateDate;
+        importJobDTO.importJobUpdateDate = importJob.importJobUpdateDate;
 
         return importJobDTO;
             
@@ -91,21 +99,25 @@ export class ImportJobService {
         let importJobDTO = new ImportJobDTO();
         importJobDTO.importJobId = importJob.importJobId;
         importJobDTO.commerceAccountId = importJob.commerceAccountId;
-        importJobDTO.importJobType = importJob.importJobType;
+        importJobDTO.productVendorName = importJob.productVendorName;
+        importJobDTO.productLineName = importJob.productLineName;
+        importJobDTO.importSortTypeName = importJob.importSortTypeName; //ROCA
         importJobDTO.importJobStatus = importJob.importJobStatus;
         importJobDTO.importJobCode = importJob.importJobCode;
-        importJobDTO.importJobSortType = importJob.importJobSortType;
         importJobDTO.importJobInputFileName = importJob.importJobInputFileName;
         importJobDTO.importJobInputFileOriginalName = importJob.importJobInputFileOriginalName;
         importJobDTO.importJobOutputFileName = importJob.importJobOutputFileName;
+        importJobDTO.importJobSortData = importJob.importJobSortData; //CARD DATA;
         importJobDTO.importJobMetadata = importJob.importJobMetadata;
         importJobDTO.importJobIsPublished = importJob.importJobIsPublished;
+        importJobDTO.importJobCreateDate = importJob.importJobCreateDate;
+        importJobDTO.importJobUpdateDate = importJob.importJobUpdateDate;
 
         return importJobDTO;
             
     }
 
-    /*
+    
     async createImportJob(createImportJobDTO: CreateImportJobDTO) {
         
         //CHECK TO SEE IF THE IMPORT JOB EXISTS;
@@ -122,15 +134,16 @@ export class ImportJobService {
         let importJobDTO = new ImportJobDTO();
         importJobDTO.importJobId = newImportJob.importJobId;
         importJobDTO.commerceAccountId = newImportJob.commerceAccountId;
-        importJobDTO.importJobType = newImportJob.importJobType;
+        importJobDTO.productVendorName = newImportJob.productVendorName;
+        importJobDTO.productLineName = newImportJob.productLineName;
+        importJobDTO.importSortTypeName = newImportJob.importSortTypeName; //ROCA
         importJobDTO.importJobStatus = newImportJob.importJobStatus;
         importJobDTO.importJobCode = newImportJob.importJobCode;
-        importJobDTO.importJobSortType = newImportJob.importJobSortType;
         importJobDTO.importJobInputFileName = newImportJob.importJobInputFileName;
         importJobDTO.importJobInputFileOriginalName = newImportJob.importJobInputFileOriginalName;
         importJobDTO.importJobOutputFileName = newImportJob.importJobOutputFileName;
+        importJobDTO.importJobSortData = newImportJob.importJobSortData; //CARD DATA;
         importJobDTO.importJobMetadata = newImportJob.importJobMetadata;
-        importJobDTO.importJobIsPublished = newImportJob.importJobIsPublished;
 
         return importJobDTO;
         
@@ -151,8 +164,6 @@ export class ImportJobService {
         }
 
         importJob.importJobStatus = updateImportJobDTO.importJobStatus;
-        importJob.importJobOutputFileName = updateImportJobDTO.importJobOutputFileName;
-        importJob.importJobMetadata = updateImportJobDTO.importJobMetadata;
 
         importJob = await this.importJobRepository.save(importJob);
 
@@ -160,6 +171,5 @@ export class ImportJobService {
 
         return importJobDTO;
     }
-    */
     
 }

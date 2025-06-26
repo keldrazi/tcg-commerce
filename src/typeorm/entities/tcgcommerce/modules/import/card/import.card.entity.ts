@@ -12,13 +12,10 @@ export class ImportCard {
     importCardTCGdbId: string;
 
     @Column()
-    importCardStatus: string;
-
+    importCardSetName: string;
+    
     @Column()
     importCardName: string;
-
-    @Column()
-    importCardSetName: string;
 
     @Column()
     importCardCondition: string;
