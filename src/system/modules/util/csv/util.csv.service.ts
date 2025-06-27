@@ -23,6 +23,12 @@ export class UtilCSVService {
             });
         });
     }
+
+    async unparseCSV(data: any[]) {
+        const csvString = Papa.unparse(data);
+        return Buffer.from(csvString, 'utf-8');
+    }
+
 }
 
 
