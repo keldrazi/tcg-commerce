@@ -13,6 +13,9 @@ export class ImportCard {
 
     @Column()
     importCardSetName: string;
+
+    @Column()
+    importCardSetAbbreviation: string;
     
     @Column()
     importCardName: string;

@@ -1,17 +1,20 @@
-import { IsDate, IsString } from "class-validator";
+import { IsString } from "class-validator";
 
 export class ImportJobDTO {
     importJobId: string;
     commerceAccountId: string;
+    commerceLocationName: string;
+    commerceUserName: string;
     productVendorName: string;
     productLineName: string;
+    productLineAbbreviation: string;
     importSortTypeName: string; //ROCA, TCGPlayer
     importJobDate: Date;
     importJobCode: string;
     importJobStatus: string;
-    importJobInputFileName: string;
+    importJobInputFileURL: string;
     importJobInputFileOriginalName: string;
-    importJobOutputFileName: string;
+    importJobOutputFileURL: string;
     importJobSortData: string; //CARD DATA;
     importJobMetadata: string;
     importJobIsPublished: boolean;
@@ -24,23 +27,17 @@ export class CreateImportJobDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
+    commerceLocationName: string;
+    @IsString()
+    commerceUserName: string;
+    @IsString()
     productVendorName: string;
     @IsString()
     productLineName: string;
     @IsString()
+    productLineAbbreviation: string;
+    @IsString()
     importSortTypeName: string; //ROCA, TCGPlayer
-    @IsDate()
-    importJobDate: Date;
-    @IsString()
-    importJobCode: string;
-    @IsString()
-    importJobStatus: string;
-    @IsString()
-    importJobInputFileName: string;
-    @IsString()
-    importJobInputFileOriginalName: string;
-    @IsString()
-    importJobSortData: string; //CARD DATA;
     @IsString()
     importJobMetadata: string;  
 }

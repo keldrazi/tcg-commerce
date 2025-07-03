@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { ImportJobService } from './import.job.service';
+import { FileInterceptor } from "@nestjs/platform-express";
+
 
 @Controller('import/job')
 export class ImportJobController {
@@ -8,6 +10,25 @@ export class ImportJobController {
         private importJobService: ImportJobService,
     ) { }
     
+    @Post()
+    @UseInterceptors(FileInterceptor('file'))
+    async createImportJob(
+        @Body() body: any,
+        @UploadedFile(
+        new ParseFilePipe({
+            validators: [
+            new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
+            ],
+        }),
+        )
+        importJobFile: Express.Multer.File,
+        
+    ) {
+
+        let importJobCode = await this.importJobService.createImportJob(importJobFile, body.createImportJobDTO);
+
+        return importJobCode;
+    }
     
     /*
     @Get('/:commerceAccountId')
