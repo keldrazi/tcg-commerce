@@ -30,21 +30,8 @@ export class TCGdbMTGPriceCurrentService {
         for(let i = 0; i < tcgdbMTGPriceCurrents.length; i++) {
             let tcgdbMTGPriceCurrent = tcgdbMTGPriceCurrents[i];
 
-            let tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO = {
-                tcgdbMTGPriceCurrentId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentId,
-                tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
-                tcgdbMTGPriceCurrentTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
-                tcgdbMTGPriceCurrentSetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
-                tcgdbMTGPriceCurrentLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice,
-                tcgdbMTGPriceCurrentMidPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMidPrice,
-                tcgdbMTGPriceCurrentHighPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentHighPrice,
-                tcgdbMTGPriceCurrentMarketPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentMarketPrice,
-                tcgdbMTGPriceCurrentDirectLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentDirectLowPrice,
-                tcgdbMTGPriceCurrentSubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName,
-                tcgdbMTGPriceCurrentCreateDate: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentCreateDate,
-                tcgdbMTGPriceCurrentUpdateDate: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentUpdateDate
-            }
-
+            let tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO = { ...tcgdbMTGPriceCurrent };
+            
             tcgdbMTGPriceCurrentDTOs.push(tcgdbMTGPriceCurrentDTO);
 
         }
@@ -56,6 +43,23 @@ export class TCGdbMTGPriceCurrentService {
         return tcgdbMTGPriceCurrentsDTO;
 
     } 
+    async getTCGdbMTGPricesCurrentByCardIdAndProductCardPrinting(tcgdbMTGCardId: string, tcgdbMTGPriceCurrentSubTypeName: string) {
+        const tcgdbMTGPriceCurrent = await this.tcgdbMTGPriceCurrentRepository.findOne({
+            where: {
+                tcgdbMTGCardId: tcgdbMTGCardId,
+                tcgdbMTGPriceCurrentSubTypeName: tcgdbMTGPriceCurrentSubTypeName,
+            }
+        });
+
+        if(tcgdbMTGPriceCurrent == null) {
+            return null;
+        }
+
+        let tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO = { ...tcgdbMTGPriceCurrent };
+
+        return tcgdbMTGPriceCurrentDTO;
+
+    }
 
     async getTCGdbMTGPricesCurrentBySetAbbreviation(setAbbreviation: string) {
         

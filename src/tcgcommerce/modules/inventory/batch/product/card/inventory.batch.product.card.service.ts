@@ -42,11 +42,12 @@ export class InventoryBatchProductCardService {
         }
 
         let productCardConditions = await this.getProductCardConditionsByProductLineId(productLineId);
-        let productCardLanguageId = await this.getProductCardLanguageIdByAbbreviationAndProductLineId(productCardLanguageAbbreviation, productLineId);
+        
+        let productCardLanguageTCGPlayerId = await this.getProductCardLanguageIdByAbbreviationAndProductLineId(productCardLanguageAbbreviation, productLineId);
         let productCardPrintings = await this.getProductCardPrintingsByProductLineId(productLineId);
 
          //TO DO: CREATE AN ERROR TO RETURN;
-        if (productCardConditions == null || productCardLanguageId == null || productCardPrintings == null) {
+        if (productCardConditions == null || productCardLanguageTCGPlayerId == null || productCardPrintings == null) {
             return null;
         }
 
@@ -64,22 +65,21 @@ export class InventoryBatchProductCardService {
             //LOOP OVER THE PRODUCT CARD ITEMS AND CREATE THE INVENTORY PRODUCT CARDS;
             for (let j = 0; j < productCardItems.length; j++) {
                 let productCardItem = productCardItems[j];
-                //GET THE CURRENT TCGDB PRICES;
-                let productCardItemPrice = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentByCardId(productCardItem.productCardItemTCGdbId);
-
+                
                 //LOOP OVER EACH PRODUCT CARD PRINTING;
                 for(let k = 0; k < productCardPrintings.length; k++) {
                     let productCardPrinting = productCardPrintings[k];
 
+                    //GET THE CURRENT TCGDB PRICE;
+                    //let productCardItemPrice = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentByCardIdAndProductCardPrinting(productCardItem.productCardItemTCGdbId, productCardPrinting.productCardPrintingName);
 
                     //LOOP OVER EACH PRODUCT CARD CONDITION;
                     for(let l = 0; l < productCardConditions.length; l++) {
                         let productCardCondition = productCardConditions[l];
                         let tcgPlayerCleanName = productCardItem.productCardItemCleanName;
-                        let tcgPlayerSKU = await this.getProductCardItemSKUByIds(productCardItem.productCardItemSKUs, productCardLanguageId, productCardPrinting.productCardPrintingId, productCardCondition.productCardConditionId);
-                        
+                        let tcgPlayerSKU = await this.getProductCardItemSKUByIds(productCardItem.productCardItemSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
 
-                        /*
+                        
                         //CREATE THE INVENTORY PRODUCT CARD;
                         let inventoryProductCard = new InventoryBatchProductCardDTO();
                         inventoryProductCard.productVendorId = productVendorId;
@@ -100,11 +100,11 @@ export class InventoryBatchProductCardService {
                         inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
                         inventoryProductCard.inventoryProductCardOverridePrice = 0.00;
 
-                        */
+                        
                     }
                 }
 
-                //productCardItemCleanName
+                
             }
         }
     }
@@ -147,7 +147,7 @@ export class InventoryBatchProductCardService {
             return null;
         }
 
-        let productCardLanguageId = productCardLanguage.productCardLanguageId;
+        let productCardLanguageId = productCardLanguage.productCardLanguageTCGPlayerId;
         
         return productCardLanguageId;
     }
@@ -161,8 +161,8 @@ export class InventoryBatchProductCardService {
         return productCardPrintings;
     }
 
-    async getProductCardItemSKUByIds(productCardItemSKUs: string, productCardLanguageId: string, productCardPrintingId: string, productCardConditionId: string) {
-        
+    async getProductCardItemSKUByIds(productCardItemSKUs: string, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
+
         let productCardItemSKUsJson = JSON.parse(productCardItemSKUs);
         let productCardItemSKU = productCardItemSKUsJson.filter(item => 
             item.languageId === productCardLanguageId &&
