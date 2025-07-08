@@ -69,7 +69,7 @@ export class AwsUtilTextractService {
         const blocks = response["Blocks"];
       
         const blocks_map = {};
-        const table_blocks = [];
+        const table_blocks: any[] = [];
         
         let rows;
         for (let block of blocks) {

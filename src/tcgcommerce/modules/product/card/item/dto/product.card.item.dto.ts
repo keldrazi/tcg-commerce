@@ -2,7 +2,6 @@ import { IsBoolean, IsString } from "class-validator";
 
 export class ProductCardItemDTO {
     productCardItemId: string;
-    commerceAccountId: string;
     productCardItemTCGdbId: string;
     productVendorId: string;
     productLineId: string;

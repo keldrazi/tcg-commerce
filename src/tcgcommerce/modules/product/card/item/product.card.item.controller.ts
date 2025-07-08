@@ -12,9 +12,9 @@ export class ProductCardItemController {
     ) { }
     
     
-    @Get('/create/:productLineName')
-    async createProductCardItemsByProductLineName(@Param('productLineName') productLineName: string) {
-        return await this.productCardItemService.createProductCardItemsByProductLineName(productLineName);
+    @Get('/create/:productVendorId/:productLineId/:productTypeId')
+    async createProductCardItems(@Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string, @Param('productTypeId') productTypeId: string) {
+        return await this.productCardItemService.createProductCardItems(productVendorId, productLineId, productTypeId);
     }
 
     @Get('/set/:productSetId')
