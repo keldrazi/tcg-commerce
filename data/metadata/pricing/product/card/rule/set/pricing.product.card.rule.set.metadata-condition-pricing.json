@@ -1,0 +1,27 @@
+
+{
+    "metadata":{
+        "fields": [
+            {
+                "id": "condition-price-percentage-nm",
+                "value": "100"
+            },
+            {
+                "id": "condition-price-percentage-lp",
+                "value": "90"
+            },
+            {
+                "id": "condition-price-percentage-mp",
+                "value": "80"
+            },
+            {
+                "id": "condition-price-percentage-hp",
+                "value": "60"
+            },
+            {
+                "id": "condition-price-percentage-dm",
+                "value": "50"
+            }
+        ]
+    }
+}

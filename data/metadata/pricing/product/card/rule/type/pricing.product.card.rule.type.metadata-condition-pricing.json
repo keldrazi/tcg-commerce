@@ -1,0 +1,81 @@
+{
+    "metadata": {
+        "fields": [
+            {
+                "id": "condition-price-percentage-nm",
+                "type": "textbox",
+                "label": "NM (Near Mint)",
+                "sub-label": "%",
+                "information": "Set the percentage for NM condition cards.",
+                "default": "100",
+                "validation": [
+                    {
+                        "type": "required",
+                        "message": "Condition Price Percentage (NM) is required."
+                    }
+                ],
+                "enabled": true
+            },
+            {
+                "id": "condition-price-percentage-lp",
+                "type": "textbox",
+                "label": "LP (Lightly Played)",
+                "sub-label": "%",
+                "information": "Set the percentage for LP condition cards.",
+                "default": "90",
+                "validation": [
+                    {
+                        "type": "required",
+                        "message": "Condition Price Percentage (LP) is required."
+                    }
+                ],
+                "enabled": true
+            },
+            {
+                "id": "condition-price-percentage-mp",
+                "type": "textbox",
+                "label": "MP (Moderately Played)",
+                "sub-label": "%",
+                "information": "Set the percentage for MP condition cards.",
+                "default": "80",
+                "validation": [
+                    {
+                        "type": "required",
+                        "message": "Condition Price Percentage (MP) is required."
+                    }
+                ],
+                "enabled": true
+            },
+            {
+                "id": "condition-price-percentage-hp",
+                "type": "textbox",
+                "label": "HP (Heavily Played)",
+                "sub-label": "%",
+                "information": "Set the percentage for HP condition cards.",
+                "default": "60",
+                "validation": [
+                    {
+                        "type": "required",
+                        "message": "Condition Price Percentage (HP) is required."
+                    }
+                ],
+                "enabled": true
+            },
+            {
+                "id": "condition-price-percentage-dm",
+                "type": "textbox",
+                "label": "DM (Damaged)",
+                "sub-label": "%",
+                "information": "Set the percentage for DM condition cards.",
+                "default": "50",
+                "validation": [
+                    {
+                        "type": "required",
+                        "message": "Condition Price Percentage (DM) is required."
+                    }
+                ],
+                "enabled": true
+            }  
+        ]   
+    }
+}
