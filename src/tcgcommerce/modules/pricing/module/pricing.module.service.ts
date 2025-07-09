@@ -22,15 +22,7 @@ export class PricingModuleService {
             return null;
         }
 
-        let pricingModuleDTO = new PricingModuleDTO();
-        pricingModuleDTO.pricingModuleId = pricingModule.pricingModuleId;
-        pricingModuleDTO.applicationModuleId = pricingModule.applicationModuleId;
-        pricingModuleDTO.commerceAccountId = pricingModule.commerceAccountId;
-        pricingModuleDTO.pricingModuleSettings = pricingModule.pricingModuleSettings;
-        pricingModuleDTO.pricingModuleRoles = pricingModule.pricingModuleRoles;
-        pricingModuleDTO.pricingModuleIsActive = pricingModule.pricingModuleIsActive;
-        pricingModuleDTO.pricingModuleCreateDate = pricingModule.pricingModuleCreateDate;
-        pricingModuleDTO.pricingModuleUpdateDate = pricingModule.pricingModuleUpdateDate;
+        let pricingModuleDTO: PricingModuleDTO = ({ ...pricingModule });
 
         return pricingModuleDTO;
         
@@ -47,15 +39,7 @@ export class PricingModuleService {
             return null;
         }
 
-        let pricingModuleDTO = new PricingModuleDTO();
-        pricingModuleDTO.pricingModuleId = pricingModule.pricingModuleId;
-        pricingModuleDTO.applicationModuleId = pricingModule.applicationModuleId;
-        pricingModuleDTO.commerceAccountId = pricingModule.commerceAccountId;
-        pricingModuleDTO.pricingModuleSettings = pricingModule.pricingModuleSettings;
-        pricingModuleDTO.pricingModuleRoles = pricingModule.pricingModuleRoles;
-        pricingModuleDTO.pricingModuleIsActive = pricingModule.pricingModuleIsActive;
-        pricingModuleDTO.pricingModuleCreateDate = pricingModule.pricingModuleCreateDate;
-        pricingModuleDTO.pricingModuleUpdateDate = pricingModule.pricingModuleUpdateDate;
+        let pricingModuleDTO: PricingModuleDTO = ({ ...pricingModule });
 
         return pricingModuleDTO;
         
@@ -72,15 +56,7 @@ export class PricingModuleService {
 
         for(let i = 0; i < pricingModules.length; i++) {
             let pricingModule = pricingModules[i];
-            let pricingModuleDTO = new PricingModuleDTO();
-            pricingModuleDTO.pricingModuleId = pricingModule.pricingModuleId;
-            pricingModuleDTO.applicationModuleId = pricingModule.applicationModuleId;
-            pricingModuleDTO.commerceAccountId = pricingModule.commerceAccountId;
-            pricingModuleDTO.pricingModuleSettings = pricingModule.pricingModuleSettings;
-            pricingModuleDTO.pricingModuleRoles = pricingModule.pricingModuleRoles;
-            pricingModuleDTO.pricingModuleIsActive = pricingModule.pricingModuleIsActive;
-            pricingModuleDTO.pricingModuleCreateDate = pricingModule.pricingModuleCreateDate;
-            pricingModuleDTO.pricingModuleUpdateDate = pricingModule.pricingModuleUpdateDate;
+            let pricingModuleDTO: PricingModuleDTO = ({ ...pricingModule });
 
             pricingModuleDTOs.push(pricingModuleDTO);
 

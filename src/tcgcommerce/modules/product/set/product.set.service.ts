@@ -30,17 +30,7 @@ export class ProductSetService {
             return null;
         }
 
-        let productSetDTO = new ProductSetDTO();
-        productSetDTO.productSetId = productSet.productSetId;
-        productSetDTO.productVendorId = productSet.productVendorId;
-        productSetDTO.productLineId = productSet.productLineId;
-        productSetDTO.productSetName = productSet.productSetName;
-        productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
-        productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
-        productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
-        productSetDTO.productSetIsActive = productSet.productSetIsActive;
-        productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
-        productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
+        let productSetDTO: ProductSetDTO = ({ ...productSet });
 
         return productSetDTO;
 
@@ -63,17 +53,7 @@ export class ProductSetService {
 
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
-            let productSetDTO = new ProductSetDTO();
-            productSetDTO.productSetId = productSet.productSetId;
-            productSetDTO.productVendorId = productSet.productVendorId;
-            productSetDTO.productLineId = productSet.productLineId;
-            productSetDTO.productSetName = productSet.productSetName;
-            productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
-            productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
-            productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
-            productSetDTO.productSetIsActive = productSet.productSetIsActive;
-            productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
-            productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
+            let productSetDTO: ProductSetDTO = ({ ...productSet });
             
             productSetDTOs.push(productSetDTO);
         }
@@ -97,17 +77,7 @@ export class ProductSetService {
 
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
-            let productSetDTO = new ProductSetDTO();
-            productSetDTO.productSetId = productSet.productSetId;
-            productSetDTO.productVendorId = productSet.productVendorId;
-            productSetDTO.productLineId = productSet.productLineId;
-            productSetDTO.productSetName = productSet.productSetName;
-            productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
-            productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
-            productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
-            productSetDTO.productSetIsActive = productSet.productSetIsActive;
-            productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
-            productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
+            let productSetDTO: ProductSetDTO = ({ ...productSet });
             
             productSetDTOs.push(productSetDTO);
         }
@@ -129,17 +99,7 @@ export class ProductSetService {
             return null;
         }
         
-        let productSetDTO = new ProductSetDTO();
-        productSetDTO.productSetId = productSet.productSetId;
-        productSetDTO.productVendorId = productSet.productVendorId;
-        productSetDTO.productLineId = productSet.productLineId;
-        productSetDTO.productSetName = productSet.productSetName;
-        productSetDTO.productSetReleaseDate = productSet.productSetReleaseDate;
-        productSetDTO.productSetAbbreviation = productSet.productSetAbbreviation;
-        productSetDTO.productSetTotalCards = productSet.productSetTotalCards;
-        productSetDTO.productSetIsActive = productSet.productSetIsActive;
-        productSetDTO.productSetCreateDate = productSet.productSetCreateDate;
-        productSetDTO.productSetUpdateDate = productSet.productSetUpdateDate;
+        let productSetDTO: ProductSetDTO = ({ ...productSet });
             
         return productSetDTO;
     }

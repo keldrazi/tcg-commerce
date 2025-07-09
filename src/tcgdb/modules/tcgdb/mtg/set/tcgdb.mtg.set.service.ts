@@ -25,15 +25,7 @@ export class TCGdbMTGSetService {
         for(let i=0; i < tcgdbMTGSets.length; i++) {
             const tcgdbMTGSet = tcgdbMTGSets[i];
             
-            let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-                tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-                tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-                tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-                tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-                tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-                tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-                tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-            }
+            let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
 
             tcgdbMTGSetDTOs.push(tcgdbMTGSetDTO);
         }
@@ -54,15 +46,7 @@ export class TCGdbMTGSetService {
             return null;
         }
 
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
 
         return tcgdbMTGSetDTO;
     }
@@ -79,15 +63,7 @@ export class TCGdbMTGSetService {
             return null;
         }
 
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
         
         return tcgdbMTGSetDTO;
     }
@@ -106,15 +82,7 @@ export class TCGdbMTGSetService {
             return null;
         }
 
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
 
         return tcgdbMTGSetDTO;
         
@@ -133,15 +101,7 @@ export class TCGdbMTGSetService {
             return null;
         }
 
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = {
-            tcgdbMTGSetId: tcgdbMTGSet.tcgdbMTGSetId,
-            tcgdbMTGSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-            tcgdbMTGSetScryfallId: tcgdbMTGSet.tcgdbMTGSetScryfallId,
-            tcgdbMTGSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
-            tcgdbMTGSetName: tcgdbMTGSet.tcgdbMTGSetName,
-            tcgdbMTGSetPublishedOn: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-            tcgdbMTGSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-        }
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
 
         return tcgdbMTGSetDTO;
     }

@@ -27,14 +27,7 @@ export class ProductCardRarityService {
             return null;
         }
 
-        let productCardRarityDTO = new ProductCardRarityDTO();
-        productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
-        productCardRarityDTO.productLineId = productCardRarity.productLineId;
-        productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
-        productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
-        productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
-        productCardRarityDTO.productCardRarityCreateDate = productCardRarity.productCardRarityCreateDate;
-        productCardRarityDTO.productCardRarityUpdateDate = productCardRarity.productCardRarityUpdateDate;
+        let productCardRarityDTO: ProductCardRarityDTO = ({ ...productCardRarity });
 
         return productCardRarityDTO;
     }
@@ -66,14 +59,7 @@ export class ProductCardRarityService {
 
         for(let i = 0; i < productCardRarities.length; i++) {
             let productCardRarity = productCardRarities[i];
-            let productCardRarityDTO = new ProductCardRarityDTO();
-            productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
-            productCardRarityDTO.productLineId = productCardRarity.productLineId;
-            productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
-            productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
-            productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
-            productCardRarityDTO.productCardRarityCreateDate = productCardRarity.productCardRarityCreateDate;
-            productCardRarityDTO.productCardRarityUpdateDate = productCardRarity.productCardRarityUpdateDate;
+            let productCardRarityDTO: ProductCardRarityDTO = ({ ...productCardRarity });
             
             productCardRarityDTOs.push(productCardRarityDTO);
         }
@@ -92,14 +78,7 @@ export class ProductCardRarityService {
 
         for(let i = 0; i < productCardRarities.length; i++) {
             let productCardRarity = productCardRarities[i];
-            let productCardRarityDTO = new ProductCardRarityDTO();
-            productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
-            productCardRarityDTO.productLineId = productCardRarity.productLineId;
-            productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
-            productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
-            productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
-            productCardRarityDTO.productCardRarityCreateDate = productCardRarity.productCardRarityCreateDate;
-            productCardRarityDTO.productCardRarityUpdateDate = productCardRarity.productCardRarityUpdateDate;
+            let productCardRarityDTO: ProductCardRarityDTO = ({ ...productCardRarity });
             
             productCardRarityDTOs.push(productCardRarityDTO);
         }
@@ -119,14 +98,7 @@ export class ProductCardRarityService {
             return null;
         }
 
-        let productCardRarityDTO = new ProductCardRarityDTO();
-        productCardRarityDTO.productCardRarityId = productCardRarity.productCardRarityId;
-        productCardRarityDTO.productLineId = productCardRarity.productLineId;
-        productCardRarityDTO.productCardRarityName = productCardRarity.productCardRarityName;
-        productCardRarityDTO.productCardRarityAbbreviation = productCardRarity.productCardRarityAbbreviation;
-        productCardRarityDTO.productCardRarityIsActive = productCardRarity.productCardRarityIsActive;
-        productCardRarityDTO.productCardRarityCreateDate = productCardRarity.productCardRarityCreateDate;
-        productCardRarityDTO.productCardRarityUpdateDate = productCardRarity.productCardRarityUpdateDate;
+        let productCardRarityDTO: ProductCardRarityDTO = ({ ...productCardRarity });
 
         return productCardRarityDTO;
         

@@ -16,18 +16,11 @@ export class CommerceUserService {
         let commerceUser = await this.commerceUserRepository.findOne({ where: { commerceUserId } });
         
         //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
-        if (!commerceUser) {
+        if (commerceUser == null) {
             return null;
         }
 
-        let commerceUserDTO = new CommerceUserDTO();
-        commerceUserDTO.commerceUserId = commerceUser.commerceUserId;
-        commerceUserDTO.commerceUserName = commerceUser.commerceUserName;
-        commerceUserDTO.commerceUserEmail = commerceUser.commerceUserEmail;
-        commerceUserDTO.commerceUserRoles = commerceUser.commerceUserRoles;
-        commerceUserDTO.commerceUserIsActive = commerceUser.commerceUserIsActive;
-        commerceUserDTO.commerceUserCreateDate = commerceUser.commerceUserCreateDate;
-        commerceUserDTO.commerceUserUpdateDate = commerceUser.commerceUserUpdateDate;
+        let commerceUserDTO:CommerceUserDTO = ({ ...commerceUser });
 
         return commerceUserDTO;
         
@@ -49,14 +42,7 @@ export class CommerceUserService {
 
         for(let i = 0; i < commerceUsers.length; i++) {
             let commerceUser = commerceUsers[i];
-            let commerceUserDTO = new CommerceUserDTO();
-            commerceUserDTO.commerceUserId = commerceUser.commerceUserId;
-            commerceUserDTO.commerceUserName = commerceUser.commerceUserName;
-            commerceUserDTO.commerceUserEmail = commerceUser.commerceUserEmail;
-            commerceUserDTO.commerceUserRoles = commerceUser.commerceUserRoles;
-            commerceUserDTO.commerceUserIsActive = commerceUser.commerceUserIsActive;
-            commerceUserDTO.commerceUserCreateDate = commerceUser.commerceUserCreateDate;
-            commerceUserDTO.commerceUserUpdateDate = commerceUser.commerceUserUpdateDate;
+            let commerceUserDTO:CommerceUserDTO = ({ ...commerceUser });
 
             commerceUserDTOs.push(commerceUserDTO);
         }
@@ -86,7 +72,7 @@ export class CommerceUserService {
         });
         
         //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
-        if (!updateCommerceUser) {
+        if (updateCommerceUser == null) {
             return null;
         }
 
@@ -111,7 +97,7 @@ export class CommerceUserService {
         });
 
         //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
-        if (!commerceUser) {
+        if (commerceUser == null) {
             return null;
         }
 
@@ -133,7 +119,7 @@ export class CommerceUserService {
         });
 
         //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
-        if (!commerceUser) {
+        if (commerceUser == null) {
             return null;
         }
 

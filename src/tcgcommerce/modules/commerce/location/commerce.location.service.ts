@@ -17,23 +17,12 @@ export class CommerceLocationService {
                 commerceLocationId : commerceLocationId
             } 
         });
-        
-        if (!commerceLocation) {
+
+        if (commerceLocation == null) {
             return null;
         }
 
-        let commerceLocationDTO = new CommerceLocationDTO();
-        commerceLocationDTO.commerceLocationId = commerceLocation.commerceLocationId;
-        commerceLocationDTO.commerceAccountId = commerceLocation.commerceAccountId;
-        commerceLocationDTO.commerceLocationName = commerceLocation.commerceLocationName;
-        commerceLocationDTO.commerceLocationAddress = commerceLocation.commerceLocationAddress;
-        commerceLocationDTO.commerceLocationCity = commerceLocation.commerceLocationCity;
-        commerceLocationDTO.commerceLocationState = commerceLocation.commerceLocationState;
-        commerceLocationDTO.commerceLocationZip = commerceLocation.commerceLocationZip;
-        commerceLocationDTO.commerceLocationPhoneNumber = commerceLocation.commerceLocationPhoneNumber;
-        commerceLocationDTO.commerceLocationIsActive = commerceLocation.commerceLocationIsActive;
-        commerceLocationDTO.commerceLocationCreateDate = commerceLocation.commerceLocationCreateDate;
-        commerceLocationDTO.commerceLocationUpdateDate = commerceLocation.commerceLocationUpdateDate;
+        let commerceLocationDTO: CommerceLocationDTO = ({ ...commerceLocation });
 
         return commerceLocationDTO;
         
@@ -54,18 +43,7 @@ export class CommerceLocationService {
 
         for(let i = 0; i < commerceLocations.length; i++) {
             let commerceLocation = commerceLocations[i];
-            let commerceLocationDTO = new CommerceLocationDTO();
-            commerceLocationDTO.commerceLocationId = commerceLocation.commerceLocationId;
-            commerceLocationDTO.commerceAccountId = commerceLocation.commerceAccountId;
-            commerceLocationDTO.commerceLocationName = commerceLocation.commerceLocationName;
-            commerceLocationDTO.commerceLocationAddress = commerceLocation.commerceLocationAddress;
-            commerceLocationDTO.commerceLocationCity = commerceLocation.commerceLocationCity;
-            commerceLocationDTO.commerceLocationState = commerceLocation.commerceLocationState;
-            commerceLocationDTO.commerceLocationZip = commerceLocation.commerceLocationZip;
-            commerceLocationDTO.commerceLocationPhoneNumber = commerceLocation.commerceLocationPhoneNumber;
-            commerceLocationDTO.commerceLocationIsActive = commerceLocation.commerceLocationIsActive;
-            commerceLocationDTO.commerceLocationCreateDate = commerceLocation.commerceLocationCreateDate;
-            commerceLocationDTO.commerceLocationUpdateDate = commerceLocation.commerceLocationUpdateDate;
+            let commerceLocationDTO: CommerceLocationDTO = ({ ...commerceLocation });
 
             commerceLocationDTOs.push(commerceLocationDTO);
         }

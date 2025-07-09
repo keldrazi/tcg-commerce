@@ -33,20 +33,7 @@ export class TCGdbMTGPriceHistoryService {
         for(let i = 0; i < tcgdbMTGPriceHistorys.length; i++) {
             let tcgdbMTGPriceHistory = tcgdbMTGPriceHistorys[i];
 
-            let tcgdbMTGPriceHistoryDTO: TCGdbMTGPriceHistoryDTO = {
-                tcgdbMTGPriceHistoryId: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryId,
-                tcgdbMTGCardId: tcgdbMTGPriceHistory.tcgdbMTGCardId,
-                tcgdbMTGPriceHistoryTCGPlayerId: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryTCGPlayerId,
-                tcgdbMTGPriceHistorySetAbbreviation: tcgdbMTGPriceHistory.tcgdbMTGPriceHistorySetAbbreviation,
-                tcgdbMTGPriceHistoryLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice,
-                tcgdbMTGPriceHistoryMidPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice,
-                tcgdbMTGPriceHistoryHighPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice,
-                tcgdbMTGPriceHistoryMarketPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice,
-                tcgdbMTGPriceHistoryDirectLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryDirectLowPrice,
-                tcgdbMTGPriceHistorySubTypeName: tcgdbMTGPriceHistory.tcgdbMTGPriceHistorySubTypeName,
-                tcgdbMTGPriceHistoryCreateDate: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryCreateDate,
-                tcgdbMTGPriceHistoryUpdateDate: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryUpdateDate
-            }
+            let tcgdbMTGPriceHistoryDTO: TCGdbMTGPriceHistoryDTO = ({ ...tcgdbMTGPriceHistory });
 
             tcgdbMTGPriceHistoryDTOs.push(tcgdbMTGPriceHistoryDTO);
 
@@ -73,20 +60,7 @@ export class TCGdbMTGPriceHistoryService {
         for(let i = 0; i < tcgdbMTGPriceHistorys.length; i++) {
             let tcgdbMTGPriceHistory = tcgdbMTGPriceHistorys[i];
 
-            let tcgdbMTGPriceHistoryDTO: TCGdbMTGPriceHistoryDTO = {
-                tcgdbMTGPriceHistoryId: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryId,
-                tcgdbMTGCardId: tcgdbMTGPriceHistory.tcgdbMTGCardId,
-                tcgdbMTGPriceHistoryTCGPlayerId: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryTCGPlayerId,
-                tcgdbMTGPriceHistorySetAbbreviation: tcgdbMTGPriceHistory.tcgdbMTGPriceHistorySetAbbreviation,
-                tcgdbMTGPriceHistoryLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice,
-                tcgdbMTGPriceHistoryMidPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice,
-                tcgdbMTGPriceHistoryHighPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice,
-                tcgdbMTGPriceHistoryMarketPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice,
-                tcgdbMTGPriceHistoryDirectLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryDirectLowPrice,
-                tcgdbMTGPriceHistorySubTypeName: tcgdbMTGPriceHistory.tcgdbMTGPriceHistorySubTypeName,
-                tcgdbMTGPriceHistoryCreateDate: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryCreateDate,
-                tcgdbMTGPriceHistoryUpdateDate: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryUpdateDate
-            }
+            let tcgdbMTGPriceHistoryDTO: TCGdbMTGPriceHistoryDTO = ({ ...tcgdbMTGPriceHistory });
 
             tcgdbMTGPriceHistoryDTOs.push(tcgdbMTGPriceHistoryDTO);
 
@@ -120,20 +94,7 @@ export class TCGdbMTGPriceHistoryService {
         for(let i = 0; i < tcgdbMTGPriceHistorys.length; i++) {
             let tcgdbMTGPriceHistory = tcgdbMTGPriceHistorys[i];
 
-            let tcgdbMTGPriceHistoryDTO: TCGdbMTGPriceHistoryDTO = {
-                tcgdbMTGPriceHistoryId: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryId,
-                tcgdbMTGCardId: tcgdbMTGPriceHistory.tcgdbMTGCardId,
-                tcgdbMTGPriceHistoryTCGPlayerId: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryTCGPlayerId,
-                tcgdbMTGPriceHistorySetAbbreviation: tcgdbMTGPriceHistory.tcgdbMTGPriceHistorySetAbbreviation,
-                tcgdbMTGPriceHistoryLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice,
-                tcgdbMTGPriceHistoryMidPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMidPrice,
-                tcgdbMTGPriceHistoryHighPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryHighPrice,
-                tcgdbMTGPriceHistoryMarketPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryMarketPrice,
-                tcgdbMTGPriceHistoryDirectLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryDirectLowPrice,
-                tcgdbMTGPriceHistorySubTypeName: tcgdbMTGPriceHistory.tcgdbMTGPriceHistorySubTypeName,
-                tcgdbMTGPriceHistoryCreateDate: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryCreateDate,
-                tcgdbMTGPriceHistoryUpdateDate: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryUpdateDate
-            }
+            let tcgdbMTGPriceHistoryDTO: TCGdbMTGPriceHistoryDTO = ({ ...tcgdbMTGPriceHistory });
 
             tcgdbMTGPriceHistoryDTOs.push(tcgdbMTGPriceHistoryDTO);
 

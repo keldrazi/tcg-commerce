@@ -23,14 +23,7 @@ export class TCGdbMTGPrintingService {
         for(let i=0; i < tcgdbMTGPrintings.length; i++) {
             const tcgdbMTGPrinting = tcgdbMTGPrintings[i];
             
-            let tcgdbMTGPrintingDTO: TCGdbMTGPrintingDTO = {
-                tcgdbMTGPrintingId: tcgdbMTGPrinting.tcgdbMTGPrintingId,
-                tcgdbMTGPrintingTCGPlayerId: tcgdbMTGPrinting.tcgdbMTGPrintingTCGPlayerId,
-                tcgdbMTGPrintingName: tcgdbMTGPrinting.tcgdbMTGPrintingName,
-                tcgdbMTGPrintingDisplayOrder: tcgdbMTGPrinting.tcgdbMTGPrintingDisplayOrder,
-                tcgdbMTGPrintingCreateDate: tcgdbMTGPrinting.tcgdbMTGPrintingCreateDate,
-                tcgdbMTGPrintingUpdateDate: tcgdbMTGPrinting.tcgdbMTGPrintingUpdateDate,
-            }
+            let tcgdbMTGPrintingDTO: TCGdbMTGPrintingDTO = ({ ...tcgdbMTGPrinting });
 
             tcgdbMTGPrintingDTOs.push(tcgdbMTGPrintingDTO);
         }
@@ -45,7 +38,13 @@ export class TCGdbMTGPrintingService {
             }
         });
 
-        return tcgdbMTGPrinting;
+        if(tcgdbMTGPrinting == null) {
+            return null;
+        }   
+
+        let tcgdbMTGPrintingDTO: TCGdbMTGPrintingDTO = ({ ...tcgdbMTGPrinting });
+
+        return tcgdbMTGPrintingDTO;
     }
 
     async createTCGdbMTGPrintings() {

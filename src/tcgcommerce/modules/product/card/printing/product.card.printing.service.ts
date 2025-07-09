@@ -27,15 +27,7 @@ export class ProductCardPrintingService {
             return null;
         }
 
-        let productCardPrintingDTO = new ProductCardPrintingDTO();
-        productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
-        productCardPrintingDTO.productCardPrintingTCGPlayerId = productCardPrinting.productCardPrintingTCGPlayerId;
-        productCardPrintingDTO.productLineId = productCardPrinting.productLineId;
-        productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-        productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
-        productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
-        productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
-        productCardPrintingDTO.productCardPrintingUpdateDate = productCardPrinting.productCardPrintingUpdateDate;
+        let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
 
         return productCardPrintingDTO;
     }
@@ -70,16 +62,8 @@ export class ProductCardPrintingService {
 
         for(let i = 0; i < productCardPrintings.length; i++) {
             let productCardPrinting = productCardPrintings[i];
-            let productCardPrintingDTO = new ProductCardPrintingDTO();
-            productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
-            productCardPrintingDTO.productCardPrintingTCGPlayerId = productCardPrinting.productCardPrintingTCGPlayerId;
-            productCardPrintingDTO.productLineId = productCardPrinting.productLineId;
-            productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-            productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
-            productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
-            productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
-            productCardPrintingDTO.productCardPrintingUpdateDate = productCardPrinting.productCardPrintingUpdateDate;
-            
+            let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
+
             productCardPrintingDTOs.push(productCardPrintingDTO);
         }
 
@@ -106,15 +90,7 @@ export class ProductCardPrintingService {
 
         for(let i = 0; i < productCardPrintings.length; i++) {
             let productCardPrinting = productCardPrintings[i];
-            let productCardPrintingDTO = new ProductCardPrintingDTO();
-            productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
-            productCardPrintingDTO.productCardPrintingTCGPlayerId = productCardPrinting.productCardPrintingTCGPlayerId;
-            productCardPrintingDTO.productLineId = productCardPrinting.productLineId;
-            productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-            productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
-            productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
-            productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
-            productCardPrintingDTO.productCardPrintingUpdateDate = productCardPrinting.productCardPrintingUpdateDate;
+            let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
             
             productCardPrintingDTOs.push(productCardPrintingDTO);
         }
@@ -140,15 +116,7 @@ export class ProductCardPrintingService {
 
         for(let i = 0; i < productCardPrintings.length; i++) {
             let productCardPrinting = productCardPrintings[i];
-            let productCardPrintingDTO = new ProductCardPrintingDTO();
-            productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
-            productCardPrintingDTO.productCardPrintingTCGPlayerId = productCardPrinting.productCardPrintingTCGPlayerId;
-            productCardPrintingDTO.productLineId = productCardPrinting.productLineId;
-            productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-            productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
-            productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
-            productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
-            productCardPrintingDTO.productCardPrintingUpdateDate = productCardPrinting.productCardPrintingUpdateDate;
+            let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
             
             productCardPrintingDTOs.push(productCardPrintingDTO);
         }
@@ -168,15 +136,7 @@ export class ProductCardPrintingService {
             return null;
         }
 
-        let productCardPrintingDTO = new ProductCardPrintingDTO();
-        productCardPrintingDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
-        productCardPrintingDTO.productCardPrintingTCGPlayerId = productCardPrinting.productCardPrintingTCGPlayerId;
-        productCardPrintingDTO.productLineId = productCardPrinting.productLineId;
-        productCardPrintingDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
-        productCardPrintingDTO.productCardPrintingDisplayOrder = productCardPrinting.productCardPrintingDisplayOrder;
-        productCardPrintingDTO.productCardPrintingIsActive = productCardPrinting.productCardPrintingIsActive;
-        productCardPrintingDTO.productCardPrintingCreateDate = productCardPrinting.productCardPrintingCreateDate;
-        productCardPrintingDTO.productCardPrintingUpdateDate = productCardPrinting.productCardPrintingUpdateDate;
+        let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
 
         return productCardPrintingDTO;
         

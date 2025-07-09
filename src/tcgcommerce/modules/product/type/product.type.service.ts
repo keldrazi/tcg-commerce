@@ -22,14 +22,7 @@ export class ProductTypeService {
             return null;
         }
 
-        let productTypeDTO = new ProductTypeDTO();
-        productTypeDTO.productTypeId = productType.productTypeId;
-        productTypeDTO.productVendorId = productType.productVendorId;
-        productTypeDTO.productLineId = productType.productLineId;
-        productTypeDTO.productTypeName = productType.productTypeName;
-        productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
-        productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
-        productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
+        let productTypeDTO: ProductTypeDTO = ({ ...productType });
 
         return productTypeDTO;
         
@@ -51,16 +44,8 @@ export class ProductTypeService {
 
         for(let i = 0; i < productTypes.length; i++) {
             let productType = productTypes[i];
-            let productTypeDTO = new ProductTypeDTO();
-            productTypeDTO.productTypeId = productType.productTypeId;
-            productTypeDTO.productTypeId = productType.productTypeId
-            productTypeDTO.productLineId = productType.productLineId;
-            productTypeDTO.productTypeName = productType.productTypeName;
-            productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
-            productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
-            productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
+            let productTypeDTO: ProductTypeDTO = ({ ...productType });
            
-
             productTypeDTOs.push(productTypeDTO);
         }
 
@@ -80,15 +65,7 @@ export class ProductTypeService {
 
         for(let i = 0; i < productTypes.length; i++) {
             let productType = productTypes[i];
-            let productTypeDTO = new ProductTypeDTO();
-            productTypeDTO.productTypeId = productType.productTypeId;
-            productTypeDTO.productTypeId = productType.productTypeId
-            productTypeDTO.productLineId = productType.productLineId;
-            productTypeDTO.productTypeName = productType.productTypeName;
-            productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
-            productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
-            productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
-           
+            let productTypeDTO: ProductTypeDTO = ({ ...productType });
 
             productTypeDTOs.push(productTypeDTO);
         }
@@ -107,15 +84,7 @@ export class ProductTypeService {
             return null;
         }
 
-        let productTypeDTO = new ProductTypeDTO();
-        productTypeDTO.productTypeId = productType.productTypeId;
-        productTypeDTO.productVendorId = productType.productVendorId;
-        productTypeDTO.productLineId = productType.productLineId;
-        productTypeDTO.productTypeName = productType.productTypeName;
-        productTypeDTO.productTypeIsActive = productType.productTypeIsActive;
-        productTypeDTO.productTypeCreateDate = productType.productTypeCreateDate;
-        productTypeDTO.productTypeUpdateDate = productType.productTypeUpdateDate;
-
+        let productTypeDTO: ProductTypeDTO = ({ ...productType });
 
         return productTypeDTO;
         

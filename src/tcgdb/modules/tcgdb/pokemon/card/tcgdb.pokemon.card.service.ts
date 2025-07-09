@@ -19,13 +19,20 @@ export class TCGdbPokemonCardService {
 
     async getTCGdbPokemonCardByTCGPlayerId(tcgPlayerId: number) {
 
-        const tcgdbPokemonCard = this.tcgdbPokemonCardRepository.findOne({
+        const tcgdbPokemonCard = await this.tcgdbPokemonCardRepository.findOne({
             where: {
                 tcgdbPokemonCardTCGPlayerId: tcgPlayerId,
             }
         })
 
-        return tcgdbPokemonCard;
+        if(tcgdbPokemonCard == null) {
+            //TO DO: CREATE AN ERROR TO RETURN;
+            return null;
+        }
+
+        let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });
+
+        return tcgdbPokemonCardDTO;
     }
 
     async getTCGdbPokemonCardByTCGdbId(tcgdbPokemonCardId: string) {
@@ -41,17 +48,7 @@ export class TCGdbPokemonCardService {
             return null;
         }
 
-        let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = {
-            tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
-            tcgdbPokemonCardTCGPlayerId: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerId,
-            tcgdbPokemonCardPokemonTCGId: tcgdbPokemonCard.tcgdbPokemonCardPokemonTCGId,
-            tcgdbPokemonCardSetAbbreviation: tcgdbPokemonCard.tcgdbPokemonCardSetAbbreviation,
-            tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
-            tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
-            tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-            tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
-            tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
-        }
+        let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });
 
         return tcgdbPokemonCardDTO;
     }
@@ -77,17 +74,7 @@ export class TCGdbPokemonCardService {
             return null;
         }
 
-        let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = {
-            tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
-            tcgdbPokemonCardTCGPlayerId: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerId,
-            tcgdbPokemonCardPokemonTCGId: tcgdbPokemonCard.tcgdbPokemonCardPokemonTCGId,
-            tcgdbPokemonCardSetAbbreviation: tcgdbPokemonCard.tcgdbPokemonCardSetAbbreviation,
-            tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
-            tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
-            tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-            tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
-            tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
-        };
+        let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });
 
         return tcgdbPokemonCardDTO;
 
@@ -111,17 +98,7 @@ export class TCGdbPokemonCardService {
         for(let i=0; i < tcgdbPokemonCards.length; i++) {
             let tcgdbPokemonCard = tcgdbPokemonCards[i];
 
-            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = {
-                tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
-                tcgdbPokemonCardTCGPlayerId: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerId,
-                tcgdbPokemonCardPokemonTCGId: tcgdbPokemonCard.tcgdbPokemonCardPokemonTCGId,
-                tcgdbPokemonCardSetAbbreviation: tcgdbPokemonCard.tcgdbPokemonCardSetAbbreviation,
-                tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
-                tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
-                tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-                tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
-                tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
-            };
+            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });
 
             tcgdbPokemonCardDTOs.push(tcgdbPokemonCardDTO);
         }
@@ -154,17 +131,7 @@ export class TCGdbPokemonCardService {
         for(let i = 0; i < tcgdbPokemonCards.length; i++) {
             let tcgdbPokemonCard = tcgdbPokemonCards[i];
 
-            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = {
-                tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
-                tcgdbPokemonCardTCGPlayerId: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerId,
-                tcgdbPokemonCardPokemonTCGId: tcgdbPokemonCard.tcgdbPokemonCardPokemonTCGId,
-                tcgdbPokemonCardSetAbbreviation: tcgdbPokemonCard.tcgdbPokemonCardSetAbbreviation,
-                tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
-                tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
-                tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-                tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
-                tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
-            };
+            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });onCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
 
             tcgdbPokemonCardDTOs.push(tcgdbPokemonCardDTO);
         }

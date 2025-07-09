@@ -31,30 +31,8 @@ export class TCGdbMTGPriceChangeMonthlyService {
         for(let i = 0; i < tcgdbMTGPriceChangeMonthlys.length; i++) {
             let tcgdbMTGPriceChangeMonthly = tcgdbMTGPriceChangeMonthlys[i];
 
-            let tcgdbMTGPriceChangeMonthlyDTO: TCGdbMTGPriceChangeMonthlyDTO = {
-                tcgdbMTGPriceChangeMonthlyId: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyId,
-                tcgdbMTGCardId: tcgdbMTGPriceChangeMonthly.tcgdbMTGCardId,
-                tcgdbMTGPriceChangeMonthlyTCGPlayerId: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyTCGPlayerId,
-                tcgdbMTGPriceChangeMonthlySetAbbreviation: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlySetAbbreviation,
-                tcgdbMTGPriceChangeMonthlyCurrentLowPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyCurrentLowPrice,
-                tcgdbMTGPriceChangeMonthlyPreviousLowPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyPreviousLowPrice,
-                tcgdbMTGPriceChangeMonthlyLowPriceDifference: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyLowPriceDifference,
-                tcgdbMTGPriceChangeMonthlyLowPricePercentage: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyLowPricePercentage,
-                tcgdbMTGPriceChangeMonthlyCurrentMidPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyCurrentMidPrice,
-                tcgdbMTGPriceChangeMonthlyPreviousMidPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyPreviousMidPrice,
-                tcgdbMTGPriceChangeMonthlyMidPriceDifference: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyMidPriceDifference,
-                tcgdbMTGPriceChangeMonthlyMidPricePercentage: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyMidPricePercentage,
-                tcgdbMTGPriceChangeMonthlyCurrentHighPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyCurrentHighPrice,
-                tcgdbMTGPriceChangeMonthlyPreviousHighPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyPreviousHighPrice,
-                tcgdbMTGPriceChangeMonthlyHighPriceDifference: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyHighPriceDifference,
-                tcgdbMTGPriceChangeMonthlyHighPricePercentage: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyHighPricePercentage,
-                tcgdbMTGPriceChangeMonthlyCurrentMarketPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyCurrentMarketPrice,
-                tcgdbMTGPriceChangeMonthlyPreviousMarketPrice: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyPreviousMarketPrice,
-                tcgdbMTGPriceChangeMonthlyMarketPriceDifference: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyMarketPriceDifference,
-                tcgdbMTGPriceChangeMonthlyMarketPricePercentage: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlyMarketPricePercentage,
-                tcgdbMTGPriceChangeMonthlySubTypeName: tcgdbMTGPriceChangeMonthly.tcgdbMTGPriceChangeMonthlySubTypeName
-            }
-
+            let tcgdbMTGPriceChangeMonthlyDTO: TCGdbMTGPriceChangeMonthlyDTO = ({ ...tcgdbMTGPriceChangeMonthly });
+           
             tcgdbMTGPriceChangeMonthlyDTOs.push(tcgdbMTGPriceChangeMonthlyDTO);
         }
 
@@ -176,7 +154,7 @@ export class TCGdbMTGPriceChangeMonthlyService {
         }
         
         
-        let CreateTCGdbMTGPriceChangeMonthlyDTO: CreateTCGdbMTGPriceChangeMonthlyDTO = {
+        let createTCGdbMTGPriceChangeMonthlyDTO: CreateTCGdbMTGPriceChangeMonthlyDTO = {
             tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
             tcgdbMTGPriceChangeMonthlyTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
             tcgdbMTGPriceChangeMonthlySetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
@@ -199,7 +177,7 @@ export class TCGdbMTGPriceChangeMonthlyService {
             tcgdbMTGPriceChangeMonthlySubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName
         }
 
-        const newTCGdbMTGPriceChangeMonthly = this.tcgdbMTGPriceChangeMonthlyRepository.create(CreateTCGdbMTGPriceChangeMonthlyDTO);
+        const newTCGdbMTGPriceChangeMonthly = this.tcgdbMTGPriceChangeMonthlyRepository.create(createTCGdbMTGPriceChangeMonthlyDTO);
         await this.tcgdbMTGPriceChangeMonthlyRepository.save(newTCGdbMTGPriceChangeMonthly);
 
         return true;

@@ -23,13 +23,7 @@ export class PricingProductCardRuleTypeService {
             return null;
         }
 
-        let pricingProductCardRuleTypeDTO = new PricingProductCardRuleTypeDTO();
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId = pricingProductCardRuleType.pricingProductCardRuleTypeId;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName = pricingProductCardRuleType.pricingProductCardRuleTypeName;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata = pricingProductCardRuleType.pricingProductCardRuleTypeMetadata;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive = pricingProductCardRuleType.pricingProductCardRuleTypeIsActive;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeCreateDate = pricingProductCardRuleType.pricingProductCardRuleTypeCreateDate;
-        pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeUpdateDate = pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate;
+        let pricingProductCardRuleTypeDTO: PricingProductCardRuleTypeDTO = ({ ...pricingProductCardRuleType });
         
         return pricingProductCardRuleTypeDTO;
 
@@ -47,13 +41,7 @@ export class PricingProductCardRuleTypeService {
         for(let i = 0; i < pricingProductCardRuleTypes.length; i++) {
             let pricingProductCardRuleType = pricingProductCardRuleTypes[i];
         
-            let pricingProductCardRuleTypeDTO = new PricingProductCardRuleTypeDTO();
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId = pricingProductCardRuleType.pricingProductCardRuleTypeId;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName = pricingProductCardRuleType.pricingProductCardRuleTypeName;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata = pricingProductCardRuleType.pricingProductCardRuleTypeMetadata;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive = pricingProductCardRuleType.pricingProductCardRuleTypeIsActive;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeCreateDate = pricingProductCardRuleType.pricingProductCardRuleTypeCreateDate;
-            pricingProductCardRuleTypeDTO.pricingProductCardRuleTypeUpdateDate = pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate;
+            let pricingProductCardRuleTypeDTO: PricingProductCardRuleTypeDTO = ({ ...pricingProductCardRuleType });
             
             pricingProductCardRuleTypesDTO.push(pricingProductCardRuleTypeDTO);
         }

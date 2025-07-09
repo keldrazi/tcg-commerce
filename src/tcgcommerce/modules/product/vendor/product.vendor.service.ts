@@ -22,13 +22,7 @@ export class ProductVendorService {
             return null;
         }
 
-        let productVendorDTO = new ProductVendorDTO();
-        productVendorDTO.productVendorId = productVendor.productVendorId;
-        productVendorDTO.productVendorName = productVendor.productVendorName;
-        productVendorDTO.productVendorIsActive = productVendor.productVendorIsActive;
-        productVendorDTO.productVendorCreateDate = productVendor.productVendorCreateDate;
-        productVendorDTO.productVendorUpdateDate = productVendor.productVendorUpdateDate;
-        
+        let productVendorDTO:ProductVendorDTO = ({ ...productVendor });        
         
         return productVendorDTO;
         
@@ -46,12 +40,7 @@ export class ProductVendorService {
 
         for(let i = 0; i < productVendors.length; i++) {
             let productVendor = productVendors[i];
-            let productVendorDTO = new ProductVendorDTO();
-            productVendorDTO.productVendorId = productVendor.productVendorId;
-            productVendorDTO.productVendorName = productVendor.productVendorName;
-            productVendorDTO.productVendorIsActive = productVendor.productVendorIsActive;
-            productVendorDTO.productVendorCreateDate = productVendor.productVendorCreateDate;
-            productVendorDTO.productVendorUpdateDate = productVendor.productVendorUpdateDate;
+            let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
 
             productVendorDTOs.push(productVendorDTO);
         }
@@ -70,12 +59,7 @@ export class ProductVendorService {
             return null;
         }
 
-        let productVendorDTO = new ProductVendorDTO();
-        productVendorDTO.productVendorId = productVendor.productVendorId;
-        productVendorDTO.productVendorName = productVendor.productVendorName;
-        productVendorDTO.productVendorIsActive = productVendor.productVendorIsActive;
-        productVendorDTO.productVendorCreateDate = productVendor.productVendorCreateDate;
-        productVendorDTO.productVendorUpdateDate = productVendor.productVendorUpdateDate;
+        let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
         
         return productVendorDTO;
         

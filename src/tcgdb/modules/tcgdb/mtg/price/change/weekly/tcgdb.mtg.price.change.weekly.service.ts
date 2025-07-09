@@ -31,29 +31,7 @@ export class TCGdbMTGPriceChangeWeeklyService {
         for(let i = 0; i < tcgdbMTGPriceChangeWeeklys.length; i++) {
             let tcgdbMTGPriceChangeWeekly = tcgdbMTGPriceChangeWeeklys[i];
 
-            let tcgdbMTGPriceChangeWeeklyDTO: TCGdbMTGPriceChangeWeeklyDTO = {
-                tcgdbMTGPriceChangeWeeklyId: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyId,
-                tcgdbMTGCardId: tcgdbMTGPriceChangeWeekly.tcgdbMTGCardId,
-                tcgdbMTGPriceChangeWeeklyTCGPlayerId: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyTCGPlayerId,
-                tcgdbMTGPriceChangeWeeklySetAbbreviation: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklySetAbbreviation,
-                tcgdbMTGPriceChangeWeeklyCurrentLowPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyCurrentLowPrice,
-                tcgdbMTGPriceChangeWeeklyPreviousLowPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyPreviousLowPrice,
-                tcgdbMTGPriceChangeWeeklyLowPriceDifference: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyLowPriceDifference,
-                tcgdbMTGPriceChangeWeeklyLowPricePercentage: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyLowPricePercentage,
-                tcgdbMTGPriceChangeWeeklyCurrentMidPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyCurrentMidPrice,
-                tcgdbMTGPriceChangeWeeklyPreviousMidPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyPreviousMidPrice,
-                tcgdbMTGPriceChangeWeeklyMidPriceDifference: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyMidPriceDifference,
-                tcgdbMTGPriceChangeWeeklyMidPricePercentage: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyMidPricePercentage,
-                tcgdbMTGPriceChangeWeeklyCurrentHighPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyCurrentHighPrice,
-                tcgdbMTGPriceChangeWeeklyPreviousHighPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyPreviousHighPrice,
-                tcgdbMTGPriceChangeWeeklyHighPriceDifference: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyHighPriceDifference,
-                tcgdbMTGPriceChangeWeeklyHighPricePercentage: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyHighPricePercentage,
-                tcgdbMTGPriceChangeWeeklyCurrentMarketPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyCurrentMarketPrice,
-                tcgdbMTGPriceChangeWeeklyPreviousMarketPrice: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyPreviousMarketPrice,
-                tcgdbMTGPriceChangeWeeklyMarketPriceDifference: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyMarketPriceDifference,
-                tcgdbMTGPriceChangeWeeklyMarketPricePercentage: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklyMarketPricePercentage,
-                tcgdbMTGPriceChangeWeeklySubTypeName: tcgdbMTGPriceChangeWeekly.tcgdbMTGPriceChangeWeeklySubTypeName
-            }
+            let tcgdbMTGPriceChangeWeeklyDTO: TCGdbMTGPriceChangeWeeklyDTO = ({ ...tcgdbMTGPriceChangeWeekly });
 
             tcgdbMTGPriceChangeWeeklyDTOs.push(tcgdbMTGPriceChangeWeeklyDTO);
         }
@@ -176,7 +154,7 @@ export class TCGdbMTGPriceChangeWeeklyService {
         }
         
         
-        let CreateTCGdbMTGPriceChangeWeeklyDTO: CreateTCGdbMTGPriceChangeWeeklyDTO = {
+        let createTCGdbMTGPriceChangeWeeklyDTO: CreateTCGdbMTGPriceChangeWeeklyDTO = {
             tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
             tcgdbMTGPriceChangeWeeklyTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
             tcgdbMTGPriceChangeWeeklySetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
@@ -199,7 +177,7 @@ export class TCGdbMTGPriceChangeWeeklyService {
             tcgdbMTGPriceChangeWeeklySubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName
         }
 
-        const newTCGdbMTGPriceChangeWeekly = this.tcgdbMTGPriceChangeWeeklyRepository.create(CreateTCGdbMTGPriceChangeWeeklyDTO);
+        const newTCGdbMTGPriceChangeWeekly = this.tcgdbMTGPriceChangeWeeklyRepository.create(createTCGdbMTGPriceChangeWeeklyDTO);
         await this.tcgdbMTGPriceChangeWeeklyRepository.save(newTCGdbMTGPriceChangeWeekly);
 
         return true;

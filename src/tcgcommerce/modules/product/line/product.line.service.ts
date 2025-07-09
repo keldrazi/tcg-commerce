@@ -22,15 +22,7 @@ export class ProductLineService {
             return null;
         }
 
-        let productLineDTO = new ProductLineDTO();
-        productLineDTO.productLineId = productLine.productLineId;
-        productLineDTO.productVendorId = productLine.productVendorId;
-        productLineDTO.productLineName = productLine.productLineName;
-        productLineDTO.productLineCode = productLine.productLineCode;
-        productLineDTO.productLineIsActive = productLine.productLineIsActive;
-        productLineDTO.productLineCreateDate = productLine.productLineCreateDate;
-        productLineDTO.productLineUpdateDate = productLine.productLineUpdateDate;
-        
+        let productLineDTO: ProductLineDTO = ({ ...productLine });
         
         return productLineDTO;
         
@@ -48,14 +40,8 @@ export class ProductLineService {
 
         for(let i = 0; i < productLines.length; i++) {
             let productLine = productLines[i];
-            let productLineDTO = new ProductLineDTO();
-            productLineDTO.productLineId = productLine.productLineId;
-            productLineDTO.productVendorId = productLine.productVendorId;
-            productLineDTO.productLineName = productLine.productLineName;
-            productLineDTO.productLineCode = productLine.productLineCode;
-            productLineDTO.productLineIsActive = productLine.productLineIsActive;
-            productLineDTO.productLineCreateDate = productLine.productLineCreateDate;
-            productLineDTO.productLineUpdateDate = productLine.productLineUpdateDate;
+            let productLineDTO: ProductLineDTO = ({ ...productLine });
+
             productLineDTOs.push(productLineDTO);
         }
 
@@ -77,14 +63,8 @@ export class ProductLineService {
 
         for(let i = 0; i < productLines.length; i++) {
             let productLine = productLines[i];
-            let productLineDTO = new ProductLineDTO();
-            productLineDTO.productLineId = productLine.productLineId;
-            productLineDTO.productVendorId = productLine.productVendorId;
-            productLineDTO.productLineName = productLine.productLineName;
-            productLineDTO.productLineCode = productLine.productLineCode;
-            productLineDTO.productLineIsActive = productLine.productLineIsActive;
-            productLineDTO.productLineCreateDate = productLine.productLineCreateDate;
-            productLineDTO.productLineUpdateDate = productLine.productLineUpdateDate;
+            let productLineDTO: ProductLineDTO = ({ ...productLine });
+
             productLineDTOs.push(productLineDTO);
         }
 
@@ -103,13 +83,7 @@ export class ProductLineService {
             return null;
         }
 
-        let productLineDTO = new ProductLineDTO();
-        productLineDTO.productLineId = productLine.productLineId;
-        productLineDTO.productVendorId = productLine.productVendorId;
-        productLineDTO.productLineName = productLine.productLineName;
-        productLineDTO.productLineCode = productLine.productLineCode;
-        productLineDTO.productLineIsActive = productLine.productLineIsActive;
-        productLineDTO.productLineUpdateDate = productLine.productLineUpdateDate;
+        let productLineDTO: ProductLineDTO = ({ ...productLine });
         
         return productLineDTO;
         
@@ -126,13 +100,7 @@ export class ProductLineService {
             return null;
         }
 
-        let productLineDTO = new ProductLineDTO();
-        productLineDTO.productLineId = productLine.productLineId;
-        productLineDTO.productVendorId = productLine.productVendorId;
-        productLineDTO.productLineName = productLine.productLineName;
-        productLineDTO.productLineCode = productLine.productLineCode;
-        productLineDTO.productLineIsActive = productLine.productLineIsActive;
-        productLineDTO.productLineUpdateDate = productLine.productLineUpdateDate;
+        let productLineDTO: ProductLineDTO = ({ ...productLine });
         
         return productLineDTO;
         

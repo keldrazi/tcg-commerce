@@ -23,15 +23,8 @@ export class TCGdbMTGLanguageService {
         for(let i=0; i < tcgdbMTGLanguages.length; i++) {
             const tcgdbMTGLanguage = tcgdbMTGLanguages[i];
             
-            let tcgdbMTGLanguageDTO: TCGdbMTGLanguageDTO = {
-                tcgdbMTGLanguageId: tcgdbMTGLanguage.tcgdbMTGLanguageId,
-                tcgdbMTGLanguageTCGPlayerId: tcgdbMTGLanguage.tcgdbMTGLanguageTCGPlayerId,
-                tcgdbMTGLanguageName: tcgdbMTGLanguage.tcgdbMTGLanguageName,
-                tcgdbMTGLanguageAbbreviation: tcgdbMTGLanguage.tcgdbMTGLanguageAbbreviation,
-                tcgdbMTGLanguageCreateDate: tcgdbMTGLanguage.tcgdbMTGLanguageCreateDate,
-                tcgdbMTGLanguageUpdateDate: tcgdbMTGLanguage.tcgdbMTGLanguageUpdateDate,
-            }
-
+            let tcgdbMTGLanguageDTO: TCGdbMTGLanguageDTO = ({ ...tcgdbMTGLanguage });
+            
             tcgdbMTGLanguageDTOs.push(tcgdbMTGLanguageDTO);
         }
 
@@ -45,7 +38,13 @@ export class TCGdbMTGLanguageService {
             }
         });
 
-        return tcgdbMTGLanguage;
+        if(tcgdbMTGLanguage == null) {
+            return null;
+        }
+        
+        let tcgdbMTGLanguageDTO: TCGdbMTGLanguageDTO = ({ ...tcgdbMTGLanguage });
+
+        return tcgdbMTGLanguageDTO;
     }
 
     async createTCGdbMTGLanguages() {

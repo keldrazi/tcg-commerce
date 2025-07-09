@@ -23,15 +23,8 @@ export class TCGdbMTGRarityService {
         for(let i=0; i < tcgdbMTGRaritys.length; i++) {
             const tcgdbMTGRarity = tcgdbMTGRaritys[i];
             
-            let tcgdbMTGRarityDTO: TCGdbMTGRarityDTO = {
-                tcgdbMTGRarityId: tcgdbMTGRarity.tcgdbMTGRarityId,
-                tcgdbMTGRarityTCGPlayerId: tcgdbMTGRarity.tcgdbMTGRarityTCGPlayerId,
-                tcgdbMTGRarityName: tcgdbMTGRarity.tcgdbMTGRarityName,
-                tcgdbMTGRarityAbbreviation: tcgdbMTGRarity.tcgdbMTGRarityAbbreviation,
-                tcgdbMTGRarityCreateDate: tcgdbMTGRarity.tcgdbMTGRarityCreateDate,
-                tcgdbMTGRarityUpdateDate: tcgdbMTGRarity.tcgdbMTGRarityUpdateDate,
-            }
-
+            let tcgdbMTGRarityDTO: TCGdbMTGRarityDTO = ({ ...tcgdbMTGRarity });
+                
             tcgdbMTGRarityDTOs.push(tcgdbMTGRarityDTO);
         }
 
@@ -45,7 +38,13 @@ export class TCGdbMTGRarityService {
             }
         });
 
-        return tcgdbMTGRarity;
+        if(tcgdbMTGRarity == null) {
+            return null;
+        }
+
+        let tcgdbMTGRarityDTO: TCGdbMTGRarityDTO = ({ ...tcgdbMTGRarity });
+
+        return tcgdbMTGRarityDTO;
     }
 
     async createTCGdbMTGRarities() {

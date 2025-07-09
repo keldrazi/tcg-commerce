@@ -6,7 +6,6 @@ export class PricingProductCardTypeDTO {
     productLineId: string;
     pricingProductCardTypeName: string;
     pricingProductCardTypeDescription: string;
-    pricingProductCardTypeMetadata: string;
     pricingProductCardTypeIsActive: boolean;
     pricingProductCardTypeCreateDate: Date; 
     pricingProductCardTypeUpdateDate: Date;

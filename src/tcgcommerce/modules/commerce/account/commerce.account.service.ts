@@ -14,22 +14,13 @@ export class CommerceAccountService {
     async getCommerceAccount(commerceAccountId: string) {
         let commerceAccount = await this.commerceAccountRepository.findOne({ where: { commerceAccountId } });
         
-         //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE ACCOUNT IS NULL;
-        if (!commerceAccount) {
+         //TO DO: CREATE AN ERROR TO RETURN IF COMMERCE ACCOUNT IS NULL;
+        if (commerceAccount == null) {
             return null;
         }
 
-        let commerceAccountDTO = new CommerceAccountDTO();
-        commerceAccountDTO.commerceAccountId = commerceAccount.commerceAccountId;
-        commerceAccountDTO.commerceAccountName = commerceAccount.commerceAccountName;
-        commerceAccountDTO.commerceAccountContactName = commerceAccount.commerceAccountContactName;
-        commerceAccountDTO.commerceAccountContactEmail = commerceAccount.commerceAccountContactEmail;
-        commerceAccountDTO.commerceAccountContactPhone = commerceAccount.commerceAccountContactPhone;
-        commerceAccountDTO.commerceAccountHandle = commerceAccount.commerceAccountHandle;
-        commerceAccountDTO.commerceAccountIsActive = commerceAccount.commerceAccountIsActive;
-        commerceAccountDTO.commerceAccountCreateDate = commerceAccount.commerceAccountCreateDate;
-        commerceAccountDTO.commerceAccountUpdateDate = commerceAccount.commerceAccountUpdateDate;
-
+        let commerceAccountDTO: CommerceAccountDTO = ({ ...commerceAccount});
+        
         return commerceAccountDTO;
         
     }
@@ -53,7 +44,7 @@ export class CommerceAccountService {
         });
 
          //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE ACCOUNT IS NULL;
-        if (!updateCommerceAccount) {
+        if (updateCommerceAccount == null) {
             return null;
         }
 

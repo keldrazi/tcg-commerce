@@ -31,29 +31,7 @@ export class TCGdbMTGPriceChangeYearlyService {
         for(let i = 0; i < tcgdbMTGPriceChangeYearlys.length; i++) {
             let tcgdbMTGPriceChangeYearly = tcgdbMTGPriceChangeYearlys[i];
 
-            let tcgdbMTGPriceChangeYearlyDTO: TCGdbMTGPriceChangeYearlyDTO = {
-                tcgdbMTGPriceChangeYearlyId: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyId,
-                tcgdbMTGCardId: tcgdbMTGPriceChangeYearly.tcgdbMTGCardId,
-                tcgdbMTGPriceChangeYearlyTCGPlayerId: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyTCGPlayerId,
-                tcgdbMTGPriceChangeYearlySetAbbreviation: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlySetAbbreviation,
-                tcgdbMTGPriceChangeYearlyCurrentLowPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyCurrentLowPrice,
-                tcgdbMTGPriceChangeYearlyPreviousLowPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyPreviousLowPrice,
-                tcgdbMTGPriceChangeYearlyLowPriceDifference: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyLowPriceDifference,
-                tcgdbMTGPriceChangeYearlyLowPricePercentage: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyLowPricePercentage,
-                tcgdbMTGPriceChangeYearlyCurrentMidPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyCurrentMidPrice,
-                tcgdbMTGPriceChangeYearlyPreviousMidPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyPreviousMidPrice,
-                tcgdbMTGPriceChangeYearlyMidPriceDifference: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyMidPriceDifference,
-                tcgdbMTGPriceChangeYearlyMidPricePercentage: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyMidPricePercentage,
-                tcgdbMTGPriceChangeYearlyCurrentHighPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyCurrentHighPrice,
-                tcgdbMTGPriceChangeYearlyPreviousHighPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyPreviousHighPrice,
-                tcgdbMTGPriceChangeYearlyHighPriceDifference: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyHighPriceDifference,
-                tcgdbMTGPriceChangeYearlyHighPricePercentage: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyHighPricePercentage,
-                tcgdbMTGPriceChangeYearlyCurrentMarketPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyCurrentMarketPrice,
-                tcgdbMTGPriceChangeYearlyPreviousMarketPrice: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyPreviousMarketPrice,
-                tcgdbMTGPriceChangeYearlyMarketPriceDifference: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyMarketPriceDifference,
-                tcgdbMTGPriceChangeYearlyMarketPricePercentage: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlyMarketPricePercentage,
-                tcgdbMTGPriceChangeYearlySubTypeName: tcgdbMTGPriceChangeYearly.tcgdbMTGPriceChangeYearlySubTypeName
-            }
+            let tcgdbMTGPriceChangeYearlyDTO: TCGdbMTGPriceChangeYearlyDTO = ({ ...tcgdbMTGPriceChangeYearly });
 
             tcgdbMTGPriceChangeYearlyDTOs.push(tcgdbMTGPriceChangeYearlyDTO);
         }
@@ -63,8 +41,6 @@ export class TCGdbMTGPriceChangeYearlyService {
     }
 
     async createTCGdbMTGPriceChangeYearlyBySet() {
-
-
         //REMOVE ALL TCGDB PRICE CHANGE DAILY RECORDS;
         await this.tcgdbMTGPriceChangeYearlyRepository.createQueryBuilder()
             .delete()
@@ -176,7 +152,7 @@ export class TCGdbMTGPriceChangeYearlyService {
         }
         
         
-        let CreateTCGdbMTGPriceChangeYearlyDTO: CreateTCGdbMTGPriceChangeYearlyDTO = {
+        let createTCGdbMTGPriceChangeYearlyDTO: CreateTCGdbMTGPriceChangeYearlyDTO = {
             tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
             tcgdbMTGPriceChangeYearlyTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
             tcgdbMTGPriceChangeYearlySetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
@@ -199,7 +175,7 @@ export class TCGdbMTGPriceChangeYearlyService {
             tcgdbMTGPriceChangeYearlySubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName
         }
 
-        const newTCGdbMTGPriceChangeYearly = this.tcgdbMTGPriceChangeYearlyRepository.create(CreateTCGdbMTGPriceChangeYearlyDTO);
+        const newTCGdbMTGPriceChangeYearly = this.tcgdbMTGPriceChangeYearlyRepository.create(createTCGdbMTGPriceChangeYearlyDTO);
         await this.tcgdbMTGPriceChangeYearlyRepository.save(newTCGdbMTGPriceChangeYearly);
 
         return true;

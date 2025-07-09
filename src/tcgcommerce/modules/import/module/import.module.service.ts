@@ -22,15 +22,7 @@ export class ImportModuleService {
             return null;
         }
 
-        let importModuleDTO = new ImportModuleDTO();
-        importModuleDTO.importModuleId = importModule.importModuleId;
-        importModuleDTO.applicationModuleId = importModule.applicationModuleId;
-        importModuleDTO.commerceAccountId = importModule.commerceAccountId;
-        importModuleDTO.importModuleSettings = importModule.importModuleSettings;
-        importModuleDTO.importModuleRoles = importModule.importModuleRoles;
-        importModuleDTO.importModuleIsActive = importModule.importModuleIsActive;
-        importModuleDTO.importModuleCreateDate = importModule.importModuleCreateDate;
-        importModuleDTO.importModuleUpdateDate = importModule.importModuleUpdateDate;
+        let importModuleDTO:ImportModuleDTO = ({ ...importModule });
 
         return importModuleDTO;
         
@@ -47,15 +39,7 @@ export class ImportModuleService {
             return null;
         }
 
-        let importModuleDTO = new ImportModuleDTO();
-        importModuleDTO.importModuleId = importModule.importModuleId;
-        importModuleDTO.applicationModuleId = importModule.applicationModuleId;
-        importModuleDTO.commerceAccountId = importModule.commerceAccountId;
-        importModuleDTO.importModuleSettings = importModule.importModuleSettings;
-        importModuleDTO.importModuleRoles = importModule.importModuleRoles;
-        importModuleDTO.importModuleIsActive = importModule.importModuleIsActive;
-        importModuleDTO.importModuleCreateDate = importModule.importModuleCreateDate;
-        importModuleDTO.importModuleUpdateDate = importModule.importModuleUpdateDate;
+        let importModuleDTO:ImportModuleDTO = ({ ...importModule });
 
         return importModuleDTO;
         
@@ -72,15 +56,7 @@ export class ImportModuleService {
 
         for(let i = 0; i < importModules.length; i++) {
             let importModule = importModules[i];
-            let importModuleDTO = new ImportModuleDTO();
-            importModuleDTO.importModuleId = importModule.importModuleId;
-            importModuleDTO.applicationModuleId = importModule.applicationModuleId;
-            importModuleDTO.commerceAccountId = importModule.commerceAccountId;
-            importModuleDTO.importModuleSettings = importModule.importModuleSettings;
-            importModuleDTO.importModuleRoles = importModule.importModuleRoles;
-            importModuleDTO.importModuleIsActive = importModule.importModuleIsActive;
-            importModuleDTO.importModuleCreateDate = importModule.importModuleCreateDate;
-            importModuleDTO.importModuleUpdateDate = importModule.importModuleUpdateDate;
+            let importModuleDTO:ImportModuleDTO = ({ ...importModule });
 
             importModuleDTOs.push(importModuleDTO);
 

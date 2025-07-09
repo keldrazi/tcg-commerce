@@ -23,16 +23,7 @@ export class TCGdbMTGConditionService {
         for(let i=0; i < tcgdbMTGConditions.length; i++) {
             const tcgdbMTGCondition = tcgdbMTGConditions[i];
             
-            let tcgdbMTGConditionDTO: TCGdbMTGConditionDTO = {
-                tcgdbMTGConditionId: tcgdbMTGCondition.tcgdbMTGConditionId,
-                tcgdbMTGConditionTCGPlayerId: tcgdbMTGCondition.tcgdbMTGConditionTCGPlayerId,
-                tcgdbMTGConditionName: tcgdbMTGCondition.tcgdbMTGConditionName,
-                tcgdbMTGConditionAbbreviation: tcgdbMTGCondition.tcgdbMTGConditionAbbreviation,
-                tcgdbMTGConditionPriceFactor: tcgdbMTGCondition.tcgdbMTGConditionPriceFactor,
-                tcgdbMTGConditionDisplayOrder: tcgdbMTGCondition.tcgdbMTGConditionDisplayOrder,
-                tcgdbMTGConditionCreateDate: tcgdbMTGCondition.tcgdbMTGConditionCreateDate,
-                tcgdbMTGConditionUpdateDate: tcgdbMTGCondition.tcgdbMTGConditionUpdateDate,
-            }
+            let tcgdbMTGConditionDTO: TCGdbMTGConditionDTO = ({ ...tcgdbMTGCondition });
 
             tcgdbMTGConditionDTOs.push(tcgdbMTGConditionDTO);
         }
@@ -47,7 +38,13 @@ export class TCGdbMTGConditionService {
             }
         });
 
-        return tcgdbMTGCondition;
+        if(tcgdbMTGCondition == null) {
+            return null;
+        }
+
+        let tcgdbMTGConditionDTO: TCGdbMTGConditionDTO = ({ ...tcgdbMTGCondition });
+
+        return tcgdbMTGConditionDTO;
     }
 
     async createTCGdbMTGConditions() {

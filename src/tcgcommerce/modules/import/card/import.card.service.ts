@@ -27,18 +27,7 @@ export class ImportCardService {
 
         for(let i = 0; i < importCards.length; i++) {
             let importCard = importCards[i];
-            let importCardDTO = new ImportCardDTO();
-            importCardDTO.importCardId = importCard.importCardId;
-            importCardDTO.importJobId = importCard.importJobId;
-            importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
-            importCardDTO.importCardSetName = importCard.importCardSetName;
-            importCardDTO.importCardName = importCard.importCardName;
-            importCardDTO.importCardCondition = importCard.importCardCondition;
-            importCardDTO.importCardPrinting = importCard.importCardPrinting;
-            importCardDTO.importCardQty = importCard.importCardQty;
-            importCardDTO.importCardPrice = importCard.importCardPrice;
-            importCardDTO.importCardCreateDate = importCard.importCardCreateDate;
-            importCardDTO.importCardUpdateDate = importCard.importCardUpdateDate;
+            let importCardDTO:ImportCardDTO = ({ ...importCard });
 
             importCardDTOs.push(importCardDTO);
         }
@@ -58,18 +47,7 @@ export class ImportCardService {
             return null;
         }
 
-        let importCardDTO = new ImportCardDTO();
-        importCardDTO.importCardId = importCard.importCardId;
-        importCardDTO.importJobId = importCard.importJobId;
-        importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
-        importCardDTO.importCardSetName = importCard.importCardSetName;
-        importCardDTO.importCardName = importCard.importCardName;
-        importCardDTO.importCardCondition = importCard.importCardCondition;
-        importCardDTO.importCardPrinting = importCard.importCardPrinting;
-        importCardDTO.importCardQty = importCard.importCardQty;
-        importCardDTO.importCardPrice = importCard.importCardPrice;
-        importCardDTO.importCardCreateDate = importCard.importCardCreateDate;
-        importCardDTO.importCardUpdateDate = importCard.importCardUpdateDate;
+        let importCardDTO:ImportCardDTO = ({ ...importCard });
 
         return importCardDTO;
             
@@ -88,18 +66,7 @@ export class ImportCardService {
             return null;
         }
 
-        let importCardDTO = new ImportCardDTO();
-        importCardDTO.importCardId = importCard.importCardId;
-        importCardDTO.importJobId = importCard.importJobId;
-        importCardDTO.importCardTCGdbId = importCard.importCardTCGdbId;
-        importCardDTO.importCardSetName = importCard.importCardSetName;
-        importCardDTO.importCardName = importCard.importCardName;
-        importCardDTO.importCardCondition = importCard.importCardCondition;
-        importCardDTO.importCardPrinting = importCard.importCardPrinting;
-        importCardDTO.importCardQty = importCard.importCardQty;
-        importCardDTO.importCardPrice = importCard.importCardPrice;
-        importCardDTO.importCardCreateDate = importCard.importCardCreateDate;
-        importCardDTO.importCardUpdateDate = importCard.importCardUpdateDate;
+        let importCardDTO:ImportCardDTO = ({ ...importCard });
 
         return importCardDTO;
             
@@ -118,17 +85,7 @@ export class ImportCardService {
         let newImportCard = this.importCardRepository.create({ ...createImportCardDTO });
         newImportCard = await this.importCardRepository.save(newImportCard);
 
-        let importCardDTO = new ImportCardDTO();
-        importCardDTO.importCardId = newImportCard.importCardId;
-        importCardDTO.importJobId = newImportCard.importJobId;
-        importCardDTO.importCardTCGdbId = newImportCard.importCardTCGdbId;
-        importCardDTO.importCardSetName = newImportCard.importCardSetName;
-        importCardDTO.importCardCondition = newImportCard.importCardCondition;
-        importCardDTO.importCardPrinting = newImportCard.importCardPrinting;
-        importCardDTO.importCardQty = newImportCard.importCardQty;
-        importCardDTO.importCardPrice = newImportCard.importCardPrice;
-        importCardDTO.importCardCreateDate = newImportCard.importCardCreateDate;
-        importCardDTO.importCardUpdateDate = newImportCard.importCardUpdateDate;
+        let importCardDTO = this.getImportCardByImportCardId(newImportCard.importCardId);
 
         return importCardDTO;
         

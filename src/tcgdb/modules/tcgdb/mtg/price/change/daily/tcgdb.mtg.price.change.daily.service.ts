@@ -31,29 +31,7 @@ export class TCGdbMTGPriceChangeDailyService {
         for(let i = 0; i < tcgdbMTGPriceChangeDailys.length; i++) {
             let tcgdbMTGPriceChangeDaily = tcgdbMTGPriceChangeDailys[i];
 
-            let tcgdbMTGPriceChangeDailyDTO: TCGdbMTGPriceChangeDailyDTO = {
-                tcgdbMTGPriceChangeDailyId: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyId,
-                tcgdbMTGCardId: tcgdbMTGPriceChangeDaily.tcgdbMTGCardId,
-                tcgdbMTGPriceChangeDailyTCGPlayerId: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyTCGPlayerId,
-                tcgdbMTGPriceChangeDailySetAbbreviation: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailySetAbbreviation,
-                tcgdbMTGPriceChangeDailyCurrentLowPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentLowPrice,
-                tcgdbMTGPriceChangeDailyPreviousLowPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousLowPrice,
-                tcgdbMTGPriceChangeDailyLowPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyLowPriceDifference,
-                tcgdbMTGPriceChangeDailyLowPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyLowPricePercentage,
-                tcgdbMTGPriceChangeDailyCurrentMidPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentMidPrice,
-                tcgdbMTGPriceChangeDailyPreviousMidPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousMidPrice,
-                tcgdbMTGPriceChangeDailyMidPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMidPriceDifference,
-                tcgdbMTGPriceChangeDailyMidPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMidPricePercentage,
-                tcgdbMTGPriceChangeDailyCurrentHighPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentHighPrice,
-                tcgdbMTGPriceChangeDailyPreviousHighPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousHighPrice,
-                tcgdbMTGPriceChangeDailyHighPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyHighPriceDifference,
-                tcgdbMTGPriceChangeDailyHighPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyHighPricePercentage,
-                tcgdbMTGPriceChangeDailyCurrentMarketPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyCurrentMarketPrice,
-                tcgdbMTGPriceChangeDailyPreviousMarketPrice: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyPreviousMarketPrice,
-                tcgdbMTGPriceChangeDailyMarketPriceDifference: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMarketPriceDifference,
-                tcgdbMTGPriceChangeDailyMarketPricePercentage: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailyMarketPricePercentage,
-                tcgdbMTGPriceChangeDailySubTypeName: tcgdbMTGPriceChangeDaily.tcgdbMTGPriceChangeDailySubTypeName
-            }
+            let tcgdbMTGPriceChangeDailyDTO: TCGdbMTGPriceChangeDailyDTO = ({ ...tcgdbMTGPriceChangeDaily });
 
             tcgdbMTGPriceChangeDailyDTOs.push(tcgdbMTGPriceChangeDailyDTO);
         }
@@ -176,7 +154,7 @@ export class TCGdbMTGPriceChangeDailyService {
         }
         
         
-        let CreateTCGdbMTGPriceChangeDailyDTO: CreateTCGdbMTGPriceChangeDailyDTO = {
+        let createTCGdbMTGPriceChangeDailyDTO: CreateTCGdbMTGPriceChangeDailyDTO = {
             tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
             tcgdbMTGPriceChangeDailyTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
             tcgdbMTGPriceChangeDailySetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
@@ -199,7 +177,8 @@ export class TCGdbMTGPriceChangeDailyService {
             tcgdbMTGPriceChangeDailySubTypeName: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSubTypeName
         }
 
-        const newTCGdbMTGPriceChangeDaily = this.tcgdbMTGPriceChangeDailyRepository.create(CreateTCGdbMTGPriceChangeDailyDTO);
+        const newTCGdbMTGPriceChangeDaily = this.tcgdbMTGPriceChangeDailyRepository.create(createTCGdbMTGPriceChangeDailyDTO);
+        
         await this.tcgdbMTGPriceChangeDailyRepository.save(newTCGdbMTGPriceChangeDaily);
 
         return true;

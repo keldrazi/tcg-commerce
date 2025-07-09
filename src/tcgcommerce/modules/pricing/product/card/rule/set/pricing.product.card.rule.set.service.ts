@@ -23,16 +23,7 @@ export class PricingProductCardRuleSetService {
             return null;
         }
 
-        let pricingProductCardRuleSetDTO = new PricingProductCardRuleSetDTO();
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetId = pricingProductCardRuleSet.pricingProductCardRuleSetId;
-        pricingProductCardRuleSetDTO.commerceAccountId = pricingProductCardRuleSet.commerceAccountId;
-        pricingProductCardRuleSetDTO.pricingProductCardTypeId = pricingProductCardRuleSet.pricingProductCardTypeId;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleTypeId = pricingProductCardRuleSet.pricingProductCardRuleTypeId;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetName = pricingProductCardRuleSet.pricingProductCardRuleSetName;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata = pricingProductCardRuleSet.pricingProductCardRuleSetMetadata;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive = pricingProductCardRuleSet.pricingProductCardRuleSetIsActive;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetCreateDate = pricingProductCardRuleSet.pricingProductCardRuleSetCreateDate;
-        pricingProductCardRuleSetDTO.pricingProductCardRuleSetUpdateDate = pricingProductCardRuleSet.pricingProductCardRuleSetUpdateDate;
+        let pricingProductCardRuleSetDTO: PricingProductCardRuleSetDTO = ({ ...pricingProductCardRuleSet });
         
         return pricingProductCardRuleSetDTO;
 
@@ -56,16 +47,7 @@ export class PricingProductCardRuleSetService {
         for(let i = 0; i < pricingProductCardRuleSets.length; i++) {
             let pricingProductCardRuleSet = pricingProductCardRuleSets[i];
         
-            let pricingProductCardRuleSetDTO = new PricingProductCardRuleSetDTO();
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetId = pricingProductCardRuleSet.pricingProductCardRuleSetId;
-            pricingProductCardRuleSetDTO.commerceAccountId = pricingProductCardRuleSet.commerceAccountId;
-            pricingProductCardRuleSetDTO.pricingProductCardTypeId = pricingProductCardRuleSet.pricingProductCardTypeId;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleTypeId = pricingProductCardRuleSet.pricingProductCardRuleTypeId;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetName = pricingProductCardRuleSet.pricingProductCardRuleSetName;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata = pricingProductCardRuleSet.pricingProductCardRuleSetMetadata;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetIsActive = pricingProductCardRuleSet.pricingProductCardRuleSetIsActive;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetCreateDate = pricingProductCardRuleSet.pricingProductCardRuleSetCreateDate;
-            pricingProductCardRuleSetDTO.pricingProductCardRuleSetUpdateDate = pricingProductCardRuleSet.pricingProductCardRuleSetUpdateDate;
+            let pricingProductCardRuleSetDTO: PricingProductCardRuleSetDTO = ({ ...pricingProductCardRuleSet });
             
             pricingProductCardRuleSetsDTO.push(pricingProductCardRuleSetDTO);
         }

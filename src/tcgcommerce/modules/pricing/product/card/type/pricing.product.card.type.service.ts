@@ -23,13 +23,8 @@ export class PricingProductCardTypeService {
             return null;
         }
 
-        let pricingProductCardTypeDTO = new PricingProductCardTypeDTO();
-        pricingProductCardTypeDTO.productVendorId = pricingProductCardType.productVendorId;
-        pricingProductCardTypeDTO.productLineId = pricingProductCardType.productLineId;
-        pricingProductCardTypeDTO.pricingProductCardTypeId = pricingProductCardType.pricingProductCardTypeId;
-        pricingProductCardTypeDTO.pricingProductCardTypeName = pricingProductCardType.pricingProductCardTypeName;
-        pricingProductCardTypeDTO.pricingProductCardTypeIsActive = pricingProductCardType.pricingProductCardTypeIsActive;
-        pricingProductCardTypeDTO.pricingProductCardTypeCreateDate = pricingProductCardType.pricingProductCardTypeCreateDate;
+        let pricingProductCardTypeDTO: PricingProductCardTypeDTO = ({ ...pricingProductCardType})
+        
         pricingProductCardTypeDTO.pricingProductCardTypeUpdateDate = pricingProductCardType.pricingProductCardTypeUpdateDate;
         
         return pricingProductCardTypeDTO;
@@ -48,12 +43,7 @@ export class PricingProductCardTypeService {
         for(let i = 0; i < pricingProductCardTypes.length; i++) {
             let pricingProductCardType = pricingProductCardTypes[i];
         
-            let pricingProductCardTypeDTO = new PricingProductCardTypeDTO();
-            pricingProductCardTypeDTO.pricingProductCardTypeId = pricingProductCardType.pricingProductCardTypeId;
-            pricingProductCardTypeDTO.pricingProductCardTypeName = pricingProductCardType.pricingProductCardTypeName;
-            pricingProductCardTypeDTO.pricingProductCardTypeIsActive = pricingProductCardType.pricingProductCardTypeIsActive;
-            pricingProductCardTypeDTO.pricingProductCardTypeCreateDate = pricingProductCardType.pricingProductCardTypeCreateDate;
-            pricingProductCardTypeDTO.pricingProductCardTypeUpdateDate = pricingProductCardType.pricingProductCardTypeUpdateDate;
+            let pricingProductCardTypeDTO: PricingProductCardTypeDTO = ({ ...pricingProductCardType})
             
             pricingProductCardTypesDTO.push(pricingProductCardTypeDTO);
         }

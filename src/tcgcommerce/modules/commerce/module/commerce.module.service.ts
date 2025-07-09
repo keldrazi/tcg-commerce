@@ -18,19 +18,11 @@ export class CommerceModuleService {
             } 
         });
         
-        if (!commerceModule) {
+        if (commerceModule == null) {
             return null;
         }
 
-        let commerceModuleDTO = new CommerceModuleDTO();
-        commerceModuleDTO.commerceModuleId = commerceModule.commerceModuleId;
-        commerceModuleDTO.applicationModuleId = commerceModule.applicationModuleId;
-        commerceModuleDTO.commerceAccountId = commerceModule.commerceAccountId;
-        commerceModuleDTO.commerceModuleSettings = commerceModule.commerceModuleSettings;
-        commerceModuleDTO.commerceModuleRoles = commerceModule.commerceModuleRoles;
-        commerceModuleDTO.commerceModuleIsActive = commerceModule.commerceModuleIsActive;
-        commerceModuleDTO.commerceModuleCreateDate = commerceModule.commerceModuleCreateDate;
-        commerceModuleDTO.commerceModuleUpdateDate = commerceModule.commerceModuleUpdateDate;
+        let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
 
         return commerceModuleDTO;
         
@@ -44,19 +36,11 @@ export class CommerceModuleService {
         });
         
         //TO DO: RETURN AN ERROR IF COMMERCE MODULE NOT FOUND;
-        if (!commerceModule) {
+        if (commerceModule == null) {
             return null;
         }
 
-        let commerceModuleDTO = new CommerceModuleDTO();
-        commerceModuleDTO.commerceModuleId = commerceModule.commerceModuleId;
-        commerceModuleDTO.applicationModuleId = commerceModule.applicationModuleId;
-        commerceModuleDTO.commerceAccountId = commerceModule.commerceAccountId;
-        commerceModuleDTO.commerceModuleSettings = commerceModule.commerceModuleSettings;
-        commerceModuleDTO.commerceModuleRoles = commerceModule.commerceModuleRoles;
-        commerceModuleDTO.commerceModuleIsActive = commerceModule.commerceModuleIsActive;
-        commerceModuleDTO.commerceModuleCreateDate = commerceModule.commerceModuleCreateDate;
-        commerceModuleDTO.commerceModuleUpdateDate = commerceModule.commerceModuleUpdateDate;
+        let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
 
         return commerceModuleDTO;
         
@@ -73,15 +57,7 @@ export class CommerceModuleService {
 
         for(let i = 0; i < commerceModules.length; i++) {
             let commerceModule = commerceModules[i];
-            let commerceModuleDTO = new CommerceModuleDTO();
-            commerceModuleDTO.commerceModuleId = commerceModule.commerceModuleId;
-            commerceModuleDTO.applicationModuleId = commerceModule.applicationModuleId;
-            commerceModuleDTO.commerceAccountId = commerceModule.commerceAccountId;
-            commerceModuleDTO.commerceModuleSettings = commerceModule.commerceModuleSettings;
-            commerceModuleDTO.commerceModuleRoles = commerceModule.commerceModuleRoles;
-            commerceModuleDTO.commerceModuleIsActive = commerceModule.commerceModuleIsActive;
-            commerceModuleDTO.commerceModuleCreateDate = commerceModule.commerceModuleCreateDate;
-            commerceModuleDTO.commerceModuleUpdateDate = commerceModule.commerceModuleUpdateDate;
+            let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
 
             commerceModuleDTOs.push(commerceModuleDTO);
 
@@ -109,7 +85,7 @@ export class CommerceModuleService {
         });
 
         //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!existingCommerceModule) {
+        if (existingCommerceModule == null) {
             return null; 
         }
 

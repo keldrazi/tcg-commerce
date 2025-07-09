@@ -18,22 +18,14 @@ export class ProductModuleService {
             } 
         });
         
-        if (!productModule) {
+        if (productModule == null) {
             return null;
         }
 
-        let productModuleDTO = new ProductModuleDTO();
-        productModuleDTO.productModuleId = productModule.productModuleId;
-        productModuleDTO.applicationModuleId = productModule.applicationModuleId;
-        productModuleDTO.commerceAccountId = productModule.commerceAccountId;
-        productModuleDTO.productModuleSettings = productModule.productModuleSettings;
-        productModuleDTO.productModuleRoles = productModule.productModuleRoles;
-        productModuleDTO.productModuleIsActive = productModule.productModuleIsActive;
-        productModuleDTO.productModuleCreateDate = productModule.productModuleCreateDate;
-        productModuleDTO.productModuleUpdateDate = productModule.productModuleUpdateDate;
+        let productModuleDTO: ProductModuleDTO = ({ ...productModule });
 
         return productModuleDTO;
-        
+
     }
 
     async getProductModuleByCommerceAccountId(commerceAccountId: string) {
@@ -47,15 +39,7 @@ export class ProductModuleService {
             return null;
         }
 
-        let productModuleDTO = new ProductModuleDTO();
-        productModuleDTO.productModuleId = productModule.productModuleId;
-        productModuleDTO.applicationModuleId = productModule.applicationModuleId;
-        productModuleDTO.commerceAccountId = productModule.commerceAccountId;
-        productModuleDTO.productModuleSettings = productModule.productModuleSettings;
-        productModuleDTO.productModuleRoles = productModule.productModuleRoles;
-        productModuleDTO.productModuleIsActive = productModule.productModuleIsActive;
-        productModuleDTO.productModuleCreateDate = productModule.productModuleCreateDate;
-        productModuleDTO.productModuleUpdateDate = productModule.productModuleUpdateDate;
+        let productModuleDTO: ProductModuleDTO = ({ ...productModule });
 
         return productModuleDTO;
         
@@ -73,15 +57,7 @@ export class ProductModuleService {
 
         for(let i = 0; i < productModules.length; i++) {
             let productModule = productModules[i];
-            let productModuleDTO = new ProductModuleDTO();
-            productModuleDTO.productModuleId = productModule.productModuleId;
-            productModuleDTO.applicationModuleId = productModule.applicationModuleId;
-            productModuleDTO.commerceAccountId = productModule.commerceAccountId;
-            productModuleDTO.productModuleSettings = productModule.productModuleSettings;
-            productModuleDTO.productModuleRoles = productModule.productModuleRoles;
-            productModuleDTO.productModuleIsActive = productModule.productModuleIsActive;
-            productModuleDTO.productModuleCreateDate = productModule.productModuleCreateDate;
-            productModuleDTO.productModuleUpdateDate = productModule.productModuleUpdateDate;
+            let productModuleDTO: ProductModuleDTO = ({ ...productModule });
 
             productModuleDTOs.push(productModuleDTO);
 
