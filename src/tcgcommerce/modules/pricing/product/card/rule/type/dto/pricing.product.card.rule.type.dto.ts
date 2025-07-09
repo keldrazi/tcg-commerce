@@ -2,7 +2,9 @@ import { IsBoolean, IsString } from "class-validator";
 
 export class PricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeId: string;
+    pricingProductCardTypeId: string;
     pricingProductCardRuleTypeName: string;
+    pricingProductCardRuleTypeCode: string;
     pricingProductCardRuleTypeDescription: string;
     pricingProductCardRuleTypeMetadata: string;
     pricingProductCardRuleTypeIsActive: boolean;
@@ -12,7 +14,11 @@ export class PricingProductCardRuleTypeDTO {
 
 export class CreatePricingProductCardRuleTypeDTO {
     @IsString()
+    pricingProductCardTypeId:string;
+    @IsString()
     pricingProductCardRuleTypeName: string;
+    @IsString()
+    pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleTypeDescription: string;
     @IsString()
@@ -26,6 +32,8 @@ export class UpdatePricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeId: string;
     @IsString()
     pricingProductCardRuleTypeName: string;
+    @IsString()
+    pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleTypeDescription: string;
     @IsString()

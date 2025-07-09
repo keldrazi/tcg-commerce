@@ -6,7 +6,13 @@ export class PricingProductCardRuleType {
     pricingProductCardRuleTypeId: string;
     
     @Column()
-    pricingProductCardRuleTypeName: string; //Baseline;
+    pricingProductCardTypeId: string;
+
+    @Column()
+    pricingProductCardRuleTypeName: string; //Base Price;
+
+    @Column()
+    pricingProductCardRuleTypeCode: string; //base-price;
 
     @Column()
     pricingProductCardRuleTypeDescription: string;

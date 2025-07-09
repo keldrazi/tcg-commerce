@@ -10,6 +10,9 @@ export class PricingProductCardType {
 
     @Column()
     productLineId: string;
+    
+    @Column()
+    productTypeId: string;
    
     @Column()
     pricingProductCardTypeName: string;

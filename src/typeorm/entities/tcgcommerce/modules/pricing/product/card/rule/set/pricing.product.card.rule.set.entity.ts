@@ -9,11 +9,23 @@ export class PricingProductCardRuleSet {
     commerceAccountId: string;
 
     @Column()
+    productVendorId: string;
+
+    @Column()
+    productLineId: string;
+    
+    @Column()
+    productTypeId: string;
+
+    @Column()
     pricingProductCardTypeId: string;
 
     @Column()
-    pricingProductCardRuleTypeId: string; //Base Prcing
+    pricingProductCardRuleTypeId: string; //Base Pricing
 
+    @Column()
+    pricingProductCardRuleTypeCode:string;
+    
     @Column()
     pricingProductCardRuleSetName: string;
 

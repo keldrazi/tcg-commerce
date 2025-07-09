@@ -74,6 +74,10 @@ import { ProductCardConditionModule } from './tcgcommerce/modules/product/card/c
 import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/language/product.card.language.module';
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
+//Product Card Pricing Modules;
+import { PricingProductCardTypeModule } from './tcgcommerce/modules/pricing/product/card/type/pricing.product.card.type.module';
+import { PricingProductCardRuleTypeModule } from './tcgcommerce/modules/pricing/product/card/rule/type/pricing.product.card.rule.type.module';
+import { PricingProductCardRuleSetModule } from './tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.module'; 
 
 //System Modules;
 import { UtilScheduleTaskPriceModule } from './system/modules/util/schedule/task/price/util.schedule.task.price.module';
@@ -156,6 +160,10 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductCardLanguageModule,
     ProductCardPrintingModule,
     ProductCardRarityModule,
+    //Product Card Pricing Modules;
+    PricingProductCardTypeModule,
+    PricingProductCardRuleTypeModule,
+    PricingProductCardRuleSetModule,
     //System Modules;
     UtilScheduleTaskPriceModule,
   ],

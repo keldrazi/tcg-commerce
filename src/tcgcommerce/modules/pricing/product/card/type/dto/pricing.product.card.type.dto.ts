@@ -4,6 +4,7 @@ export class PricingProductCardTypeDTO {
     pricingProductCardTypeId: string;
     productVendorId: string;
     productLineId: string;
+    productTypeId: string;
     pricingProductCardTypeName: string;
     pricingProductCardTypeDescription: string;
     pricingProductCardTypeIsActive: boolean;
@@ -16,6 +17,8 @@ export class CreatePricingProductCardTypeDTO {
     productVendorId: string;
     @IsString()
     productLineId: string;
+    @IsString()
+    productTypeId: string;
     @IsString()
     pricingProductCardTypeName: string;
     @IsString()
