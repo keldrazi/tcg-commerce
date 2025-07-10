@@ -10,6 +10,7 @@ import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/car
 import { ProductCardLanguageService } from 'src/tcgcommerce/modules/product/card/language/product.card.language.service';
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
 import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
+import { PricingProductCardRuleSetService } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.service';
 
 
 @Injectable()
@@ -26,13 +27,14 @@ export class InventoryBatchProductCardService {
         private productCardLanguageService: ProductCardLanguageService,
         private productCardPrintingService: ProductCardPrintingService,
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
+        private pricingProductCardRuleSetService: PricingProductCardRuleSetService
     ) { }
 
     
 
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
-    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
         
         //GET THE PRODUCT SETS;
         let productSets = await this.getProductSetsByProductLineId(productLineId);
@@ -50,6 +52,9 @@ export class InventoryBatchProductCardService {
         if (productCardConditions == null || productCardLanguageTCGPlayerId == null || productCardPrintings == null) {
             return null;
         }
+
+        //GET THE PRICING PRODUCT CARD RULE SETS;
+        let pricingProductCardRuleSets = await this.pricingProductCardRuleSetService.getPricingProductCardRuleSets(commerceAccountId, productTypeId);
 
         //LOOP OVER THE PRODUCT SETS AND GET THE PRODUCT CARD ITEMS;
         for (let i = 0; i < productSets.length; i++) {
@@ -96,11 +101,11 @@ export class InventoryBatchProductCardService {
                         inventoryProductCard.inventoryProductCardQty = 0;
                         inventoryProductCard.inventoryProductCardMaxQty = 0;
                         inventoryProductCard.inventoryProductCardReserveQty = 0;
-                        inventoryProductCard.inventoryProductCardPrice = 0.00;
+                        
                         inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
                         inventoryProductCard.inventoryProductCardOverridePrice = 0.00;
 
-                        
+                        //SET THE PRICE BASED ON THE PRICING PRODUCT CARD RULE SETS;
                     }
                 }
 

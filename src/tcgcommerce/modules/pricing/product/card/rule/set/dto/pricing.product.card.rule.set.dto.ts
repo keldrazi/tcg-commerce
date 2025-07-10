@@ -7,8 +7,8 @@ export class PricingProductCardRuleSetDTO {
     productLineId: string;
     productTypeId: string;
     pricingProductCardTypeId: string;
-    pricingProductCardRuleTypeCode: string;
     pricingProductCardRuleTypeId: string;
+    pricingProductCardRuleTypeCode: string;
     pricingProductCardRuleSetName: string;
     pricingProductCardRuleSetMetadata: string;
     pricingProductCardRuleSetIsActive: boolean;
