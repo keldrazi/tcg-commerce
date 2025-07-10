@@ -1,4 +1,4 @@
-import { IsBoolean, IsString } from "class-validator";
+import { IsBoolean, IsJSON, IsString } from "class-validator";
 
 export class PricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeId: string;
@@ -21,8 +21,7 @@ export class CreatePricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleTypeDescription: string;
-    @IsString()
-    pricingProductCardRuleTypeMetadata: string;
+    pricingProductCardRuleTypeMetadata: any;
     @IsBoolean()
     pricingProductCardRuleTypeIsActive: boolean;
 }
@@ -36,8 +35,7 @@ export class UpdatePricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleTypeDescription: string;
-    @IsString()
-    pricingProductCardRuleTypeMetadata: string;
+    pricingProductCardRuleTypeMetadata: any;
     @IsBoolean()
     pricingProductCardRuleTypeIsActive: boolean;
 }

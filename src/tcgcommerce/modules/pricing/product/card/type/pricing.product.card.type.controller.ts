@@ -17,7 +17,7 @@ export class PricingProductCardTypeController {
         return await this.pricingProductCardTypeService.getPricingProductCardType(pricingProductCardTypeId);
     }
 
-    @Get('/all')
+    @Get()
     async getPricingProductCardTypes() {
         return await this.pricingProductCardTypeService.getPricingProductCardTypes();
     }

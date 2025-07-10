@@ -2,10 +2,10 @@
     "metadata": {
         "fields": [
             {
-                "id": "base-price-level",
+                "id": "base-price",
                 "type": "select",
-                "label": "Base Price Level",
-                "information": "Select the base price level for cards.",
+                "label": "Base Price",
+                "information": "Select the base price for cards.",
                 "options": [
                     {
                         "value": "tcgplayer-low",
@@ -20,7 +20,7 @@
                 "validation": [
                     {
                         "type": "required",
-                        "message": "Base Price Level is required."
+                        "message": "Base Price is required."
                     }
                 ],
                 "enabled": true

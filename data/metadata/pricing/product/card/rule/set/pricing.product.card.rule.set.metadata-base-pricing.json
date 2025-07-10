@@ -3,7 +3,7 @@
     "metadata":{
         "fields": [
             {
-                "id": "base-price-level",
+                "id": "base-price",
                 "value": "tcgplayer-low"
             },
             {

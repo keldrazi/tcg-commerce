@@ -16,8 +16,12 @@ export class PricingProductCardRuleTypeController {
     async getPricingProductCardRuleType(@Param('pricingProductCardRuleTypeId') pricingProductCardRuleTypeId: string) {
         return await this.pricingProductCardRuleTypeService.getPricingProductCardRuleType(pricingProductCardRuleTypeId);
     }
+    @Get('pricingProductCardType/:pricingProductCardTypeId')
+    async getPricingProductCardRuleTypesByPricingProductCardTypeId(@Param('pricingProductCardTypeId') pricingProductCardTypeId: string) {
+        return await this.pricingProductCardRuleTypeService.getPricingProductCardRuleTypesByPricingProductCardTypeId(pricingProductCardTypeId);
+    }
 
-    @Get('/all')
+    @Get()
     async getPricingProductCardRuleTypes() {
         return await this.pricingProductCardRuleTypeService.getPricingProductCardRuleTypes();
     }

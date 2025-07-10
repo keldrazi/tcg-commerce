@@ -29,6 +29,32 @@ export class PricingProductCardRuleTypeService {
 
     }
 
+    async getPricingProductCardRuleTypesByPricingProductCardTypeId(pricingProductCardTypeId: string) {
+        let pricingProductCardRuleTypes = await this.pricingProductCardRuleTypeRepository.find({
+            where: {
+                pricingProductCardTypeId: pricingProductCardTypeId,
+            }
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(pricingProductCardRuleTypes == null) {
+            return null;
+        }
+
+        let pricingProductCardRuleTypesDTO: PricingProductCardRuleTypeDTO[] = [];
+        for(let i = 0; i < pricingProductCardRuleTypes.length; i++) {
+            let pricingProductCardRuleType = pricingProductCardRuleTypes[i];
+
+            let pricingProductCardRuleTypeDTO: PricingProductCardRuleTypeDTO = ({ ...pricingProductCardRuleType });
+
+            pricingProductCardRuleTypesDTO.push(pricingProductCardRuleTypeDTO);
+        }
+
+        return pricingProductCardRuleTypesDTO;
+    }
+
+        
+
     async getPricingProductCardRuleTypes() {
         let pricingProductCardRuleTypes = await this.pricingProductCardRuleTypeRepository.find();
         
@@ -75,6 +101,8 @@ export class PricingProductCardRuleTypeService {
 
         pricingProductCardRuleType.pricingProductCardRuleTypeId = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeId;
         pricingProductCardRuleType.pricingProductCardRuleTypeName = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeName;
+        pricingProductCardRuleType.pricingProductCardRuleTypeCode = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeCode;
+        pricingProductCardRuleType.pricingProductCardRuleTypeDescription = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeDescription;
         pricingProductCardRuleType.pricingProductCardRuleTypeMetadata = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeMetadata;
         pricingProductCardRuleType.pricingProductCardRuleTypeIsActive = updatePricingProductCardRuleTypeDTO.pricingProductCardRuleTypeIsActive;
         pricingProductCardRuleType.pricingProductCardRuleTypeUpdateDate = new Date();

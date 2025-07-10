@@ -33,8 +33,7 @@ export class CreatePricingProductCardRuleSetDTO {
     pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleSetName: string;
-    @IsString()
-    pricingProductCardRuleSetMetadata: string;
+    pricingProductCardRuleSetMetadata: any;
     @IsBoolean()
     pricingProductCardRuleSetIsActive: boolean;
 }
@@ -48,8 +47,7 @@ export class UpdatePricingProductCardRuleSetDTO {
     pricingProductCardRuleTypeId: string;
     @IsString()
     pricingProductCardRuleSetName: string;
-    @IsString()
-    pricingProductCardRuleSetMetadata: string;
+    pricingProductCardRuleSetMetadata: any;
     @IsBoolean()
     pricingProductCardRuleSetIsActive: boolean;
 }
