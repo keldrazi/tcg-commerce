@@ -1,4 +1,5 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { PricingProductCardRuleTypeMetadata } from 'src/tcgcommerce/modules/pricing/product/card/rule/type/interface/pricing.product.card.rule.type.metadata.interface';
 
 @Entity('pricingProductCardRuleType')
 export class PricingProductCardRuleType {
@@ -18,7 +19,7 @@ export class PricingProductCardRuleType {
     pricingProductCardRuleTypeDescription: string;
 
     @Column('jsonb')
-    pricingProductCardRuleTypeMetadata: string;
+    pricingProductCardRuleTypeMetadata: PricingProductCardRuleTypeMetadata;
 
     @Column({type: 'boolean', default: false})
     pricingProductCardRuleTypeIsActive: boolean;

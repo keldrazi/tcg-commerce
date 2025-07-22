@@ -17,9 +17,9 @@ export class PricingProductCardRuleSetController {
         return await this.pricingProductCardRuleSetService.getPricingProductCardRuleSet(pricingProductCardRuleSetId);
     }
 
-    @Get('commerceAccount/:commerceAccountId/productLine/:productLineId')
-    async getPricingProductCardRuleSets(@Param('commerceAccountId') commerceAccountId: string, @Param('productLineId') productLineId: string) {
-        return await this.pricingProductCardRuleSetService.getPricingProductCardRuleSets(commerceAccountId, productLineId);
+    @Get('commerceAccount/:commerceAccountId/pricingProductCardTypeId/:pricingProductCardTypeId')
+    async getPricingProductCardRuleSets(@Param('commerceAccountId') commerceAccountId: string, @Param('pricingProductCardTypeId') pricingProductCardTypeId: string) {
+        return await this.pricingProductCardRuleSetService.getPricingProductCardRuleSets(commerceAccountId, pricingProductCardTypeId);
     }
 
     @Post()

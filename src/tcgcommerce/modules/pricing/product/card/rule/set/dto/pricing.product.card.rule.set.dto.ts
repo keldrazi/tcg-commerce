@@ -1,4 +1,5 @@
 import { IsBoolean, IsString } from "class-validator";
+import { PricingProductCardRuleSetMetadata } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/interface/pricing.product.card.rule.set.metadata.interface';
 
 export class PricingProductCardRuleSetDTO {
     pricingProductCardRuleSetId: string;
@@ -10,7 +11,7 @@ export class PricingProductCardRuleSetDTO {
     pricingProductCardRuleTypeId: string;
     pricingProductCardRuleTypeCode: string;
     pricingProductCardRuleSetName: string;
-    pricingProductCardRuleSetMetadata: string;
+    pricingProductCardRuleSetMetadata: PricingProductCardRuleSetMetadata;
     pricingProductCardRuleSetIsActive: boolean;
     pricingProductCardRuleSetCreateDate: Date;
     pricingProductCardRuleSetUpdateDate: Date;
@@ -33,7 +34,7 @@ export class CreatePricingProductCardRuleSetDTO {
     pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleSetName: string;
-    pricingProductCardRuleSetMetadata: any;
+    pricingProductCardRuleSetMetadata: PricingProductCardRuleSetMetadata;
     @IsBoolean()
     pricingProductCardRuleSetIsActive: boolean;
 }
@@ -47,7 +48,7 @@ export class UpdatePricingProductCardRuleSetDTO {
     pricingProductCardRuleTypeId: string;
     @IsString()
     pricingProductCardRuleSetName: string;
-    pricingProductCardRuleSetMetadata: any;
+    pricingProductCardRuleSetMetadata: PricingProductCardRuleSetMetadata;
     @IsBoolean()
     pricingProductCardRuleSetIsActive: boolean;
 }

@@ -11,7 +11,7 @@ import { ProductCardLanguageService } from 'src/tcgcommerce/modules/product/card
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
 import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
 import { PricingProductCardRuleSetService } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.service';
-
+import { BASE_PRICE, CONDITION_PRICING, PRICING_PRODUCT_CARD_RULE_TYPE_CODE, BASE_PRICE_DEFAULT_RULE_SET, CONDITION_PRICE_DEFAULT_RULE_SET } from 'src/system/constants/tcgcommerce/inventory/constants.tcgcommerce.inventory';
 
 @Injectable()
 export class InventoryBatchProductCardService {

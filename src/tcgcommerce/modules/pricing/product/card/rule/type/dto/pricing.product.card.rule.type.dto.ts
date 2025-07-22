@@ -1,4 +1,5 @@
 import { IsBoolean, IsJSON, IsString } from "class-validator";
+import { PricingProductCardRuleTypeMetadata } from 'src/tcgcommerce/modules/pricing/product/card/rule/type/interface/pricing.product.card.rule.type.metadata.interface';
 
 export class PricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeId: string;
@@ -6,7 +7,7 @@ export class PricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeName: string;
     pricingProductCardRuleTypeCode: string;
     pricingProductCardRuleTypeDescription: string;
-    pricingProductCardRuleTypeMetadata: string;
+    pricingProductCardRuleTypeMetadata: PricingProductCardRuleTypeMetadata;
     pricingProductCardRuleTypeIsActive: boolean;
     pricingProductCardRuleTypeCreateDate: Date; 
     pricingProductCardRuleTypeUpdateDate: Date;
@@ -21,7 +22,7 @@ export class CreatePricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleTypeDescription: string;
-    pricingProductCardRuleTypeMetadata: any;
+    pricingProductCardRuleTypeMetadata: PricingProductCardRuleTypeMetadata;
     @IsBoolean()
     pricingProductCardRuleTypeIsActive: boolean;
 }
@@ -35,7 +36,7 @@ export class UpdatePricingProductCardRuleTypeDTO {
     pricingProductCardRuleTypeCode: string;
     @IsString()
     pricingProductCardRuleTypeDescription: string;
-    pricingProductCardRuleTypeMetadata: any;
+    pricingProductCardRuleTypeMetadata: PricingProductCardRuleTypeMetadata;
     @IsBoolean()
     pricingProductCardRuleTypeIsActive: boolean;
 }
