@@ -92,5 +92,29 @@ export class PricingProductCardRuleSetService {
 
         return pricingProductCardDTO;
         
-    }   
+    }  
+    
+    async processPricingProductCardRuleSet(pricingProductCardRuleSetsDTO: PricingProductCardRuleSetDTO[]) {
+        let pricingProductCardRuleSets: any[] = [];
+        
+        for (let i = 0; i < pricingProductCardRuleSetsDTO.length; i++) {
+            let pricingProductCardRuleSetDTO = pricingProductCardRuleSetsDTO[i];
+            let pricingProductCardRuleSet = {
+                pricingProductCardRuleTypeCode: pricingProductCardRuleSetDTO.pricingProductCardRuleTypeCode,
+                pricingProductCardRuleSet: [] as any[]
+            }
+
+            let pricingProductCardRuleSetMetadata = pricingProductCardRuleSetDTO.pricingProductCardRuleSetMetadata.metadata.fields;;
+            for (let j = 0; j < pricingProductCardRuleSetMetadata.length; j++) {
+                let metadata = pricingProductCardRuleSetMetadata[j];
+                pricingProductCardRuleSet.pricingProductCardRuleSet.push({
+                    [metadata.id]: metadata.value
+                });
+            }
+
+            pricingProductCardRuleSets.push(pricingProductCardRuleSet);
+        }
+
+        return pricingProductCardRuleSets;
+    }
 }

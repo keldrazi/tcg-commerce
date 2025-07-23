@@ -11,7 +11,7 @@ import { ProductCardLanguageService } from 'src/tcgcommerce/modules/product/card
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
 import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
 import { PricingProductCardRuleSetService } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.service';
-import { BASE_PRICE, CONDITION_PRICING, PRICING_PRODUCT_CARD_RULE_TYPE_CODE, BASE_PRICE_DEFAULT_RULE_SET, CONDITION_PRICE_DEFAULT_RULE_SET } from 'src/system/constants/tcgcommerce/inventory/constants.tcgcommerce.inventory';
+import { ProductCardPriceService } from 'src/tcgcommerce/modules/product/card/price/product.card.price.service';
 
 @Injectable()
 export class InventoryBatchProductCardService {
@@ -27,7 +27,8 @@ export class InventoryBatchProductCardService {
         private productCardLanguageService: ProductCardLanguageService,
         private productCardPrintingService: ProductCardPrintingService,
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
-        private pricingProductCardRuleSetService: PricingProductCardRuleSetService
+        private pricingProductCardRuleSetService: PricingProductCardRuleSetService,
+        private productCardPriceService: ProductCardPriceService,
     ) { }
 
     
@@ -36,12 +37,22 @@ export class InventoryBatchProductCardService {
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
     async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
         
+        //GET THE PRODUCT LINE;
+        let productLine = await this.getProductLine(productLineId);
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if (productLine == null) {
+            return null;
+        }
+
         //GET THE PRODUCT SETS;
         let productSets = await this.getProductSetsByProductLineId(productLineId);
          //TO DO: CREATE AN ERROR TO RETURN;
         if (productSets == null) {
             return null;
         }
+
+
 
         let productCardConditions = await this.getProductCardConditionsByProductLineId(productLineId);
         
@@ -54,7 +65,15 @@ export class InventoryBatchProductCardService {
         }
 
         //GET THE PRICING PRODUCT CARD RULE SETS;
+        let pricingProductCardRuleSetsEnabled = false;
+        let processedPricingProductCardRuleSets: any[];
         let pricingProductCardRuleSets = await this.pricingProductCardRuleSetService.getPricingProductCardRuleSets(commerceAccountId, productTypeId);
+
+        if(pricingProductCardRuleSets != null && pricingProductCardRuleSets.length > 0) {
+            pricingProductCardRuleSetsEnabled = true;
+            processedPricingProductCardRuleSets = await this.pricingProductCardRuleSetService.processPricingProductCardRuleSet(pricingProductCardRuleSets);
+        }
+
 
         //LOOP OVER THE PRODUCT SETS AND GET THE PRODUCT CARD ITEMS;
         for (let i = 0; i < productSets.length; i++) {
@@ -71,13 +90,17 @@ export class InventoryBatchProductCardService {
             for (let j = 0; j < productCardItems.length; j++) {
                 let productCardItem = productCardItems[j];
                 
+                //GET THE PRODUCT CARD ITEM PRICES;
+                let productCardPrices = await this.productCardPriceService.getProductCardPrices(productLine.productLineCode, productCardItem.productCardItemTCGdbId, productCardItem.productCardItemId);
+                if (productCardPrices == null) {
+                    continue;
+                }
+
                 //LOOP OVER EACH PRODUCT CARD PRINTING;
                 for(let k = 0; k < productCardPrintings.length; k++) {
                     let productCardPrinting = productCardPrintings[k];
 
-                    //GET THE CURRENT TCGDB PRICE;
-                    //let productCardItemPrice = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentByCardIdAndProductCardPrinting(productCardItem.productCardItemTCGdbId, productCardPrinting.productCardPrintingName);
-
+                    
                     //LOOP OVER EACH PRODUCT CARD CONDITION;
                     for(let l = 0; l < productCardConditions.length; l++) {
                         let productCardCondition = productCardConditions[l];
@@ -102,30 +125,46 @@ export class InventoryBatchProductCardService {
                         inventoryProductCard.inventoryProductCardMaxQty = 0;
                         inventoryProductCard.inventoryProductCardReserveQty = 0;
                         
+                        /*
                         inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
                         inventoryProductCard.inventoryProductCardOverridePrice = 0.00;
-
+                        */
+                        
                         //SET THE PRICE BASED ON THE PRICING PRODUCT CARD RULE SETS;
+                        let productCardPrice = productCardPrices.find(obj => obj.productCardPrintingName === productCardPrinting.productCardPrintingName);
+
+                        if(productCardPrice != undefined){
+                            //CALL THE PRICING PRODUCT CARD RULE SET SERVICE TO GET THE PRICE;
+                            if(pricingProductCardRuleSetsEnabled) {
+                               
+                            }
+                            //CALL THE PRICING PRODUCT CARD RULE SET SERVICE TO GET THE PRICE (DEFAULTS)
+                            else {
+                                inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
+                                inventoryProductCard.inventoryProductCardOverridePrice = 0.00;
+                            }
+                        }
+                        else {
+                            //SET THE PRICE TO 0.00;
+                        }
                     }
                 }
 
                 
             }
-        }
+        }   
     }
 
 
 
     //UTILITY FUNCTIONS;
-    async getProductLineIdByCode(productLineCode: string) {
-        let productLine = await this.productLineService.getProductLineByCode(productLineCode);
+    async getProductLine(productLineId: string) {
+        let productLine = await this.productLineService.getProductLine(productLineId);
         if (productLine == null) {
             return null;
         }
         
-        let productLineId = productLine.productLineId;
-        
-        return productLineId;
+        return productLine;
     }
 
     async getProductSetsByProductLineId(productLineId: string) {

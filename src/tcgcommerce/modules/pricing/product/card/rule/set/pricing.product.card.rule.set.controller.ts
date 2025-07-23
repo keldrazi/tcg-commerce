@@ -34,4 +34,11 @@ export class PricingProductCardRuleSetController {
         return await this.pricingProductCardRuleSetService.updatePricingProductCardRuleSet(updatePricingProductCardRuleSetDTO);
     }
 
+    @Put('process')
+    async processPricingProductCardRuleSet(@Body() pricingProductCardRuleSetDTOs: PricingProductCardRuleSetDTO[]) {
+        return await this.pricingProductCardRuleSetService.processPricingProductCardRuleSet(pricingProductCardRuleSetDTOs);
+    }
+
+    
+
 }

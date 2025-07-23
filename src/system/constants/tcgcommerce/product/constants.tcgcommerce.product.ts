@@ -1,0 +1,4 @@
+export const PRODUCT_LINE_CODE = {
+    MAGIC_THE_GATHERING: 'MTG',
+    POKEMON: 'PKE',
+}
