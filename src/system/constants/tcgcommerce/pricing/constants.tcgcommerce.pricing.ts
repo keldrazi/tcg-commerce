@@ -15,7 +15,12 @@ export const BASE_PRICE = {
     ROUNDING_PRICE_ENABLED: 'rounding-price-enabled',
 }
 
-export const CONDITION_PRICING_PERCENTAGE = {
+export const BASE_PRICE_VALUES = {
+    LOW: 'tcgplayer_low',
+    MARKET: 'tcgplayer_market',
+}
+
+export const CONDITION_PRICE = {
     CONDITION_PRICE_PERCENTAGE_NM: 'condition-price-percentage-nm',
     CONDITION_PRICE_PERCENTAGE_LP: 'condition-price-percentage-lp',
     CONDITION_PRICE_PERCENTAGE_MP: 'condition-price-percentage-mp',
@@ -23,7 +28,7 @@ export const CONDITION_PRICING_PERCENTAGE = {
     CONDITION_PRICE_PERCENTAGE_DM: 'condition-price-percentage-dm'
 }
 
-export const CONDITION_PRICING = {
+export const CONDITION_PRICE_ABBREVIATION = {
     NM: 'condition-price-percentage-nm',
     LP: 'condition-price-percentage-lp',
     MP: 'condition-price-percentage-mp',
