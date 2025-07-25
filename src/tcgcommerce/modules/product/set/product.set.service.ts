@@ -103,6 +103,25 @@ export class ProductSetService {
             
         return productSetDTO;
     }
+
+    async getProductSetByAbbreviation(productVendorId: string, productLineId: string, productSetAbbreviation: string) {
+        let productSet = await this.productSetRepository.findOne({
+            where: {
+                productVendorId: productVendorId,
+                productLineId: productLineId,
+                productSetAbbreviation: productSetAbbreviation
+            }
+        });
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productSet == null) {
+            return null;
+        }
+        
+        let productSetDTO: ProductSetDTO = ({ ...productSet });
+            
+        return productSetDTO;
+    }
     
     async createProductSet(createProductSetDTO: CreateProductSetDTO) {
     

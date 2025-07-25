@@ -9,7 +9,6 @@ import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.s
 import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
 import { ProductCardLanguageService } from 'src/tcgcommerce/modules/product/card/language/product.card.language.service';
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
-import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
 import { PricingProductCardRuleSetService } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.service';
 import { ProductCardPriceService } from 'src/tcgcommerce/modules/product/card/price/product.card.price.service';
 
@@ -26,16 +25,46 @@ export class InventoryBatchProductCardService {
         private productCardConditionService: ProductCardConditionService,
         private productCardLanguageService: ProductCardLanguageService,
         private productCardPrintingService: ProductCardPrintingService,
-        private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
         private pricingProductCardRuleSetService: PricingProductCardRuleSetService,
         private productCardPriceService: ProductCardPriceService,
     ) { }
 
-    
+    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+
+        let productSets = await this.getProductSetsByProductLineId(productLineId);
+        if (productSets == null) {
+            return null;
+        }
+
+        //LOOP OVER EACH PRODUCT SET AND CREATE THE INVENTORY PRODUCT CARDS;
+        for (let i = 0; i < productSets.length; i++) {
+            let productSet = productSets[i];
+            await this.createBatchInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
+        }
+
+        return true;
+
+    }
+
+    async createBatchInventoryProductCardsBySetCode(productSetCode: string, productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+        //GET THE PRODUCT SET BY CODE;
+        let productSet = await this.getProductSetByAbbreviation(productVendorId, productLineId, productSetCode);
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if (productSet == null) {
+            return null;
+        }
+
+        //CREATE THE BATCH INVENTORY PRODUCT CARDS BY SET;
+        await this.createBatchInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
+
+        return true;
+
+    }
 
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
-    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+    async createBatchInventoryProductCardsBySet(productSet: any, productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
         
         //GET THE PRODUCT LINE;
         let productLine = await this.getProductLine(productLineId);
@@ -44,14 +73,6 @@ export class InventoryBatchProductCardService {
         if (productLine == null) {
             return null;
         }
-
-        //GET THE PRODUCT SETS;
-        let productSets = await this.getProductSetsByProductLineId(productLineId);
-         //TO DO: CREATE AN ERROR TO RETURN;
-        if (productSets == null) {
-            return null;
-        }
-
 
 
         let productCardConditions = await this.getProductCardConditionsByProductLineId(productLineId);
@@ -65,94 +86,96 @@ export class InventoryBatchProductCardService {
         }
 
         //GET THE PRICING PRODUCT CARD RULE SETS;
-        let pricingProductCardRuleSetsEnabled = false;
-        let processedPricingProductCardRuleSets: any[];
+        let processedPricingProductCardRuleSets: any[] = [];
         let pricingProductCardRuleSets = await this.pricingProductCardRuleSetService.getPricingProductCardRuleSets(commerceAccountId, productTypeId);
 
         if(pricingProductCardRuleSets != null && pricingProductCardRuleSets.length > 0) {
-            pricingProductCardRuleSetsEnabled = true;
             processedPricingProductCardRuleSets = await this.pricingProductCardRuleSetService.processPricingProductCardRuleSet(pricingProductCardRuleSets);
         }
 
 
-        //LOOP OVER THE PRODUCT SETS AND GET THE PRODUCT CARD ITEMS;
-        for (let i = 0; i < productSets.length; i++) {
-            let productSet = productSets[i];
-            let productSetId = productSet.productSetId;
-            let productCardItems = await this.productCardItemService.getProductCardItemsByProductSetId(productSetId);
+        
+        let productSetId = productSet.productSetId;
+        let productCardItems = await this.productCardItemService.getProductCardItemsByProductSetId(productSetId);
+        
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if (productCardItems == null) {
+            return null;
+        }
+
+        //LOOP OVER THE PRODUCT CARD ITEMS AND CREATE THE INVENTORY PRODUCT CARDS;
+        for (let j = 0; j < productCardItems.length; j++) {
+            let productCardItem = productCardItems[j];
             
-            //TO DO: CREATE AN ERROR TO RETURN;
-            if (productCardItems == null) {
-                return null;
+            //GET THE PRODUCT CARD ITEM PRICES;
+            let productCardPrices = await this.productCardPriceService.getProductCardPrices(productLine.productLineCode, productCardItem.productCardItemTCGdbId, productCardItem.productCardItemId);
+            if (productCardPrices == null) {
+                continue;
             }
 
-            //LOOP OVER THE PRODUCT CARD ITEMS AND CREATE THE INVENTORY PRODUCT CARDS;
-            for (let j = 0; j < productCardItems.length; j++) {
-                let productCardItem = productCardItems[j];
+            //LOOP OVER EACH PRODUCT CARD PRINTING;
+            for(let k = 0; k < productCardPrintings.length; k++) {
+                let productCardPrinting = productCardPrintings[k];
+
+                let productCardSKUCondition = await this.getProductCardItemSKUByPrinting(productCardItem.productCardItemSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId);
                 
-                //GET THE PRODUCT CARD ITEM PRICES;
-                let productCardPrices = await this.productCardPriceService.getProductCardPrices(productLine.productLineCode, productCardItem.productCardItemTCGdbId, productCardItem.productCardItemId);
-                if (productCardPrices == null) {
+                if(productCardSKUCondition == null) {
                     continue;
                 }
 
-                //LOOP OVER EACH PRODUCT CARD PRINTING;
-                for(let k = 0; k < productCardPrintings.length; k++) {
-                    let productCardPrinting = productCardPrintings[k];
+                //LOOP OVER EACH PRODUCT CARD CONDITION;
+                for(let l = 0; l < productCardConditions.length; l++) {
+                    let productCardCondition = productCardConditions[l];
+                    let productCardSKUCondition = await this.getProductCardItemSKUByCondition(productCardItem.productCardItemSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
 
+                    //IF THE TCGPLAYERSKU IS NULL - NO MATCHING 
+                    //CREATE THE INVENTORY PRODUCT CARD;
+                    let inventoryProductCard = new InventoryBatchProductCardDTO();
+                    inventoryProductCard.productVendorId = productVendorId;
+                    inventoryProductCard.productLineId = productLineId;
+                    inventoryProductCard.commerceAccountId = commerceAccountId;
+                    inventoryProductCard.commerceLocationId = commerceLocationId;
+                    inventoryProductCard.productCardItemId = productCardItem.productCardItemId;
+                    inventoryProductCard.productSetAbbreviation = productSet.productSetAbbreviation;
+                    inventoryProductCard.productCardPrintingName = productCardPrinting.productCardPrintingName;
+                    inventoryProductCard.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
+                    inventoryProductCard.productCardLanguageAbbreviation = productCardLanguageAbbreviation;
+                    inventoryProductCard.inventoryProductCardSKU = productCardSKUCondition;
+
+                    //SET THE INVENTORY PRODUCT CARD DEFAULT VALUES;
+                    inventoryProductCard.inventoryProductCardQty = 0;
+                    inventoryProductCard.inventoryProductCardMaxQty = 0;
+                    inventoryProductCard.inventoryProductCardReserveQty = 0;
+                    inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
+                    inventoryProductCard.inventoryProductCardOverridePrice = 0;
                     
-                    //LOOP OVER EACH PRODUCT CARD CONDITION;
-                    for(let l = 0; l < productCardConditions.length; l++) {
-                        let productCardCondition = productCardConditions[l];
-                        let tcgPlayerCleanName = productCardItem.productCardItemCleanName;
-                        let tcgPlayerSKU = await this.getProductCardItemSKUByIds(productCardItem.productCardItemSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
+                    
+                    //SET THE PRICE BASED ON THE PRICING PRODUCT CARD RULE SETS;
+                    let productCardPriceByPrinting = productCardPrices.find(obj => obj.productCardPrintingName === productCardPrinting.productCardPrintingName);
 
-                        
-                        //CREATE THE INVENTORY PRODUCT CARD;
-                        let inventoryProductCard = new InventoryBatchProductCardDTO();
-                        inventoryProductCard.productVendorId = productVendorId;
-                        inventoryProductCard.productLineId = productLineId;
-                        inventoryProductCard.commerceAccountId = commerceAccountId;
-                        inventoryProductCard.commerceLocationId = commerceLocationId;
-                        inventoryProductCard.productCardItemId = productCardItem.productCardItemId;
-                        inventoryProductCard.productSetAbbreviation = productSet.productSetAbbreviation;
-                        inventoryProductCard.productCardPrintingName = productCardPrinting.productCardPrintingName;
-                        inventoryProductCard.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
-                        inventoryProductCard.productCardLanguageAbbreviation = productCardLanguageAbbreviation;
-
-                        //SET THE INVENTORY PRODUCT CARD DEFAULT VALUES;
-                        inventoryProductCard.inventoryProductCardQty = 0;
-                        inventoryProductCard.inventoryProductCardMaxQty = 0;
-                        inventoryProductCard.inventoryProductCardReserveQty = 0;
-                        
-                        /*
-                        inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
-                        inventoryProductCard.inventoryProductCardOverridePrice = 0.00;
-                        */
-                        
-                        //SET THE PRICE BASED ON THE PRICING PRODUCT CARD RULE SETS;
-                        let productCardPrice = productCardPrices.find(obj => obj.productCardPrintingName === productCardPrinting.productCardPrintingName);
-
-                        if(productCardPrice != undefined){
-                            //CALL THE PRICING PRODUCT CARD RULE SET SERVICE TO GET THE PRICE;
-                            if(pricingProductCardRuleSetsEnabled) {
-                               
-                            }
-                            //CALL THE PRICING PRODUCT CARD RULE SET SERVICE TO GET THE PRICE (DEFAULTS)
-                            else {
-                                inventoryProductCard.inventoryProductCardOverridePriceEnabled = false;
-                                inventoryProductCard.inventoryProductCardOverridePrice = 0.00;
-                            }
+                    if(productCardPriceByPrinting != undefined){
+                        if(processedPricingProductCardRuleSets.length > 0) {
+                            inventoryProductCard.inventoryProductCardPrice = await this.pricingProductCardRuleSetService.applyCustomPricingProductCardRuleSets(
+                                processedPricingProductCardRuleSets,
+                                productCardCondition.productCardConditionAbbreviation,
+                                productCardPriceByPrinting
+                            );
+                        } else {
+                            inventoryProductCard.inventoryProductCardPrice = await this.pricingProductCardRuleSetService.applyDefaultPricingProductCardRuleSet(
+                                productCardCondition.productCardConditionAbbreviation,
+                                productCardPriceByPrinting
+                            );
                         }
-                        else {
-                            //SET THE PRICE TO 0.00;
-                        }
+                    } else {
+                        //SET THE PRICE TO 0;
+                        inventoryProductCard.inventoryProductCardPrice = 0;
                     }
                 }
-
-                
             }
-        }   
+
+            
+        }
+          
     }
 
 
@@ -174,6 +197,15 @@ export class InventoryBatchProductCardService {
         }
         
         return productSets;
+    }
+
+    async getProductSetByAbbreviation(productVendorId: string, productLineId: string, productSetAbbreviation: string) {
+        let productSet = await this.productSetService.getProductSetByAbbreviation(productVendorId, productLineId, productSetAbbreviation);
+        if (productSet == null) {
+            return null;
+        }
+        
+        return productSet;
     }
 
     async getProductCardConditionsByProductLineId(productLineId: string) {
@@ -205,16 +237,27 @@ export class InventoryBatchProductCardService {
         return productCardPrintings;
     }
 
-    async getProductCardItemSKUByIds(productCardItemSKUs: string, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
+    async getProductCardItemSKUByPrinting(productCardItemSKUs: string, productCardLanguageId: number, productCardPrintingId: number) {
 
-        let productCardItemSKUsJson = JSON.parse(productCardItemSKUs);
-        let productCardItemSKU = productCardItemSKUsJson.filter(item => 
+        const productCardItemSKUsJson = JSON.parse(productCardItemSKUs);
+        const productCardItemSKU = productCardItemSKUsJson.filter(item => 
+            item.languageId === productCardLanguageId &&
+            item.printingId === productCardPrintingId
+        );
+
+        return productCardItemSKU.length > 0 ? productCardItemSKU[0] : null;
+    }
+
+    async getProductCardItemSKUByCondition(productCardItemSKUs: string, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
+
+        const productCardItemSKUsJson = JSON.parse(productCardItemSKUs);
+        const productCardItemSKU = productCardItemSKUsJson.filter(item => 
             item.languageId === productCardLanguageId &&
             item.printingId === productCardPrintingId &&
             item.conditionId === productCardConditionId
         );
 
-        return productCardItemSKU;
+        return productCardItemSKU.length > 0 ? productCardItemSKU[0] : null;
     }
 
  
