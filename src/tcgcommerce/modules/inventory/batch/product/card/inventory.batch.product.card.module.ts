@@ -4,6 +4,7 @@ import { InventoryBatchProductCardService } from './inventory.batch.product.card
 import { InventoryBatchProductCardController } from './inventory.batch.product.card.controller';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { ProductCardItemModule } from 'src/tcgcommerce/modules/product/card/item/product.card.item.module';
+import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
 import { ProductCardConditionModule } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.module';
@@ -17,6 +18,7 @@ import { ProductCardPriceModule } from 'src/tcgcommerce/modules/product/card/pri
     imports: [
         TypeOrmModule.forFeature([InventoryProductCard]),
         ProductCardItemModule,
+        ProductVendorModule,
         ProductLineModule,
         ProductSetModule,
         ProductCardConditionModule,

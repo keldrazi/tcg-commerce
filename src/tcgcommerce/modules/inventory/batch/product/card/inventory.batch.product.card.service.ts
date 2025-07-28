@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InventoryBatchProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/product/card/dto/inventory.batch.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { ProductCardItemService } from 'src/tcgcommerce/modules/product/card/item/product.card.item.service';
+import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
@@ -20,6 +21,7 @@ export class InventoryBatchProductCardService {
     constructor(
         @InjectRepository(InventoryProductCard) private inventoryProductCardRepository: Repository<InventoryProductCard>,
         private productCardItemService: ProductCardItemService,
+        private productVendorService: ProductVendorService,
         private productLineService: ProductLineService,
         private productSetService: ProductSetService,
         private productCardConditionService: ProductCardConditionService,
@@ -65,6 +67,13 @@ export class InventoryBatchProductCardService {
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
     async createBatchInventoryProductCardsBySet(productSet: any, productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+        //GET THE PRODCUT VENDOR;
+        let productVendor = await this.getProductVendor(productVendorId);
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if (productVendor == null) {
+            return null;
+        }
         
         //GET THE PRODUCT LINE;
         let productLine = await this.getProductLine(productLineId);
@@ -181,6 +190,15 @@ export class InventoryBatchProductCardService {
 
 
     //UTILITY FUNCTIONS;
+    async getProductVendor(productVendorId: string) {
+        let productVendor = await this.productVendorService.getProductVendor(productVendorId);
+        if (productVendor == null) {
+            return null;
+        }
+        
+        return productVendor;
+    }
+
     async getProductLine(productLineId: string) {
         let productLine = await this.productLineService.getProductLine(productLineId);
         if (productLine == null) {
