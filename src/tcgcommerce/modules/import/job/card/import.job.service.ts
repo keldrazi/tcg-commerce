@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ImportJob } from 'src/typeorm/entities/tcgcommerce/modules/import/job/import.job.entity';
-import { ImportJobDTO, CreateImportJobDTO, UpdateImportJobDTO } from './dto/import.job.dto';
+import { ImportJobDTO, CreateImportJobDTO, UpdateImportJobDTO } from './card/dto/import.job.dto';
 import { IMPORT_JOB_STATUS, IMPORT_SORT_TYPE_NAME, IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH } from 'src/system/constants/tcgcommerce/import/constants.tcgcommerce.import';
 import { AwsS3Service } from 'src/system/modules/aws/s3/aws.s3.service';
 import { ImportProcessService } from 'src/tcgcommerce/modules/import/process/import.process.service';
