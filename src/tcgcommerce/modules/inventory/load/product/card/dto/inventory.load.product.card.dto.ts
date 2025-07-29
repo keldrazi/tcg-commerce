@@ -1,4 +1,4 @@
-export class InventoryBatchProductCardDTO {
+export class InventoryLoadProductCardDTO {
     inventoryProductCardId: string;
     productVendorId: string;
     productLineId: string;
@@ -23,7 +23,7 @@ export class InventoryBatchProductCardDTO {
     
 }
 
-export class CreateInventoryBatchProductCardDTO {
+export class CreateInventoryLoadProductCardDTO {
     productVendorId: string;
     productLineId: string;
     commerceAccountId: string;

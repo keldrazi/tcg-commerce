@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InventoryBatchProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/product/card/dto/inventory.batch.product.card.dto';
+import { InventoryLoadProductCardDTO } from 'src/tcgcommerce/modules/inventory/load/product/card/dto/inventory.load.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { ProductCardItemService } from 'src/tcgcommerce/modules/product/card/item/product.card.item.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
@@ -12,9 +12,10 @@ import { ProductCardLanguageService } from 'src/tcgcommerce/modules/product/card
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
 import { PricingProductCardRuleSetService } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.service';
 import { ProductCardPriceService } from 'src/tcgcommerce/modules/product/card/price/product.card.price.service';
+import { CommerceLocationService } from 'src/tcgcommerce/modules/commerce/location/commerce.location.service';
 
 @Injectable()
-export class InventoryBatchProductCardService {
+export class InventoryLoadProductCardService {
 
     
 
@@ -29,6 +30,7 @@ export class InventoryBatchProductCardService {
         private productCardPrintingService: ProductCardPrintingService,
         private pricingProductCardRuleSetService: PricingProductCardRuleSetService,
         private productCardPriceService: ProductCardPriceService,
+        private commerceLocationService: CommerceLocationService
     ) { }
 
     async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
@@ -41,14 +43,14 @@ export class InventoryBatchProductCardService {
         //LOOP OVER EACH PRODUCT SET AND CREATE THE INVENTORY PRODUCT CARDS;
         for (let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
-            await this.createBatchInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
+            await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
         }
 
         return true;
 
     }
 
-    async createBatchInventoryProductCardsBySetCode(productSetCode: string, productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+    async createLoadInventoryProductCardsBySetCode(productSetCode: string, productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
         //GET THE PRODUCT SET BY CODE;
         let productSet = await this.getProductSetByAbbreviation(productVendorId, productLineId, productSetCode);
         
@@ -58,7 +60,7 @@ export class InventoryBatchProductCardService {
         }
 
         //CREATE THE BATCH INVENTORY PRODUCT CARDS BY SET;
-        await this.createBatchInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
+        await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
 
         return true;
 
@@ -66,7 +68,16 @@ export class InventoryBatchProductCardService {
 
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
-    async createBatchInventoryProductCardsBySet(productSet: any, productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+    async createLoadInventoryProductCardsBySet(productSet: any, productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+
+        //GET THE COMMERCE LOCATION;
+        let commerceLocation = await this.commerceLocationService.getCommerceLocation(commerceLocationId);
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if (commerceLocation == null) {
+            return null;
+        }
+        
         //GET THE PRODCUT VENDOR;
         let productVendor = await this.getProductVendor(productVendorId);
 
@@ -111,7 +122,8 @@ export class InventoryBatchProductCardService {
         if (productCardItems == null) {
             return null;
         }
-
+        
+        let productInventoryCardsByItem: any [] = [];
         //LOOP OVER THE PRODUCT CARD ITEMS AND CREATE THE INVENTORY PRODUCT CARDS;
         for (let j = 0; j < productCardItems.length; j++) {
             let productCardItem = productCardItems[j];
@@ -122,6 +134,8 @@ export class InventoryBatchProductCardService {
                 continue;
             }
 
+            let productInventoryCardsByPrinting: any[] = [];
+            
             //LOOP OVER EACH PRODUCT CARD PRINTING;
             for(let k = 0; k < productCardPrintings.length; k++) {
                 let productCardPrinting = productCardPrintings[k];
@@ -132,6 +146,8 @@ export class InventoryBatchProductCardService {
                     continue;
                 }
 
+                
+                let productInventoryCardsByCondition: any[] = [];
                 //LOOP OVER EACH PRODUCT CARD CONDITION;
                 for(let l = 0; l < productCardConditions.length; l++) {
                     let productCardCondition = productCardConditions[l];
@@ -139,7 +155,7 @@ export class InventoryBatchProductCardService {
 
                     //IF THE TCGPLAYERSKU IS NULL - NO MATCHING 
                     //CREATE THE INVENTORY PRODUCT CARD;
-                    let inventoryProductCard = new InventoryBatchProductCardDTO();
+                    let inventoryProductCard = new InventoryLoadProductCardDTO();
                     inventoryProductCard.productVendorId = productVendorId;
                     inventoryProductCard.productLineId = productLineId;
                     inventoryProductCard.commerceAccountId = commerceAccountId;
@@ -179,11 +195,38 @@ export class InventoryBatchProductCardService {
                         //SET THE PRICE TO 0;
                         inventoryProductCard.inventoryProductCardPrice = 0;
                     }
+                    productInventoryCardsByCondition.push(inventoryProductCard);
+                    //SAVE THE INVENTORY PRODUCT CARD;
+                    await this.inventoryProductCardRepository.save(inventoryProductCard);
                 }
+                //ADD THE PRODUCT INVENTORY CARDS BY CONDITION TO THE PRODUCT INVENTORY CARDS BY PRINTING;
+                let productInventoryCardByPrinting = {
+                    productInventoryCardPrintingName: productCardPrinting.productCardPrintingName,
+                    productInventoryCards: productInventoryCardsByCondition
+                };
+                
+                productInventoryCardsByPrinting.push(productInventoryCardByPrinting);
             }
 
+            let productInventoryCardByItem = {
+                productSetAbbreviation: productSet.productSetAbbreviation,
+                productCardItemName: productCardItem.productCardItemName,
+                productInventoryCardsByPrinting: productInventoryCardsByPrinting
+            };
+
+            productInventoryCardsByItem.push(productInventoryCardByItem);
             
         }
+
+        let productInventoryCardsBySet = {
+            commerceLocation: commerceLocation,
+            productVendor: productVendor,
+            productLine: productLine,
+            productSet: productSet,
+            productInventoryCardsByItem: productInventoryCardsByItem
+        };
+
+        return productInventoryCardsBySet;
           
     }
 
