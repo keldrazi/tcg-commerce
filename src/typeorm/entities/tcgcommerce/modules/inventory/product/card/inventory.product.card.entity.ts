@@ -38,6 +38,7 @@ export class InventoryProductCard {
     @Column({ nullable: true })
     inventoryProductCardBarcode: string;
 
+    @Column()
     inventoryProductCardQty: number;
 
     @Column()
@@ -56,7 +57,7 @@ export class InventoryProductCard {
     inventoryProductCardOverridePrice: number;
 
     @Column('jsonb')
-    inventoryProductCardMetadata: string //(TCG Player SKU, TCG Player Clean Name);
+    inventoryProductCardMetadata: string;
 
     @CreateDateColumn()
     inventoryProductCardCreateDate: Date;

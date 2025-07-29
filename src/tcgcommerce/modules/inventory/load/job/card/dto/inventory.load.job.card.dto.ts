@@ -10,7 +10,7 @@ export class InventoryLoadJobCardDTO {
     productVendorName: string;
     productLineId: string;
     productLineName: string;
-    productLineAbbreviation: string;
+    productLineCode: string;
     inventoryLoadJobCardSetCode: string;
     inventoryLoadJobCardDate: Date;
     inventoryLoadJobCardCode: string;
@@ -20,7 +20,7 @@ export class InventoryLoadJobCardDTO {
     inventoryLoadJobCardUpdateDate: Date;  
 }
 
-export class CreateInventoryLoadCardJobDTO {
+export class CreateInventoryLoadJobCardDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
@@ -38,7 +38,7 @@ export class CreateInventoryLoadCardJobDTO {
     @IsString()
     productLineName: string;
     @IsString()
-    productLineAbbreviation: string;
+    productLineCode: string;
     @IsString()
     inventoryLoadJobCardSetCode: string; 
 }

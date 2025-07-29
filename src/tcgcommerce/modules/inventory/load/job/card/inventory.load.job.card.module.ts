@@ -1,19 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ImportJobController } from './import.job.controller';
-import { ImportJobService } from './import.job.service';
-import { ImportProcessModule } from 'src/tcgcommerce/modules/import/process/import.process.module';
-import { ImportJob } from 'src/typeorm/entities/tcgcommerce/modules/import/job/import.job.entity';
-import { AwsS3Module } from 'src/system/modules/aws/s3/aws.s3.module';
+import { InventoryLoadJobCardController } from './inventory.load.job.card.controller';
+import { InventoryLoadJobCardService } from './inventory.load.job.card.service';
+import { InventoryLoadJobCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/load/job/card/inventory.load.job.card.entity';
+
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ImportJob]),
-        AwsS3Module,
-        ImportProcessModule
+        TypeOrmModule.forFeature([InventoryLoadJobCard]),
     ],
-    controllers: [ImportJobController],
-    providers: [ImportJobService],
-    exports: [ImportJobService]
+    controllers: [InventoryLoadJobCardController],
+    providers: [InventoryLoadJobCardService],
+    exports: [InventoryLoadJobCardService]
 })
-export class ImportJobModule {}
+export class InventoryLoadJobCardModule {}
