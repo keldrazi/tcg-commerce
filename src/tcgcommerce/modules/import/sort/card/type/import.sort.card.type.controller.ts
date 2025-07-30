@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateImportSortTypeDTO, UpdateImportSortTypeDTO, ImportSortTypeDTO } from './dto/import.sort.type.dto';
-import { ImportSortTypeService } from './import.sort.type.service';
+import { CreateImportSortTypeDTO, UpdateImportSortTypeDTO, ImportSortTypeDTO } from './dto/import.sort.card.type.dto';
+import { ImportSortTypeService } from './import.sort.card.type.service';
 
 
 

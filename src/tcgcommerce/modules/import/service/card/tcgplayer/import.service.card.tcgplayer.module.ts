@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ImportServiceTCGPlayerService } from './import.service.tcgplayer.service';
+import { ImportServiceTCGPlayerService } from './import.service.card.tcgplayer.service';
 import { UtilPDFModule } from 'src/system/modules/util/pdf/util.pdf.module';
 
 

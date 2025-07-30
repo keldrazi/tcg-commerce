@@ -1,5 +1,5 @@
 import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { ImportJobService } from './import.job.service';
+import { ImportJobService } from './import.job.card.service';
 import { FileInterceptor } from "@nestjs/platform-express";
 
 

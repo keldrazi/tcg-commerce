@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ImportServiceRocaService } from "./import.service.roca.service";
+import { ImportServiceRocaService } from "./import.service.card.roca.service";
 import { UtilCSVModule } from 'src/system/modules/util/csv/util.csv.module';
-import { ImportServiceUtilModule } from 'src/tcgcommerce/modules/import/service/card/util/import.service.util.module';
+import { ImportServiceUtilModule } from 'src/tcgcommerce/modules/import/service/card/util/import.service.card.util.module';
 
 
 

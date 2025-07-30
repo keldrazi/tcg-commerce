@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UtilCSVService } from 'src/system/modules/util/csv/util.csv.service';
-import { ImportSortDTO, ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/data/dto/import.sort.data.dto';
+import { ImportSortDTO, ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto';
 import { IMPORT_JOB_STATUS, IMPORT_CARD_CONDITION, IMPORT_CARD_PRINTING, IMPORT_ROCA_CARD_DATA_KEYS } from 'src/system/constants/tcgcommerce/import/constants.tcgcommerce.import';
-import { ImportServiceUtilService } from 'src/tcgcommerce/modules/import/service/card/util/import.service.util.service';
+import { ImportServiceUtilService } from 'src/tcgcommerce/modules/import/service/card/util/import.service.card.util.service';
 
 @Injectable()
 export class ImportServiceRocaService {

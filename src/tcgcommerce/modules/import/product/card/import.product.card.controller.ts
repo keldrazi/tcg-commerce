@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ImportCardService } from './import.card.service';
+import { ImportCardService } from './import.product.card.service';
 
 @Controller('import/card')
 export class ImportCardController {

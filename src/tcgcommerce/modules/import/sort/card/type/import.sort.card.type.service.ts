@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateImportSortTypeDTO, UpdateImportSortTypeDTO, ImportSortTypeDTO } from './dto/import.sort.type.dto';
+import { CreateImportSortTypeDTO, UpdateImportSortTypeDTO, ImportSortTypeDTO } from './dto/import.sort.card.type.dto';
 import { ImportSortType } from 'src/typeorm/entities/tcgcommerce/modules/import/sort/type/import.sort.type.entity';
 
 @Injectable()

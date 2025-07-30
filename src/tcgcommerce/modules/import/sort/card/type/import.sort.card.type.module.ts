@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ImportSortTypeService } from './import.sort.type.service';
-import { ImportSortTypeController } from './import.sort.type.controller';
+import { ImportSortTypeService } from './import.sort.card.type.service';
+import { ImportSortTypeController } from './import.sort.card.type.controller';
 import { ImportSortType } from 'src/typeorm/entities/tcgcommerce/modules/import/sort/type/import.sort.type.entity';
 
 

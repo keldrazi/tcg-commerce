@@ -155,7 +155,7 @@ export class InventoryLoadProductCardService {
 
                     //IF THE TCGPLAYERSKU IS NULL - NO MATCHING 
                     //CREATE THE INVENTORY PRODUCT CARD;
-                    let inventoryProductCard = new InventoryLoadProductCardDTO();
+                    let inventoryProductCard = new InventoryProductCard();
                     inventoryProductCard.productVendorId = productVendorId;
                     inventoryProductCard.productLineId = productLineId;
                     inventoryProductCard.commerceAccountId = commerceAccountId;
@@ -195,9 +195,11 @@ export class InventoryLoadProductCardService {
                         //SET THE PRICE TO 0;
                         inventoryProductCard.inventoryProductCardPrice = 0;
                     }
-                    productInventoryCardsByCondition.push(inventoryProductCard);
+                    
                     //SAVE THE INVENTORY PRODUCT CARD;
-                    await this.inventoryProductCardRepository.save(inventoryProductCard);
+                    inventoryProductCard = await this.inventoryProductCardRepository.save(inventoryProductCard);
+                    let inventoryProductCardDTO: InventoryLoadProductCardDTO = ({ ...inventoryProductCard});
+                    productInventoryCardsByCondition.push(inventoryProductCardDTO);
                 }
                 //ADD THE PRODUCT INVENTORY CARDS BY CONDITION TO THE PRODUCT INVENTORY CARDS BY PRINTING;
                 let productInventoryCardByPrinting = {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ImportCard } from 'src/typeorm/entities/tcgcommerce/modules/import/card/import.card.entity';
-import { ImportCardDTO, CreateImportCardDTO, UpdateImportCardDTO } from './dto/import.card.dto';
+import { ImportCardDTO, CreateImportCardDTO, UpdateImportCardDTO } from './dto/import.product.card.dto';
 
 @Injectable()
 export class ImportCardService {
