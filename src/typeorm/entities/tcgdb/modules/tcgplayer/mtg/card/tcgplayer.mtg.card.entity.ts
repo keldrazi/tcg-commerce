@@ -4,40 +4,28 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGPlayerMTGCard {
     @PrimaryGeneratedColumn('uuid')
     tcgPlayerMTGCardId: string;
-
     @Column()
     tcgPlayerMTGCardProductId: number;
-
     @Column()
     tcgPlayerMTGCardGroupId: number;
-
     @Column({nullable: true})
-    tcgPlayerMTGCardSetAbbreviation: string;
-
+    tcgPlayerMTGCardSetCode: string;
     @Column()
     tcgPlayerMTGCardName: string;
-
     @Column()
     tcgPlayerMTGCardCleanName: string;
-
     @Column()
     tcgPlayerMTGCardImageURL: string;
-
     @Column()
     tcgPlayerMTGCardURL: string;
-
     @Column()
     tcgPlayerMTGCardModifiedOn: Date;
-
     @Column('jsonb')
     tcgPlayerMTGCardData: string;
-
     @Column('jsonb')
     tcgPlayerMTGCardSKUs: string;
-
     @CreateDateColumn()
     tcgPlayerMTGCardCreateDate: Date;
-
     @UpdateDateColumn()
     tcgPlayerMTGCardUpdateDate: Date; 
 

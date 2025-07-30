@@ -4,25 +4,18 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class ProductCardLanguage {
     @PrimaryGeneratedColumn('uuid')
     productCardLanguageId: string;
-
     @Column()
     productCardLanguageTCGPlayerId: number;
-
     @Column()
     productLineId: string;
-
     @Column()
     productCardLanguageName: string;
-
     @Column()
-    productCardLanguageAbbreviation: string;
-
+    productCardLanguageCode: string;
     @Column({type: 'boolean', default: false})
     productCardLanguageIsActive: boolean;
-
     @CreateDateColumn()
     productCardLanguageCreateDate: Date;
-
     @UpdateDateColumn()
     productCardLanguageUpdateDate: Date; 
 

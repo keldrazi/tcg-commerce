@@ -5,29 +5,21 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class CommerceAccount {
     @PrimaryGeneratedColumn('uuid')
     commerceAccountId: string;
-
     @Column()
     commerceAccountName: string;
-
     @Column()
     commerceAccountContactName: string;
-
     @Column({unique: true})
     @IsEmail()
     commerceAccountContactEmail: string;
-
     @Column()
     commerceAccountContactPhone: string;
-
     @Column({unique: true})
     commerceAccountHandle: string;
-
     @Column({type: 'boolean', default: true})
     commerceAccountIsActive: boolean;
-
     @CreateDateColumn()
     commerceAccountCreateDate: Date;
-
     @UpdateDateColumn()
     commerceAccountUpdateDate: Date; 
 

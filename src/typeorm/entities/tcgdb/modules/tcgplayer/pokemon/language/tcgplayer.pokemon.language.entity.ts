@@ -4,19 +4,14 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGPlayerPokemonLanguage {
     @PrimaryGeneratedColumn('uuid')
     tcgPlayerPokemonLangId: string;
-
     @Column()
     tcgPlayerPokemonLanguageId: number;
-
     @Column()
     tcgPlayerPokemonLanguageName: string;
-
     @Column()
     tcgPlayerPokemonLanguageAbbreviation: string;
-
     @CreateDateColumn()
     tcgPlayerPokemonLanguageCreateDate: Date;
-
     @UpdateDateColumn()
     tcgPlayerPokemonLanguageUpdateDate: Date; 
 

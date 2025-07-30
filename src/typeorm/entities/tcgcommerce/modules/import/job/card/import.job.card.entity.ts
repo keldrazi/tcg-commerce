@@ -1,62 +1,50 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('importJob')
-export class ImportJob {
+@Entity('importJobCard')
+export class ImportJobCard {
     @PrimaryGeneratedColumn('uuid')
-    importJobId: string;
-
+    importJobCardId: string;
     @Column()
     commerceAccountId: string;
-
+    @Column()
+    commerceLocationId: string;
     @Column()
     commerceLocationName: string;
-
     @Column()
     commerceUserName: string;
-
+    @Column()
+    productVendorId: string;
     @Column()
     productVendorName: string;
-
+    @Column()
+    productLineId: string;
     @Column()
     productLineName: string;
-
     @Column()
-    productLineAbbreviation: string;
-
+    productLineCode: string;
     @Column()
-    importSortTypeName: string;
-
+    importSortCardTypeName: string;
     @Column()
-    importJobDate: Date;
-
+    importJobCardDate: Date;
     @Column({unique: true})
-    importJobCode: string;
-
+    importJobCardCode: string;
     @Column()
-    importJobStatus: string;    
-
+    importJobCardStatus: string;    
     @Column({nullable: true})
-    importJobInputFileURL: string;
-
+    importJobCardInputFileURL: string;
     @Column()
-    importJobInputFileOriginalName: string;
-
+    importJobCardInputFileOriginalName: string;
     @Column({nullable: true})
-    importJobOutputFileURL: string;
-
+    importJobCardOutputFileURL: string;
     @Column('jsonb', {nullable: true}) //CARD DATA;
-    importJobSortData: string;
-
+    importJobCardSortData: string;
     @Column('jsonb') //LOCATION | PROCESSED BY | TOTAL COST | TOTAL VALUE | TOTAL CARD QTY | COST OF GOODS
-    importJobMetadata: string;
-
+    importJobCardMetadata: string;
     @Column({type: 'boolean', default: false})
-    importJobIsPublished: boolean;
-
+    importJobCardIsPublished: boolean;
     @CreateDateColumn()
-    importJobCreateDate: Date;
-
+    importJobCardCreateDate: Date;
     @UpdateDateColumn()
-    importJobUpdateDate: Date; 
+    importJobCardUpdateDate: Date;
 
 }

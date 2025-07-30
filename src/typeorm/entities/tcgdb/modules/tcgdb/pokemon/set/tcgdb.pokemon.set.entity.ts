@@ -4,28 +4,20 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGdbPokemonSet {
     @PrimaryGeneratedColumn('uuid')
     tcgdbPokemonSetId: string;
-
     @Column({nullable: true})
     tcgdbPokemonSetTCGPlayerId: number;
-
     @Column({nullable: true})
     tcgdbPokemonSetPokemonTCGId: string;
-
     @Column()
     tcgdbPokemonSetName: string;
-
     @Column()
-    tcgdbPokemonSetAbbreviation: string;
-
+    tcgdbPokemonSetCode: string;
     @Column()
     tcgdbPokemonSetPublishedOn: Date;
-
     @Column({nullable: true})
     tcgdbPokemonSetTotalCards: number;
-
     @CreateDateColumn()
     tcgdbPokemonSetCreateDate: Date;
-
     @UpdateDateColumn()
     tcgdbPokemonSetUpdateDate: Date; 
 

@@ -4,28 +4,20 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGdbMTGSet {
     @PrimaryGeneratedColumn('uuid')
     tcgdbMTGSetId: string;
-
     @Column({nullable: true})
     tcgdbMTGSetTCGPlayerId: number;
-
     @Column({nullable: true})
     tcgdbMTGSetScryfallId: string;
-
     @Column()
     tcgdbMTGSetName: string;
-
     @Column()
-    tcgdbMTGSetAbbreviation: string;
-
+    tcgdbMTGSetCode: string;
     @Column()
     tcgdbMTGSetPublishedOn: Date;
-
     @Column({nullable: true})
     tcgdbMTGSetTotalCards: number;
-
     @CreateDateColumn()
     tcgdbMTGSetCreateDate: Date;
-
     @UpdateDateColumn()
     tcgdbMTGSetUpdateDate: Date; 
 

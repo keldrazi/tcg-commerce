@@ -4,19 +4,14 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGdbMTGRarity {
     @PrimaryGeneratedColumn('uuid')
     tcgdbMTGRarityId: string;
-
     @Column({nullable: true})
     tcgdbMTGRarityTCGPlayerId: number;
- 
     @Column()
     tcgdbMTGRarityName: string;
-
     @Column()
-    tcgdbMTGRarityAbbreviation: string;
-
+    tcgdbMTGRarityCode: string;
     @CreateDateColumn()
     tcgdbMTGRarityCreateDate: Date;
-
     @UpdateDateColumn()
     tcgdbMTGRarityUpdateDate: Date; 
 

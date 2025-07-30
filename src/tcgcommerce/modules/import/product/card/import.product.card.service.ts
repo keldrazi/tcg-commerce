@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ImportCard } from 'src/typeorm/entities/tcgcommerce/modules/import/card/import.card.entity';
+import { ImportCard } from 'src/typeorm/entities/tcgcommerce/modules/import/product/card/import.product.card.entity';
 import { ImportCardDTO, CreateImportCardDTO, UpdateImportCardDTO } from './dto/import.product.card.dto';
 
 @Injectable()

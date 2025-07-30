@@ -15,7 +15,7 @@ export class ProductCardCondition {
     productCardConditionName: string;
 
     @Column()
-    productCardConditionAbbreviation: string;
+    productCardConditionCode: string;
 
     @Column({type: 'decimal'})
     productCardConditionPriceFactor: number;

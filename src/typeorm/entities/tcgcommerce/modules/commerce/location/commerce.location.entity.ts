@@ -5,44 +5,36 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class CommerceLocation {
     @PrimaryGeneratedColumn('uuid')
     commerceLocationId: string;
-
     @Column()
     @IsString()
     commerceAccountId: string;
-
     @Column()
     @IsString()
     commerceLocationName: string;
-
     @Column()
     @IsString()
     commerceLocationAddress: string;
-
     @Column()
     @IsString()
     commerceLocationCity: string;
-
     @Column()
     @IsString()
     commerceLocationState: string;
-
     @Column()
     @IsString()
     commerceLocationZip: string;
-
     @Column()
     @IsString()
     commerceLocationPhoneNumber: string;
-
+    @Column()
+    @IsString()
+    commerceLocationUrl: string;
     @Column({type: 'boolean', default: false})
     commerceLocationIsDefault: boolean;
-
     @Column({type: 'boolean', default: true})
     commerceLocationIsActive: boolean;
-
     @CreateDateColumn()
     commerceLocationCreateDate: Date;
-
     @UpdateDateColumn()
     commerceLocationUpdateDate: Date; 
 

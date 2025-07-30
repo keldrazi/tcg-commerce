@@ -4,19 +4,14 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGdbMTGLanguage {
     @PrimaryGeneratedColumn('uuid')
     tcgdbMTGLanguageId: string;
-
     @Column({nullable: true})
     tcgdbMTGLanguageTCGPlayerId: number;
- 
     @Column()
     tcgdbMTGLanguageName: string;
-
     @Column()
-    tcgdbMTGLanguageAbbreviation: string;
-
+    tcgdbMTGLanguageCode: string;
     @CreateDateColumn()
     tcgdbMTGLanguageCreateDate: Date;
-
     @UpdateDateColumn()
     tcgdbMTGLanguageUpdateDate: Date; 
 

@@ -4,25 +4,18 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class ProductModule {
     @PrimaryGeneratedColumn('uuid')
     productModuleId: string;
-
     @Column()
     applicationModuleId: string;
-
     @Column()
     commerceAccountId: string;
-
     @Column('jsonb')
     productModuleSettings: string;
-
     @Column('jsonb')
     productModuleRoles: string;
-    
     @Column({type: 'boolean', default: false})
     productModuleIsActive: boolean;
-
     @CreateDateColumn()
     productModuleCreateDate: Date;
-
     @UpdateDateColumn()
     productModuleUpdateDate: Date; 
 

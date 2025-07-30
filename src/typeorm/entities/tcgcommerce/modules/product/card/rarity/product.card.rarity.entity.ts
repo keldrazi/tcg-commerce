@@ -4,22 +4,16 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class ProductCardRarity {
     @PrimaryGeneratedColumn('uuid')
     productCardRarityId: string;
-
     @Column()
     productLineId: string;
-
     @Column()
     productCardRarityName: string;
-
     @Column()
-    productCardRarityAbbreviation: string;
-
+    productCardRarityCode: string;
     @Column({type: 'boolean', default: false})
     productCardRarityIsActive: boolean;
-
     @CreateDateColumn()
     productCardRarityCreateDate: Date;
-
     @UpdateDateColumn()
     productCardRarityUpdateDate: Date; 
 

@@ -4,16 +4,14 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class ProductVendor {
     @PrimaryGeneratedColumn('uuid')
     productVendorId: string;
-
     @Column()
     productVendorName: string;
-
+    @Column()
+    productVendorCode: string;
     @Column({type: 'boolean', default: false})
     productVendorIsActive: boolean;
-
     @CreateDateColumn()
     productVendorCreateDate: Date;
-
     @UpdateDateColumn()
     productVendorUpdateDate: Date; 
 

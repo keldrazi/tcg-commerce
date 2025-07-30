@@ -4,22 +4,16 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGPlayerMTGPrinting {
     @PrimaryGeneratedColumn('uuid')
     tcgPlayerMTGPrintId: string;
-
     @Column()
     tcgPlayerMTGPrintingId: number;
-
     @Column()
     tcgPlayerMTGPrintingName: string;
-
     @Column()
     tcgPlayerMTGPrintingDisplayOrder: number;
-
     @Column()
     tcgPlayerMTGPrintingModifiedOn: Date;
-
     @CreateDateColumn()
     tcgPlayerMTGPrintingCreateDate: Date;
-
     @UpdateDateColumn()
     tcgPlayerMTGPrintingUpdateDate: Date; 
 

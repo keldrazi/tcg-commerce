@@ -6,32 +6,24 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class CommerceUser {
     @PrimaryGeneratedColumn('uuid')
     commerceUserId: string;
-
     @Column()
     commerceAccountId: string;
-
     @Column()
     commerceUserName: string;
-
     @Column({unique: true})
     @IsEmail()
     commerceUserEmail: string;
-
     @Column()
     @Exclude()
     @IsString()
     @MinLength(8)
     commerceUserPassword: string;
-
     @Column('jsonb')
     commerceUserRoles: string;
-
     @Column({type: 'boolean', default: false})
     commerceUserIsActive: boolean;
-
     @CreateDateColumn()
     commerceUserCreateDate: Date;
-
     @UpdateDateColumn()
     commerceUserUpdateDate: Date; 
 } 

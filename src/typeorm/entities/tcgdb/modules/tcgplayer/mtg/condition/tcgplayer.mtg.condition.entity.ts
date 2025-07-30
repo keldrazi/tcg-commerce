@@ -6,19 +6,14 @@ export class TCGPlayerMTGCondition {
     tcgPlayerMTGCondId: string;
     @Column()
     tcgPlayerMTGConditionId: number;
-
     @Column()
     tcgPlayerMTGConditionName: string;
-
     @Column()
-    tcgPlayerMTGConditionAbbreviation: string;
-
+    tcgPlayerMTGConditionCode: string;
     @Column()
     tcgPlayerMTGConditionDisplayOrder: number;
-
     @CreateDateColumn()
     tcgPlayerMTGConditionCreateDate: Date;
-
     @UpdateDateColumn()
     tcgPlayerMTGConditionUpdateDate: Date; 
 

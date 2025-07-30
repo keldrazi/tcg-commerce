@@ -1,53 +1,61 @@
 import { IsString } from "class-validator";
 
-export class ImportJobDTO {
-    importJobId: string;
+export class ImportJobCardDTO {
+    importJobCardId: string;
     commerceAccountId: string;
+    commerceLocationId: string;
     commerceLocationName: string;
     commerceUserName: string;
+    productVendorId: string;
     productVendorName: string;
+    productLineId: string;
     productLineName: string;
-    productLineAbbreviation: string;
-    importSortTypeName: string; //ROCA, TCGPlayer
-    importJobDate: Date;
-    importJobCode: string;
-    importJobStatus: string;
-    importJobInputFileURL: string;
-    importJobInputFileOriginalName: string;
-    importJobOutputFileURL: string;
-    importJobSortData: string; //CARD DATA;
-    importJobMetadata: string;
-    importJobIsPublished: boolean;
-    importJobCreateDate: Date;
-    importJobUpdateDate: Date;  
+    productLineCode: string;
+    importSortCardTypeName: string; //ROCA, TCGPlayer
+    importJobCardDate: Date;
+    importJobCardCode: string;
+    importJobCardStatus: string;
+    importJobCardInputFileURL: string;
+    importJobCardInputFileOriginalName: string;
+    importJobCardOutputFileURL: string;
+    importJobCardSortData: string; //CARD DATA;
+    importJobCardMetadata: string;
+    importJobCardIsPublished: boolean;
+    importJobCardCreateDate: Date;
+    importJobCardUpdateDate: Date;  
 }
-
 
 export class CreateImportJobDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
+    commerceLocationId: string;
+    @IsString()
     commerceLocationName: string;
     @IsString()
     commerceUserName: string;
     @IsString()
+    productVendorId: string;
+    @IsString()
     productVendorName: string;
+    @IsString()
+    productLineId: string;
     @IsString()
     productLineName: string;
     @IsString()
-    productLineAbbreviation: string;
+    productLineCode: string;
     @IsString()
-    importSortTypeName: string; //ROCA, TCGPlayer
+    importSortCardTypeName: string; //ROCA, TCGPlayer
     @IsString()
-    importJobMetadata: string;  
+    importJobCardMetadata: string;  
 }
 
 export class UpdateImportJobDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
-    importJobId: string;
+    importJobCardId: string;
     @IsString()
-    importJobStatus: string;
+    importJobCardStatus: string;
     
 }
