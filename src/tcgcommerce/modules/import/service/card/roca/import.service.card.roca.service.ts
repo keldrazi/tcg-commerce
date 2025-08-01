@@ -1,54 +1,54 @@
 import { Injectable } from '@nestjs/common';
 import { UtilCSVService } from 'src/system/modules/util/csv/util.csv.service';
-import { ImportSortDTO, ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto';
-import { IMPORT_JOB_STATUS, IMPORT_CARD_CONDITION, IMPORT_CARD_PRINTING, IMPORT_ROCA_CARD_DATA_KEYS } from 'src/system/constants/tcgcommerce/import/constants.tcgcommerce.import';
-import { ImportServiceUtilService } from 'src/tcgcommerce/modules/import/service/card/util/import.service.card.util.service';
+import { ImportSortCardDataDTO, ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto';
+import { IMPORT_JOB_CARD_STATUS, IMPORT_SORT_CARD_CONDITION, IMPORT_SORT_CARD_PRINTING, IMPORT_SORT_ROCA_CARD_DATA_KEYS } from 'src/system/constants/tcgcommerce/import/job/card/tcgcommerce.import.job.card.constants';
+import { ImportServiceCardUtilService } from 'src/tcgcommerce/modules/import/service/card/util/import.service.card.util.service';
 
 @Injectable()
-export class ImportServiceRocaService {
+export class ImportServiceCardRocaService {
  
     constructor(
         private utilCSVService: UtilCSVService,
-        private importServiceUtilService: ImportServiceUtilService,
+        private importServiceCardUtilService: ImportServiceCardUtilService,
     ) {}
     
     
-    async processImport(importFile: Express.Multer.File) {
+    async processImportCards(importJobCardFile: Express.Multer.File) {
 
-        let importCSVData = await this.utilCSVService.parseCSV(importFile);
-        let importData = await this.processCSVCardData(importCSVData); 
+        let importSortCSVData = await this.utilCSVService.parseCSV(importJobCardFile);
+        let importSortCardData = await this.processCSVCardData(importSortCSVData);
 
         let importSortCardDTOs: ImportSortCardDTO[] = [];
 
-        for(let i = 0; i < importData.importCardData.length; i++) {
+        for(let i = 0; i < importSortCardData.importCardData.length; i++) {
 
-            let cardData = importData.importCardData[i];
+            let cardData = importSortCardData.importCardData[i];
 
-            if(cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_ID] != '') {
+            if(cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_ID] != '') {
 
                 let importSortCardDTO = new ImportSortCardDTO();
-                importSortCardDTO.importSortCardTCGPlayerId = parseInt(cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_ID]);
-                importSortCardDTO.importSortCardSetName = cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_SET_NAME];
-                importSortCardDTO.importSortCardName = cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_NAME];
-                importSortCardDTO.importSortCardNumber = cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_NUMBER];
-                importSortCardDTO.importSortCardCondition = await this.importServiceUtilService.getImportCardCondition(cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_CONDITION]);
+                let importCardTCGPlayerId = cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_ID];
+                importSortCardDTO.importSortCardSetName = cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_SET_NAME];
+                importSortCardDTO.importSortCardName = cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_NAME];
+                importSortCardDTO.importSortCardNumber = cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_NUMBER];
+                importSortCardDTO.importSortCardCondition = await this.importServiceCardUtilService.getImportSortCardCondition(cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_CONDITION]);
                 //NEED TO CHECK THIS;
-                importSortCardDTO.importSortCardPrinting = IMPORT_CARD_PRINTING.NORMAL;
-                importSortCardDTO.importSortCardTCGPlayerMarketPrice = parseFloat(cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_MARKET_PRICE]);
-                importSortCardDTO.importSortCardTCGPlayerLowPrice = parseFloat(cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_LOW_PRICE]);
-                importSortCardDTO.importSortCardQty = parseInt(cardData[IMPORT_ROCA_CARD_DATA_KEYS.CARD_QTY]);
+                importSortCardDTO.importSortCardPrinting = IMPORT_SORT_CARD_PRINTING.NORMAL;
+                importSortCardDTO.importSortCardTCGPlayerMarketPrice = parseFloat(cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_MARKET_PRICE]);
+                importSortCardDTO.importSortCardTCGPlayerLowPrice = parseFloat(cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_LOW_PRICE]);
+                importSortCardDTO.importSortCardQty = parseInt(cardData[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_QTY]);
 
                 importSortCardDTOs.push(importSortCardDTO);
             }  
         }
 
-        let importSortDTO = new ImportSortDTO();
-        importSortDTO.importSortTotalCardQty = importData.totalImportCardQty;
-        importSortDTO.importSortTotalCardTCGPlayerMarketPrice = importData.totalImportCardTCGPlayerMarketPrice;
-        importSortDTO.importSortTotalCardTCGPlayerLowPrice = importData.totalImportCardTCGPlayerLowPrice;
-        importSortDTO.importSortCards = importSortCardDTOs;
+        let importSortCardDataDTO = new ImportSortCardDataDTO();
+        importSortCardDataDTO.importSortCardTotalCardQty = importSortCardData.importSortCardTotalCardQty;
+        importSortCardDataDTO.importSortCardTotalCardTCGPlayerMarketPrice = importSortCardData.importSortCardTotalCardTCGPlayerMarketPrice;
+        importSortCardDataDTO.importSortCardTotalCardTCGPlayerLowPrice = importSortCardData.importSortCardTotalCardTCGPlayerLowPrice;
+        importSortCardDataDTO.importSortCardData = importSortCardDTOs;
 
-        return importSortDTO;
+        return importSortCardDataDTO;
 
     }
 
@@ -63,10 +63,9 @@ export class ImportServiceRocaService {
 
         for(let i = 0; i < importCSVCardData.length; i++) {
             let importCard = importCSVCardData[i];
-
-            let importCardQty = parseInt(importCard[IMPORT_ROCA_CARD_DATA_KEYS.CARD_QTY]);
-            let importCardTCGPlayerMarketPrice = parseFloat(importCard[IMPORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_MARKET_PRICE]) * importCardQty;
-            let importCardTCGPlayerLowPrice = parseFloat(importCard[IMPORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_LOW_PRICE]) * importCardQty;
+            let importCardQty = parseInt(importCard[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_QTY]);
+            let importCardTCGPlayerMarketPrice = parseFloat(importCard[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_MARKET_PRICE]) * importCardQty;
+            let importCardTCGPlayerLowPrice = parseFloat(importCard[IMPORT_SORT_ROCA_CARD_DATA_KEYS.CARD_TCG_PLAYER_LOW_PRICE]) * importCardQty;
 
             importCardTCGPlayerMarketPrice = parseFloat(importCardTCGPlayerMarketPrice.toFixed(2));
             importCardTCGPlayerLowPrice = parseFloat(importCardTCGPlayerLowPrice.toFixed(2));
@@ -79,9 +78,9 @@ export class ImportServiceRocaService {
         }
 
         let importData = {
-            totalImportCardQty: totalImportCardQty,
-            totalImportCardTCGPlayerMarketPrice: totalImportCardTCGPlayerMarketPrice,
-            totalImportCardTCGPlayerLowPrice: totalImportCardTCGPlayerLowPrice,
+            importSortCardTotalCardQty: totalImportCardQty,
+            importSortCardTotalCardTCGPlayerMarketPrice: totalImportCardTCGPlayerMarketPrice,
+            importSortCardTotalCardTCGPlayerLowPrice: totalImportCardTCGPlayerLowPrice,
             importCardData: importCardData
         }
 

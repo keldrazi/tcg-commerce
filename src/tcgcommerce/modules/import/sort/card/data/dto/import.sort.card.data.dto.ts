@@ -1,10 +1,10 @@
 
-export class ImportSortDTO {
+export class ImportSortCardDataDTO {
     importJobId: string;
-    importSortTotalCardQty: number;
-    importSortTotalCardTCGPlayerMarketPrice: number;
-    importSortTotalCardTCGPlayerLowPrice: number;
-    importSortCards: ImportSortCardDTO[];
+    importSortCardTotalCardQty: number;
+    importSortCardTotalCardTCGPlayerMarketPrice: number;
+    importSortCardTotalCardTCGPlayerLowPrice: number;
+    importSortCardData: ImportSortCardDTO[];
 }
 
 export class ImportSortCardDTO {

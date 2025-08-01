@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { ImportServicePhyzbatchService } from './import.service.card.phyzbatch.service';
+import { ImportServiceCardPhyzbatchService } from './import.service.card.phyzbatch.service';
 import { UtilCSVModule } from 'src/system/modules/util/csv/util.csv.module';
-import { ImportServiceUtilModule } from 'src/tcgcommerce/modules/import/service/card/util/import.service.card.util.module';
+import { ImportServiceCardUtilModule } from 'src/tcgcommerce/modules/import/service/card/util/import.service.card.util.module';
 
 @Module({
   imports: [
     UtilCSVModule,
-    ImportServiceUtilModule
+    ImportServiceCardUtilModule
   ], 
-  providers: [ImportServicePhyzbatchService],
-  exports: [ImportServicePhyzbatchService],
+  providers: [ImportServiceCardPhyzbatchService],
+  exports: [ImportServiceCardPhyzbatchService],
 })
-export class ImportServicePhyzbatchModule {}
+export class ImportServiceCardPhyzbatchModule {}

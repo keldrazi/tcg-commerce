@@ -25,7 +25,7 @@ export class ImportJobCardDTO {
     importJobCardUpdateDate: Date;  
 }
 
-export class CreateImportJobDTO {
+export class CreateImportJobCardDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
@@ -48,14 +48,4 @@ export class CreateImportJobDTO {
     importSortCardTypeName: string; //ROCA, TCGPlayer
     @IsString()
     importJobCardMetadata: string;  
-}
-
-export class UpdateImportJobDTO {
-    @IsString()
-    commerceAccountId: string;
-    @IsString()
-    importJobCardId: string;
-    @IsString()
-    importJobCardStatus: string;
-    
 }

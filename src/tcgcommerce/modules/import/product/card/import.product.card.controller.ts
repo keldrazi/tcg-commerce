@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ImportCardService } from './import.product.card.service';
+import { ImportProductCardService } from './import.product.card.service';
 
-@Controller('import/card')
-export class ImportCardController {
+@Controller('import/product/card')
+export class ImportProductCardController {
 
     constructor(
-        private importCardService: ImportCardService,
+        private importProductCardService: ImportProductCardService,
     ) { }
     
     

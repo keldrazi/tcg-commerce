@@ -4,37 +4,26 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class ImportProductCard {
     @PrimaryGeneratedColumn('uuid')
     importProductCardId: string;
-
     @Column()
     importJobCardId: string;
-
     @Column()
     importProductCardTCGdbId: string;
-
     @Column()
     importProductCardSetName: string;
-
     @Column()
     importProductCardSetCode: string;
-    
     @Column()
     importProductCardName: string;
-
     @Column()
     importProductCardCondition: string;
-
     @Column()
     importProductCardPrinting: string;
-
     @Column()
     importProductCardQty: number;
-
     @Column({type: 'decimal'})
     importProductCardPrice: number;
-
     @CreateDateColumn()
     importProductCardCreateDate: Date;
-
     @UpdateDateColumn()
     importProductCardUpdateDate: Date; 
 

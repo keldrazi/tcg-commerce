@@ -1,58 +1,39 @@
 
 import { IsDecimal, IsNumber, IsString } from "class-validator";
 
-export class ImportCardDTO {
-    importCardId: string;
-    importJobId: string;
-    importCardTCGdbId: string;
-    importCardName: string;
-    importCardSetName: string;
-    importCardSetAbbreviation: string;
-    importCardCondition: string;
-    importCardPrinting: string;
-    importCardQty: number;
-    importCardPrice: number;
-    importCardCreateDate: Date;
-    importCardUpdateDate: Date;
+export class ImportProductCardDTO {
+    importProductCardId: string;
+    importJobCardId: string;
+    importProductCardTCGdbId: string;
+    importProductCardName: string;
+    importProductCardSetName: string;
+    importProductCardSetCode: string;
+    importProductCardCondition: string;
+    importProductCardPrinting: string;
+    importProductCardQty: number;
+    importProductCardPrice: number;
+    importProductCardCreateDate: Date;
+    importProductCardUpdateDate: Date;
 }
 
-export class CreateImportCardDTO {
+export class CreateImportProductCardDTO {
     @IsString()
-    importJobId: string;
+    importJobCardId: string;
     @IsString()
-    importCardTCGDBId: string;
+    importProductCardTCGDBId: string;
     @IsString()
-    importCardName: string;
+    importProductCardName: string;
     @IsString()
-    importCardSetName: string;
+    importProductCardSetName: string;
     @IsString()
-    importCardSetAbbreviation: string;
+    importProductCardSetCode: string;
     @IsString()
-    importCardCondition: string;
+    importProductCardCondition: string;
     @IsString()
-    importCardPrinting: string;
+    importProductCardPrinting: string;
     @IsNumber()
-    importCardQty: number;  
+    importProductCardQty: number;  
     @IsDecimal()
-    importCardPrice: number;
+    importProductCardPrice: number;
 
-}
-
-export class UpdateImportCardDTO {
-    @IsString()
-    importCardId: string;
-    @IsString()
-    importCardSetName: string;
-    @IsString()
-    importCardSetAbbreviation: string;
-    @IsString()
-    importCardName: string;
-    @IsString()
-    importCardCondition: string;
-    @IsString()
-    importCardPrinting: string;
-    @IsNumber()
-    importCardQty: number;  
-    @IsDecimal()
-    importCardPrice: number;
 }

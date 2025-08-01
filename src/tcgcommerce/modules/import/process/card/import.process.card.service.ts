@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { ImportServicePhyzbatchService } from 'src/tcgcommerce/modules/import/service/card/phyzbatch/import.service.card.phyzbatch.service';
-import { ImportServiceRocaService } from 'src/tcgcommerce/modules/import/service/card/roca/import.service.card.roca.service';
-import { ImportServiceTCGPlayerService } from 'src/tcgcommerce/modules/import/service/card/tcgplayer/import.service.card.tcgplayer.service';
-import { ImportJobDTO } from 'src/tcgcommerce/modules/import/job/card/dto/import.job.card.dto';
-import { ImportSortDTO, ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto'; 
-import { IMPORT_JOB_STATUS, IMPORT_SORT_TYPE_NAME, IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH, IMPORT_PRODUCT_LINE } from 'src/system/constants/tcgcommerce/import/constants.tcgcommerce.import';
+import { ImportServiceCardPhyzbatchService } from 'src/tcgcommerce/modules/import/service/card/phyzbatch/import.service.card.phyzbatch.service';
+import { ImportServiceCardRocaService } from 'src/tcgcommerce/modules/import/service/card/roca/import.service.card.roca.service';
+import { ImportServiceCardTCGPlayerService } from 'src/tcgcommerce/modules/import/service/card/tcgplayer/import.service.card.tcgplayer.service';
+import { ImportJobCardDTO } from 'src/tcgcommerce/modules/import/job/card/dto/import.job.card.dto';
+import { ImportSortCardDataDTO, ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto'; 
+import { IMPORT_JOB_CARD_STATUS, IMPORT_SORT_CARD_TYPE_NAME, IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH, IMPORT_JOB_CARD_PRODUCT_LINE } from 'src/system/constants/tcgcommerce/import/job/card/tcgcommerce.import.job.card.constants';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CreateImportCardDTO } from 'src/tcgcommerce/modules/import/product/card/dto/import.product.card.dto';
-import { ImportCardService } from 'src/tcgcommerce/modules/import/product/card/import.product.card.service';
+import { CreateImportProductCardDTO } from 'src/tcgcommerce/modules/import/product/card/dto/import.product.card.dto';
+import { ImportProductCardService } from 'src/tcgcommerce/modules/import/product/card/import.product.card.service';
 import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.service';
 import { TCGdbMTGCard } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.entity';
 import { TCGdbMTGCardDTO } from 'src/tcgdb/modules/tcgdb/mtg/card/dto/tcgdb.mtg.card.dto';
@@ -16,46 +16,46 @@ import { TCGdbMTGCardDTO } from 'src/tcgdb/modules/tcgdb/mtg/card/dto/tcgdb.mtg.
 export class ImportProcessService {
 
     constructor(
-        private importServicePhyzbatchService: ImportServicePhyzbatchService,
-        private importServiceRocaService: ImportServiceRocaService,
-        private importServiceTCGPlayerService: ImportServiceTCGPlayerService,
+        private importServiceCardPhyzbatchService: ImportServiceCardPhyzbatchService,
+        private importServiceCardRocaService: ImportServiceCardRocaService,
+        private importServiceCardTCGPlayerService: ImportServiceCardTCGPlayerService,
         private eventEmitter: EventEmitter2,
-        private importCardService: ImportCardService,
+        private importProductCardService: ImportProductCardService,
         private tcgdbMTGCardService: TCGdbMTGCardService
     ) { }
 
     
 
-    async processImport(importJobDTO: ImportJobDTO, importJobFile: Express.Multer.File) {
+    async processImportCard(importJobCardDTO: ImportJobCardDTO, importJobCardFile: Express.Multer.File) {
 
         //UPDATE THE IMPORT JOB STATUS TO PROCESSING FILE;
         this.eventEmitter.emit(
             'import.job.status',
             {
-                importJobId: importJobDTO.importJobId,
-                importJobStatus: IMPORT_JOB_STATUS.PROCESSING_FILE,
+                importJobId: importJobCardDTO.importJobCardId,
+                importJobStatus: IMPORT_JOB_CARD_STATUS.PROCESSING_FILE,
             }
         )
         
         //PROCESS THE IMPORT BASED ON THE SORT TYPE NAME
-        let importSortDTO: ImportSortDTO | undefined = undefined;
+        let importSortCardDataDTO: ImportSortCardDataDTO | undefined = undefined;
 
-        switch (importJobDTO.importSortTypeName) {
-            case IMPORT_SORT_TYPE_NAME.PHYZBATCH:
-                importSortDTO = await this.importServicePhyzbatchService.processImport(importJobFile);
-            case IMPORT_SORT_TYPE_NAME.ROCA:
-                importSortDTO = await this.importServiceRocaService.processImport(importJobFile);
-            case IMPORT_SORT_TYPE_NAME.TCG_PLAYER:
-                //importSortDTO = await this.importServiceTCGPlayerService.processImport(importJobFile);
+        switch (importJobCardDTO.importSortCardTypeName) {
+            case IMPORT_SORT_CARD_TYPE_NAME.PHYZBATCH:
+                importSortCardDataDTO = await this.importServiceCardPhyzbatchService.processImportCards(importJobCardFile);
+            case IMPORT_SORT_CARD_TYPE_NAME.ROCA:
+                importSortCardDataDTO = await this.importServiceCardRocaService.processImportCards(importJobCardFile);
+            case IMPORT_SORT_CARD_TYPE_NAME.TCG_PLAYER:
+                importSortCardDataDTO = await this.importServiceCardTCGPlayerService.processImportCards(importJobCardFile);
         }
 
-        if(importSortDTO == undefined) {
+        if(importSortCardDataDTO == undefined) {
             //UPDATE THE IMPORT JOB STATUS TO FAILED;
             this.eventEmitter.emit(
-                'import.job.update.status',
+                'import.job.card.update.status',
                 {
-                    importJobId: importJobDTO.importJobId,
-                    importJobStatus: IMPORT_JOB_STATUS.FAILED,
+                    importJobCardId: importJobCardDTO.importJobCardId,
+                    importJobCardStatus: IMPORT_JOB_CARD_STATUS.FAILED,
                 }
             )
             return;
@@ -63,29 +63,27 @@ export class ImportProcessService {
 
         //UPDATE THE IMPORT JOB WITH THE IMPORT SORT DATA;
         this.eventEmitter.emit(
-            'import.job.update.sort.data',
+            'import.job.card.update.sort.data',
             {
-                importJobId: importJobDTO.importJobId,
-                importSortDTO: importSortDTO,
+                importJobCardId: importJobCardDTO.importJobCardId,
+                importSortCardDataDTO: importSortCardDataDTO,
             }
         );
 
-        //CREATE THE IMPORT CARD DATA;
-        let importSortCardDTOs = importSortDTO.importSortCards;
 
-        switch (importJobDTO.productLineAbbreviation) {
-            case IMPORT_PRODUCT_LINE.MTG:
-                await this.createMTGImportCards(importJobDTO.importJobId, importSortCardDTOs);
+        switch (importJobCardDTO.productLineCode) {
+            case IMPORT_JOB_CARD_PRODUCT_LINE.MTG:
+                await this.createMTGImportCards(importJobCardDTO.importJobCardId, importSortCardDataDTO.importSortCardData);
                 break;
-            case IMPORT_PRODUCT_LINE.PKE:
+            case IMPORT_JOB_CARD_PRODUCT_LINE.PKE:
                 // Handle PKE import cards creation if needed
                 break;
 
         }
         
     }
-
-    async createMTGImportCards(importJobId: string, importSortCardDTOs: ImportSortCardDTO[]) {
+    //NEED TO UPDATE THIS TO PRODUCT NOT TCGDB CARD;
+    async createMTGImportCards(importJobCardId: string, importSortCardDTOs: ImportSortCardDTO[]) {
         
         for(let i = 0; i < importSortCardDTOs.length; i++) {
             let importSortCardDTO = importSortCardDTOs[i];

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ImportServiceUtilService } from "./import.service.card.util.service";
+import { ImportServiceCardUtilService } from "./import.service.card.util.service";
 
 
 
@@ -8,7 +8,7 @@ import { ImportServiceUtilService } from "./import.service.card.util.service";
   imports: [
     
   ], 
-  providers: [ImportServiceUtilService],
-  exports: [ImportServiceUtilService],
+  providers: [ImportServiceCardUtilService],
+  exports: [ImportServiceCardUtilService],
 })
-export class ImportServiceUtilModule {}
+export class ImportServiceCardUtilModule {}

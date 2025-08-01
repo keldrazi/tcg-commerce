@@ -1,96 +1,97 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ImportCard } from 'src/typeorm/entities/tcgcommerce/modules/import/product/card/import.product.card.entity';
-import { ImportCardDTO, CreateImportCardDTO, UpdateImportCardDTO } from './dto/import.product.card.dto';
+import { ImportProductCard } from 'src/typeorm/entities/tcgcommerce/modules/import/product/card/import.product.card.entity';
+import { ImportProductCardDTO, CreateImportProductCardDTO } from './dto/import.product.card.dto';
 
 @Injectable()
-export class ImportCardService {
+export class ImportProductCardService {
 
     constructor(
-        @InjectRepository(ImportCard) private importCardRepository: Repository<ImportCard>,
+        @InjectRepository(ImportProductCard) private importProductCardRepository: Repository<ImportProductCard>,
     ) { }
 
-    async getImportCardsByImportJobId(importJobId: string) {
+    async getImportProductCardsByImportJobCardId(importJobCardId: string) {
 
-        let importCards = await this.importCardRepository.find({
+        let importProductCards = await this.importProductCardRepository.find({
             where: {
-                importJobId: importJobId
+                importJobCardId: importJobCardId
             }
         });
 
-        if(importCards == null) {
+        if(importProductCards == null) {
             return [];
         }
 
-        let importCardDTOs: ImportCardDTO[] = [];
+        let importProductCardDTOs: ImportProductCardDTO[] = [];
 
-        for(let i = 0; i < importCards.length; i++) {
-            let importCard = importCards[i];
-            let importCardDTO:ImportCardDTO = ({ ...importCard });
+        for(let i = 0; i < importProductCards.length; i++) {
+            let importProductCard = importProductCards[i];
+            let importProductCardDTO: ImportProductCardDTO = ({ ...importProductCard });
 
-            importCardDTOs.push(importCardDTO);
+            importProductCardDTOs.push(importProductCardDTO);
         }
 
-        return importCardDTOs;
+        return importProductCardDTOs;
     }
 
-    async getImportCardByImportCardId(importCardId: string) {
-        let importCard = await this.importCardRepository.findOne({
+    async getImportProductCardByImportProductCardId(importProductCardId: string) {
+        let importProductCard = await this.importProductCardRepository.findOne({
             where: {
-                importCardId: importCardId
+                importProductCardId: importProductCardId
             }
         });
 
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(importCard == null) {
+        if(importProductCard == null) {
             return null;
         }
 
-        let importCardDTO:ImportCardDTO = ({ ...importCard });
+        let importProductCardDTO:ImportProductCardDTO = ({ ...importProductCard });
 
-        return importCardDTO;
-            
+        return importProductCardDTO;
+
     }
 
-    async getImportCardByImportJobIdAndTCGdbId(importJobId: string, tcgdbId: string) {
-        let importCard = await this.importCardRepository.findOne({
+    async getImportProductCardByImportJobCardIdAndTCGdbId(importJobCardId: string, tcgdbId: string) {
+        let importProductCard = await this.importProductCardRepository.findOne({
             where: {
-                importJobId: importJobId,
-                importCardTCGdbId: tcgdbId
+                importJobCardId: importJobCardId,
+                importProductCardTCGdbId: tcgdbId
             }
         });
 
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(importCard == null) {
+        if(importProductCard == null) {
             return null;
         }
 
-        let importCardDTO:ImportCardDTO = ({ ...importCard });
+        let importProductCardDTO:ImportProductCardDTO = ({ ...importProductCard });
 
-        return importCardDTO;
-            
+        return importProductCardDTO;
+
     }
 
-    async createImportCard(createImportCardDTO: CreateImportCardDTO) {
-        
+    async createImportProductCard(createImportProductCardDTO: CreateImportProductCardDTO) {
+
         //CHECK TO SEE IF THE IMPORT JOB EXISTS;
-        let importCard = await this.getImportCardByImportJobIdAndTCGdbId(createImportCardDTO.importJobId, createImportCardDTO.importCardTCGDBId);
+        let importProductCard = await this.getImportProductCardByImportJobCardIdAndTCGdbId(createImportProductCardDTO.importJobCardId, createImportProductCardDTO.importProductCardTCGDBId);
                 
         //TO DO: RETURN AN ERROR FOR DUPLICATE IMPORT CARD;
-        if (importCard != null) {
+        if (importProductCard != null) {
             return null;
         }
         
-        let newImportCard = this.importCardRepository.create({ ...createImportCardDTO });
-        newImportCard = await this.importCardRepository.save(newImportCard);
+        importProductCard = this.importProductCardRepository.create({ ...createImportProductCardDTO });
+        importProductCard = await this.importProductCardRepository.save(importProductCard);
 
-        let importCardDTO = this.getImportCardByImportCardId(newImportCard.importCardId);
+        let importProductCardDTO: ImportProductCardDTO = ({ ...importProductCard });
 
-        return importCardDTO;
+        return importProductCardDTO;
         
     }
 
+    /*
     async updateImportCard(updateImportCardDTO: UpdateImportCardDTO) {
 
         //CHECK TO SEE IF THE IMPORT JOB EXISTS;
@@ -117,5 +118,6 @@ export class ImportCardService {
 
         return importCardDTO;
     }
+    */
     
 }

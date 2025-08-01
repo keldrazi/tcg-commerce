@@ -1,131 +1,113 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ImportJob } from 'src/typeorm/entities/tcgcommerce/modules/import/job/card/import.job.card.entity';
-import { ImportJobDTO, CreateImportJobDTO, UpdateImportJobDTO } from './card/dto/import.job.dto';
-import { IMPORT_JOB_STATUS, IMPORT_SORT_TYPE_NAME, IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH } from 'src/system/constants/tcgcommerce/import/constants.tcgcommerce.import';
+import { ImportJobCard } from 'src/typeorm/entities/tcgcommerce/modules/import/job/card/import.job.card.entity';
+import { ImportJobCardDTO, CreateImportJobCardDTO } from './dto/import.job.card.dto';
+import { IMPORT_JOB_CARD_STATUS, IMPORT_SORT_CARD_TYPE_NAME, IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH } from 'src/system/constants/tcgcommerce/import/job/card/tcgcommerce.import.job.card.constants';
 import { AwsS3Service } from 'src/system/modules/aws/s3/aws.s3.service';
 import { ImportProcessService } from 'src/tcgcommerce/modules/import/process/card/import.process.card.service';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ImportSortDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto';
+import { ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto';
 
 @Injectable()
-export class ImportJobService {
+export class ImportJobCardService {
 
     constructor(
-        @InjectRepository(ImportJob) private importJobRepository: Repository<ImportJob>,
+        @InjectRepository(ImportJobCard) private importJobCardRepository: Repository<ImportJobCard>,
         private awsS3Service: AwsS3Service,
         private importProcessService: ImportProcessService
     ) { }
 
-    async getImportJobsByCommerceAccountId(commerceAccountId: string) {
+    async getImportJobCardsByCommerceAccountId(commerceAccountId: string, productLineId: string) {
 
-        let importJobs = await this.importJobRepository.find({
+        let importJobCards = await this.importJobCardRepository.find({
             where: {
-                commerceAccountId: commerceAccountId
+                commerceAccountId: commerceAccountId,
+                productLineId: productLineId
             }
         });
 
-        if(importJobs == null) {
+        if(importJobCards == null) {
             return [];
         }
 
-        let importJobDTOs: ImportJobDTO[] = [];
+        let importJobCardDTOs: ImportJobCardDTO[] = [];
 
-        for(let i = 0; i < importJobs.length; i++) {
-            let importJob = importJobs[i];
+        for(let i = 0; i < importJobCards.length; i++) {
+            let importJobCard = importJobCards[i];
             //MAP TO DTO;
-            let importJobDTO: ImportJobDTO = ({ ...importJob});
-            
-            importJobDTOs.push(importJobDTO);
+            let importJobCardDTO: ImportJobCardDTO = ({ ...importJobCard });
+
+            importJobCardDTOs.push(importJobCardDTO);
         }
 
-        return importJobDTOs;
+        return importJobCardDTOs;
     }
 
-    async getImportJobByImportJobId(importJobId: string) {
-        let importJob = await this.importJobRepository.findOne({
+    async getImportJobCardByImportJobCardId(importJobCardId: string) {
+        let importJobCard = await this.importJobCardRepository.findOne({
             where: {
-                importJobId: importJobId
+                importJobCardId: importJobCardId
             }
         });
 
         
-        if(importJob == null) {
+        if(importJobCard == null) {
             return undefined;
         }
 
         //MAP TO DTO;
-        let importJobDTO: ImportJobDTO = ({ ...importJob});
+        let importJobCardDTO: ImportJobCardDTO = ({ ...importJobCard });
         
-        return importJobDTO;
+        return importJobCardDTO;
             
     }
 
-    async getImportJobByImportJobCode(importJobCode: string) {
-        let importJob = await this.importJobRepository.findOne({
-            where: {
-                importJobCode: importJobCode
-            }
-        });
-
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(importJob == null) {
-            return undefined;
-        }
-
-        //MAP TO DTO;
-        let importJobDTO: ImportJobDTO = ({ ...importJob});
-
-        return importJobDTO;
-            
-    }
-
-    async getImportJobByOriginaFileName(commerceAccountId: string, importJobInputFileOriginalName: string) {
-        return await this.importJobRepository.findOne({
+    async getImportJobCardByOriginaFileName(commerceAccountId: string, importJobCardInputFileOriginalName: string) {
+        return await this.importJobCardRepository.findOne({
             where: { 
                 commerceAccountId: commerceAccountId,
-                importJobInputFileOriginalName: importJobInputFileOriginalName }
+                importJobCardInputFileOriginalName: importJobCardInputFileOriginalName }
         });
     }
 
 
-    async createImportJob(importJobFile: Express.Multer.File, createImportJobDTO: CreateImportJobDTO) {
+    async createImportJob(importJobCardFile: Express.Multer.File, createImportJobCardDTO: CreateImportJobCardDTO) {
 
         //CHECK TO SEE IF A FILE WITH THE SAME NAME EXISTS;
-        let existingImportJob = await this.getImportJobByOriginaFileName(createImportJobDTO.commerceAccountId, importJobFile.originalname);
-        
-        if(existingImportJob != null) {
+        let existingImportJobCard = await this.getImportJobCardByOriginaFileName(createImportJobCardDTO.commerceAccountId, importJobCardFile.originalname);
+
+        if(existingImportJobCard != null) {
             //HANDLE EXISTING FILE WITH THE SAME NAME;
             return null; //TO DO: RETURN AN ERROR;
         }
 
-        let importJobCode = await this.createImportJobCode(createImportJobDTO.productLineAbbreviation, createImportJobDTO.importSortTypeName, createImportJobDTO.commerceLocationName);
-        
+        let importJobCardCode= await this.createImportJobCardCode(createImportJobCardDTO.productLineCode, createImportJobCardDTO.importSortCardTypeName, createImportJobCardDTO.commerceLocationName);
+
         //UPLOAD THE FILE TO S3
-        let importJobInputFileURL = await this.uploadImportJobFile(createImportJobDTO.commerceAccountId, importJobFile, importJobCode, createImportJobDTO.importSortTypeName);
+        let importJobCardInputFileURL = await this.uploadImportJobCardFile(createImportJobCardDTO.commerceAccountId, importJobCardFile, importJobCardCode, createImportJobCardDTO.importSortCardTypeName);
 
-        let newImportJob = this.importJobRepository.create({ ...createImportJobDTO });
-        newImportJob.importJobCode = importJobCode;
-        newImportJob.importJobStatus = IMPORT_JOB_STATUS.PROCESSING;
-        newImportJob.importJobInputFileURL = importJobInputFileURL;
-        newImportJob.importJobInputFileOriginalName = importJobFile.originalname;
-        newImportJob.importJobDate = new Date();
-        newImportJob.importJobSortData = JSON.stringify({}); //INITIALIZE SORT DATA AS EMPTY;
-        newImportJob.importJobMetadata = JSON.stringify(createImportJobDTO.importJobMetadata); //INITIALIZE METADATA AS EMPTY;
-        newImportJob = await this.importJobRepository.save(newImportJob);
+        let importJobCard = this.importJobCardRepository.create({ ...createImportJobCardDTO });
+        importJobCard.importJobCardCode = importJobCardCode;
+        importJobCard.importJobCardStatus = IMPORT_JOB_CARD_STATUS.PROCESSING;
+        importJobCard.importJobCardInputFileURL = importJobCardInputFileURL;
+        importJobCard.importJobCardInputFileOriginalName = importJobCardFile.originalname;
+        importJobCard.importJobCardDate = new Date();
+        importJobCard.importJobCardSortData = JSON.stringify({}); //INITIALIZE SORT DATA AS EMPTY;
+        importJobCard.importJobCardMetadata = JSON.stringify(createImportJobCardDTO.importJobCardMetadata); //INITIALIZE METADATA AS EMPTY;
+        importJobCard = await this.importJobCardRepository.save(importJobCard);
 
-        let importJobDTO = await this.getImportJobByImportJobId(newImportJob.importJobId);
+        let importJobCardDTO = await this.getImportJobCardByImportJobCardId(importJobCard.importJobCardId);
         
-        if(importJobDTO == undefined) {
+        if(importJobCardDTO == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return null; //RETURN AN ERROR;
         }
 
-        this.importProcessService.processImport(importJobDTO, importJobFile)
+        this.importProcessService.processImport(importJobCardDTO, importJobCardFile)
 
-        return importJobDTO;
-        
+        return importJobCardDTO;
+
     }
 
     /*
@@ -153,70 +135,70 @@ export class ImportJobService {
     }
     */
 
-    async createImportJobCode(productLineAbbreviation: string, importSortTypeName: string, commerceLocationName:string) {
+    async createImportJobCardCode(productLineCode: string, importSortCardTypeName: string, commerceLocationName:string) {
 
         let now = new Date();
         let dateCode = now.getFullYear().toString() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + '-' + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
-        
-        let importJobCode = productLineAbbreviation.toUpperCase() + '-' + importSortTypeName.replace(/ /g, '-').toUpperCase() + '-' + commerceLocationName.replace(/ /g, '-').toUpperCase() + '-' + dateCode;
+
+        let importJobCode = productLineCode.toUpperCase() + '-' + importSortCardTypeName.replace(/ /g, '-').toUpperCase() + '-' + commerceLocationName.replace(/ /g, '-').toUpperCase() + '-' + dateCode;
 
         return importJobCode;
     }
 
-    async uploadImportJobFile(commerceAccountId: string, importJobFile: Express.Multer.File, importJobCode: string, importSortTypeName: string) {
+    async uploadImportJobCardFile(commerceAccountId: string, importJobCardFile: Express.Multer.File, importJobCardCode: string, importSortCardTypeName: string) {
 
-        let importJobFileBuffer = importJobFile.buffer;
-        let importJobBucketPath = '';
-        let importJobFileURL = '';
+        let importJobCardFileBuffer = importJobCardFile.buffer;
+        let importJobCardBucketPath = '';
+        let importJobCardFileURL = '';
 
-        switch(importSortTypeName) {
-            case IMPORT_SORT_TYPE_NAME.TCG_PLAYER:
-                importJobBucketPath = commerceAccountId + '/' + IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH.TCG_PLAYER;
-                importJobFileURL = await this.awsS3Service.uploadPDF(importJobFileBuffer, importJobBucketPath, importJobCode);
+        switch(importSortCardTypeName) {
+            case IMPORT_SORT_CARD_TYPE_NAME.TCG_PLAYER:
+                importJobCardBucketPath = commerceAccountId + '/' + IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH.TCG_PLAYER;
+                importJobCardFileURL = await this.awsS3Service.uploadPDF(importJobCardFileBuffer, importJobCardBucketPath, importJobCardCode);
                 break;
-            case IMPORT_SORT_TYPE_NAME.ROCA:
-                importJobBucketPath = commerceAccountId + '/' + IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH.ROCA;
-                importJobFileURL = await this.awsS3Service.uploadCSV(importJobFileBuffer, importJobBucketPath, importJobCode);
+            case IMPORT_SORT_CARD_TYPE_NAME.ROCA:
+                importJobCardBucketPath = commerceAccountId + '/' + IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH.ROCA;
+                importJobCardFileURL = await this.awsS3Service.uploadCSV(importJobCardFileBuffer, importJobCardBucketPath, importJobCardCode);
                 break;
-            case IMPORT_SORT_TYPE_NAME.PHYZBATCH:
-                importJobBucketPath = commerceAccountId + '/' + IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH.PHYZBATCH;
-                importJobFileURL = await this.awsS3Service.uploadCSV(importJobFileBuffer, importJobBucketPath, importJobCode);
+            case IMPORT_SORT_CARD_TYPE_NAME.PHYZBATCH:
+                importJobCardBucketPath = commerceAccountId + '/' + IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH.PHYZBATCH;
+                importJobCardFileURL = await this.awsS3Service.uploadCSV(importJobCardFileBuffer, importJobCardBucketPath, importJobCardCode);
                 break;
         }
 
-        return importJobFileURL;
+        return importJobCardFileURL;
         
     }
 
 
-    async updateImportJobStatus(importJobId: string, importJobStatus: string) {
-        let importJob = await this.getImportJobByImportJobId(importJobId);
-        
-        if(importJob == undefined) {
+    async updateImportJobCardStatus(importJobCardId: string, importJobCardStatus: string) {
+        let importJobCard = await this.getImportJobCardByImportJobCardId(importJobCardId);
+
+        if(importJobCard == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        importJob.importJobStatus = importJobStatus;
-        importJob.importJobUpdateDate = new Date();
+        importJobCard.importJobCardStatus = importJobCardStatus;
+        importJobCard.importJobCardUpdateDate = new Date();
 
-        await this.importJobRepository.save(importJob);
+        await this.importJobCardRepository.save(importJobCard);
 
         return true;
     }
 
-    async updateImportJobSortData(importJobId: string, importSortDTO: ImportSortDTO) {
-        let importJob = await this.getImportJobByImportJobId(importJobId);
-        
-        if(importJob == undefined) {
+    async updateImportJobSortData(importJobId: string, importSortCardDTO: ImportSortCardDTO) {
+        let importJobCard = await this.getImportJobCardByImportJobCardId(importJobId);
+
+        if(importJobCard == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        importJob.importJobSortData = JSON.stringify(importSortDTO);
-        importJob.importJobUpdateDate = new Date();
+        importJobCard.importJobCardSortData = JSON.stringify(importSortCardDTO);
+        importJobCard.importJobCardUpdateDate = new Date();
 
-        await this.importJobRepository.save(importJob);
+        await this.importJobCardRepository.save(importJobCard);
 
         return true;
     }
@@ -224,23 +206,23 @@ export class ImportJobService {
 
 
     /* EVENT LISTENERS */
-    @OnEvent('import.job.update.status')
-    async handleImportJobStatusEvent(payload: any) {
+    @OnEvent('import.job.card.update.status')
+    async handleImportJobCardStatusEvent(payload: any) {
 
-        let importJobCode = payload.importJobCode;
-        let importJobStatus = payload.importJobStatus;
+        let importJobCardCode = payload.importJobCardCode;
+        let importJobCardStatus = payload.importJobCardStatus;
 
-        await this.updateImportJobStatus(importJobCode, importJobStatus);
+        await this.updateImportJobCardStatus(importJobCardCode, importJobCardStatus);
 
     }
 
-    @OnEvent('import.job.update.sort.data')
-    async handleImportJobSortDataEvent(payload: any) {
+    @OnEvent('import.job.card.update.sort.data')
+    async handleImportJobCardSortDataEvent(payload: any) {
 
-        let importJobId = payload.importJobId;
-        let importSortDTO = payload.importSortDTO;
+        let importJobCardId = payload.importJobCardId;
+        let importSortCardDTO = payload.importSortCardDTO;
 
-        await this.updateImportJobSortData(importJobId, importSortDTO);
+        await this.updateImportJobSortData(importJobCardId, importSortCardDTO);
 
     }
 

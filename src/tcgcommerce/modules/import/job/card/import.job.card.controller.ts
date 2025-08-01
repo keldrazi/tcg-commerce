@@ -1,13 +1,13 @@
 import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { ImportJobService } from './import.job.card.service';
+import { ImportJobCardService } from './import.job.card.service';
 import { FileInterceptor } from "@nestjs/platform-express";
 
 
-@Controller('import/job')
-export class ImportJobController {
+@Controller('import/job/card')
+export class ImportJobCardController {
 
     constructor(
-        private importJobService: ImportJobService,
+        private importJobCardService: ImportJobCardService,
     ) { }
     
     @Post()
@@ -25,7 +25,7 @@ export class ImportJobController {
         
     ) {
 
-        let importJobCode = await this.importJobService.createImportJob(importJobFile, body.createImportJobDTO);
+        let importJobCode = await this.importJobCardService.createImportJob(importJobFile, body.createImportJobDTO);
 
         return importJobCode;
     }

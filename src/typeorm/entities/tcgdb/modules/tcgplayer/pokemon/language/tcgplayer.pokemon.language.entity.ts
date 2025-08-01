@@ -9,7 +9,7 @@ export class TCGPlayerPokemonLanguage {
     @Column()
     tcgPlayerPokemonLanguageName: string;
     @Column()
-    tcgPlayerPokemonLanguageAbbreviation: string;
+    tcgPlayerPokemonLanguageCode: string;
     @CreateDateColumn()
     tcgPlayerPokemonLanguageCreateDate: Date;
     @UpdateDateColumn()
