@@ -13,7 +13,7 @@ import { TCGdbMTGCard } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/card/
 import { TCGdbMTGCardDTO } from 'src/tcgdb/modules/tcgdb/mtg/card/dto/tcgdb.mtg.card.dto';
 
 @Injectable()
-export class ImportProcessService {
+export class ImportProcessCardService {
 
     constructor(
         private importServiceCardPhyzbatchService: ImportServiceCardPhyzbatchService,
@@ -26,11 +26,11 @@ export class ImportProcessService {
 
     
 
-    async processImportCard(importJobCardDTO: ImportJobCardDTO, importJobCardFile: Express.Multer.File) {
+    async processImportCards(importJobCardDTO: ImportJobCardDTO, importJobCardFile: Express.Multer.File) {
 
         //UPDATE THE IMPORT JOB STATUS TO PROCESSING FILE;
         this.eventEmitter.emit(
-            'import.job.status',
+            'import.job.card.update.status',
             {
                 importJobId: importJobCardDTO.importJobCardId,
                 importJobStatus: IMPORT_JOB_CARD_STATUS.PROCESSING_FILE,
@@ -96,27 +96,29 @@ export class ImportProcessService {
                 continue;
             }
 
-            let importCardDTO: CreateImportCardDTO = {
-                importJobId: importJobId,
-                importCardTCGDBId: tcgdbMTGCard.tcgdbMTGCardId,
-                importCardName: tcgdbMTGCard.tcgdbMTGCardName,
-                importCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
-                importCardSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
-                importCardCondition: importSortCardDTO.importSortCardCondition,
-                importCardPrinting: importSortCardDTO.importSortCardPrinting,
-                importCardQty: importSortCardDTO.importSortCardQty,
-                importCardPrice: importSortCardDTO.importSortCardTCGPlayerLowPrice,
+            let importProductCardDTO: CreateImportProductCardDTO = {
+                importJobCardId: importJobCardId,
+                importProductCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
+                importProductCardName: tcgdbMTGCard.tcgdbMTGCardName,
+                importProductCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
+                importProductCardSetCode: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+                importProductCardCondition: importSortCardDTO.importSortCardCondition,
+                importProductCardPrinting: importSortCardDTO.importSortCardPrinting,
+                importProductCardQty: importSortCardDTO.importSortCardQty,
+                importProductCardPriceLow: importSortCardDTO.importSortCardTCGPlayerLowPrice,
+                importProductCardPriceMarket: importSortCardDTO.importSortCardTCGPlayerMarketPrice,
             };
+
             
             //CREATE THE IMPORT CARD;
-            await this.importCardService.createImportCard(importCardDTO);
+            await this.importProductCardService.createImportProductCard(importProductCardDTO);
         }
 
         this.eventEmitter.emit(
-            'import.job.update.status',
+            'import.job.card.update.status',
             {
-                importJobId: importJobId,
-                importJobStatus: IMPORT_JOB_STATUS.READY_FOR_REVIEW
+                importJobCardId: importJobCardId,
+                importJobCardStatus: IMPORT_JOB_CARD_STATUS.READY_FOR_REVIEW
             }
         )
             

@@ -11,7 +11,8 @@ export class ImportProductCardDTO {
     importProductCardCondition: string;
     importProductCardPrinting: string;
     importProductCardQty: number;
-    importProductCardPrice: number;
+    importProductCardPriceLow: number;
+    importProductCardPriceMarket: number;
     importProductCardCreateDate: Date;
     importProductCardUpdateDate: Date;
 }
@@ -20,7 +21,7 @@ export class CreateImportProductCardDTO {
     @IsString()
     importJobCardId: string;
     @IsString()
-    importProductCardTCGDBId: string;
+    importProductCardTCGdbId: string;
     @IsString()
     importProductCardName: string;
     @IsString()
@@ -34,6 +35,8 @@ export class CreateImportProductCardDTO {
     @IsNumber()
     importProductCardQty: number;  
     @IsDecimal()
-    importProductCardPrice: number;
+    importProductCardPriceLow: number;
+    @IsDecimal()
+    importProductCardPriceMarket: number;
 
 }

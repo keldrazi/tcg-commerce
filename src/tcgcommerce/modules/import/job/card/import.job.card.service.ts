@@ -5,7 +5,7 @@ import { ImportJobCard } from 'src/typeorm/entities/tcgcommerce/modules/import/j
 import { ImportJobCardDTO, CreateImportJobCardDTO } from './dto/import.job.card.dto';
 import { IMPORT_JOB_CARD_STATUS, IMPORT_SORT_CARD_TYPE_NAME, IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH } from 'src/system/constants/tcgcommerce/import/job/card/tcgcommerce.import.job.card.constants';
 import { AwsS3Service } from 'src/system/modules/aws/s3/aws.s3.service';
-import { ImportProcessService } from 'src/tcgcommerce/modules/import/process/card/import.process.card.service';
+import { ImportProcessCardService } from 'src/tcgcommerce/modules/import/process/card/import.process.card.service';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ImportSortCardDTO } from 'src/tcgcommerce/modules/import/sort/card/data/dto/import.sort.card.data.dto';
 
@@ -15,7 +15,7 @@ export class ImportJobCardService {
     constructor(
         @InjectRepository(ImportJobCard) private importJobCardRepository: Repository<ImportJobCard>,
         private awsS3Service: AwsS3Service,
-        private importProcessService: ImportProcessService
+        private importProcessCardService: ImportProcessCardService
     ) { }
 
     async getImportJobCardsByCommerceAccountId(commerceAccountId: string, productLineId: string) {
@@ -104,36 +104,11 @@ export class ImportJobCardService {
             return null; //RETURN AN ERROR;
         }
 
-        this.importProcessService.processImport(importJobCardDTO, importJobCardFile)
+        this.importProcessCardService.processImportCards(importJobCardDTO, importJobCardFile)
 
         return importJobCardDTO;
 
     }
-
-    /*
-    async updateImportJob(updateImportJobDTO: UpdateImportJobDTO) {
-
-        //CHECK TO SEE IF THE IMPORT JOB EXISTS;
-        let importJob = await this.importJobRepository.findOne({
-            where: {
-                importJobId: updateImportJobDTO.importJobId
-            }
-        });
-
-        //TO DO: RETURN AN ERROR FOR NON EXISTENT IMPORT JOB;
-        if(importJob == null) {
-            return null;
-        }
-
-        importJob.importJobStatus = updateImportJobDTO.importJobStatus;
-
-        importJob = await this.importJobRepository.save(importJob);
-
-        let importJobDTO = this.getImportJobByImportJobId(importJob.importJobId);
-
-        return importJobDTO;
-    }
-    */
 
     async createImportJobCardCode(productLineCode: string, importSortCardTypeName: string, commerceLocationName:string) {
 
@@ -209,10 +184,10 @@ export class ImportJobCardService {
     @OnEvent('import.job.card.update.status')
     async handleImportJobCardStatusEvent(payload: any) {
 
-        let importJobCardCode = payload.importJobCardCode;
+        let importJobCardId = payload.importJobCardId;
         let importJobCardStatus = payload.importJobCardStatus;
 
-        await this.updateImportJobCardStatus(importJobCardCode, importJobCardStatus);
+        await this.updateImportJobCardStatus(importJobCardId, importJobCardStatus);
 
     }
 

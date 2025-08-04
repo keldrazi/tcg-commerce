@@ -21,7 +21,9 @@ export class ImportProductCard {
     @Column()
     importProductCardQty: number;
     @Column({type: 'decimal'})
-    importProductCardPrice: number;
+    importProductCardPriceLow: number;
+    @Column({type: 'decimal'})
+    importProductCardPriceMarket: number;
     @CreateDateColumn()
     importProductCardCreateDate: Date;
     @UpdateDateColumn()

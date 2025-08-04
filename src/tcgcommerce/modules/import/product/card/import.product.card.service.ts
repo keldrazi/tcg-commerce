@@ -75,7 +75,7 @@ export class ImportProductCardService {
     async createImportProductCard(createImportProductCardDTO: CreateImportProductCardDTO) {
 
         //CHECK TO SEE IF THE IMPORT JOB EXISTS;
-        let importProductCard = await this.getImportProductCardByImportJobCardIdAndTCGdbId(createImportProductCardDTO.importJobCardId, createImportProductCardDTO.importProductCardTCGDBId);
+        let importProductCard = await this.getImportProductCardByImportJobCardIdAndTCGdbId(createImportProductCardDTO.importJobCardId, createImportProductCardDTO.importProductCardTCGdbId);
                 
         //TO DO: RETURN AN ERROR FOR DUPLICATE IMPORT CARD;
         if (importProductCard != null) {
@@ -90,34 +90,5 @@ export class ImportProductCardService {
         return importProductCardDTO;
         
     }
-
-    /*
-    async updateImportCard(updateImportCardDTO: UpdateImportCardDTO) {
-
-        //CHECK TO SEE IF THE IMPORT JOB EXISTS;
-        let importCard = await this.importCardRepository.findOne({
-            where: {
-                importCardId: updateImportCardDTO.importCardId
-            }
-        });
-
-        //TO DO: RETURN AN ERROR FOR NON EXISTENT IMPORT CARD;
-        if(importCard == null) {
-            return null;
-        }
-
-        importCard.importCardName = updateImportCardDTO.importCardName;
-        importCard.importCardSetName = updateImportCardDTO.importCardSetName;
-        importCard.importCardCondition = updateImportCardDTO.importCardCondition;
-        importCard.importCardQty = updateImportCardDTO.importCardQty;
-        importCard.importCardPrice = updateImportCardDTO.importCardPrice;
-
-        importCard = await this.importCardRepository.save(importCard);
-
-        let importCardDTO = this.getImportCardByImportCardId(importCard.importCardId);
-
-        return importCardDTO;
-    }
-    */
     
 }
