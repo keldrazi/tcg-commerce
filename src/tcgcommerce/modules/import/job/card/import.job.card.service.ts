@@ -18,7 +18,7 @@ export class ImportJobCardService {
         private importProcessCardService: ImportProcessCardService
     ) { }
 
-    async getImportJobCardsByCommerceAccountId(commerceAccountId: string, productLineId: string) {
+    async getImportJobCardsByCommerceAccountIdAndProductLineId(commerceAccountId: string, productLineId: string) {
 
         let importJobCards = await this.importJobCardRepository.find({
             where: {

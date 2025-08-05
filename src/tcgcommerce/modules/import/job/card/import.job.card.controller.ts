@@ -29,24 +29,11 @@ export class ImportJobCardController {
 
         return importJobCode;
     }
+
+    //GET ALL IMPORT JOBS FOR A COMMERCE ACCOUNT;
+    //REVIEW IMPORT JOB
+    //REJECT IMPORT JOB
+    //APPROVE IMPORT JOB
     
-    /*
-    @Get('/:commerceAccountId')
-    async getCommerceAccount(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountService.getCommerceAccount(commerceAccountId);
-    }
-
-    @Post()
-    @UsePipes(new ValidationPipe())
-    async createCommerceAccount(@Body() createCommerceAcountDTO: CreateCommerceAccountDTO) {
-        return await this.commerceAccountService.createCommerceAccount(createCommerceAcountDTO);
-    }
-
-    /*
-    @Put(':id')
-    async updateUser(@Param('tcgDatabaseUserId') tcgDatabaseUserId: string, @Body() tcgDatabaseUserUpdateDTO: TCGDatabaseUserUpdateDTO) {
-        await this.tcgDatabaseUserService.updateTCGDatabaseUser(tcgDatabaseUserId, tcgDatabaseUserUpdateDTO);
-    }
-    */
 
 }
