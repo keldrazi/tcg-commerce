@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ImportSortTypeService } from './import.sort.card.type.service';
-import { ImportSortTypeController } from './import.sort.card.type.controller';
-import { ImportSortType } from 'src/typeorm/entities/tcgcommerce/modules/import/sort/card/type/import.sort.card.type.entity';
+import { ImportSortCardTypeService } from './import.sort.card.type.service';
+import { ImportSortCardTypeController } from './import.sort.card.type.controller';
+import { ImportSortCardType } from 'src/typeorm/entities/tcgcommerce/modules/import/sort/card/type/import.sort.card.type.entity';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ImportSortType])
+        TypeOrmModule.forFeature([ImportSortCardType])
     ],
-    controllers: [ImportSortTypeController],
-    providers: [ImportSortTypeService],
-    exports: [ImportSortTypeService]
+    controllers: [ImportSortCardTypeController],
+    providers: [ImportSortCardTypeService],
+    exports: [ImportSortCardTypeService]
 })
-export class ImportSortTypeModule {}
+export class ImportSortCardTypeModule {}

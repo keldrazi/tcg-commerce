@@ -1,136 +1,136 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateImportSortTypeDTO, UpdateImportSortTypeDTO, ImportSortTypeDTO } from './dto/import.sort.card.type.dto';
-import { ImportSortType } from 'src/typeorm/entities/tcgcommerce/modules/import/sort/card/type/import.sort.card.type.entity';
+import { CreateImportSortCardTypeDTO, UpdateImportSortCardTypeDTO, ImportSortCardTypeDTO } from './dto/import.sort.card.type.dto';
+import { ImportSortCardType } from 'src/typeorm/entities/tcgcommerce/modules/import/sort/card/type/import.sort.card.type.entity';
 
 @Injectable()
-export class ImportSortTypeService {
+export class ImportSortCardTypeService {
 
     constructor(
-        @InjectRepository(ImportSortType) private importSortTypeRepository: Repository<ImportSortType>,
+        @InjectRepository(ImportSortCardType) private importSortCardTypeRepository: Repository<ImportSortCardType>,
     ) { }
 
-    async getImportSortType(importSortTypeId: string) {
-        let importSortType = await this.importSortTypeRepository.findOne({ 
+    async getImportSortCardType(importSortCardTypeId: string) {
+        let importSortCardType = await this.importSortCardTypeRepository.findOne({ 
             where: { 
-                importSortTypeId: importSortTypeId 
+                importSortCardTypeId: importSortCardTypeId 
             } 
         });
         
-        if (importSortType == null) {
+        if (importSortCardType == null) {
             return null;
         }
 
-        let importSortTypeDTO = new ImportSortTypeDTO();
-        importSortTypeDTO.importSortTypeId = importSortType.importSortTypeId;
-        importSortTypeDTO.importSortTypeName = importSortType.importSortTypeName;
-        importSortTypeDTO.importSortTypeDescription = importSortType.importSortTypeDescription;
-        importSortTypeDTO.importSortTypeMetadata = importSortType.importSortTypeMetadata;
-        importSortTypeDTO.importSortTypeIsActive = importSortType.importSortTypeIsActive;
-        importSortTypeDTO.importSortTypeCreateDate = importSortType.importSortTypeCreateDate;
-        importSortTypeDTO.importSortTypeUpdateDate = importSortType.importSortTypeUpdateDate;
+        let importSortCardTypeDTO = new ImportSortCardTypeDTO();
+        importSortCardTypeDTO.importSortCardTypeId = importSortCardType.importSortCardTypeId;
+        importSortCardTypeDTO.importSortCardTypeName = importSortCardType.importSortCardTypeName;
+        importSortCardTypeDTO.importSortCardTypeDescription = importSortCardType.importSortCardTypeDescription;
+        importSortCardTypeDTO.importSortCardTypeMetadata = importSortCardType.importSortCardTypeMetadata;
+        importSortCardTypeDTO.importSortCardTypeIsActive = importSortCardType.importSortCardTypeIsActive;
+        importSortCardTypeDTO.importSortCardTypeCreateDate = importSortCardType.importSortCardTypeCreateDate;
+        importSortCardTypeDTO.importSortCardTypeUpdateDate = importSortCardType.importSortCardTypeUpdateDate;
 
-        return importSortTypeDTO;
+        return importSortCardTypeDTO;
         
     }
 
-    async getImportSortTypes() {
-        let importSortTypes = await this.importSortTypeRepository.find();
+    async getImportSortCardTypes() {
+        let importSortCardTypes = await this.importSortCardTypeRepository.find();
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(importSortTypes == null) {
+        if(importSortCardTypes == null) {
             return null;
         }
         
-        let importSortTypeDTOs: ImportSortTypeDTO[] = [];
+        let importSortCardTypeDTOs: ImportSortCardTypeDTO[] = [];
 
-        for(let i = 0; i < importSortTypes.length; i++) {
-            let importSortType = importSortTypes[i];
-            let importSortTypeDTO = new ImportSortTypeDTO();
-            importSortTypeDTO.importSortTypeId = importSortType.importSortTypeId
-            importSortTypeDTO.importSortTypeName = importSortType.importSortTypeName;
-            importSortTypeDTO.importSortTypeDescription = importSortType.importSortTypeDescription;
-            importSortTypeDTO.importSortTypeMetadata = importSortType.importSortTypeMetadata;
-            importSortTypeDTO.importSortTypeIsActive = importSortType.importSortTypeIsActive;
-            importSortTypeDTO.importSortTypeCreateDate = importSortType.importSortTypeCreateDate;
-            importSortTypeDTO.importSortTypeUpdateDate = importSortType.importSortTypeUpdateDate;
+        for(let i = 0; i < importSortCardTypes.length; i++) {
+            let importSortCardType = importSortCardTypes[i];
+            let importSortCardTypeDTO = new ImportSortCardTypeDTO();
+            importSortCardTypeDTO.importSortCardTypeId = importSortCardType.importSortCardTypeId
+            importSortCardTypeDTO.importSortCardTypeName = importSortCardType.importSortCardTypeName;
+            importSortCardTypeDTO.importSortCardTypeDescription = importSortCardType.importSortCardTypeDescription;
+            importSortCardTypeDTO.importSortCardTypeMetadata = importSortCardType.importSortCardTypeMetadata;
+            importSortCardTypeDTO.importSortCardTypeIsActive = importSortCardType.importSortCardTypeIsActive;
+            importSortCardTypeDTO.importSortCardTypeCreateDate = importSortCardType.importSortCardTypeCreateDate;
+            importSortCardTypeDTO.importSortCardTypeUpdateDate = importSortCardType.importSortCardTypeUpdateDate;
            
 
-            importSortTypeDTOs.push(importSortTypeDTO);
+            importSortCardTypeDTOs.push(importSortCardTypeDTO);
         }
 
-        return importSortTypeDTOs;
+        return importSortCardTypeDTOs;
     }
     
-    async getImportSortTypeByName(name: string) {
-        let importSortType = await this.importSortTypeRepository.findOne({ 
+    async getImportSortCardTypeByName(name: string) {
+        let importSortCardType = await this.importSortCardTypeRepository.findOne({ 
             where: { 
-                importSortTypeName: name 
+                importSortCardTypeName: name 
             } 
         });
         
-        if (importSortType == null) {
+        if (importSortCardType == null) {
             return null;
         }
 
-        let importSortTypeDTO = new ImportSortTypeDTO();
-        importSortTypeDTO.importSortTypeId = importSortType.importSortTypeId;
-        importSortTypeDTO.importSortTypeName = importSortType.importSortTypeName;
-        importSortTypeDTO.importSortTypeDescription = importSortType.importSortTypeDescription;
-        importSortTypeDTO.importSortTypeMetadata = importSortType.importSortTypeMetadata;
-        importSortTypeDTO.importSortTypeIsActive = importSortType.importSortTypeIsActive;
-        importSortTypeDTO.importSortTypeCreateDate = importSortType.importSortTypeCreateDate;
-        importSortTypeDTO.importSortTypeUpdateDate = importSortType.importSortTypeUpdateDate;
+        let importSortCardTypeDTO = new ImportSortCardTypeDTO();
+        importSortCardTypeDTO.importSortCardTypeId = importSortCardType.importSortCardTypeId;
+        importSortCardTypeDTO.importSortCardTypeName = importSortCardType.importSortCardTypeName;
+        importSortCardTypeDTO.importSortCardTypeDescription = importSortCardType.importSortCardTypeDescription;
+        importSortCardTypeDTO.importSortCardTypeMetadata = importSortCardType.importSortCardTypeMetadata;
+        importSortCardTypeDTO.importSortCardTypeIsActive = importSortCardType.importSortCardTypeIsActive;
+        importSortCardTypeDTO.importSortCardTypeCreateDate = importSortCardType.importSortCardTypeCreateDate;
+        importSortCardTypeDTO.importSortCardTypeUpdateDate = importSortCardType.importSortCardTypeUpdateDate;
 
 
-        return importSortTypeDTO;
+        return importSortCardTypeDTO;
         
     }
     
-    async createImportSortType(createImportSortTypeDTO: CreateImportSortTypeDTO) {
+    async createImportSortCardType(createImportSortCardTypeDTO: CreateImportSortCardTypeDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let importSortType = await this.getImportSortTypeByName(createImportSortTypeDTO.importSortTypeName);
-        
+        let importSortCardType = await this.getImportSortCardTypeByName(createImportSortCardTypeDTO.importSortCardTypeName);
+
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (importSortType != null) {
+        if (importSortCardType != null) {
             return null;
         }
-        
-        let newImportSortType = this.importSortTypeRepository.create({ ...createImportSortTypeDTO });
-        newImportSortType = await this.importSortTypeRepository.save(newImportSortType);
 
-        let importSortTypeDTO = this.getImportSortType(newImportSortType.importSortTypeId);
-        
-        return importSortTypeDTO;
+        let newImportSortCardType = this.importSortCardTypeRepository.create({ ...createImportSortCardTypeDTO });
+        newImportSortCardType = await this.importSortCardTypeRepository.save(newImportSortCardType);
+
+        let importSortCardTypeDTO = this.getImportSortCardType(newImportSortCardType.importSortCardTypeId);
+
+        return importSortCardTypeDTO;
         
     }
 
-    async updateImportSortType(updateImportSortTypeDTO: UpdateImportSortTypeDTO) {
-                    
-        let existingImportSortType = await this.importSortTypeRepository.findOne({ 
-            where: { 
-                importSortTypeId: updateImportSortTypeDTO.importSortTypeId
-            } 
+    async updateImportSortCardType(updateImportSortCardTypeDTO: UpdateImportSortCardTypeDTO) {
+
+        let existingImportSortCardType = await this.importSortCardTypeRepository.findOne({
+            where: {
+                importSortCardTypeId: updateImportSortCardTypeDTO.importSortCardTypeId
+            }
         });
 
         //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!existingImportSortType) {
-            return null; 
+        if (!existingImportSortCardType) {
+            return null;
         }
 
-        existingImportSortType.importSortTypeName = updateImportSortTypeDTO.importSortTypeName;
-        existingImportSortType.importSortTypeDescription = updateImportSortTypeDTO.importSortTypeDescription;
-        existingImportSortType.importSortTypeMetadata = updateImportSortTypeDTO.importSortTypeMetadata
-        existingImportSortType.importSortTypeIsActive = updateImportSortTypeDTO.importSortTypeIsActive;
-        existingImportSortType.importSortTypeUpdateDate = new Date();
-        
-        await this.importSortTypeRepository.save(existingImportSortType);
+        existingImportSortCardType.importSortCardTypeName = updateImportSortCardTypeDTO.importSortCardTypeName;
+        existingImportSortCardType.importSortCardTypeDescription = updateImportSortCardTypeDTO.importSortCardTypeDescription;
+        existingImportSortCardType.importSortCardTypeMetadata = updateImportSortCardTypeDTO.importSortCardTypeMetadata;
+        existingImportSortCardType.importSortCardTypeIsActive = updateImportSortCardTypeDTO.importSortCardTypeIsActive;
+        existingImportSortCardType.importSortCardTypeUpdateDate = new Date();
 
-        let importSortTypeDTO = this.getImportSortType(existingImportSortType.importSortTypeId);
+        await this.importSortCardTypeRepository.save(existingImportSortCardType);
 
-        return importSortTypeDTO;
+        let importSortCardTypeDTO = this.getImportSortCardType(existingImportSortCardType.importSortCardTypeId);
+
+        return importSortCardTypeDTO;
     
     }
     

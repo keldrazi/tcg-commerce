@@ -1,38 +1,38 @@
 import { IsEmail, IsString, IsBoolean } from "class-validator";
 
-export class ImportSortTypeDTO {
-    importSortTypeId: string;
-    importSortTypeName: string;
-    importSortTypeDescription: string;
-    importSortTypeMetadata: string;
-    importSortTypeIsActive: boolean;
-    importSortTypeCreateDate: Date;
-    importSortTypeUpdateDate: Date;
+export class ImportSortCardTypeDTO {
+    importSortCardTypeId: string;
+    importSortCardTypeName: string;
+    importSortCardTypeDescription: string;
+    importSortCardTypeMetadata: string;
+    importSortCardTypeIsActive: boolean;
+    importSortCardTypeCreateDate: Date;
+    importSortCardTypeUpdateDate: Date;
 
     
 }
 
-export class CreateImportSortTypeDTO {
+export class CreateImportSortCardTypeDTO {
     @IsString()
-    importSortTypeName: string;
+    importSortCardTypeName: string;
     @IsString()
-    importSortTypeDescription: string;
+    importSortCardTypeDescription: string;
     @IsString()
-    importSortTypeMetadata: string;
+    importSortCardTypeMetadata: string;
    
     
 }
 
-export class UpdateImportSortTypeDTO {
+export class UpdateImportSortCardTypeDTO {
     @IsString()
-    importSortTypeId: string;
+    importSortCardTypeId: string;
     @IsString()
-    importSortTypeName: string;
+    importSortCardTypeName: string;
     @IsString()
-    importSortTypeDescription: string;
+    importSortCardTypeDescription: string;
     @IsString()
-    importSortTypeMetadata: string;
+    importSortCardTypeMetadata: string;
     @IsBoolean()
-    importSortTypeIsActive: boolean;
+    importSortCardTypeIsActive: boolean;
     
 }
