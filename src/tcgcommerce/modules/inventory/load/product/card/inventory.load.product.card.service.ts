@@ -230,8 +230,6 @@ export class InventoryLoadProductCardService {
           
     }
 
-
-
     //UTILITY FUNCTIONS;
     async getProductVendor(productVendorId: string) {
         let productVendor = await this.productVendorService.getProductVendor(productVendorId);

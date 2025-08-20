@@ -89,11 +89,11 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndProductSetAbbreviation(commerceAccountId: string, productSetAbbreviation: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndProductSetCode(commerceAccountId: string, productSetCode: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
-                productSetAbbreviation: productSetAbbreviation,
+                productSetCode: productSetCode,
             }
         });
 
@@ -117,12 +117,12 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndCommerceLocationIdProductSetAbbreviation(commerceAccountId: string, commerceLocationId: string, productSetAbbreviation: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndCommerceLocationIdProductSetCode(commerceAccountId: string, commerceLocationId: string, productSetCode: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
                 commerceLocationId: commerceLocationId,
-                productSetAbbreviation: productSetAbbreviation,
+                productSetCode: productSetCode,
             }
         });
 
