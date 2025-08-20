@@ -138,7 +138,7 @@ export class ProductCardItemService {
             return null; 
         }
 
-        existingProductCardItem.productSetAbbreviation = updateProductCardItemDTO.productSetAbbreviation;
+        existingProductCardItem.productSetCode = updateProductCardItemDTO.productSetCode;
         existingProductCardItem.productCardItemNumber = updateProductCardItemDTO.productCardItemNumber;
         existingProductCardItem.productCardItemName = updateProductCardItemDTO.productCardItemName;
         existingProductCardItem.productCardItemCleanName = updateProductCardItemDTO.productCardItemCleanName;
@@ -191,7 +191,7 @@ export class ProductCardItemService {
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
             
-            let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetAbbreviation(productSet.productSetAbbreviation);
+            let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetCode(productSet.productSetCode);
 
             if(productCardsBySet == null) {
                 return 0;
@@ -220,8 +220,8 @@ export class ProductCardItemService {
                     productLineId: productLineId,
                     productTypeId: productTypeId,
                     productSetId: productSet.productSetId,
-                    productSetAbbreviation: productSet.productSetAbbreviation,
-                    productCardRarityAbbreviation: tcgdbMTGCard.tcgdbMTGCardRarityAbbreviation,
+                    productSetCode: productSet.productSetCode,
+                    productCardRarityCode: tcgdbMTGCard.tcgdbMTGCardRarityCode,
                     productCardItemNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
                     productCardItemName: tcgdbMTGCard.tcgdbMTGCardName,
                     productCardItemCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,

@@ -64,7 +64,7 @@ export class TCGdbMTGLanguageService {
                 const newTCGdgMTGLanguage = this.tcgdbMTGLanguageRepository.create({
                     tcgdbMTGLanguageTCGPlayerId: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageId,
                     tcgdbMTGLanguageName: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageName,
-                    tcgdbMTGLanguageAbbreviation: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageAbbreviation
+                    tcgdbMTGLanguageCode: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageCode
                 });
 
                 await this.tcgdbMTGLanguageRepository.save(newTCGdgMTGLanguage);

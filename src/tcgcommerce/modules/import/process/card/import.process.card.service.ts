@@ -101,7 +101,7 @@ export class ImportProcessCardService {
                 importProductCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
                 importProductCardName: tcgdbMTGCard.tcgdbMTGCardName,
                 importProductCardSetName: tcgdbMTGCard.tcgdbMTGCardSetName,
-                importProductCardSetCode: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+                importProductCardSetCode: tcgdbMTGCard.tcgdbMTGCardSetCode,
                 importProductCardCondition: importSortCardDTO.importSortCardCondition,
                 importProductCardPrinting: importSortCardDTO.importSortCardPrinting,
                 importProductCardQty: importSortCardDTO.importSortCardQty,

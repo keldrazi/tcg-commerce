@@ -29,10 +29,10 @@ export class TCGPlayerMTGSetService {
         return tcgPlayerMTGSet;
     }
 
-    async getTCGPlayerMTGSetBySetAbbreviation(setAbbreviation: string) {
+    async getTCGPlayerMTGSetBySetCode(setCode: string) {
         let tcgPlayerMTGSet = await this.tcgPlayerMTGSetRepository.findOne({
             where: {
-                tcgPlayerMTGSetAbbreviation: setAbbreviation,
+                tcgPlayerMTGSetCode: setCode,
             }
         });
 
@@ -76,7 +76,7 @@ export class TCGPlayerMTGSetService {
                 const newTCGPlayerMTGSet = this.tcgPlayerMTGSetRepository.create({
                     tcgPlayerMTGSetGroupId: tcgPlayerMTGSet.groupId,
                     tcgPlayerMTGSetName: tcgPlayerMTGSet.name,
-                    tcgPlayerMTGSetAbbreviation: tcgPlayerMTGSet.abbreviation,
+                    tcgPlayerMTGSetCode: tcgPlayerMTGSet.abbreviation,
                     tcgPlayerMTGSetIsSupplemental: tcgPlayerMTGSet.isSupplemental,
                     tcgPlayerMTGSetTotalCards: totalCards,
                     tcgPlayerMTGSetPublishedOn: tcgPlayerMTGSet.publishedOn,

@@ -13,7 +13,7 @@ export class TCGdbMTGCard {
     @Column({nullable: true})
     tcgdbMTGCardSetCode: string;
     @Column({nullable: true})
-    tcgdbMTGCardRarityAbbreviation: string;
+    tcgdbMTGCardRarityCode: string;
     @Column({nullable: true})
     tcgdbMTGCardNumber: string;
     @Column()

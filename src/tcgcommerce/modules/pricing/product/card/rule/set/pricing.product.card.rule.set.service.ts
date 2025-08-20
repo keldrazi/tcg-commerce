@@ -119,7 +119,7 @@ export class PricingProductCardRuleSetService {
         return pricingProductCardRuleSets;
     }
 
-    async applyCustomPricingProductCardRuleSets(processedPricingProductCardRuleSets: any[], productCardConditionAbbreviation:string, productCardPrices:any) {
+    async applyCustomPricingProductCardRuleSets(processedPricingProductCardRuleSets: any[], productCardConditionCode:string, productCardPrices:any) {
         //SET THE PRICES
         let productCardPriceLow = productCardPrices.productCardPriceCurrentLowPrice;
         let productCardPriceMarket = productCardPrices.productCardPriceCurrentMarketPrice;
@@ -134,7 +134,7 @@ export class PricingProductCardRuleSetService {
             const conditionPricePercentageHP = conditionPricePricingProductCardRuleSet.pricingProductCardRuleSet.find(rule => rule[CONDITION_PRICE.CONDITION_PRICE_PERCENTAGE_HP] !== undefined)?.[CONDITION_PRICE.CONDITION_PRICE_PERCENTAGE_HP];
             const conditionPricePercentageDM = conditionPricePricingProductCardRuleSet.pricingProductCardRuleSet.find(rule => rule[CONDITION_PRICE.CONDITION_PRICE_PERCENTAGE_DM] !== undefined)?.[CONDITION_PRICE.CONDITION_PRICE_PERCENTAGE_DM];
 
-            switch(productCardConditionAbbreviation) {
+            switch(productCardConditionCode) {
                 case 'NM':
                     productCardPriceLow = productCardPriceLow * (conditionPricePercentageNM / 100);
                     productCardPriceMarket = productCardPriceMarket * (conditionPricePercentageNM / 100);
@@ -190,14 +190,14 @@ export class PricingProductCardRuleSetService {
 
     }
 
-    async applyDefaultPricingProductCardRuleSet(productCardConditionAbbreviation:string, productCardPrices:any) {
+    async applyDefaultPricingProductCardRuleSet(productCardConditionCode:string, productCardPrices:any) {
         //SET THE PRICES
         let productCardPriceLow = productCardPrices.productCardPriceCurrentLowPrice;
         let productCardPriceMarket = productCardPrices.productCardPriceCurrentMarketPrice;
         let productCardPrice = 0;
         
         //CONDITION PRICE ELEMENT;
-        switch(productCardConditionAbbreviation) {
+        switch(productCardConditionCode) {
             case 'NM':
                 productCardPriceLow = productCardPriceLow * (CONDITION_PRICE_DEFAULT_RULE_SET.CONDITION_PRICE_PERCENTAGE_NM / 100);
                 productCardPriceMarket = productCardPriceMarket * (CONDITION_PRICE_DEFAULT_RULE_SET.CONDITION_PRICE_PERCENTAGE_NM / 100);

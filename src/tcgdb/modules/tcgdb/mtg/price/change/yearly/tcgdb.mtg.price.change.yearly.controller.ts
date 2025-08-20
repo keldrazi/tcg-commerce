@@ -9,9 +9,9 @@ export class TCGdbMTGPriceChangeYearlyController {
     ) {}
 
 
-    @Get('/set/:setAbbreviation')
-    async getTCGdbMTGPriceChangeYearlyBySet(@Param('setAbbreviation') setAbbreviation: string) {
-        return await this.tcgdbMTGPriceChangeYearlyService.getTCGdbMTGPriceChangeYearlyBySet(setAbbreviation);
+    @Get('/set/:setCode')
+    async getTCGdbMTGPriceChangeYearlyBySet(@Param('setCode') setCode: string) {
+        return await this.tcgdbMTGPriceChangeYearlyService.getTCGdbMTGPriceChangeYearlyBySet(setCode);
     }
 
     @Get('/create')

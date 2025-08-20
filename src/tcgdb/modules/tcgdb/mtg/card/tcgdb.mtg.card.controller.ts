@@ -33,9 +33,9 @@ export class TCGdbMTGCardController {
         return this.tcgdbMTGCardService.getTCGdbMTGCardsBySetName(setName);
     }
     
-    @Get('/setAbbreviation/:setAbbreviation')
-    async getTCGdbMTGCardsBySetAbbreviation(@Param('setAbbreviation') setAbbrevation: string) {
-        return this.tcgdbMTGCardService.getTCGdbMTGCardsBySetAbbreviation(setAbbrevation);
+    @Get('/setCode/:setCode')
+    async getTCGdbMTGCardsBySetCode(@Param('setCode') setAbbrevation: string) {
+        return this.tcgdbMTGCardService.getTCGdbMTGCardsBySetCode(setAbbrevation);
     }
     
     @Get('/create')

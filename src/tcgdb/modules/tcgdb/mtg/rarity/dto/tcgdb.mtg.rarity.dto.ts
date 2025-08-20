@@ -3,7 +3,7 @@ export class TCGdbMTGRarityDTO {
     tcgdbMTGRarityId: string;
     tcgdbMTGRarityTCGPlayerId: number;
     tcgdbMTGRarityName: string;
-    tcgdbMTGRarityAbbreviation: string;
+    tcgdbMTGRarityCode: string;
     tcgdbMTGRarityCreateDate: Date;
     tcgdbMTGRarityUpdateDate: Date;
 }

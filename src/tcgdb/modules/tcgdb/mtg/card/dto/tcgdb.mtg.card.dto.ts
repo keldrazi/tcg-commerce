@@ -10,8 +10,8 @@ export class TCGdbMTGCardDTO {
     tcgdbMTGCardTCGPlayerId: number;
     tcgdbMTGCardScryfallId: string;
     tcgdbMTGCardSetName: string;
-    tcgdbMTGCardSetAbbreviation: string;
-    tcgdbMTGCardRarityAbbreviation: string;
+    tcgdbMTGCardSetCode: string;
+    tcgdbMTGCardRarityCode: string;
     tcgdbMTGCardNumber: string;
     tcgdbMTGCardName: string;
     tcgdbMTGCardCleanName: string;

@@ -3,7 +3,7 @@ export class TCGdbMTGConditionDTO {
     tcgdbMTGConditionId: string;
     tcgdbMTGConditionTCGPlayerId: number;
     tcgdbMTGConditionName: string;
-    tcgdbMTGConditionAbbreviation: string;
+    tcgdbMTGConditionCode: string;
     tcgdbMTGConditionPriceFactor: number;
     tcgdbMTGConditionDisplayOrder: number;
     tcgdbMTGConditionCreateDate: Date;

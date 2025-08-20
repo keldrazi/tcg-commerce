@@ -4,7 +4,7 @@ export class ProductCardRarityDTO {
     productCardRarityId: string;
     productLineId: string;
     productCardRarityName: string;
-    productCardRarityAbbreviation: string;
+    productCardRarityCode: string;
     productCardRarityIsActive: boolean;
     productCardRarityCreateDate: Date;
     productCardRarityUpdateDate: Date;
@@ -16,7 +16,7 @@ export class CreateProductCardRarityDTO {
     @IsString()
     productCardRarityName: string;
     @IsString()
-    productCardRarityAbbreviation: string;
+    productCardRarityCode: string;
     @IsBoolean()
     productCardRarityIsActive: boolean;
 }
@@ -29,7 +29,7 @@ export class UpdateProductCardRarityDTO {
     @IsString()
     productCardRarityName: string;
     @IsString()
-    productCardRarityAbbreviation: string;
+    productCardRarityCode: string;
     @IsBoolean()
     productCardRarityIsActive: boolean;
 }

@@ -6,7 +6,7 @@ export class TCGdbPokemonSetDTO {
     tcgdbPokemonSetId: string;
     tcgdbPokemonSetTCGPlayerId: number;
     tcgdbPokemonSetPokemonTCGId: string;
-    tcgdbPokemonSetAbbreviation: string;
+    tcgdbPokemonSetCode: string;
     tcgdbPokemonSetName: string;
     tcgdbPokemonSetPublishedOn: Date;
     tcgdbPokemonSetTotalCards: number;

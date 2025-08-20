@@ -89,7 +89,7 @@ export class TCGPlayerMTGCardService {
                         const newTCGPlayerMTGCard = this.tcgPlayerMTGCardRepository.create({
                             tcgPlayerMTGCardProductId: tcgPlayerMTGCard.productId,
                             tcgPlayerMTGCardGroupId: tcgPlayerMTGCard.groupId,
-                            tcgPlayerMTGCardSetAbbreviation: tcgPlayerMTGSet.tcgPlayerMTGSetAbbreviation,
+                            tcgPlayerMTGCardSetCode: tcgPlayerMTGSet.tcgPlayerMTGSetCode,
                             tcgPlayerMTGCardName: tcgPlayerMTGCard.name,
                             tcgPlayerMTGCardCleanName: tcgPlayerMTGCard.cleanName,
                             tcgPlayerMTGCardImageURL: tcgPlayerMTGCard.imageUrl,

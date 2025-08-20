@@ -6,7 +6,7 @@ export class TCGdbMTGPriceChangeDailyDTO {
     tcgdbMTGPriceChangeDailyId: string;
     tcgdbMTGCardId: string;
     tcgdbMTGPriceChangeDailyTCGPlayerId: number;
-    tcgdbMTGPriceChangeDailySetAbbreviation: string;
+    tcgdbMTGPriceChangeDailySetCode: string;
     tcgdbMTGPriceChangeDailyCurrentLowPrice: number;
     tcgdbMTGPriceChangeDailyPreviousLowPrice: number;
     tcgdbMTGPriceChangeDailyLowPriceDifference: number;
@@ -29,7 +29,7 @@ export class TCGdbMTGPriceChangeDailyDTO {
 export class CreateTCGdbMTGPriceChangeDailyDTO {
     tcgdbMTGCardId: string;
     tcgdbMTGPriceChangeDailyTCGPlayerId: number;
-    tcgdbMTGPriceChangeDailySetAbbreviation: string;
+    tcgdbMTGPriceChangeDailySetCode: string;
     tcgdbMTGPriceChangeDailyCurrentLowPrice: number;
     tcgdbMTGPriceChangeDailyPreviousLowPrice: number;
     tcgdbMTGPriceChangeDailyLowPriceDifference: number;

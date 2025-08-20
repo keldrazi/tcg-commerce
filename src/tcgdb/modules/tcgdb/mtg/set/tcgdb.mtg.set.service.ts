@@ -69,11 +69,11 @@ export class TCGdbMTGSetService {
     }
 
     
-    async getTCGdbMTGSetBySetAbbreviation(setAbbreviation: string) {
+    async getTCGdbMTGSetBySetCode(setCode: string) {
 
         const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
             where: {
-                tcgdbMTGSetAbbreviation: setAbbreviation,
+                tcgdbMTGSetCode: setCode,
             }
         })
 
@@ -123,7 +123,7 @@ export class TCGdbMTGSetService {
             if(tcgdbMTGSet == null) {
                 const newTCGdgMTGSet = this.tcgdbMTGSetRepository.create({
                     tcgdbMTGSetTCGPlayerId: tcgPlayerMTGSet.tcgPlayerMTGSetGroupId,
-                    tcgdbMTGSetAbbreviation: tcgPlayerMTGSet.tcgPlayerMTGSetAbbreviation,
+                    tcgdbMTGSetCode: tcgPlayerMTGSet.tcgPlayerMTGSetCode,
                     tcgdbMTGSetName: tcgPlayerMTGSet.tcgPlayerMTGSetName,
                     tcgdbMTGSetPublishedOn: tcgPlayerMTGSet.tcgPlayerMTGSetPublishedOn,
                     tcgdbMTGSetTotalCards: tcgPlayerMTGSet.tcgPlayerMTGSetTotalCards,

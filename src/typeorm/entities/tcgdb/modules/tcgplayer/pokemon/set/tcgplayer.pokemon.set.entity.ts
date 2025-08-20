@@ -10,7 +10,7 @@ export class TCGPlayerPokemonSet {
     @Column()
     tcgPlayerPokemonSetName: string;
     @Column()
-    tcgPlayerPokemonSetAbbreviation: string;
+    tcgPlayerPokemonSetCode: string;
     @Column()
     tcgPlayerPokemonSetIsSupplemental: boolean;
     @Column()

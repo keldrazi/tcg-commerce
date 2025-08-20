@@ -13,10 +13,10 @@ export class InventoryProductCardDTO {
     commerceAccountId: string;
     commerceLocationId: string;
     productCardItemId: string;
-    productSetAbbreviation: string;
+    productSetCode: string;
     productCardPrintingName: string;
-    productCardConditionAbbreviation: string;
-    productCardLanguageAbbreviation: string;
+    productCardConditionCode: string;
+    productCardLanguageCode: string;
     inventoryProductCardSKU: string;
     inventoryProductCardBarcode: string;
     inventoryProductCardQty: number;
@@ -49,13 +49,13 @@ export class CreateInventoryProductCardDTO {
     @IsString()
     productCardItemId: string;
     @IsString()
-    productSetAbbreviation: string;
+    productSetCode: string;
     @IsString()
     productCardPrintingName: string;
     @IsString()
-    productCardConditionAbbreviation: string;
+    productCardConditionCode: string;
     @IsString()
-    productCardLanguageAbbreviation: string;
+    productCardLanguageCode: string;
     @IsNumber()
     inventoryProductCardQty: number;
     @IsNumber()

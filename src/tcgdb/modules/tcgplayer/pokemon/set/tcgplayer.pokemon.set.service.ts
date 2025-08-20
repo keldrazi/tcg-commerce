@@ -27,10 +27,10 @@ export class TCGPlayerPokemonSetService {
         });
     }
 
-    async getTCGPlayerPokemonSetBySetAbbreviation(setAbbreviation: string) {
+    async getTCGPlayerPokemonSetBySetCode(setCode: string) {
         return await this.tcgPlayerPokemonSetRepository.findOne({
             where: {
-                tcgPlayerPokemonSetAbbreviation: setAbbreviation,
+                tcgPlayerPokemonSetCode: setCode,
             }
         });
     }
@@ -64,7 +64,7 @@ export class TCGPlayerPokemonSetService {
             const newTCGPlayerPokemonSet = this.tcgPlayerPokemonSetRepository.create({
                 tcgPlayerPokemonSetGroupId: tcgPlayerPokemonSet.groupId,
                 tcgPlayerPokemonSetName: tcgPlayerPokemonSet.name,
-                tcgPlayerPokemonSetAbbreviation: tcgPlayerPokemonSet.abbreviation,
+                tcgPlayerPokemonSetCode: tcgPlayerPokemonSet.abbreviation,
                 tcgPlayerPokemonSetIsSupplemental: tcgPlayerPokemonSet.isSupplemental,
                 tcgPlayerPokemonSetTotalCards: totalCards,
                 tcgPlayerPokemonSetPublishedOn: tcgPlayerPokemonSet.publishedOn,

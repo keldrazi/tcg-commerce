@@ -10,7 +10,7 @@ export class TCGPlayerPokemonCard {
     @Column()
     tcgPlayerPokemonCardGroupId: number;
     @Column({nullable: true})
-    tcgPlayerPokemonCardSetAbbreviation: string;
+    tcgPlayerPokemonCardSetCode: string;
     @Column()
     tcgPlayerPokemonCardName: string;
     @Column()

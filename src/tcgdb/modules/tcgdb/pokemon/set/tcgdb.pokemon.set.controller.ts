@@ -20,8 +20,8 @@ export class TCGdbPokemonSetController {
     }
 
     @Get('/tcgplayer/abbreviation/:abbreviation')
-    async getSetByTCGPlayerSetAbbreviation(@Param('abbreviation') setAbbreviation: string) {
-        return this.tcgdbPokemonSetService.getTCGdbPokemonSetByTCGPlayerSetAbbreviation(setAbbreviation);
+    async getSetByTCGPlayerSetCode(@Param('abbreviation') setCode: string) {
+        return this.tcgdbPokemonSetService.getTCGdbPokemonSetByTCGPlayerSetCode(setCode);
     }
 
     @Get('/tcgplayer/name/:name')

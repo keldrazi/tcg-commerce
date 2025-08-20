@@ -9,9 +9,9 @@ export class TCGdbMTGPriceChangeWeeklyController {
     ) {}
 
 
-    @Get('/set/:setAbbreviation')
-    async getTCGdbMTGPriceChangeWeeklyBySet(@Param('setAbbreviation') setAbbreviation: string) {
-        return await this.tcgdbMTGPriceChangeWeeklyService.getTCGdbMTGPriceChangeWeeklyBySet(setAbbreviation);
+    @Get('/set/:setCode')
+    async getTCGdbMTGPriceChangeWeeklyBySet(@Param('setCode') setCode: string) {
+        return await this.tcgdbMTGPriceChangeWeeklyService.getTCGdbMTGPriceChangeWeeklyBySet(setCode);
     }
 
     @Get('/create')

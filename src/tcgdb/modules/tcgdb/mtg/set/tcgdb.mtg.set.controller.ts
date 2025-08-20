@@ -24,8 +24,8 @@ export class TCGdbMTGSetController {
     }
     
     @Get('/abbreviation/:abbreviation')
-    async getSetByTCGPlayerSetAbbreviation(@Param('abbreviation') setAbbreviation: string) {
-        return this.tcgdbMTGSetService.getTCGdbMTGSetBySetAbbreviation(setAbbreviation);
+    async getSetByTCGPlayerSetCode(@Param('abbreviation') setCode: string) {
+        return this.tcgdbMTGSetService.getTCGdbMTGSetBySetCode(setCode);
     }
 
     @Get('/name/:name')

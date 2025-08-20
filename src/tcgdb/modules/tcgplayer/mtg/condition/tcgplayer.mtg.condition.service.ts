@@ -18,10 +18,10 @@ export class TCGPlayerMTGConditionService {
         return await this.tcgPlayerMTGConditionRepository.find();
     }
 
-    async getTCGPlayerMTGConditionByConditionAbbreviation(conditionAbbreviation: string) {
+    async getTCGPlayerMTGConditionByConditionCode(conditionCode: string) {
         let tcgPlayerMTGCondition = await this.tcgPlayerMTGConditionRepository.findOne({
             where: {
-                tcgPlayerMTGConditionAbbreviation: conditionAbbreviation,
+                tcgPlayerMTGConditionCode: conditionCode,
             }
         });
 
@@ -54,7 +54,7 @@ export class TCGPlayerMTGConditionService {
                 let newTCGPlayerMTGCondition = this.tcgPlayerMTGConditionRepository.create({
                     tcgPlayerMTGConditionId: tcgPlayerMTGCondition.conditionId,
                     tcgPlayerMTGConditionName: tcgPlayerMTGCondition.name,
-                    tcgPlayerMTGConditionAbbreviation: tcgPlayerMTGCondition.abbreviation,
+                    tcgPlayerMTGConditionCode: tcgPlayerMTGCondition.abbreviation,
                     tcgPlayerMTGConditionDisplayOrder: tcgPlayerMTGCondition.displayOrder,
                 });
 

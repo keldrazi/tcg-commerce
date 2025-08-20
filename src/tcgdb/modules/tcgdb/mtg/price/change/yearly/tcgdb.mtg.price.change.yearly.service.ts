@@ -19,10 +19,10 @@ export class TCGdbMTGPriceChangeYearlyService {
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
     ) {}
 
-    async getTCGdbMTGPriceChangeYearlyBySet(setAbbreviation: string) {
+    async getTCGdbMTGPriceChangeYearlyBySet(setCode: string) {
         let tcgdbMTGPriceChangeYearlys = await this.tcgdbMTGPriceChangeYearlyRepository.find({
             where: {
-                tcgdbMTGPriceChangeYearlySetAbbreviation: setAbbreviation,
+                tcgdbMTGPriceChangeYearlySetCode: setCode,
             }
         });
 
@@ -60,18 +60,18 @@ export class TCGdbMTGPriceChangeYearlyService {
             priceHistoryDate.setDate(priceHistoryDate.getDate() - 365); // 365 days ago
 
             //CURRENT PRICES;
-            let tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetAbbreviation(tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+            let tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(tcgdbMTGSet.tcgdbMTGSetCode);
 
             if(tcgdbMTGPriceCurrents.length == 0) {
-                console.log("No current prices for set: " + tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+                console.log("No current prices for set: " + tcgdbMTGSet.tcgdbMTGSetCode);
                 continue;
             }
 
             //HISTORY PRICES;
-            let tcgdbMTGPriceHistorys = await this.tcgdbMTGPriceHistoryService.getTCGdbMTGPricesHistoryBySetAbbreviationAndDate(tcgdbMTGSet.tcgdbMTGSetAbbreviation, priceHistoryDate);
+            let tcgdbMTGPriceHistorys = await this.tcgdbMTGPriceHistoryService.getTCGdbMTGPricesHistoryBySetCodeAndDate(tcgdbMTGSet.tcgdbMTGSetCode, priceHistoryDate);
 
             if(tcgdbMTGPriceHistorys.length == 0) {
-                console.log("No history prices for set: " + tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+                console.log("No history prices for set: " + tcgdbMTGSet.tcgdbMTGSetCode);
                 continue;
             }
 
@@ -155,7 +155,7 @@ export class TCGdbMTGPriceChangeYearlyService {
         let createTCGdbMTGPriceChangeYearlyDTO: CreateTCGdbMTGPriceChangeYearlyDTO = {
             tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
             tcgdbMTGPriceChangeYearlyTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
-            tcgdbMTGPriceChangeYearlySetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
+            tcgdbMTGPriceChangeYearlySetCode: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetCode,
             tcgdbMTGPriceChangeYearlyCurrentLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice,
             tcgdbMTGPriceChangeYearlyPreviousLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice,
             tcgdbMTGPriceChangeYearlyLowPriceDifference: tcgdbMTGPriceChangeYearlyLowPriceDifference,

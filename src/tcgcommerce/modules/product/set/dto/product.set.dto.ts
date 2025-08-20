@@ -5,7 +5,7 @@ export class ProductSetDTO {
     productVendorId: string;
     productLineId: string;
     productSetName: string;
-    productSetAbbreviation: string;
+    productSetCode: string;
     productSetReleaseDate: Date;
     productSetTotalCards: number;
     productSetIsActive: boolean;
@@ -21,7 +21,7 @@ export class CreateProductSetDTO {
     @IsString()
     productSetName: string;
     @IsString()
-    productSetAbbreviation: string;  
+    productSetCode: string;  
     @IsNumber()
     productSetTotalCards: number;
     @IsDate()
@@ -34,7 +34,7 @@ export class UpdateProductSetDTO {
     @IsString()
     productSetName: string;
     @IsString()
-    productSetAbbreviation: string; 
+    productSetCode: string; 
     @IsNumber()
     productSetTotalCards: number;
     @IsDate()

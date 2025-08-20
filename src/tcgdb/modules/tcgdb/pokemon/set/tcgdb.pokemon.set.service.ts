@@ -29,7 +29,7 @@ export class TCGdbPokemonSetService {
                 tcgdbPokemonSetId: tcgdbPokemonSet.tcgdbPokemonSetId,
                 tcgdbPokemonSetTCGPlayerId: tcgdbPokemonSet.tcgdbPokemonSetTCGPlayerId,
                 tcgdbPokemonSetPokemonTCGId: tcgdbPokemonSet.tcgdbPokemonSetPokemonTCGId,
-                tcgdbPokemonSetAbbreviation: tcgdbPokemonSet.tcgdbPokemonSetAbbreviation,
+                tcgdbPokemonSetCode: tcgdbPokemonSet.tcgdbPokemonSetCode,
                 tcgdbPokemonSetName: tcgdbPokemonSet.tcgdbPokemonSetName,
                 tcgdbPokemonSetPublishedOn: tcgdbPokemonSet.tcgdbPokemonSetPublishedOn,
                 tcgdbPokemonSetTotalCards: tcgdbPokemonSet.tcgdbPokemonSetTotalCards,
@@ -62,12 +62,12 @@ export class TCGdbPokemonSetService {
         return tcgdbPokemonSet;
     }
 
-    async getTCGdbPokemonSetBySetAbbreviation(setAbbreviation: string) {
+    async getTCGdbPokemonSetBySetCode(setCode: string) {
 
 
         const tcgdbPokemonSet = await this.tcgdbPokemonSetRepository.findOne({
             where: {
-                tcgdbPokemonSetAbbreviation: setAbbreviation,
+                tcgdbPokemonSetCode: setCode,
             }
         })
 
@@ -80,7 +80,7 @@ export class TCGdbPokemonSetService {
             tcgdbPokemonSetId: tcgdbPokemonSet.tcgdbPokemonSetId,
             tcgdbPokemonSetTCGPlayerId: tcgdbPokemonSet.tcgdbPokemonSetTCGPlayerId,
             tcgdbPokemonSetPokemonTCGId: tcgdbPokemonSet.tcgdbPokemonSetPokemonTCGId,
-            tcgdbPokemonSetAbbreviation: tcgdbPokemonSet.tcgdbPokemonSetAbbreviation,
+            tcgdbPokemonSetCode: tcgdbPokemonSet.tcgdbPokemonSetCode,
             tcgdbPokemonSetName: tcgdbPokemonSet.tcgdbPokemonSetName,
             tcgdbPokemonSetPublishedOn: tcgdbPokemonSet.tcgdbPokemonSetPublishedOn,
             tcgdbPokemonSetTotalCards: tcgdbPokemonSet.tcgdbPokemonSetTotalCards,
@@ -107,7 +107,7 @@ export class TCGdbPokemonSetService {
             tcgdbPokemonSetId: tcgdbPokemonSet.tcgdbPokemonSetId,
             tcgdbPokemonSetTCGPlayerId: tcgdbPokemonSet.tcgdbPokemonSetTCGPlayerId,
             tcgdbPokemonSetPokemonTCGId: tcgdbPokemonSet.tcgdbPokemonSetPokemonTCGId,
-            tcgdbPokemonSetAbbreviation: tcgdbPokemonSet.tcgdbPokemonSetAbbreviation,
+            tcgdbPokemonSetCode: tcgdbPokemonSet.tcgdbPokemonSetCode,
             tcgdbPokemonSetName: tcgdbPokemonSet.tcgdbPokemonSetName,
             tcgdbPokemonSetPublishedOn: tcgdbPokemonSet.tcgdbPokemonSetPublishedOn,
             tcgdbPokemonSetTotalCards: tcgdbPokemonSet.tcgdbPokemonSetTotalCards,
@@ -131,7 +131,7 @@ export class TCGdbPokemonSetService {
             if(tcgdbPokemonSet == null) {
                 const newTCGdbPokemonSet = this.tcgdbPokemonSetRepository.create({
                     tcgdbPokemonSetTCGPlayerId: tcgPlayerPokemonSet.tcgPlayerPokemonSetGroupId,
-                    tcgdbPokemonSetAbbreviation: tcgPlayerPokemonSet.tcgPlayerPokemonSetAbbreviation,
+                    tcgdbPokemonSetCode: tcgPlayerPokemonSet.tcgPlayerPokemonSetCode,
                     tcgdbPokemonSetName: tcgPlayerPokemonSet.tcgPlayerPokemonSetName,
                     tcgdbPokemonSetPublishedOn: tcgPlayerPokemonSet.tcgPlayerPokemonSetPublishedOn,
                     tcgdbPokemonSetTotalCards: tcgPlayerPokemonSet.tcgPlayerPokemonSetTotalCards,

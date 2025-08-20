@@ -19,10 +19,10 @@ export class TCGdbMTGPriceChangeDailyService {
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
     ) {}
 
-    async getTCGdbMTGPriceChangeDailyBySet(setAbbreviation: string) {
+    async getTCGdbMTGPriceChangeDailyBySet(setCode: string) {
         let tcgdbMTGPriceChangeDailys = await this.tcgdbMTGPriceChangeDailyRepository.find({
             where: {
-                tcgdbMTGPriceChangeDailySetAbbreviation: setAbbreviation,
+                tcgdbMTGPriceChangeDailySetCode: setCode,
             }
         });
 
@@ -62,18 +62,18 @@ export class TCGdbMTGPriceChangeDailyService {
             priceHistoryDate.setDate(priceHistoryDate.getDate() - 1); // yesterday
 
             //CURRENT PRICES;
-            let tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetAbbreviation(tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+            let tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(tcgdbMTGSet.tcgdbMTGSetCode);
 
             if(tcgdbMTGPriceCurrents.length == 0) {
-                console.log("No current prices for set: " + tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+                console.log("No current prices for set: " + tcgdbMTGSet.tcgdbMTGSetCode);
                 continue;
             }
 
             //HISTORY PRICES;
-            let tcgdbMTGPriceHistorys = await this.tcgdbMTGPriceHistoryService.getTCGdbMTGPricesHistoryBySetAbbreviationAndDate(tcgdbMTGSet.tcgdbMTGSetAbbreviation, priceHistoryDate);
+            let tcgdbMTGPriceHistorys = await this.tcgdbMTGPriceHistoryService.getTCGdbMTGPricesHistoryBySetCodeAndDate(tcgdbMTGSet.tcgdbMTGSetCode, priceHistoryDate);
 
             if(tcgdbMTGPriceHistorys.length == 0) {
-                console.log("No history prices for set: " + tcgdbMTGSet.tcgdbMTGSetAbbreviation);
+                console.log("No history prices for set: " + tcgdbMTGSet.tcgdbMTGSetCode);
                 continue;
             }
 
@@ -157,7 +157,7 @@ export class TCGdbMTGPriceChangeDailyService {
         let createTCGdbMTGPriceChangeDailyDTO: CreateTCGdbMTGPriceChangeDailyDTO = {
             tcgdbMTGCardId: tcgdbMTGPriceCurrent.tcgdbMTGCardId,
             tcgdbMTGPriceChangeDailyTCGPlayerId: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentTCGPlayerId,
-            tcgdbMTGPriceChangeDailySetAbbreviation: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetAbbreviation,
+            tcgdbMTGPriceChangeDailySetCode: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentSetCode,
             tcgdbMTGPriceChangeDailyCurrentLowPrice: tcgdbMTGPriceCurrent.tcgdbMTGPriceCurrentLowPrice,
             tcgdbMTGPriceChangeDailyPreviousLowPrice: tcgdbMTGPriceHistory.tcgdbMTGPriceHistoryLowPrice,
             tcgdbMTGPriceChangeDailyLowPriceDifference: tcgdbMTGPriceChangeDailyLowPriceDifference,

@@ -34,7 +34,7 @@ export class TCGdbPokemonPriceHistoryService {
             let tcgdbPokemonPriceHistoryDTO: TCGdbPokemonPriceHistoryDTO = {
                 tcgdbPokemonCardId: tcgdbPokemonPriceHistory.tcgdbPokemonCardId,
                 tcgdbPokemonPriceHistoryTCGPlayerId: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryTCGPlayerId,
-                tcgdbPokemonPriceHistorySetAbbreviation: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistorySetAbbreviation,
+                tcgdbPokemonPriceHistorySetCode: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistorySetCode,
                 tcgdbPokemonPriceHistoryLowPrice: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryLowPrice,
                 tcgdbPokemonPriceHistoryMidPrice: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryMidPrice,
                 tcgdbPokemonPriceHistoryHighPrice: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryHighPrice,
@@ -71,7 +71,7 @@ export class TCGdbPokemonPriceHistoryService {
             let tcgdbPokemonPriceHistoryDTO: TCGdbPokemonPriceHistoryDTO = {
                 tcgdbPokemonCardId: tcgdbPokemonPriceHistory.tcgdbPokemonCardId,
                 tcgdbPokemonPriceHistoryTCGPlayerId: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryTCGPlayerId,
-                tcgdbPokemonPriceHistorySetAbbreviation: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistorySetAbbreviation,
+                tcgdbPokemonPriceHistorySetCode: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistorySetCode,
                 tcgdbPokemonPriceHistoryLowPrice: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryLowPrice,
                 tcgdbPokemonPriceHistoryMidPrice: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryMidPrice,
                 tcgdbPokemonPriceHistoryHighPrice: tcgdbPokemonPriceHistory.tcgdbPokemonPriceHistoryHighPrice,
@@ -114,7 +114,7 @@ export class TCGdbPokemonPriceHistoryService {
             const newTCGdbPokemonPriceHistory = this.tcgdbPokemonPriceHistoryRepository.create({
                 tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
                 tcgdbPokemonPriceHistoryTCGPlayerId: tcgPlayerPokemonPrice.tcgPlayerPokemonPriceProductId,
-                tcgdbPokemonPriceHistorySetAbbreviation: tcgdbPokemonCard.tcgdbPokemonCardSetAbbreviation,
+                tcgdbPokemonPriceHistorySetCode: tcgdbPokemonCard.tcgdbPokemonCardSetCode,
                 tcgdbPokemonPriceHistoryLowPrice: tcgPlayerPokemonPrice.tcgPlayerPokemonPriceLowPrice,
                 tcgdbPokemonPriceHistoryMidPrice: tcgPlayerPokemonPrice.tcgPlayerPokemonPriceMidPrice,
                 tcgdbPokemonPriceHistoryHighPrice: tcgPlayerPokemonPrice.tcgPlayerPokemonPriceHighPrice,

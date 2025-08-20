@@ -137,7 +137,7 @@ export class ProductCardRarityService {
         }
 
         existingProductCardRarity.productCardRarityName = updateProductCardRarityDTO.productCardRarityName;
-        existingProductCardRarity.productCardRarityAbbreviation = updateProductCardRarityDTO.productCardRarityAbbreviation;
+        existingProductCardRarity.productCardRarityCode = updateProductCardRarityDTO.productCardRarityCode;
         existingProductCardRarity.productCardRarityIsActive = updateProductCardRarityDTO.productCardRarityIsActive;
         existingProductCardRarity.productCardRarityUpdateDate = new Date();
         
@@ -185,7 +185,7 @@ export class ProductCardRarityService {
             let createProductCardRarityDTO = new CreateProductCardRarityDTO();
             createProductCardRarityDTO.productLineId = productLineId;
             createProductCardRarityDTO.productCardRarityName = tcgdbMTGProductCardRarity.tcgdbMTGRarityName;
-            createProductCardRarityDTO.productCardRarityAbbreviation = tcgdbMTGProductCardRarity.tcgdbMTGRarityAbbreviation;
+            createProductCardRarityDTO.productCardRarityCode = tcgdbMTGProductCardRarity.tcgdbMTGRarityCode;
             createProductCardRarityDTO.productCardRarityIsActive = true;
             
             await this.createProductCardRarity(createProductCardRarityDTO);

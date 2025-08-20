@@ -65,7 +65,7 @@ export class TCGdbPokemonCardService {
         let tcgdbPokemonCard = await this.tcgdbPokemonCardRepository.findOne({
             where: {
                 tcgdbPokemonCardName: cardName,
-                tcgdbPokemonCardSetAbbreviation: tcgdbPokemonSetDTO.tcgdbPokemonSetAbbreviation,
+                tcgdbPokemonCardSetCode: tcgdbPokemonSetDTO.tcgdbPokemonSetCode,
             }
         });
 
@@ -107,10 +107,10 @@ export class TCGdbPokemonCardService {
     
     }
 
-    async getTCGdbPokemonCardsBySetAbbreviation(setAbbreviation: string) {
+    async getTCGdbPokemonCardsBySetCode(setCode: string) {
 
         let tcgdbPokemonCardDTOs: TCGdbPokemonCardDTO[] = [];
-        let tcgdbPokemonSetDTO = await this.tcgdbPokemonSetService.getTCGdbPokemonSetBySetAbbreviation(setAbbreviation);
+        let tcgdbPokemonSetDTO = await this.tcgdbPokemonSetService.getTCGdbPokemonSetBySetCode(setCode);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if(tcgdbPokemonSetDTO == null) {
@@ -119,7 +119,7 @@ export class TCGdbPokemonCardService {
 
         const tcgdbPokemonCards = await this.tcgdbPokemonCardRepository.find({
             where: {
-                tcgdbPokemonCardSetAbbreviation: setAbbreviation,
+                tcgdbPokemonCardSetCode: setCode,
             }
         })
 
@@ -148,7 +148,7 @@ export class TCGdbPokemonCardService {
     async getTCGdbPokemonCardsBySetName(setName: string) {
 
         let tcgdbPokemonCardDTOs: TCGdbPokemonCardDTO[] = [];
-        let tcgdbPokemonSetDTO = await this.tcgdbPokemonSetService.getTCGdbPokemonSetBySetAbbreviation(setName);
+        let tcgdbPokemonSetDTO = await this.tcgdbPokemonSetService.getTCGdbPokemonSetBySetCode(setName);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if(tcgdbPokemonSetDTO == null) {
@@ -157,7 +157,7 @@ export class TCGdbPokemonCardService {
 
         const tcgdbPokemonCards = await this.tcgdbPokemonCardRepository.find({
             where: {
-                tcgdbPokemonCardSetAbbreviation: tcgdbPokemonSetDTO.tcgdbPokemonSetAbbreviation,
+                tcgdbPokemonCardSetCode: tcgdbPokemonSetDTO.tcgdbPokemonSetCode,
             }
         })
 
@@ -173,7 +173,7 @@ export class TCGdbPokemonCardService {
                 tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
                 tcgdbPokemonCardTCGPlayerId: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerId,
                 tcgdbPokemonCardPokemonTCGId: tcgdbPokemonCard.tcgdbPokemonCardPokemonTCGId,
-                tcgdbPokemonCardSetAbbreviation: tcgdbPokemonCard.tcgdbPokemonCardSetAbbreviation,
+                tcgdbPokemonCardSetCode: tcgdbPokemonCard.tcgdbPokemonCardSetCode,
                 tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
                 tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
                 tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
@@ -209,7 +209,7 @@ export class TCGdbPokemonCardService {
             if(tcgdbPokemonCard == null) {
                 const newTCGdgPokemonCard = this.tcgdbPokemonCardRepository.create({
                     tcgdbPokemonCardTCGPlayerId: tcgPlayerPokemonCard.tcgPlayerPokemonCardProductId,
-                    tcgdbPokemonCardSetAbbreviation: tcgPlayerPokemonCard.tcgPlayerPokemonCardSetAbbreviation,
+                    tcgdbPokemonCardSetCode: tcgPlayerPokemonCard.tcgPlayerPokemonCardSetCode,
                     tcgdbPokemonCardName: tcgPlayerPokemonCard.tcgPlayerPokemonCardName,
                     tcgdbPokemonCardCleanName: tcgPlayerPokemonCard.tcgPlayerPokemonCardCleanName,
                     tcgdbPokemonCardImageURL: tcgPlayerPokemonCard.tcgPlayerPokemonCardImageURL,

@@ -33,7 +33,7 @@ export class InventoryLoadProductCardService {
         private commerceLocationService: CommerceLocationService
     ) { }
 
-    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageCode: string, commerceAccountId: string, commerceLocationId: string) {
 
         let productSets = await this.getProductSetsByProductLineId(productLineId);
         if (productSets == null) {
@@ -43,16 +43,16 @@ export class InventoryLoadProductCardService {
         //LOOP OVER EACH PRODUCT SET AND CREATE THE INVENTORY PRODUCT CARDS;
         for (let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
-            await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
+            await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageCode, commerceAccountId, commerceLocationId);
         }
 
         return true;
 
     }
 
-    async createLoadInventoryProductCardsBySetCode(productSetCode: string, productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+    async createLoadInventoryProductCardsBySetCode(productSetCode: string, productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageCode: string, commerceAccountId: string, commerceLocationId: string) {
         //GET THE PRODUCT SET BY CODE;
-        let productSet = await this.getProductSetByAbbreviation(productVendorId, productLineId, productSetCode);
+        let productSet = await this.getProductSetByCode(productVendorId, productLineId, productSetCode);
         
         //TO DO: CREATE AN ERROR TO RETURN;
         if (productSet == null) {
@@ -60,15 +60,15 @@ export class InventoryLoadProductCardService {
         }
 
         //CREATE THE BATCH INVENTORY PRODUCT CARDS BY SET;
-        await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageAbbreviation, commerceAccountId, commerceLocationId);
+        await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageCode, commerceAccountId, commerceLocationId);
 
         return true;
 
     }
 
-    //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/LOCATION;
+    //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/COMMERCE LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
-    async createLoadInventoryProductCardsBySet(productSet: any, productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageAbbreviation: string, commerceAccountId: string, commerceLocationId: string) {
+    async createLoadInventoryProductCardsBySet(productSet: any, productVendorId: string, productLineId: string, productTypeId:string, productCardLanguageCode: string, commerceAccountId: string, commerceLocationId: string) {
 
         //GET THE COMMERCE LOCATION;
         let commerceLocation = await this.commerceLocationService.getCommerceLocation(commerceLocationId);
@@ -97,7 +97,7 @@ export class InventoryLoadProductCardService {
 
         let productCardConditions = await this.getProductCardConditionsByProductLineId(productLineId);
         
-        let productCardLanguageTCGPlayerId = await this.getProductCardLanguageIdByAbbreviationAndProductLineId(productCardLanguageAbbreviation, productLineId);
+        let productCardLanguageTCGPlayerId = await this.getProductCardLanguageIdByCodeAndProductLineId(productCardLanguageCode, productLineId);
         let productCardPrintings = await this.getProductCardPrintingsByProductLineId(productLineId);
 
          //TO DO: CREATE AN ERROR TO RETURN;
@@ -112,8 +112,6 @@ export class InventoryLoadProductCardService {
         if(pricingProductCardRuleSets != null && pricingProductCardRuleSets.length > 0) {
             processedPricingProductCardRuleSets = await this.pricingProductCardRuleSetService.processPricingProductCardRuleSet(pricingProductCardRuleSets);
         }
-
-
         
         let productSetId = productSet.productSetId;
         let productCardItems = await this.productCardItemService.getProductCardItemsByProductSetId(productSetId);
@@ -161,10 +159,10 @@ export class InventoryLoadProductCardService {
                     inventoryProductCard.commerceAccountId = commerceAccountId;
                     inventoryProductCard.commerceLocationId = commerceLocationId;
                     inventoryProductCard.productCardItemId = productCardItem.productCardItemId;
-                    inventoryProductCard.productSetAbbreviation = productSet.productSetAbbreviation;
+                    inventoryProductCard.productSetCode = productSet.productSetCode;
                     inventoryProductCard.productCardPrintingName = productCardPrinting.productCardPrintingName;
-                    inventoryProductCard.productCardConditionAbbreviation = productCardCondition.productCardConditionAbbreviation;
-                    inventoryProductCard.productCardLanguageAbbreviation = productCardLanguageAbbreviation;
+                    inventoryProductCard.productCardConditionCode = productCardCondition.productCardConditionCode;
+                    inventoryProductCard.productCardLanguageCode = productCardLanguageCode;
                     inventoryProductCard.inventoryProductCardSKU = productCardSKUCondition;
 
                     //SET THE INVENTORY PRODUCT CARD DEFAULT VALUES;
@@ -182,12 +180,12 @@ export class InventoryLoadProductCardService {
                         if(processedPricingProductCardRuleSets.length > 0) {
                             inventoryProductCard.inventoryProductCardPrice = await this.pricingProductCardRuleSetService.applyCustomPricingProductCardRuleSets(
                                 processedPricingProductCardRuleSets,
-                                productCardCondition.productCardConditionAbbreviation,
+                                productCardCondition.productCardConditionCode,
                                 productCardPriceByPrinting
                             );
                         } else {
                             inventoryProductCard.inventoryProductCardPrice = await this.pricingProductCardRuleSetService.applyDefaultPricingProductCardRuleSet(
-                                productCardCondition.productCardConditionAbbreviation,
+                                productCardCondition.productCardConditionCode,
                                 productCardPriceByPrinting
                             );
                         }
@@ -211,7 +209,7 @@ export class InventoryLoadProductCardService {
             }
 
             let productInventoryCardByItem = {
-                productSetAbbreviation: productSet.productSetAbbreviation,
+                productSetCode: productSet.productSetCode,
                 productCardItemName: productCardItem.productCardItemName,
                 productInventoryCardsByPrinting: productInventoryCardsByPrinting
             };
@@ -262,8 +260,8 @@ export class InventoryLoadProductCardService {
         return productSets;
     }
 
-    async getProductSetByAbbreviation(productVendorId: string, productLineId: string, productSetAbbreviation: string) {
-        let productSet = await this.productSetService.getProductSetByAbbreviation(productVendorId, productLineId, productSetAbbreviation);
+    async getProductSetByCode(productVendorId: string, productLineId: string, productSetCode: string) {
+        let productSet = await this.productSetService.getProductSetByCode(productVendorId, productLineId, productSetCode);
         if (productSet == null) {
             return null;
         }
@@ -280,8 +278,8 @@ export class InventoryLoadProductCardService {
         return productCardConditions;
     }
 
-    async getProductCardLanguageIdByAbbreviationAndProductLineId(productCardLanguageAbbreviation: string, productLineId: string) {
-        let productCardLanguage = await this.productCardLanguageService.getProductCardLanguageByAbbreviationAndProductLineId(productCardLanguageAbbreviation, productLineId);
+    async getProductCardLanguageIdByCodeAndProductLineId(productCardLanguageCode: string, productLineId: string) {
+        let productCardLanguage = await this.productCardLanguageService.getProductCardLanguageByCodeAndProductLineId(productCardLanguageCode, productLineId);
         if (productCardLanguage == null) {
             return null;
         }

@@ -5,7 +5,7 @@ export class ProductCardConditionDTO {
     productCardConditionTCGPlayerId: number;
     productLineId: string;
     productCardConditionName: string;
-    productCardConditionAbbreviation: string;
+    productCardConditionCode: string;
     productCardConditionPriceFactor: number;
     productCardConditionDisplayOrder: number;
     productCardConditionIsActive: boolean;
@@ -21,7 +21,7 @@ export class CreateProductCardConditionDTO {
     @IsString()
     productCardConditionName: string;
     @IsString()
-    productCardConditionAbbreviation: string;
+    productCardConditionCode: string;
     @IsNumber()
     productCardConditionPriceFactor: number;
     @IsNumber()
@@ -40,7 +40,7 @@ export class UpdateProductCardConditionDTO {
     @IsString()
     productCardConditionName: string;
     @IsString()
-    productCardConditionAbbreviation: string;
+    productCardConditionCode: string;
     @IsNumber()
     productCardConditionPriceFactor: number;
     @IsNumber()

@@ -64,7 +64,7 @@ export class TCGdbMTGRarityService {
                 const newTCGdgMTGRarity = this.tcgdbMTGRarityRepository.create({
                     tcgdbMTGRarityTCGPlayerId: tcgPlayerMTGRarity.tcgPlayerMTGRarityId,
                     tcgdbMTGRarityName: tcgPlayerMTGRarity.tcgPlayerMTGRarityDisplayText,
-                    tcgdbMTGRarityAbbreviation: tcgPlayerMTGRarity.tcgPlayerMTGRarityDBValue
+                    tcgdbMTGRarityCode: tcgPlayerMTGRarity.tcgPlayerMTGRarityDBValue
                 });
 
                 await this.tcgdbMTGRarityRepository.save(newTCGdgMTGRarity);

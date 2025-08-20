@@ -18,10 +18,10 @@ export class TCGPlayerPokemonLanguageService {
         return await this.tcgPlayerPokemonLanguageRepository.find();
     }
 
-    async getTCGPlayerPokemonLanguageByLanguageAbbreviation(languageAbbreviation: string) {
+    async getTCGPlayerPokemonLanguageByLanguageCode(languageCode: string) {
         let tcgPlayerPokemonLanguage = await this.tcgPlayerPokemonLanguageRepository.findOne({
             where: {
-                tcgPlayerPokemonLanguageAbbreviation: languageAbbreviation,
+                tcgPlayerPokemonLanguageCode: languageCode,
             }
         });
 
@@ -55,7 +55,7 @@ export class TCGPlayerPokemonLanguageService {
                 const newTCGPlayerPokemonLanguage = this.tcgPlayerPokemonLanguageRepository.create({
                     tcgPlayerPokemonLanguageId: tcgPlayerPokemonLanguage.languageId,
                     tcgPlayerPokemonLanguageName: tcgPlayerPokemonLanguage.name,
-                    tcgPlayerPokemonLanguageAbbreviation: tcgPlayerPokemonLanguage.abbr,
+                    tcgPlayerPokemonLanguageCode: tcgPlayerPokemonLanguage.abbr,
                 });
 
                 await this.tcgPlayerPokemonLanguageRepository.save(newTCGPlayerPokemonLanguage);

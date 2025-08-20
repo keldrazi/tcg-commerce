@@ -104,12 +104,12 @@ export class ProductSetService {
         return productSetDTO;
     }
 
-    async getProductSetByAbbreviation(productVendorId: string, productLineId: string, productSetAbbreviation: string) {
+    async getProductSetByCode(productVendorId: string, productLineId: string, productSetCode: string) {
         let productSet = await this.productSetRepository.findOne({
             where: {
                 productVendorId: productVendorId,
                 productLineId: productLineId,
-                productSetAbbreviation: productSetAbbreviation
+                productSetCode: productSetCode
             }
         });
         
@@ -156,7 +156,7 @@ export class ProductSetService {
         }
 
         existingProductSet.productSetName = updateProductSetDTO.productSetName;
-        existingProductSet.productSetAbbreviation = updateProductSetDTO.productSetAbbreviation;
+        existingProductSet.productSetCode = updateProductSetDTO.productSetCode;
         existingProductSet.productSetReleaseDate = updateProductSetDTO.productSetReleaseDate;
         existingProductSet.productSetTotalCards = updateProductSetDTO.productSetTotalCards;
         existingProductSet.productSetIsActive = updateProductSetDTO.productSetIsActive;
@@ -200,7 +200,7 @@ export class ProductSetService {
                 productVendorId: this.MTG_SET_VENDOR_ID,
                 productLineId: this.MTG_SET_LINE_ID,
                 productSetName: tcgdbMTGSet.tcgdbMTGSetName,
-                productSetAbbreviation: tcgdbMTGSet.tcgdbMTGSetAbbreviation,
+                productSetCode: tcgdbMTGSet.tcgdbMTGSetCode,
                 productSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
                 productSetReleaseDate: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
                 productSetIsActive: true,

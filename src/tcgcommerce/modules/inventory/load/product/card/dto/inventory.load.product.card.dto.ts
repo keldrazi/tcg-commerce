@@ -5,10 +5,10 @@ export class InventoryLoadProductCardDTO {
     commerceAccountId: string;
     commerceLocationId: string;
     productCardItemId: string;
-    productSetAbbreviation: string;
+    productSetCode: string;
     productCardPrintingName: string;
-    productCardConditionAbbreviation: string;
-    productCardLanguageAbbreviation: string;
+    productCardConditionCode: string;
+    productCardLanguageCode: string;
     inventoryProductCardSKU: string;
     inventoryProductCardBarcode: string;
     inventoryProductCardQty: number;
@@ -29,10 +29,10 @@ export class CreateInventoryLoadProductCardDTO {
     commerceAccountId: string;
     commerceLocationId: string;
     productCardItemId: string;
-    productSetAbbreviation: string;
+    productSetCode: string;
     productCardPrintingName: string;
-    productCardConditionAbbreviation: string;
-    productCardLanguageAbbreviation: string;
+    productCardConditionCode: string;
+    productCardLanguageCode: string;
     inventoryProductCardQty: number;
     inventoryProductCardMaxQty: number;
     inventoryProductCardReserveQty: number;

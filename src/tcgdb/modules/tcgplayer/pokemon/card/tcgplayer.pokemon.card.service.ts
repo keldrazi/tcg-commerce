@@ -87,7 +87,7 @@ export class TCGPlayerPokemonCardService {
                     const newTCGPlayerPokemonCard = this.tcgPlayerPokemonCardRepository.create({
                         tcgPlayerPokemonCardProductId: tcgPlayerPokemonCard.productId,
                         tcgPlayerPokemonCardGroupId: tcgPlayerPokemonCard.groupId,
-                        tcgPlayerPokemonCardSetAbbreviation: tcgPlayerPokemonSet.tcgPlayerPokemonSetAbbreviation,
+                        tcgPlayerPokemonCardSetCode: tcgPlayerPokemonSet.tcgPlayerPokemonSetCode,
                         tcgPlayerPokemonCardName: tcgPlayerPokemonCard.name,
                         tcgPlayerPokemonCardCleanName: tcgPlayerPokemonCard.cleanName,
                         tcgPlayerPokemonCardImageURL: tcgPlayerPokemonCard.imageUrl,

@@ -9,7 +9,7 @@ export class TCGdbPokemonCardDTO {
     tcgdbPokemonCardId: string;
     tcgdbPokemonCardTCGPlayerId: number;
     tcgdbPokemonCardPokemonTCGId: string;
-    tcgdbPokemonCardSetAbbreviation: string;
+    tcgdbPokemonCardSetCode: string;
     tcgdbPokemonCardName: string;
     tcgdbPokemonCardCleanName: string;
     tcgdbPokemonCardImageURL: string;

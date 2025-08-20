@@ -6,7 +6,7 @@ export class TCGdbMTGPriceChangeMonthlyDTO {
     tcgdbMTGPriceChangeMonthlyId: string;
     tcgdbMTGCardId: string;
     tcgdbMTGPriceChangeMonthlyTCGPlayerId: number;
-    tcgdbMTGPriceChangeMonthlySetAbbreviation: string;
+    tcgdbMTGPriceChangeMonthlySetCode: string;
     tcgdbMTGPriceChangeMonthlyCurrentLowPrice: number;
     tcgdbMTGPriceChangeMonthlyPreviousLowPrice: number;
     tcgdbMTGPriceChangeMonthlyLowPriceDifference: number;
@@ -29,7 +29,7 @@ export class TCGdbMTGPriceChangeMonthlyDTO {
 export class CreateTCGdbMTGPriceChangeMonthlyDTO {
     tcgdbMTGCardId: string;
     tcgdbMTGPriceChangeMonthlyTCGPlayerId: number;
-    tcgdbMTGPriceChangeMonthlySetAbbreviation: string;
+    tcgdbMTGPriceChangeMonthlySetCode: string;
     tcgdbMTGPriceChangeMonthlyCurrentLowPrice: number;
     tcgdbMTGPriceChangeMonthlyPreviousLowPrice: number;
     tcgdbMTGPriceChangeMonthlyLowPriceDifference: number;

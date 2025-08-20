@@ -74,7 +74,7 @@ export class TCGdbMTGPriceHistoryService {
 
     } 
 
-    async getTCGdbMTGPricesHistoryBySetAbbreviationAndDate(setAbbreviation: string, priceHistoryDate: Date) {
+    async getTCGdbMTGPricesHistoryBySetCodeAndDate(setCode: string, priceHistoryDate: Date) {
         
         let startOfDay = new Date(priceHistoryDate);
         startOfDay.setHours(0, 0, 0, 0); // Set to 12:00:00 am
@@ -84,7 +84,7 @@ export class TCGdbMTGPriceHistoryService {
 
         const tcgdbMTGPriceHistorys = await this.tcgdbMTGPriceHistoryRepository.find({
             where: {
-                tcgdbMTGPriceHistorySetAbbreviation: setAbbreviation,
+                tcgdbMTGPriceHistorySetCode: setCode,
                 tcgdbMTGPriceHistoryCreateDate: Between(startOfDay, endOfDay),
             }
         });
@@ -109,7 +109,7 @@ export class TCGdbMTGPriceHistoryService {
         const newTCGdbMTGPrice = this.tcgdbMTGPriceHistoryRepository.create({
             tcgdbMTGCardId: tcgdbMTGCard.tcgdbMTGCardId,
             tcgdbMTGPriceHistoryTCGPlayerId: tcgPlayerMTGPrice.tcgPlayerMTGPriceProductId,
-            tcgdbMTGPriceHistorySetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+            tcgdbMTGPriceHistorySetCode: tcgdbMTGCard.tcgdbMTGCardSetCode,
             tcgdbMTGPriceHistoryLowPrice: tcgPlayerMTGPrice.tcgPlayerMTGPriceLowPrice,
             tcgdbMTGPriceHistoryMidPrice: tcgPlayerMTGPrice.tcgPlayerMTGPriceMidPrice,
             tcgdbMTGPriceHistoryHighPrice: tcgPlayerMTGPrice.tcgPlayerMTGPriceHighPrice,

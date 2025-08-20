@@ -172,7 +172,7 @@ export class ProductCardConditionService {
         }
 
         existingProductCardCondition.productCardConditionName = updateProductCardConditionDTO.productCardConditionName;
-        existingProductCardCondition.productCardConditionAbbreviation = updateProductCardConditionDTO.productCardConditionAbbreviation;
+        existingProductCardCondition.productCardConditionCode = updateProductCardConditionDTO.productCardConditionCode;
         existingProductCardCondition.productCardConditionPriceFactor = updateProductCardConditionDTO.productCardConditionPriceFactor;
         existingProductCardCondition.productCardConditionDisplayOrder = updateProductCardConditionDTO.productCardConditionDisplayOrder;
         existingProductCardCondition.productCardConditionIsActive = updateProductCardConditionDTO.productCardConditionIsActive;
@@ -223,7 +223,7 @@ export class ProductCardConditionService {
             createProductCardConditionDTO.productLineId = productLineId;
             createProductCardConditionDTO.productCardConditionTCGPlayerId = tcgdbMTGProductCardCondition.tcgdbMTGConditionTCGPlayerId;
             createProductCardConditionDTO.productCardConditionName = tcgdbMTGProductCardCondition.tcgdbMTGConditionName;
-            createProductCardConditionDTO.productCardConditionAbbreviation = tcgdbMTGProductCardCondition.tcgdbMTGConditionAbbreviation;
+            createProductCardConditionDTO.productCardConditionCode = tcgdbMTGProductCardCondition.tcgdbMTGConditionCode;
             createProductCardConditionDTO.productCardConditionPriceFactor = tcgdbMTGProductCardCondition.tcgdbMTGConditionPriceFactor;
             createProductCardConditionDTO.productCardConditionDisplayOrder = tcgdbMTGProductCardCondition.tcgdbMTGConditionDisplayOrder;
             createProductCardConditionDTO.productCardConditionIsActive = true;

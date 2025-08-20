@@ -68,7 +68,7 @@ export class TCGdbMTGCardService {
         let tcgdbMTGCard = await this.tcgdbMTGCardRepository.findOne({
             where: {
                 tcgdbMTGCardName: cardName,
-                tcgdbMTGCardSetAbbreviation: tcgdbMTGSetDTO.tcgdbMTGSetAbbreviation,
+                tcgdbMTGCardSetCode: tcgdbMTGSetDTO.tcgdbMTGSetCode,
             }
         });
 
@@ -123,7 +123,7 @@ export class TCGdbMTGCardService {
         //GET TCGDB CARDS BY SET ABBREVIATION;
         let tcgdbMTGCards = await this.tcgdbMTGCardRepository.find({
             where: {
-                tcgdbMTGCardSetAbbreviation: tcgdbMTGSetDTO.tcgdbMTGSetAbbreviation,
+                tcgdbMTGCardSetCode: tcgdbMTGSetDTO.tcgdbMTGSetCode,
             }
         });
 
@@ -148,10 +148,10 @@ export class TCGdbMTGCardService {
         return tcgdbMTGSetCardDTO;
     }
 
-    async getTCGdbMTGCardsBySetAbbreviation(setAbbreviation: string) {
+    async getTCGdbMTGCardsBySetCode(setCode: string) {
 
         let tcgdbMTGCardDTOs: TCGdbMTGCardDTO[] = [];
-        let tcgdbMTGSetDTO = await this.tcgdbMTGSetService.getTCGdbMTGSetBySetAbbreviation(setAbbreviation);
+        let tcgdbMTGSetDTO = await this.tcgdbMTGSetService.getTCGdbMTGSetBySetCode(setCode);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if(tcgdbMTGSetDTO == null) {
@@ -161,7 +161,7 @@ export class TCGdbMTGCardService {
         //GET TCGDB CARDS BY SET ABBREVIATION;
         let tcgdbMTGCards = await this.tcgdbMTGCardRepository.find({
             where: {
-                tcgdbMTGCardSetAbbreviation: setAbbreviation,
+                tcgdbMTGCardSetCode: setCode,
             }
         });
 
@@ -209,7 +209,7 @@ export class TCGdbMTGCardService {
                 }
 
                 let tcgdbMTGCardNumber = "0";
-                let tcgdbMTGCardRarityAbbreviation = "U";
+                let tcgdbMTGCardRarityCode = "U";
 
                 try{
                     let tcgPlayerMTGCardData: any = tcgPlayerMTGCard.tcgPlayerMTGCardData;
@@ -218,7 +218,7 @@ export class TCGdbMTGCardService {
                         let tcgdbMTGCardNumberObject = tcgPlayerMTGCardData.extendedData.find(item => item.name === 'Number');
                         tcgdbMTGCardNumber = tcgdbMTGCardNumberObject ? tcgdbMTGCardNumberObject.value : "0";
                         let tcgdbMTGCardRarityObject = tcgPlayerMTGCardData.extendedData.find(item => item.name === 'Rarity');
-                        tcgdbMTGCardRarityAbbreviation = tcgdbMTGCardRarityObject ? tcgdbMTGCardRarityObject.value : "U";
+                        tcgdbMTGCardRarityCode = tcgdbMTGCardRarityObject ? tcgdbMTGCardRarityObject.value : "U";
                     }
                 }
                 catch(error) {
@@ -228,8 +228,8 @@ export class TCGdbMTGCardService {
                 const newTCGdgMTGCard = this.tcgdbMTGCardRepository.create({
                     tcgdbMTGCardTCGPlayerId: tcgPlayerMTGCard.tcgPlayerMTGCardProductId,
                     tcgdbMTGCardSetName: tcgdbMTGSetName,
-                    tcgdbMTGCardSetAbbreviation: tcgPlayerMTGCard.tcgPlayerMTGCardSetAbbreviation,
-                    tcgdbMTGCardRarityAbbreviation: tcgdbMTGCardRarityAbbreviation,
+                    tcgdbMTGCardSetCode: tcgPlayerMTGCard.tcgPlayerMTGCardSetCode,
+                    tcgdbMTGCardRarityCode: tcgdbMTGCardRarityCode,
                     tcgdbMTGCardNumber: tcgdbMTGCardNumber,
                     tcgdbMTGCardName: tcgPlayerMTGCard.tcgPlayerMTGCardName,
                     tcgdbMTGCardCleanName: tcgPlayerMTGCard.tcgPlayerMTGCardCleanName,

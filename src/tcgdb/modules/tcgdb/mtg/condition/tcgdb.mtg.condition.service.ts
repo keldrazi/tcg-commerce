@@ -60,7 +60,7 @@ export class TCGdbMTGConditionService {
             let tcgdbMTGCondition = await this.getTCGdbMTGConditionByTCGPlayerId(tcgPlayerMTGCondition.tcgPlayerMTGConditionId);
             let tcgdbMTGConditionPriceFactor = 1;
 
-            switch(tcgPlayerMTGCondition.tcgPlayerMTGConditionAbbreviation) {
+            switch(tcgPlayerMTGCondition.tcgPlayerMTGConditionCode) {
                 case 'NM':
                     tcgdbMTGConditionPriceFactor = 1;
                     break;
@@ -83,7 +83,7 @@ export class TCGdbMTGConditionService {
                 const newTCGdgMTGCondition = this.tcgdbMTGConditionRepository.create({
                     tcgdbMTGConditionTCGPlayerId: tcgPlayerMTGCondition.tcgPlayerMTGConditionId,
                     tcgdbMTGConditionName: tcgPlayerMTGCondition.tcgPlayerMTGConditionName,
-                    tcgdbMTGConditionAbbreviation: tcgPlayerMTGCondition.tcgPlayerMTGConditionAbbreviation,
+                    tcgdbMTGConditionCode: tcgPlayerMTGCondition.tcgPlayerMTGConditionCode,
                     tcgdbMTGConditionPriceFactor: tcgdbMTGConditionPriceFactor,
                     tcgdbMTGConditionDisplayOrder: tcgPlayerMTGCondition.tcgPlayerMTGConditionDisplayOrder,
                 });

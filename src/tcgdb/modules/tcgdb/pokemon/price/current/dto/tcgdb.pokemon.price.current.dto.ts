@@ -5,7 +5,7 @@ export class TCGdbPokemonPricesCurrentDTO {
 export class TCGdbPokemonPriceCurrentDTO {
     tcgdbPokemonCardId: string;
     tcgdbPokemonPriceCurrentTCGPlayerId: number;
-    tcgdbPokemonPriceCurrentSetAbbreviation: string;
+    tcgdbPokemonPriceCurrentSetCode: string;
     tcgdbPokemonPriceCurrentLowPrice: number;
     tcgdbPokemonPriceCurrentMidPrice: number;
     tcgdbPokemonPriceCurrentHighPrice: number;

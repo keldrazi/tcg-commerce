@@ -6,7 +6,7 @@ export class TCGdbMTGPriceHistoryDTO {
     tcgdbMTGPriceHistoryId: string;
     tcgdbMTGCardId: string;
     tcgdbMTGPriceHistoryTCGPlayerId: number;
-    tcgdbMTGPriceHistorySetAbbreviation: string;
+    tcgdbMTGPriceHistorySetCode: string;
     tcgdbMTGPriceHistoryLowPrice: number;
     tcgdbMTGPriceHistoryMidPrice: number;
     tcgdbMTGPriceHistoryHighPrice: number;

@@ -6,7 +6,7 @@ export class TCGdbMTGPriceChangeYearlyDTO {
     tcgdbMTGPriceChangeYearlyId: string;
     tcgdbMTGCardId: string;
     tcgdbMTGPriceChangeYearlyTCGPlayerId: number;
-    tcgdbMTGPriceChangeYearlySetAbbreviation: string;
+    tcgdbMTGPriceChangeYearlySetCode: string;
     tcgdbMTGPriceChangeYearlyCurrentLowPrice: number;
     tcgdbMTGPriceChangeYearlyPreviousLowPrice: number;
     tcgdbMTGPriceChangeYearlyLowPriceDifference: number;
@@ -29,7 +29,7 @@ export class TCGdbMTGPriceChangeYearlyDTO {
 export class CreateTCGdbMTGPriceChangeYearlyDTO {
     tcgdbMTGCardId: string;
     tcgdbMTGPriceChangeYearlyTCGPlayerId: number;
-    tcgdbMTGPriceChangeYearlySetAbbreviation: string;
+    tcgdbMTGPriceChangeYearlySetCode: string;
     tcgdbMTGPriceChangeYearlyCurrentLowPrice: number;
     tcgdbMTGPriceChangeYearlyPreviousLowPrice: number;
     tcgdbMTGPriceChangeYearlyLowPriceDifference: number;

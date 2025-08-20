@@ -6,7 +6,7 @@ export class TCGdbMTGPriceCurrentDTO {
     tcgdbMTGPriceCurrentId: string;
     tcgdbMTGCardId: string;
     tcgdbMTGPriceCurrentTCGPlayerId: number;
-    tcgdbMTGPriceCurrentSetAbbreviation: string;
+    tcgdbMTGPriceCurrentSetCode: string;
     tcgdbMTGPriceCurrentLowPrice: number;
     tcgdbMTGPriceCurrentMidPrice: number;
     tcgdbMTGPriceCurrentHighPrice: number;

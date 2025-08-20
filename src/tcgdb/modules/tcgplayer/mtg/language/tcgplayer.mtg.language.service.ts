@@ -18,10 +18,10 @@ export class TCGPlayerMTGLanguageService {
         return await this.tcgPlayerMTGLanguageRepository.find();
     }
 
-    async getTCGPlayerMTGLanguageByLanguageAbbreviation(languageAbbreviation: string) {
+    async getTCGPlayerMTGLanguageByLanguageCode(languageCode: string) {
         let tcgPlayerMTGLanguage = await this.tcgPlayerMTGLanguageRepository.findOne({
             where: {
-                tcgPlayerMTGLanguageAbbreviation: languageAbbreviation,
+                tcgPlayerMTGLanguageCode: languageCode,
             }
         });
 
@@ -55,7 +55,7 @@ export class TCGPlayerMTGLanguageService {
                 const newTCGPlayerMTGLanguage = this.tcgPlayerMTGLanguageRepository.create({
                     tcgPlayerMTGLanguageId: tcgPlayerMTGLanguage.languageId,
                     tcgPlayerMTGLanguageName: tcgPlayerMTGLanguage.name,
-                    tcgPlayerMTGLanguageAbbreviation: tcgPlayerMTGLanguage.abbr,
+                    tcgPlayerMTGLanguageCode: tcgPlayerMTGLanguage.abbr,
                 });
 
                 await this.tcgPlayerMTGLanguageRepository.save(newTCGPlayerMTGLanguage);

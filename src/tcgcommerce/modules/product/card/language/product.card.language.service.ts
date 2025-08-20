@@ -105,10 +105,10 @@ export class ProductCardLanguageService {
         
     }
 
-    async getProductCardLanguageByAbbreviationAndProductLineId(abbrecviation: string, productLineId: string) {
+    async getProductCardLanguageByCodeAndProductLineId(abbrecviation: string, productLineId: string) {
         let productCardLanguage = await this.productCardLanguageRepository.findOne({ 
             where: { 
-                productCardLanguageAbbreviation: abbrecviation,
+                productCardLanguageCode: abbrecviation,
                 productLineId: productLineId 
             } 
         });
@@ -180,7 +180,7 @@ export class ProductCardLanguageService {
         }
 
         existingProductCardLanguage.productCardLanguageName = updateProductCardLanguageDTO.productCardLanguageName;
-        existingProductCardLanguage.productCardLanguageAbbreviation = updateProductCardLanguageDTO.productCardLanguageAbbreviation;
+        existingProductCardLanguage.productCardLanguageCode = updateProductCardLanguageDTO.productCardLanguageCode;
         existingProductCardLanguage.productCardLanguageIsActive = updateProductCardLanguageDTO.productCardLanguageIsActive;
         existingProductCardLanguage.productCardLanguageUpdateDate = new Date();
         
@@ -227,7 +227,7 @@ export class ProductCardLanguageService {
             createProductCardLanguageDTO.productCardLanguageTCGPlayerId = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageTCGPlayerId;
             createProductCardLanguageDTO.productLineId = productLine.productLineId;
             createProductCardLanguageDTO.productCardLanguageName = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageName;
-            createProductCardLanguageDTO.productCardLanguageAbbreviation = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageAbbreviation;
+            createProductCardLanguageDTO.productCardLanguageCode = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageCode;
             createProductCardLanguageDTO.productCardLanguageIsActive = true;
             
             await this.createProductCardLanguage(createProductCardLanguageDTO);

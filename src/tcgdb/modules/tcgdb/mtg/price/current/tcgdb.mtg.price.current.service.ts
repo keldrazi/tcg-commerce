@@ -61,11 +61,11 @@ export class TCGdbMTGPriceCurrentService {
 
     }
 
-    async getTCGdbMTGPricesCurrentBySetAbbreviation(setAbbreviation: string) {
+    async getTCGdbMTGPricesCurrentBySetCode(setCode: string) {
         
         const tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentRepository.find({
             where: {
-                tcgdbMTGPriceCurrentSetAbbreviation: setAbbreviation,
+                tcgdbMTGPriceCurrentSetCode: setCode,
             }
         });
 
@@ -113,7 +113,7 @@ export class TCGdbMTGPriceCurrentService {
             const newTCGdbMTGPrice = this.tcgdbMTGPriceCurrentRepository.create({
                 tcgdbMTGCardId: tcgdbMTGCard.tcgdbMTGCardId,
                 tcgdbMTGPriceCurrentTCGPlayerId: tcgPlayerMTGPrice.tcgPlayerMTGPriceProductId,
-                tcgdbMTGPriceCurrentSetAbbreviation: tcgdbMTGCard.tcgdbMTGCardSetAbbreviation,
+                tcgdbMTGPriceCurrentSetCode: tcgdbMTGCard.tcgdbMTGCardSetCode,
                 tcgdbMTGPriceCurrentLowPrice: tcgPlayerMTGPrice.tcgPlayerMTGPriceLowPrice,
                 tcgdbMTGPriceCurrentMidPrice: tcgPlayerMTGPrice.tcgPlayerMTGPriceMidPrice,
                 tcgdbMTGPriceCurrentHighPrice: tcgPlayerMTGPrice.tcgPlayerMTGPriceHighPrice,

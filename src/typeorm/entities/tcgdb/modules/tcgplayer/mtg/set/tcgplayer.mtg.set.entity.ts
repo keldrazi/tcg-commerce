@@ -9,7 +9,7 @@ export class TCGPlayerMTGSet {
     @Column()
     tcgPlayerMTGSetName: string;
     @Column()
-    tcgPlayerMTGSetAbbreviation: string;
+    tcgPlayerMTGSetCode: string;
     @Column()
     tcgPlayerMTGSetIsSupplemental: boolean;
     @Column()

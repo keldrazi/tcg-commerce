@@ -5,7 +5,7 @@ export class ProductCardLanguageDTO {
     productCardLanguageTCGPlayerId: number;
     productLineId: string;
     productCardLanguageName: string;
-    productCardLanguageAbbreviation: string;
+    productCardLanguageCode: string;
     productCardLanguageIsActive: boolean;
     productCardLanguageCreateDate: Date;
     productCardLanguageUpdateDate: Date;
@@ -19,7 +19,7 @@ export class CreateProductCardLanguageDTO {
     @IsString()
     productCardLanguageName: string;
     @IsString()
-    productCardLanguageAbbreviation: string;
+    productCardLanguageCode: string;
     @IsBoolean()
     productCardLanguageIsActive: boolean;
 }
@@ -34,7 +34,7 @@ export class UpdateProductCardLanguageDTO {
     @IsString()
     productCardLanguageName: string;
     @IsString()
-    productCardLanguageAbbreviation: string;
+    productCardLanguageCode: string;
     @IsBoolean()
     productCardLanguageIsActive: boolean;
 }
