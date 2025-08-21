@@ -4,7 +4,6 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class TCGdbMTGPriceHistory {
     @PrimaryGeneratedColumn('uuid')
     tcgdbMTGPriceHistoryId: string;
-
     @Column()
     tcgdbMTGCardId: string;
     @Column()

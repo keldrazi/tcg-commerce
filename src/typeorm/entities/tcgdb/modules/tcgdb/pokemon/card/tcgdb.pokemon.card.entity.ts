@@ -9,7 +9,13 @@ export class TCGdbPokemonCard {
     @Column({nullable: true})
     tcgdbPokemonCardPokemonTCGId: string;
     @Column({nullable: true})
+    tcgdbPokemonCardSetName: string;
+    @Column({nullable: true})
     tcgdbPokemonCardSetCode: string;
+    @Column({nullable: true})
+    tcgdbPokemonCardRarityCode: string;
+    @Column({nullable: true})
+    tcgdbPokemonCardNumber: string;
     @Column()
     tcgdbPokemonCardName: string;
     @Column()
@@ -17,9 +23,11 @@ export class TCGdbPokemonCard {
     @Column()
     tcgdbPokemonCardImageURL: string;
     @Column('jsonb')
-    tcgdbPokemonCardData: string;
+    tcgdbPokemonCardTCGPlayerData: string;
     @Column('jsonb')
     tcgdbPokemonCardTCGPlayerSKUs: string
+    @Column('jsonb')
+    tcgdbPokemonCardPokemonTCGData: string;
     @CreateDateColumn()
     tcgdbPokemonCardCreateDate: Date;
     @UpdateDateColumn()
