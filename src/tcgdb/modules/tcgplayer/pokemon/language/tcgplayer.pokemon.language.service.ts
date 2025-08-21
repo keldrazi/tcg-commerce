@@ -12,7 +12,7 @@ export class TCGPlayerPokemonLanguageService {
         private tcgPlayerAPILanguageService: TCGPlayerAPILanguageService,
     ) {}
 
-    private tcgPlayerPokemonCategoryId = '1';
+    private tcgPlayerPokemonCategoryId = '3';
 
     async getTCGPlayerPokemonLanguages() {
         return await this.tcgPlayerPokemonLanguageRepository.find();

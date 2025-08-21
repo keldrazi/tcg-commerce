@@ -12,7 +12,7 @@ export class TCGPlayerPokemonPrintingService {
         private tcgPlayerAPIPrintingService: TCGPlayerAPIPrintingService,
     ) {}
 
-    private tcgPlayerPokemonCategoryId = '1';
+    private tcgPlayerPokemonCategoryId = '3';
 
 
     async getTCGPlayerPokemonPrintings() {

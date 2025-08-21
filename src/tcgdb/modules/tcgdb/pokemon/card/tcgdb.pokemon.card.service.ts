@@ -131,7 +131,7 @@ export class TCGdbPokemonCardService {
         for(let i = 0; i < tcgdbPokemonCards.length; i++) {
             let tcgdbPokemonCard = tcgdbPokemonCards[i];
 
-            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });onCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
+            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });
 
             tcgdbPokemonCardDTOs.push(tcgdbPokemonCardDTO);
         }
@@ -169,17 +169,7 @@ export class TCGdbPokemonCardService {
         for(let i = 0; i < tcgdbPokemonCards.length; i++) {
             let tcgdbPokemonCard = tcgdbPokemonCards[i];
 
-            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = {
-                tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
-                tcgdbPokemonCardTCGPlayerId: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerId,
-                tcgdbPokemonCardPokemonTCGId: tcgdbPokemonCard.tcgdbPokemonCardPokemonTCGId,
-                tcgdbPokemonCardSetCode: tcgdbPokemonCard.tcgdbPokemonCardSetCode,
-                tcgdbPokemonCardName: tcgdbPokemonCard.tcgdbPokemonCardName,
-                tcgdbPokemonCardCleanName: tcgdbPokemonCard.tcgdbPokemonCardCleanName,
-                tcgdbPokemonCardImageURL: tcgdbPokemonCard.tcgdbPokemonCardImageURL,
-                tcgdbPokemonCardData: tcgdbPokemonCard.tcgdbPokemonCardData,
-                tcgdbPokemonCardTCGPlayerSKUs: tcgdbPokemonCard.tcgdbPokemonCardTCGPlayerSKUs,
-            };
+            let tcgdbPokemonCardDTO: TCGdbPokemonCardDTO = ({ ...tcgdbPokemonCard });
 
             tcgdbPokemonCardDTOs.push(tcgdbPokemonCardDTO);
         }
@@ -207,21 +197,52 @@ export class TCGdbPokemonCardService {
 
             //CARD DOESN'T EXIST - CREATE IT;
             if(tcgdbPokemonCard == null) {
+
+                //GET THE SET NAME;
+                let tcgdbPokemonSetDTO = await this.tcgdbPokemonSetService.getTCGdbPokemonSetByTCGPlayerId(tcgPlayerPokemonCard.tcgPlayerPokemonCardGroupId);
+                let tcgdbPokemonSetName = "";
+                
+                if(tcgdbPokemonSetDTO != null) {
+                    tcgdbPokemonSetName = tcgdbPokemonSetDTO.tcgdbPokemonSetName;
+                }
+
+                let tcgdbPokemonCardNumber = "0";
+                let tcgdbPokemonCardRarityCode = "U";
+
+                try{
+                    let tcgPlayerPokemonCardData: any = tcgPlayerPokemonCard.tcgPlayerPokemonCardData;
+                    
+                   if(tcgPlayerPokemonCardData != null) {
+                        let tcgdbPokemonCardNumberObject = tcgPlayerPokemonCardData.extendedData.find(item => item.name === 'Number');
+                        tcgdbPokemonCardNumber = tcgdbPokemonCardNumberObject ? tcgdbPokemonCardNumberObject.value : "0";
+                        let tcgdbPokemonCardRarityObject = tcgPlayerPokemonCardData.extendedData.find(item => item.name === 'Rarity');
+                        tcgdbPokemonCardRarityCode = tcgdbPokemonCardRarityObject ? tcgdbPokemonCardRarityObject.value : "U";
+                    }
+                }
+                catch(error) {
+                    console.log("Error parsing extended data: " + error);
+                }
+
                 const newTCGdgPokemonCard = this.tcgdbPokemonCardRepository.create({
                     tcgdbPokemonCardTCGPlayerId: tcgPlayerPokemonCard.tcgPlayerPokemonCardProductId,
+                    tcgdbPokemonCardSetName: tcgdbPokemonSetName,
                     tcgdbPokemonCardSetCode: tcgPlayerPokemonCard.tcgPlayerPokemonCardSetCode,
+                    tcgdbPokemonCardRarityCode: tcgdbPokemonCardRarityCode,
+                    tcgdbPokemonCardNumber: tcgdbPokemonCardNumber,
                     tcgdbPokemonCardName: tcgPlayerPokemonCard.tcgPlayerPokemonCardName,
                     tcgdbPokemonCardCleanName: tcgPlayerPokemonCard.tcgPlayerPokemonCardCleanName,
                     tcgdbPokemonCardImageURL: tcgPlayerPokemonCard.tcgPlayerPokemonCardImageURL,
-                    tcgdbPokemonCardData: tcgPlayerPokemonCard.tcgPlayerPokemonCardData,
+                    tcgdbPokemonCardTCGPlayerData: tcgPlayerPokemonCard.tcgPlayerPokemonCardData,
                     tcgdbPokemonCardTCGPlayerSKUs: tcgPlayerPokemonCard.tcgPlayerPokemonCardSKUs,
                 });
 
-                let scryfallPokemonCard = await this.pokemonTCGPokemonCardService.getPokemonTCGPokemonCardByTCGPlayerId(tcgPlayerPokemonCard.tcgPlayerPokemonCardProductId);
+                let pokemonTCGPokemonCard = await this.pokemonTCGPokemonCardService.getPokemonTCGPokemonCardByTCGPlayerId(tcgPlayerPokemonCard.tcgPlayerPokemonCardProductId);
 
-                if(scryfallPokemonCard != null) {
-                    newTCGdgPokemonCard.tcgdbPokemonCardPokemonTCGId = scryfallPokemonCard.pokemonTCGPokemonCardPokemonTCGId;
+                if(pokemonTCGPokemonCard != null) {
+                    newTCGdgPokemonCard.tcgdbPokemonCardPokemonTCGId = pokemonTCGPokemonCard.pokemonTCGPokemonCardId;
+                    newTCGdgPokemonCard.tcgdbPokemonCardPokemonTCGData = pokemonTCGPokemonCard.pokemonTCGPokemonCardData;
                 }
+
 
                 await this.tcgdbPokemonCardRepository.save(newTCGdgPokemonCard);
 
@@ -230,7 +251,8 @@ export class TCGdbPokemonCardService {
         }
 
         return tcgdbPokemonCardRecordCount;
-    } 
+
+    }
 }
 
 

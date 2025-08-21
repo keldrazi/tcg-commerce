@@ -9,10 +9,14 @@ export class TCGdbPokemonCardDTO {
     tcgdbPokemonCardId: string;
     tcgdbPokemonCardTCGPlayerId: number;
     tcgdbPokemonCardPokemonTCGId: string;
+    tcgdbPokemonCardSetName: string;
     tcgdbPokemonCardSetCode: string;
+    tcgdbPokemonCardRarityCode: string;
+    tcgdbPokemonCardNumber: string;
     tcgdbPokemonCardName: string;
     tcgdbPokemonCardCleanName: string;
     tcgdbPokemonCardImageURL: string;
-    tcgdbPokemonCardData: string;
-    tcgdbPokemonCardTCGPlayerSKUs: string;    
+    tcgdbPokemonCardTCGPlayerData: string;
+    tcgdbPokemonCardTCGPlayerSKUs: string; 
+    tcgdbPokemonCardPokemonTCGData: string;   
 }

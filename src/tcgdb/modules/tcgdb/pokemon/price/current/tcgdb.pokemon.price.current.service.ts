@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TCGPlayerPokemonPriceService } from 'src/tcgdb/modules/tcgplayer/pokemon/price/tcgplayer.pokemon.price.service';
 import { TCGdbPokemonCardService } from 'src/tcgdb/modules/tcgdb/pokemon/card/tcgdb.pokemon.card.service';
+import { TCGdbPokemonPriceHistoryService } from 'src/tcgdb/modules/tcgdb/pokemon/price/history/tcgdb.pokemon.price.history.service';
 import { TCGdbPokemonPricesCurrentDTO, TCGdbPokemonPriceCurrentDTO } from './dto/tcgdb.pokemon.price.current.dto';
 import { TCGdbPokemonPriceCurrent } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemon/price/current/tcgdb.pokemon.price.current.entity';
 
@@ -13,51 +14,12 @@ export class TCGdbPokemonPriceCurrentService {
         @InjectRepository(TCGdbPokemonPriceCurrent) private tcgdbPokemonPriceCurrentRepository: Repository<TCGdbPokemonPriceCurrent>, 
         private tcgPlayerPokemonPriceService: TCGPlayerPokemonPriceService,
         private tcgdbPokemonCardService: TCGdbPokemonCardService,
+        private tcgdbPokemonPriceHistoryService: TCGdbPokemonPriceHistoryService,
     ) {}
-
-    async getTCGdbPokemonPricesCurrentByCardIdAndDate(cardId: string) {
-            
-        let date = new Date();
-
-        const tcgdbPokemonPricesCurrent = await this.tcgdbPokemonPriceCurrentRepository.find({
-            where: {
-                tcgdbPokemonCardId: cardId,
-                tcgdbPokemonPriceCurrentCreateDate: date,
-            }
-        });
-
-        let tcgdbPokemonPriceCurrentDTOs: TCGdbPokemonPriceCurrentDTO[] = [];
-
-        for(let i = 0; i < tcgdbPokemonPricesCurrent.length; i++) {
-            let tcgdbPokemonPriceCurrent = tcgdbPokemonPricesCurrent[i];
-
-            let tcgdbPokemonPriceCurrentDTO: TCGdbPokemonPriceCurrentDTO = {
-                tcgdbPokemonCardId: tcgdbPokemonPriceCurrent.tcgdbPokemonCardId,
-                tcgdbPokemonPriceCurrentTCGPlayerId: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentTCGPlayerId,
-                tcgdbPokemonPriceCurrentSetCode: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentSetCode,
-                tcgdbPokemonPriceCurrentLowPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentLowPrice,
-                tcgdbPokemonPriceCurrentMidPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentMidPrice,
-                tcgdbPokemonPriceCurrentHighPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentHighPrice,
-                tcgdbPokemonPriceCurrentMarketPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentMarketPrice,
-                tcgdbPokemonPriceCurrentDirectLowPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentDirectLowPrice,
-                tcgdbPokemonPriceCurrentSubTypeName: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentSubTypeName,
-            }
-
-            tcgdbPokemonPriceCurrentDTOs.push(tcgdbPokemonPriceCurrentDTO);
-
-        }
-
-        let tcgdbPokemonPricesCurrentDTO: TCGdbPokemonPricesCurrentDTO = {
-            tcgdbPokemonPricesCurrent: tcgdbPokemonPriceCurrentDTOs,
-        }
-
-        return tcgdbPokemonPricesCurrentDTO;
-
-    }  
 
     async getTCGdbPokemonPricesCurrentByCardId(cardId: string) {
         
-        const tcgdbPokemonPricesCurrent = await this.tcgdbPokemonPriceCurrentRepository.find({
+        const tcgdbPokemonPriceCurrents = await this.tcgdbPokemonPriceCurrentRepository.find({
             where: {
                 tcgdbPokemonCardId: cardId,
             }
@@ -65,34 +27,71 @@ export class TCGdbPokemonPriceCurrentService {
 
         let tcgdbPokemonPriceCurrentDTOs: TCGdbPokemonPriceCurrentDTO[] = [];
 
-        for(let i = 0; i < tcgdbPokemonPricesCurrent.length; i++) {
-            let tcgdbPokemonPriceCurrent = tcgdbPokemonPricesCurrent[i];
+        for(let i = 0; i < tcgdbPokemonPriceCurrents.length; i++) {
+            let tcgdbPokemonPriceCurrent = tcgdbPokemonPriceCurrents[i];
 
-            let tcgdbPokemonPriceCurrentDTO: TCGdbPokemonPriceCurrentDTO = {
-                tcgdbPokemonCardId: tcgdbPokemonPriceCurrent.tcgdbPokemonCardId,
-                tcgdbPokemonPriceCurrentTCGPlayerId: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentTCGPlayerId,
-                tcgdbPokemonPriceCurrentSetCode: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentSetCode,
-                tcgdbPokemonPriceCurrentLowPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentLowPrice,
-                tcgdbPokemonPriceCurrentMidPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentMidPrice,
-                tcgdbPokemonPriceCurrentHighPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentHighPrice,
-                tcgdbPokemonPriceCurrentMarketPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentMarketPrice,
-                tcgdbPokemonPriceCurrentDirectLowPrice: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentDirectLowPrice,
-                tcgdbPokemonPriceCurrentSubTypeName: tcgdbPokemonPriceCurrent.tcgdbPokemonPriceCurrentSubTypeName,
+            let tcgdbPokemonPriceCurrentDTO: TCGdbPokemonPriceCurrentDTO = { ...tcgdbPokemonPriceCurrent };
+            
+            tcgdbPokemonPriceCurrentDTOs.push(tcgdbPokemonPriceCurrentDTO);
+
+        }
+
+        let tcgdbPokemonPriceCurrentsDTO: TCGdbPokemonPricesCurrentDTO = {
+            tcgdbPokemonPricesCurrent: tcgdbPokemonPriceCurrentDTOs,
+        }
+
+        return tcgdbPokemonPriceCurrentsDTO;
+
+    } 
+    async getTCGdbPokemonPricesCurrentByCardIdAndProductCardPrinting(tcgdbPokemonCardId: string, tcgdbPokemonPriceCurrentSubTypeName: string) {
+        const tcgdbPokemonPriceCurrent = await this.tcgdbPokemonPriceCurrentRepository.findOne({
+            where: {
+                tcgdbPokemonCardId: tcgdbPokemonCardId,
+                tcgdbPokemonPriceCurrentSubTypeName: tcgdbPokemonPriceCurrentSubTypeName,
             }
+        });
+
+        if(tcgdbPokemonPriceCurrent == null) {
+            return null;
+        }
+
+        let tcgdbPokemonPriceCurrentDTO: TCGdbPokemonPriceCurrentDTO = { ...tcgdbPokemonPriceCurrent };
+
+        return tcgdbPokemonPriceCurrentDTO;
+
+    }
+
+    async getTCGdbPokemonPricesCurrentBySetCode(setCode: string) {
+        
+        const tcgdbPokemonPriceCurrents = await this.tcgdbPokemonPriceCurrentRepository.find({
+            where: {
+                tcgdbPokemonPriceCurrentSetCode: setCode,
+            }
+        });
+
+        let tcgdbPokemonPriceCurrentDTOs: TCGdbPokemonPriceCurrentDTO[] = [];
+
+        for(let i = 0; i < tcgdbPokemonPriceCurrents.length; i++) {
+            let tcgdbPokemonPriceCurrent = tcgdbPokemonPriceCurrents[i];
+
+            let tcgdbPokemonPriceCurrentDTO: TCGdbPokemonPriceCurrentDTO = { ...tcgdbPokemonPriceCurrent };
 
             tcgdbPokemonPriceCurrentDTOs.push(tcgdbPokemonPriceCurrentDTO);
 
         }
 
-        let tcgdbPokemonPricesCurrentDTO: TCGdbPokemonPricesCurrentDTO = {
-            tcgdbPokemonPricesCurrent: tcgdbPokemonPriceCurrentDTOs,
-        }
+        return tcgdbPokemonPriceCurrentDTOs;
 
-        return tcgdbPokemonPricesCurrentDTO;
+    } 
+    
+    async createTCGdbPokemonPricesCurrent() {
 
-    }  
+        //REMOVE ALL CURRENT PRICES;
+        await this.tcgdbPokemonPriceCurrentRepository.createQueryBuilder()
+            .delete()
+            .from(TCGdbPokemonPriceCurrent)
+            .execute();
 
-    async createTCGdbPokemonPrices() {
 
         let tcgdbPokemonPriceCurrentRecordCount = 0;
         let tcgPlayerPokemonPrices = await this.tcgPlayerPokemonPriceService.getTCGPlayerPokemonPricesToProcess();
@@ -111,7 +110,7 @@ export class TCGdbPokemonPriceCurrentService {
                 continue;
             }
 
-            const newTCGdbPokemonPriceCurrent = this.tcgdbPokemonPriceCurrentRepository.create({
+            const newTCGdbPokemonPrice = this.tcgdbPokemonPriceCurrentRepository.create({
                 tcgdbPokemonCardId: tcgdbPokemonCard.tcgdbPokemonCardId,
                 tcgdbPokemonPriceCurrentTCGPlayerId: tcgPlayerPokemonPrice.tcgPlayerPokemonPriceProductId,
                 tcgdbPokemonPriceCurrentSetCode: tcgdbPokemonCard.tcgdbPokemonCardSetCode,
@@ -123,17 +122,18 @@ export class TCGdbPokemonPriceCurrentService {
                 tcgdbPokemonPriceCurrentSubTypeName: tcgPlayerPokemonPrice.tcgPlayerPokemonPriceSubTypeName,
             });
 
-            await this.tcgdbPokemonPriceCurrentRepository.save(newTCGdbPokemonPriceCurrent);
+            await this.tcgdbPokemonPriceCurrentRepository.save(newTCGdbPokemonPrice);
+            await this.tcgdbPokemonPriceHistoryService.createTCGdbPokemonPricesHistory(tcgdbPokemonCard, tcgPlayerPokemonPrice);
             
             tcgdbPokemonPriceCurrentRecordCount++;
         }
 
         await this.tcgPlayerPokemonPriceService.updateTCGPlayerPokemonPricesIsProcessed();
+        await this.tcgPlayerPokemonPriceService.deleteTCGPlayerPokemonPricesIsProcessed();
         
         return tcgdbPokemonPriceCurrentRecordCount;
 
-    }  
-    
+    }    
 }
 
 
