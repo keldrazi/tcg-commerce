@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TCGPlayerPokemonSetService } from 'src/tcgdb/modules/tcgplayer/pokemon/set/tcgplayer.pokemon.set.service';
-import { ScryfallPokemonSetService } from 'src/tcgdb/modules/scryfall/pokemon/set/scryfall.pokemon.set.service';
+import { PokemonTCGPokemonSetService } from 'src/tcgdb/modules/pokemontcg/pokemon/set/pokemontcg.pokemon.set.service';
 import { TCGdbPokemonSetDTO } from './dto/tcgdb.pokemon.set.dto';
 import { TCGdbPokemonSet } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemon/set/tcgdb.pokemon.set.entity';
 
@@ -12,7 +12,7 @@ export class TCGdbPokemonSetService {
     constructor(
         @InjectRepository(TCGdbPokemonSet) private tcgdbPokemonSetRepository: Repository<TCGdbPokemonSet>, 
         private tcgPlayerPokemonSetService: TCGPlayerPokemonSetService,
-        private scryfallPokemonSetService: ScryfallPokemonSetService,
+        private pokemonTCGPokemonSetService: PokemonTCGPokemonSetService,
     ) {}
     
     async getTCGdbPokemonSets() {
@@ -129,10 +129,10 @@ export class TCGdbPokemonSetService {
                     tcgdbPokemonSetTotalCards: tcgPlayerPokemonSet.tcgPlayerPokemonSetTotalCards,
                 });
 
-                let scryfallPokemonSet = await this.scryfallPokemonSetService.getScryfallPokemonSetByTCGPlayerId(tcgPlayerPokemonSet.tcgPlayerPokemonSetGroupId);
+                let pokemonTCGPokemonSet = await this.pokemonTCGPokemonSetService.getPokemonTCGPokemonSetByTCGPlayerId(tcgPlayerPokemonSet.tcgPlayerPokemonSetGroupId);
 
-                if(scryfallPokemonSet != null) {
-                    newTCGdgPokemonSet.tcgdbPokemonSetScryfallId = scryfallPokemonSet.scryfallPokemonSetScryfallId;
+                if(pokemonTCGPokemonSet != null) {
+                    newTCGdgPokemonSet.tcgdbPokemonSetPokemonTCGId = pokemonTCGPokemonSet.pokemonTCGPokemonSetId;
                 }
 
                 await this.tcgdbPokemonSetRepository.save(newTCGdgPokemonSet);

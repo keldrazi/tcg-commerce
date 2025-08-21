@@ -1,9 +1,9 @@
 
-export class TCGdbMTGLanguageDTO {
-    tcgdbMTGLanguageId: string;
-    tcgdbMTGLanguageTCGPlayerId: number;
-    tcgdbMTGLanguageName: string;
-    tcgdbMTGLanguageCode: string;
-    tcgdbMTGLanguageCreateDate: Date;
-    tcgdbMTGLanguageUpdateDate: Date;
+export class TCGdbPokemonLanguageDTO {
+    tcgdbPokemonLanguageId: string;
+    tcgdbPokemonLanguageTCGPlayerId: number;
+    tcgdbPokemonLanguageName: string;
+    tcgdbPokemonLanguageCode: string;
+    tcgdbPokemonLanguageCreateDate: Date;
+    tcgdbPokemonLanguageUpdateDate: Date;
 }
