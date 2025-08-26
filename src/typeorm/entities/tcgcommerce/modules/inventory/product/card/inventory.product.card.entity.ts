@@ -13,7 +13,7 @@ export class InventoryProductCard {
     @Column()
     commerceLocationId: string;
     @Column()
-    productCardItemId: string;
+    productCardId: string;
     @Column()
     productSetCode: string;
     @Column()

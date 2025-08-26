@@ -20,6 +20,6 @@ export class PricingProductCardRuleType {
     @CreateDateColumn()
     pricingProductCardRuleTypeCreateDate: Date;
     @UpdateDateColumn()
-    pricingProductCardRuleTypeUpdateDate: Date; 
+    pricingProductCardRuleTypeUpdateDate: Date;
 
 }

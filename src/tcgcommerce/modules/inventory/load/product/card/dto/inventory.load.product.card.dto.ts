@@ -4,7 +4,7 @@ export class InventoryLoadProductCardDTO {
     productLineId: string;
     commerceAccountId: string;
     commerceLocationId: string;
-    productCardItemId: string;
+    productCardId: string;
     productSetCode: string;
     productCardPrintingName: string;
     productCardConditionCode: string;
@@ -28,7 +28,7 @@ export class CreateInventoryLoadProductCardDTO {
     productLineId: string;
     commerceAccountId: string;
     commerceLocationId: string;
-    productCardItemId: string;
+    productCardId: string;
     productSetCode: string;
     productCardPrintingName: string;
     productCardConditionCode: string;

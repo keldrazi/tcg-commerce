@@ -1,5 +1,5 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { PricingProductCardRuleSetMetadata } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/interface/pricing.product.card.rule.set.metadata.interface';
+import { PricingProductCardServiceUpdateData } from 'src/tcgcommerce/modules/pricing/product/card/service/update/interface/pricing.product.card.service.update.interface';
 
 @Entity('pricingProductCardServiceUpdate')
 export class PricingProductCardServiceUpdate {
@@ -14,6 +14,10 @@ export class PricingProductCardServiceUpdate {
     @Column()
     productTypeId: string;
     @Column()
+    pricingProductCardServiceUpdateStatus: string;
+    @Column()
+    pricingProductCardServiceUpdateType: string;
+    @Column()
     pricingProductCardServiceUpdateCode: string;
     @Column()
     pricingProductCardServiceUpdateTotalCards: number;
@@ -22,9 +26,7 @@ export class PricingProductCardServiceUpdate {
     @Column()
     pricingProductCardServiceUpdateTotalCardsDecrease: number;
     @Column('jsonb')
-    pricingProductCardServiceUpdateData: PricingProductCardRuleSetMetadata;
-    @Column({type: 'boolean', default: false})
-    pricingProductCardServiceUpdateIsComplete: boolean;
+    pricingProductCardServiceUpdateData: PricingProductCardServiceUpdateData;
     @CreateDateColumn()
     pricingProductCardServiceUpdateCreateDate: Date;
     @UpdateDateColumn()

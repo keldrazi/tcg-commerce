@@ -28,6 +28,6 @@ export class PricingProductCardRuleSet {
     @CreateDateColumn()
     pricingProductCardRuleSetCreateDate: Date;
     @UpdateDateColumn()
-    pricingProductCardRuleSetUpdateDate: Date; 
+    pricingProductCardRuleSetUpdateDate: Date;
 
 }

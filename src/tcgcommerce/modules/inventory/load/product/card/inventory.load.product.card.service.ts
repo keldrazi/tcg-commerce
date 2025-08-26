@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InventoryLoadProductCardDTO } from 'src/tcgcommerce/modules/inventory/load/product/card/dto/inventory.load.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
-import { ProductCardItemService } from 'src/tcgcommerce/modules/product/card/item/product.card.item.service';
+import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
@@ -21,7 +21,7 @@ export class InventoryLoadProductCardService {
 
     constructor(
         @InjectRepository(InventoryProductCard) private inventoryProductCardRepository: Repository<InventoryProductCard>,
-        private productCardItemService: ProductCardItemService,
+        private productCardService: ProductCardService,
         private productVendorService: ProductVendorService,
         private productLineService: ProductLineService,
         private productSetService: ProductSetService,
@@ -114,20 +114,20 @@ export class InventoryLoadProductCardService {
         }
         
         let productSetId = productSet.productSetId;
-        let productCardItems = await this.productCardItemService.getProductCardItemsByProductSetId(productSetId);
+        let productCards = await this.productCardService.getProductCardsByProductSetId(productSetId);
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if (productCardItems == null) {
+        if (productCards == null) {
             return null;
         }
         
         let productInventoryCardsByItem: any [] = [];
         //LOOP OVER THE PRODUCT CARD ITEMS AND CREATE THE INVENTORY PRODUCT CARDS;
-        for (let j = 0; j < productCardItems.length; j++) {
-            let productCardItem = productCardItems[j];
+        for (let j = 0; j < productCards.length; j++) {
+            let productCard = productCards[j];
             
             //GET THE PRODUCT CARD ITEM PRICES;
-            let productCardPrices = await this.productCardPriceService.getProductCardPrices(productLine.productLineCode, productCardItem.productCardItemTCGdbId, productCardItem.productCardItemId);
+            let productCardPrices = await this.productCardPriceService.getProductCardPrices(productLine.productLineCode, productCard.productCardTCGdbId, productCard.productCardId);
             if (productCardPrices == null) {
                 continue;
             }
@@ -138,7 +138,7 @@ export class InventoryLoadProductCardService {
             for(let k = 0; k < productCardPrintings.length; k++) {
                 let productCardPrinting = productCardPrintings[k];
 
-                let productCardSKUCondition = await this.getProductCardItemSKUByPrinting(productCardItem.productCardItemSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId);
+                let productCardSKUCondition = await this.getProductCardSKUByPrinting(productCard.productCardSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId);
                 
                 if(productCardSKUCondition == null) {
                     continue;
@@ -149,7 +149,7 @@ export class InventoryLoadProductCardService {
                 //LOOP OVER EACH PRODUCT CARD CONDITION;
                 for(let l = 0; l < productCardConditions.length; l++) {
                     let productCardCondition = productCardConditions[l];
-                    let productCardSKUCondition = await this.getProductCardItemSKUByCondition(productCardItem.productCardItemSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
+                    let productCardSKUCondition = await this.getProductCardSKUByCondition(productCard.productCardSKUs, productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
 
                     //IF THE TCGPLAYERSKU IS NULL - NO MATCHING 
                     //CREATE THE INVENTORY PRODUCT CARD;
@@ -158,7 +158,7 @@ export class InventoryLoadProductCardService {
                     inventoryProductCard.productLineId = productLineId;
                     inventoryProductCard.commerceAccountId = commerceAccountId;
                     inventoryProductCard.commerceLocationId = commerceLocationId;
-                    inventoryProductCard.productCardItemId = productCardItem.productCardItemId;
+                    inventoryProductCard.productCardId = productCard.productCardId;
                     inventoryProductCard.productSetCode = productSet.productSetCode;
                     inventoryProductCard.productCardPrintingName = productCardPrinting.productCardPrintingName;
                     inventoryProductCard.productCardConditionCode = productCardCondition.productCardConditionCode;
@@ -210,7 +210,7 @@ export class InventoryLoadProductCardService {
 
             let productInventoryCardByItem = {
                 productSetCode: productSet.productSetCode,
-                productCardItemName: productCardItem.productCardItemName,
+                productCardName: productCard.productCardName,
                 productInventoryCardsByPrinting: productInventoryCardsByPrinting
             };
 
@@ -296,27 +296,27 @@ export class InventoryLoadProductCardService {
         return productCardPrintings;
     }
 
-    async getProductCardItemSKUByPrinting(productCardItemSKUs: string, productCardLanguageId: number, productCardPrintingId: number) {
+    async getProductCardSKUByPrinting(productCardSKUs: string, productCardLanguageId: number, productCardPrintingId: number) {
 
-        const productCardItemSKUsJson = JSON.parse(productCardItemSKUs);
-        const productCardItemSKU = productCardItemSKUsJson.filter(item => 
+        const productCardSKUsJson = JSON.parse(productCardSKUs);
+        const productCardSKU = productCardSKUsJson.filter(item => 
             item.languageId === productCardLanguageId &&
             item.printingId === productCardPrintingId
         );
 
-        return productCardItemSKU.length > 0 ? productCardItemSKU[0] : null;
+        return productCardSKU.length > 0 ? productCardSKU[0] : null;
     }
 
-    async getProductCardItemSKUByCondition(productCardItemSKUs: string, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
+    async getProductCardSKUByCondition(productCardSKUs: string, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
 
-        const productCardItemSKUsJson = JSON.parse(productCardItemSKUs);
-        const productCardItemSKU = productCardItemSKUsJson.filter(item => 
+        const productCardSKUsJson = JSON.parse(productCardSKUs);
+        const productCardSKU = productCardSKUsJson.filter(item => 
             item.languageId === productCardLanguageId &&
             item.printingId === productCardPrintingId &&
             item.conditionId === productCardConditionId
         );
 
-        return productCardItemSKU.length > 0 ? productCardItemSKU[0] : null;
+        return productCardSKU.length > 0 ? productCardSKU[0] : null;
     }
 
  

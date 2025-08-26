@@ -19,6 +19,6 @@ export class PricingProductCardType {
     @CreateDateColumn()
     pricingProductCardTypeCreateDate: Date;
     @UpdateDateColumn()
-    pricingProductCardTypeUpdateDate: Date; 
+    pricingProductCardTypeUpdateDate: Date;
 
 }

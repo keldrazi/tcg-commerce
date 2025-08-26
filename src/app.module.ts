@@ -69,7 +69,7 @@ import { ProductTypeModule } from './tcgcommerce/modules/product/type/product.ty
 import { ProductModuleModule } from './tcgcommerce/modules/product/module/product.module.module';
 import { ProductSetModule } from './tcgcommerce/modules/product/set/product.set.module';  
 //Product Card Modules;
-import { ProductCardItemModule } from './tcgcommerce/modules/product/card/item/product.card.item.module';
+import { ProductCardItemModule } from './tcgcommerce/modules/product/card/product.card.module';
 import { ProductCardConditionModule } from './tcgcommerce/modules/product/card/condition/product.card.condition.module';
 import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/language/product.card.language.module';
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';

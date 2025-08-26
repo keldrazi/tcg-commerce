@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { InventoryLoadProductCardService } from './inventory.load.product.card.service';
 import { InventoryLoadProductCardController } from './inventory.load.product.card.controller';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
-import { ProductCardItemModule } from 'src/tcgcommerce/modules/product/card/item/product.card.item.module';
+import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
@@ -18,7 +18,7 @@ import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/locatio
 @Module({
     imports: [
         TypeOrmModule.forFeature([InventoryProductCard]),
-        ProductCardItemModule,
+        ProductCardModule,
         ProductVendorModule,
         ProductLineModule,
         ProductSetModule,

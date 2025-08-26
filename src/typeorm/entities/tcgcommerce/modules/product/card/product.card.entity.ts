@@ -1,11 +1,11 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('productCardItem')
-export class ProductCardItem {
+@Entity('productCard')
+export class ProductCard {
     @PrimaryGeneratedColumn('uuid')
-    productCardItemId: string;
+    productCardId: string;
     @Column()
-    productCardItemTCGdbId: string;
+    productCardTCGdbId: string;
     @Column()
     productVendorId: string;
     @Column()
@@ -19,26 +19,26 @@ export class ProductCardItem {
     @Column()
     productCardRarityCode: string;
     @Column()
-    productCardItemNumber: string;
+    productCardNumber: string;
     @Column()
-    productCardItemName: string;
+    productCardName: string;
     @Column()
-    productCardItemCleanName: string;
+    productCardCleanName: string;
     @Column()
-    productCardItemImage: string;
+    productCardImage: string;
     @Column({type: 'boolean', default: false})
-    productCardItemIsPresale: boolean;
+    productCardIsPresale: boolean;
     @Column('jsonb')
-    productCardItemExtendedData: string;
+    productCardExtendedData: string;
     @Column('jsonb')
-    productCardItemMetadata: string;
+    productCardMetadata: string;
     @Column('jsonb')
-    productCardItemSKUs: string;
+    productCardSKUs: string;
     @Column({type: 'boolean', default: true})
-    productCardItemIsActive: boolean;
+    productCardIsActive: boolean;
     @CreateDateColumn()
-    productCardItemCreateDate: Date;
+    productCardCreateDate: Date;
     @UpdateDateColumn()
-    productCardItemUpdateDate: Date; 
+    productCardUpdateDate: Date;
 
 }
