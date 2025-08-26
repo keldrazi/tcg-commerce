@@ -69,7 +69,7 @@ import { ProductTypeModule } from './tcgcommerce/modules/product/type/product.ty
 import { ProductModuleModule } from './tcgcommerce/modules/product/module/product.module.module';
 import { ProductSetModule } from './tcgcommerce/modules/product/set/product.set.module';  
 //Product Card Modules;
-import { ProductCardItemModule } from './tcgcommerce/modules/product/card/product.card.module';
+import { ProductCardModule } from './tcgcommerce/modules/product/card/product.card.module';
 import { ProductCardConditionModule } from './tcgcommerce/modules/product/card/condition/product.card.condition.module';
 import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/language/product.card.language.module';
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
@@ -79,7 +79,11 @@ import { ProductCardPriceModule } from './tcgcommerce/modules/product/card/price
 import { PricingProductCardTypeModule } from './tcgcommerce/modules/pricing/product/card/type/pricing.product.card.type.module';
 import { PricingProductCardRuleTypeModule } from './tcgcommerce/modules/pricing/product/card/rule/type/pricing.product.card.rule.type.module';
 import { PricingProductCardRuleSetModule } from './tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.module'; 
-
+//Product Card Inventory Modules;
+import { InventoryProductCardModule } from './tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
+//Product Card Load Inventory Modules;
+import { InventoryBatchLoadJobProductCardModule } from './tcgcommerce/modules/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.module';
+import { InventoryBatchLoadProductCardModule } from './tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.module';
 //System Modules;
 import { UtilScheduleTaskPriceModule } from './system/modules/util/schedule/task/price/util.schedule.task.price.module';
 
@@ -156,7 +160,7 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductModuleModule,
     ProductSetModule,
     //Product Card Modules;
-    ProductCardItemModule,
+    ProductCardModule,
     ProductCardConditionModule,
     ProductCardLanguageModule,
     ProductCardPrintingModule,
@@ -166,6 +170,11 @@ const NODE_ENV = process.env.NODE_ENV;
     PricingProductCardTypeModule,
     PricingProductCardRuleTypeModule,
     PricingProductCardRuleSetModule,
+    //Inventory Product Card Modules;
+    InventoryProductCardModule,
+    //Inventory Load Product Card Modules;
+    InventoryBatchLoadJobProductCardModule,
+    InventoryBatchLoadProductCardModule,
     //System Modules;
     UtilScheduleTaskPriceModule,
   ],

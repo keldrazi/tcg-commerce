@@ -1,7 +1,7 @@
 import { IsString } from "class-validator";
 
-export class InventoryLoadJobCardDTO {
-    inventoryLoadJobCardId: string;
+export class InventoryBatchLoadJobProductCardDTO {
+    inventoryBatchLoadJobProductCardId: string;
     commerceAccountId: string;
     commerceLocationId: string;
     commerceLocationName: string;
@@ -11,16 +11,16 @@ export class InventoryLoadJobCardDTO {
     productLineId: string;
     productLineName: string;
     productLineCode: string;
-    inventoryLoadJobCardSetCode: string;
-    inventoryLoadJobCardDate: Date;
-    inventoryLoadJobCardCode: string;
-    inventoryLoadJobCardStatus: string;
-    inventoryLoadJobCardData: string;
-    inventoryLoadJobCardCreateDate: Date;
-    inventoryLoadJobCardUpdateDate: Date;  
+    inventoryBatchLoadJobProductCardSetCode: string;
+    inventoryBatchLoadJobProductCardDate: Date;
+    inventoryBatchLoadJobProductCardCode: string;
+    inventoryBatchLoadJobProductCardStatus: string;
+    inventoryBatchLoadJobProductCardData: string;
+    inventoryBatchLoadJobProductCardCreateDate: Date;
+    inventoryBatchLoadJobProductCardUpdateDate: Date;
 }
 
-export class CreateInventoryLoadJobCardDTO {
+export class CreateInventoryBatchLoadJobProductCardDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
@@ -40,5 +40,5 @@ export class CreateInventoryLoadJobCardDTO {
     @IsString()
     productLineCode: string;
     @IsString()
-    inventoryLoadJobCardSetCode: string; 
+    inventoryBatchLoadJobProductCardSetCode: string;
 }

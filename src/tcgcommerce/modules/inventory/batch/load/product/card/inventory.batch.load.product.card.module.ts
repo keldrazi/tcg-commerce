@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryLoadProductCardService } from './inventory.load.product.card.service';
-import { InventoryLoadProductCardController } from './inventory.load.product.card.controller';
+import { InventoryBatchLoadProductCardService } from './inventory.batch.load.product.card.service';
+import { InventoryBatchLoadProductCardController } from './inventory.batch.load.product.card.controller';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
@@ -29,8 +29,8 @@ import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/locatio
         ProductCardPriceModule,
         CommerceLocationModule
     ],
-    controllers: [InventoryLoadProductCardController],
-    providers: [InventoryLoadProductCardService],
-    exports: [InventoryLoadProductCardService]
+    controllers: [InventoryBatchLoadProductCardController],
+    providers: [InventoryBatchLoadProductCardService],
+    exports: [InventoryBatchLoadProductCardService]
 })
-export class InventoryLoadProductCardModule {}
+export class InventoryBatchLoadProductCardModule {}

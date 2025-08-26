@@ -31,13 +31,13 @@ export class InventoryProductCardService {
         
         return inventoryProductCardDTO;
     }
-    
-    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductCardItemId(commerceAccountId: string, commerceLocationId: string, productCardItemId: string) {
+
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
                 commerceLocationId: commerceLocationId,
-                productCardItemId: productCardItemId, 
+                productCardId: productCardId, 
             }
         });
 
@@ -61,11 +61,11 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndProductCardItemId(commerceAccountId: string, productCardItemId: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndProductCardId(commerceAccountId: string, productCardId: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
-                productCardItemId: productCardItemId, 
+                productCardId: productCardId, 
             }
         });
 
@@ -117,7 +117,7 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndCommerceLocationIdProductSetCode(commerceAccountId: string, commerceLocationId: string, productSetCode: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductSetCode(commerceAccountId: string, commerceLocationId: string, productSetCode: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
@@ -149,7 +149,7 @@ export class InventoryProductCardService {
     async createInventoryProductCard(createInventoryProductCardsDTO: CreateInventoryProductCardsDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD INVENTORY ALREADY EXISTS;
-        let inventoryProductCards = await this.getInventoryProductCardsByCommerceAccountIdAndProductCardItemId(createInventoryProductCardsDTO.commerceAccountId, createInventoryProductCardsDTO.productCardItemId);
+        let inventoryProductCards = await this.getInventoryProductCardsByCommerceAccountIdAndProductCardId(createInventoryProductCardsDTO.commerceAccountId, createInventoryProductCardsDTO.productCardId);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if(inventoryProductCards != null) {
@@ -175,7 +175,7 @@ export class InventoryProductCardService {
 
         let inventoryProductCardsDTO = new InventoryProductCardsDTO();
         inventoryProductCardsDTO.commerceAccountId = createInventoryProductCardsDTO.commerceAccountId;
-        inventoryProductCardsDTO.productCardItemId = createInventoryProductCardsDTO.productCardItemId;
+        inventoryProductCardsDTO.productCardId = createInventoryProductCardsDTO.productCardId;
         inventoryProductCardsDTO.inventoryProductCardDTOs = inventoryProductCardDTOs;
 
         return inventoryProductCardsDTO;
@@ -225,7 +225,7 @@ export class InventoryProductCardService {
 
         let inventoryProductCardsDTO = new InventoryProductCardsDTO();
         inventoryProductCardsDTO.commerceAccountId = updateInventoryProductCardsDTO.commerceAccountId;
-        inventoryProductCardsDTO.productCardItemId = updateInventoryProductCardsDTO.productCardItemId;
+        inventoryProductCardsDTO.productCardId = updateInventoryProductCardsDTO.productCardId;
         inventoryProductCardsDTO.inventoryProductCardDTOs = inventoryProductCardDTOs;
 
         return inventoryProductCardsDTO;

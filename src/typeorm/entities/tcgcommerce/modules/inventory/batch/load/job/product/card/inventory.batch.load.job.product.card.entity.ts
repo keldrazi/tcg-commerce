@@ -1,9 +1,9 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('inventoryLoadJobCard')
-export class InventoryLoadJobCard {
+@Entity('inventoryBatchLoadJobProductCard')
+export class InventoryBatchLoadJobProductCard {
     @PrimaryGeneratedColumn('uuid')
-    inventoryLoadJobCardId: string;
+    inventoryBatchLoadJobProductCardId: string;
     @Column()
     commerceAccountId: string;
     @Column()
@@ -23,17 +23,17 @@ export class InventoryLoadJobCard {
     @Column()
     productLineCode: string;
     @Column()
-    inventoryLoadJobCardSetCode: string;
+    inventoryBatchLoadJobProductCardSetCode: string;
     @Column()
-    inventoryLoadJobCardDate: Date;
+    inventoryBatchLoadJobProductCardDate: Date;
     @Column()
-    inventoryLoadJobCardCode: string;
+    inventoryBatchLoadJobProductCardCode: string;
     @Column()
-    inventoryLoadJobCardStatus: string;
+    inventoryBatchLoadJobProductCardStatus: string;
     @Column('jsonb')
-    inventoryLoadJobCardData: string;
+    inventoryBatchLoadJobProductCardData: string;
     @CreateDateColumn()
-    inventoryLoadJobCardCreateDate: Date;
+    inventoryBatchLoadJobProductCardCreateDate: Date;
     @UpdateDateColumn()
-    inventoryLoadJobCardUpdateDate: Date;
+    inventoryBatchLoadJobProductCardUpdateDate: Date;
 }

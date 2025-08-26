@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InventoryLoadProductCardDTO } from 'src/tcgcommerce/modules/inventory/load/product/card/dto/inventory.load.product.card.dto';
+import { InventoryLoadProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/dto/inventory.batch.load.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
@@ -15,7 +15,7 @@ import { ProductCardPriceService } from 'src/tcgcommerce/modules/product/card/pr
 import { CommerceLocationService } from 'src/tcgcommerce/modules/commerce/location/commerce.location.service';
 
 @Injectable()
-export class InventoryLoadProductCardService {
+export class InventoryBatchLoadProductCardService {
 
     
 

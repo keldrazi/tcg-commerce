@@ -10,7 +10,9 @@ import { TCGdbMTGPriceChangeDailyModule } from 'src/tcgdb/modules/tcgdb/mtg/pric
 @Module({
     imports: [
         TypeOrmModule.forFeature([PricingProductCardServiceUpdate]),
-        TCGdbMTGPriceChangeDailyModule
+        TCGdbMTGPriceChangeDailyModule,
+        ProductCardModule,
+        InventoryProductCardModule
     ],
     controllers: [PricingProductCardServiceUpdateController],
     providers: [PricingProductCardServiceUpdateService],

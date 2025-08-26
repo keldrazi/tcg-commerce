@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { InventoryLoadProductCardDTO } from './dto/inventory.load.product.card.dto';
-import { InventoryLoadProductCardService } from './inventory.load.product.card.service';
+import { InventoryLoadProductCardDTO } from './dto/inventory.batch.load.product.card.dto';
+import { InventoryBatchLoadProductCardService } from './inventory.batch.load.product.card.service';
 
 
 
-@Controller('inventory/batch/product/card')
-export class InventoryLoadProductCardController {
+@Controller('inventory/batch/load/product/card')
+export class InventoryBatchLoadProductCardController {
 
     constructor(
-        private inventoryBatchProductCardService: InventoryLoadProductCardService,
+        private inventoryBatchProductCardService: InventoryBatchLoadProductCardService,
     ) { }
     
     

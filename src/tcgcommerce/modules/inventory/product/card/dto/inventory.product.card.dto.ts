@@ -2,7 +2,7 @@ import { IsBoolean, IsDecimal, IsEmail, IsNumber, IsString } from "class-validat
 
 export class InventoryProductCardsDTO {
     commerceAccountId: string;
-    productCardItemId: string;
+    productCardId: string;
     inventoryProductCardDTOs: InventoryProductCardDTO[];
 }
 
@@ -12,7 +12,7 @@ export class InventoryProductCardDTO {
     productLineId: string;
     commerceAccountId: string;
     commerceLocationId: string;
-    productCardItemId: string;
+    productCardId: string;
     productSetCode: string;
     productCardPrintingName: string;
     productCardConditionCode: string;
@@ -33,7 +33,7 @@ export class InventoryProductCardDTO {
 
 export class CreateInventoryProductCardsDTO {
     commerceAccountId: string;
-    productCardItemId: string;
+    productCardId: string;
     createInventoryProductCardDTOs: CreateInventoryProductCardDTO[];
 }
 
@@ -47,7 +47,7 @@ export class CreateInventoryProductCardDTO {
     @IsString()
     commerceLocationId: string;
     @IsString()
-    productCardItemId: string;
+    productCardId: string;
     @IsString()
     productSetCode: string;
     @IsString()
@@ -75,7 +75,7 @@ export class CreateInventoryProductCardDTO {
 
 export class UpdateInventoryProductCardsDTO {
     commerceAccountId: string;
-    productCardItemId: string;
+    productCardId: string;
     updateInventoryProductCardDTOs: UpdateInventoryProductCardDTO[];
 }
 
