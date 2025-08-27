@@ -26,7 +26,7 @@ export class CommerceLocation {
     @Column()
     @IsString()
     commerceLocationPhoneNumber: string;
-    @Column()
+    @Column({ nullable: true })
     @IsString()
     commerceLocationUrl: string;
     @Column({type: 'boolean', default: false})

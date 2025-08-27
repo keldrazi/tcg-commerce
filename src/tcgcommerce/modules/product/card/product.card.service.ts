@@ -170,6 +170,7 @@ export class ProductCardService {
 
         switch (productLine.productLineCode) {
             case "MTG":
+                console.log("MTG");
                 productCardRecordCount = await this.createMTGProductCards(productVendorId, productLineId, productTypeId);
                 break;
         }
@@ -185,6 +186,8 @@ export class ProductCardService {
             //TO DO: CREATE AN ERROR TO RETURN;
             return 0;
         }
+
+        console.log("Product Sets:" + productSets.length);
         
         let productCardRecordCount = 0;
 
@@ -194,6 +197,7 @@ export class ProductCardService {
             let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetCode(productSet.productSetCode);
 
             if(productCardsBySet == null) {
+                console.log(`No TCGdb MTG Cards found for Set Code: ${productSet.productSetCode}`);
                 return 0;
             }
 
@@ -205,6 +209,7 @@ export class ProductCardService {
                 
                 //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
                 if (productCardCheck != null) {
+                    console.log(`Product Card already exists for TCGdb MTG Card ID: ${tcgdbMTGCard.tcgdbMTGCardId}, Skipping...`);
                     continue;
                 }
 

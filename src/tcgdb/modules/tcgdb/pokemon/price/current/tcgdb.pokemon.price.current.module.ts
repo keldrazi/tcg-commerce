@@ -5,12 +5,14 @@ import { TCGdbPokemonPriceCurrentController } from "./tcgdb.pokemon.price.curren
 import { TCGPlayerPokemonPriceModule } from 'src/tcgdb/modules/tcgplayer/pokemon/price/tcgplayer.pokemon.price.module';
 import { TCGdbPokemonCardModule } from 'src/tcgdb/modules/tcgdb/pokemon/card/tcgdb.pokemon.card.module';
 import { TCGdbPokemonPriceCurrent } from 'src/typeorm/entities/tcgdb/modules/tcgdb/pokemon/price/current/tcgdb.pokemon.price.current.entity';
+import { TCGdbPokemonPriceHistoryModule } from 'src/tcgdb/modules/tcgdb/pokemon/price/history/tcgdb.pokemon.price.history.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([TCGdbPokemonPriceCurrent]),
         TCGdbPokemonCardModule,
         TCGPlayerPokemonPriceModule,
+        TCGdbPokemonPriceHistoryModule,
     ], 
     controllers: [TCGdbPokemonPriceCurrentController],
     providers: [TCGdbPokemonPriceCurrentService],

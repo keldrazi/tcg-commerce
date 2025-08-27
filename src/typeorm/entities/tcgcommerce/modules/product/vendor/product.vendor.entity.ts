@@ -4,9 +4,9 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 export class ProductVendor {
     @PrimaryGeneratedColumn('uuid')
     productVendorId: string;
-    @Column()
+    @Column({ nullable: true })
     productVendorName: string;
-    @Column()
+    @Column({ nullable: true })
     productVendorCode: string;
     @Column({type: 'boolean', default: false})
     productVendorIsActive: boolean;

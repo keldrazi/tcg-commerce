@@ -14,6 +14,7 @@ export class ProductCardController {
     
     @Get('/create/:productVendorId/:productLineId/:productTypeId')
     async createProductCards(@Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string, @Param('productTypeId') productTypeId: string) {
+        console.log(`Creating Product Cards for Vendor ID: ${productVendorId}, Line ID: ${productLineId}, Type ID: ${productTypeId}`);
         return await this.productCardService.createProductCards(productVendorId, productLineId, productTypeId);
     }
 
