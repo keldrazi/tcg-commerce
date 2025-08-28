@@ -156,7 +156,7 @@ export class ProductCardService {
         return productCardDTO;
     } 
 
-    //CREATE PRODUCT CARD ITEMS;
+    //CREATE PRODUCT CARDS;
     async createProductCards(productVendorId: string, productLineId: string, productTypeId: string) {
         
         let productLine = await this.productLineService.getProductLine(productLineId);
@@ -178,7 +178,7 @@ export class ProductCardService {
         return productCardRecordCount;
     }
 
-    //CREATE PRODUCT CARD ITEMS (MTG);
+    //CREATE PRODUCT CARDS (MTG);
     async createMTGProductCards(productVendorId: string, productLineId: string, productTypeId: string) {
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendorId, productLineId);
         
@@ -186,8 +186,6 @@ export class ProductCardService {
             //TO DO: CREATE AN ERROR TO RETURN;
             return 0;
         }
-
-        console.log("Product Sets:" + productSets.length);
         
         let productCardRecordCount = 0;
 
@@ -197,7 +195,6 @@ export class ProductCardService {
             let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetCode(productSet.productSetCode);
 
             if(productCardsBySet == null) {
-                console.log(`No TCGdb MTG Cards found for Set Code: ${productSet.productSetCode}`);
                 return 0;
             }
 
@@ -209,7 +206,6 @@ export class ProductCardService {
                 
                 //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
                 if (productCardCheck != null) {
-                    console.log(`Product Card already exists for TCGdb MTG Card ID: ${tcgdbMTGCard.tcgdbMTGCardId}, Skipping...`);
                     continue;
                 }
 

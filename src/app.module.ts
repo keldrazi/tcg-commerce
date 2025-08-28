@@ -75,10 +75,10 @@ import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/la
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
 import { ProductCardPriceModule } from './tcgcommerce/modules/product/card/price/product.card.price.module';
-//Product Card Pricing Modules;
-import { PricingProductCardTypeModule } from './tcgcommerce/modules/pricing/product/card/type/pricing.product.card.type.module';
-import { PricingProductCardRuleTypeModule } from './tcgcommerce/modules/pricing/product/card/rule/type/pricing.product.card.rule.type.module';
-import { PricingProductCardRuleSetModule } from './tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.module'; 
+//Product Card Price Modules;
+import { PriceProductCardTypeModule } from './tcgcommerce/modules/price/product/card/type/price.product.card.type.module';
+import { PriceProductCardRuleTypeModule } from './tcgcommerce/modules/price/product/card/rule/type/price.product.card.rule.type.module';
+import { PriceProductCardRuleSetModule } from './tcgcommerce/modules/price/product/card/rule/set/price.product.card.rule.set.module'; 
 //Product Card Inventory Modules;
 import { InventoryProductCardModule } from './tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 //Product Card Load Inventory Modules;
@@ -166,10 +166,10 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductCardPrintingModule,
     ProductCardRarityModule,
     ProductCardPriceModule,
-    //Product Card Pricing Modules;
-    PricingProductCardTypeModule,
-    PricingProductCardRuleTypeModule,
-    PricingProductCardRuleSetModule,
+    //Product Card Price Modules;
+    PriceProductCardTypeModule,
+    PriceProductCardRuleTypeModule,
+    PriceProductCardRuleSetModule,
     //Inventory Product Card Modules;
     InventoryProductCardModule,
     //Inventory Load Product Card Modules;

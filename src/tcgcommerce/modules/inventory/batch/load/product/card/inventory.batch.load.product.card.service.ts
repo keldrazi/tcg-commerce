@@ -10,7 +10,7 @@ import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.s
 import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
 import { ProductCardLanguageService } from 'src/tcgcommerce/modules/product/card/language/product.card.language.service';
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
-import { PricingProductCardRuleSetService } from 'src/tcgcommerce/modules/pricing/product/card/rule/set/pricing.product.card.rule.set.service';
+import { PriceProductCardRuleSetService } from 'src/tcgcommerce/modules/price/product/card/rule/set/price.product.card.rule.set.service';
 import { ProductCardPriceService } from 'src/tcgcommerce/modules/product/card/price/product.card.price.service';
 import { CommerceLocationService } from 'src/tcgcommerce/modules/commerce/location/commerce.location.service';
 
@@ -28,7 +28,7 @@ export class InventoryBatchLoadProductCardService {
         private productCardConditionService: ProductCardConditionService,
         private productCardLanguageService: ProductCardLanguageService,
         private productCardPrintingService: ProductCardPrintingService,
-        private pricingProductCardRuleSetService: PricingProductCardRuleSetService,
+        private priceProductCardRuleSetService: PriceProductCardRuleSetService,
         private productCardPriceService: ProductCardPriceService,
         private commerceLocationService: CommerceLocationService
     ) { }
@@ -106,11 +106,11 @@ export class InventoryBatchLoadProductCardService {
         }
 
         //GET THE PRICING PRODUCT CARD RULE SETS;
-        let processedPricingProductCardRuleSets: any[] = [];
-        let pricingProductCardRuleSets = await this.pricingProductCardRuleSetService.getPricingProductCardRuleSets(commerceAccountId, productTypeId);
+        let processedPriceProductCardRuleSets: any[] = [];
+        let priceProductCardRuleSets = await this.priceProductCardRuleSetService.getPriceProductCardRuleSets(commerceAccountId, productTypeId);
 
-        if(pricingProductCardRuleSets != null && pricingProductCardRuleSets.length > 0) {
-            processedPricingProductCardRuleSets = await this.pricingProductCardRuleSetService.processPricingProductCardRuleSet(pricingProductCardRuleSets);
+        if(priceProductCardRuleSets != null && priceProductCardRuleSets.length > 0) {
+            processedPriceProductCardRuleSets = await this.priceProductCardRuleSetService.processPriceProductCardRuleSet(priceProductCardRuleSets);
         }
         
         let productSetId = productSet.productSetId;
@@ -177,14 +177,14 @@ export class InventoryBatchLoadProductCardService {
                     let productCardPriceByPrinting = productCardPrices.find(obj => obj.productCardPrintingName === productCardPrinting.productCardPrintingName);
 
                     if(productCardPriceByPrinting != undefined){
-                        if(processedPricingProductCardRuleSets.length > 0) {
-                            inventoryProductCard.inventoryProductCardPrice = await this.pricingProductCardRuleSetService.applyCustomPricingProductCardRuleSets(
-                                processedPricingProductCardRuleSets,
+                        if(processedPriceProductCardRuleSets.length > 0) {
+                            inventoryProductCard.inventoryProductCardPrice = await this.priceProductCardRuleSetService.applyCustomPriceProductCardRuleSets(
+                                processedPriceProductCardRuleSets,
                                 productCardCondition.productCardConditionCode,
                                 productCardPriceByPrinting
                             );
                         } else {
-                            inventoryProductCard.inventoryProductCardPrice = await this.pricingProductCardRuleSetService.applyDefaultPricingProductCardRuleSet(
+                            inventoryProductCard.inventoryProductCardPrice = await this.priceProductCardRuleSetService.applyDefaultPriceProductCardRuleSet(
                                 productCardCondition.productCardConditionCode,
                                 productCardPriceByPrinting
                             );
