@@ -18,8 +18,23 @@ export class PriceProductCardServiceUpdateService {
     ) { }
 
     
+    /*
+    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageCode: string, commerceAccountId: string, commerceLocationId: string) {
 
-    
+        let productSets = await this.getProductSetsByProductLineId(productLineId);
+        if (productSets == null) {
+            return null;
+        }
 
+        //LOOP OVER EACH PRODUCT SET AND CREATE THE INVENTORY PRODUCT CARDS;
+        for (let i = 0; i < productSets.length; i++) {
+            let productSet = productSets[i];
+            await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageCode, commerceAccountId, commerceLocationId);
+        }
+
+        return true;
+
+    }
+    */
     
 }
