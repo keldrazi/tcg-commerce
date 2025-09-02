@@ -1,4 +1,4 @@
-import { PriceProductCardServiceUpdateData } from "../interface/price.product.card.service.update.interface";
+import { PriceProductCardServiceUpdateData } from "../interface/price.product.card.service.update.data.interface";
 
 export class PriceProductCardServiceUpdateDTO {
     priceProductCardServiceUpdateId: string;
@@ -7,6 +7,8 @@ export class PriceProductCardServiceUpdateDTO {
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
+    productSetCode: string;
+    productCardLanguageCode: string;
     priceProductCardServiceUpdateStatus: string;
     priceProductCardServiceUpdateType: string;
     priceProductCardServiceUpdateCode: string;

@@ -3,38 +3,70 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceProductCardServiceUpdate } from 'src/typeorm/entities/tcgcommerce/modules/price/product/card/service/update/price.product.card.service.update.entity';
 import { PriceProductCardServiceUpdateDTO } from './dto/price.product.card.service.update.dto';
-import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
-import { InventoryProductCardService } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.service';
-import { TCGdbMTGPriceChangeDailyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.service';
+import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
+//MTG Service
+import { PriceProductCardLineUpdateMTGService } from 'src/tcgcommerce/modules/price/product/card/line/update/mtg/price.product.card.line.update.mtg.service';
+import { ProductSetDTO } from 'src/tcgcommerce/modules/product/set/dto/product.set.dto';
 
 @Injectable()
 export class PriceProductCardServiceUpdateService {
 
     constructor(
        @InjectRepository(PriceProductCardServiceUpdate) private priceProductCardServiceUpdateRepository: Repository<PriceProductCardServiceUpdate>,
-       private productCardService: ProductCardService,
-       private inventoryProductCardService: InventoryProductCardService,
-       private tcgdbMTGPriceChangeDailyService: TCGdbMTGPriceChangeDailyService
+       private productLineService: ProductLineService,
+       private productSetService: ProductSetService,
+       private priceProductCardLineUpdateMTGService: PriceProductCardLineUpdateMTGService,
+
     ) { }
 
     
-    /*
-    async createBatchInventoryProductCards(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageCode: string, commerceAccountId: string, commerceLocationId: string) {
+    
+    async updateProductCardPrices(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageCode: string, commerceAccountId: string) {
+
+        let productLine = await this.getProductLine(productLineId);
+        if (productLine == null) {
+            return null;
+        }
 
         let productSets = await this.getProductSetsByProductLineId(productLineId);
         if (productSets == null) {
             return null;
         }
 
-        //LOOP OVER EACH PRODUCT SET AND CREATE THE INVENTORY PRODUCT CARDS;
-        for (let i = 0; i < productSets.length; i++) {
-            let productSet = productSets[i];
-            await this.createLoadInventoryProductCardsBySet(productSet, productVendorId, productLineId, productTypeId, productCardLanguageCode, commerceAccountId, commerceLocationId);
+        if(productLine.productLineCode === 'MTG') {
+            await this.updateMTGProductCardPrices(productLineId, productCardLanguageCode, commerceAccountId);
         }
 
-        return true;
+       
+
 
     }
-    */
+
+    async updateMTGProductCardPrices(productLineId: string, productCardLanguageCode: string, commerceAccountId: string) {
+        
+    }
+    
+    
+    
+    //UTILITY FUNCTIONS
+    async getProductSetsByProductLineId(productLineId: string) {
+        let productSets = await this.productSetService.getProductSetsByProductLineId(productLineId);
+        if (productSets == null) {
+            return null;
+        }
+        
+        return productSets;
+    }
+
+    async getProductLine(productLineId: string) {
+        let productLine = await this.productLineService.getProductLine(productLineId);
+        if (productLine == null) {
+            return null;
+        }
+        
+        return productLine;
+    }
+
     
 }

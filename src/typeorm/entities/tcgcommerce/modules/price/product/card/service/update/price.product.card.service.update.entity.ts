@@ -1,5 +1,5 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { PriceProductCardServiceUpdateData } from 'src/tcgcommerce/modules/price/product/card/service/update/interface/price.product.card.service.update.interface';
+import { PriceProductCardServiceUpdateData } from 'src/tcgcommerce/modules/price/product/card/service/update/interface/price.product.card.service.update.data.interface';
 
 @Entity('priceProductCardServiceUpdate')
 export class PriceProductCardServiceUpdate {
@@ -13,6 +13,10 @@ export class PriceProductCardServiceUpdate {
     productLineId: string;
     @Column()
     productTypeId: string;
+    @Column()
+    productSetCode: string;
+    @Column()
+    productCardLanguageCode: string;
     @Column()
     priceProductCardServiceUpdateStatus: string;
     @Column()

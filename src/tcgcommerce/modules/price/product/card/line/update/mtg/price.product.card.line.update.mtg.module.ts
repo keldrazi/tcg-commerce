@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { PriceProductCardServiceUpdateService } from './price.product.card.service.update.service';
-import { PriceProductCardServiceUpdateController } from './price.product.card.service.update.controller';
+import { PriceProductCardLineUpdateMTGService } from './price.product.card.line.update.mtg.service';
 import { PriceProductCardServiceUpdate } from 'src/typeorm/entities/tcgcommerce/modules/price/product/card/service/update/price.product.card.service.update.entity';
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
-import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
-import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
 import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 //MTG Modules;
 import { TCGdbMTGPriceChangeDailyModule } from 'src/tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.module';
@@ -15,15 +12,13 @@ import { TCGdbMTGSetModule } from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set
     imports: [
         TypeOrmModule.forFeature([PriceProductCardServiceUpdate]),
         ProductCardModule,
-        ProductLineModule,
-        ProductSetModule,
         InventoryProductCardModule,
         //MTG Modules;
         TCGdbMTGSetModule,
         TCGdbMTGPriceChangeDailyModule
     ],
-    controllers: [PriceProductCardServiceUpdateController],
-    providers: [PriceProductCardServiceUpdateService],
-    exports: [PriceProductCardServiceUpdateService]
+    controllers: [],
+    providers: [PriceProductCardLineUpdateMTGService],
+    exports: [PriceProductCardLineUpdateMTGService]
 })
-export class PriceProductCardServiceUpdateModule {}
+export class PriceProductCardLineUpdateMTGModule {}

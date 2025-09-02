@@ -56,10 +56,6 @@ export class TCGdbMTGPriceChangeDailyService {
         
         for(let i=0; i < tcgdbMTGSets.length; i++) {
             const tcgdbMTGSet = tcgdbMTGSets[i];
-            
-            //GET YESTERDAYS DATE;
-            let priceHistoryDate = new Date();
-            priceHistoryDate.setDate(priceHistoryDate.getDate() - 1); // yesterday
 
             //CURRENT PRICES;
             let tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(tcgdbMTGSet.tcgdbMTGSetCode);
