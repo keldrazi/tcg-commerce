@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { PriceProductCardLineUpdateMTGService } from './price.product.card.line.update.mtg.service';
+import { PriceProductCardServiceLineMTGService } from './price.product.card.service.update.line.mtg.service';
 import { PriceProductCardServiceUpdate } from 'src/typeorm/entities/tcgcommerce/modules/price/product/card/service/update/price.product.card.service.update.entity';
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
@@ -18,7 +18,7 @@ import { TCGdbMTGSetModule } from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set
         TCGdbMTGPriceChangeDailyModule
     ],
     controllers: [],
-    providers: [PriceProductCardLineUpdateMTGService],
-    exports: [PriceProductCardLineUpdateMTGService]
+    providers: [PriceProductCardServiceLineMTGService],
+    exports: [PriceProductCardServiceLineMTGService]
 })
-export class PriceProductCardLineUpdateMTGModule {}
+export class PriceProductCardServiceLineMTGModule {}

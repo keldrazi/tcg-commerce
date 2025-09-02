@@ -1,5 +1,7 @@
 export interface PriceProductCardServiceUpdateData {
-    data: {
+    data: [
+        productLineCode: string,
+        productSetCode: string,
         prices: [
             {
                 productCardItemId: string;
@@ -15,6 +17,6 @@ export interface PriceProductCardServiceUpdateData {
                 priceProductCardItemPriceChangePercent: number;
             }
         ]
-    }
+    ]
 }
 

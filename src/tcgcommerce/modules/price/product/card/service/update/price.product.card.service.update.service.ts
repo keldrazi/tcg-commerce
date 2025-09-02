@@ -6,7 +6,7 @@ import { PriceProductCardServiceUpdateDTO } from './dto/price.product.card.servi
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 //MTG Service
-import { PriceProductCardLineUpdateMTGService } from 'src/tcgcommerce/modules/price/product/card/line/update/mtg/price.product.card.line.update.mtg.service';
+import { PriceProductCardServiceLineMTGService } from 'src/tcgcommerce/modules/price/product/card/service/update/line/mtg/price.product.card.service.update.line.mtg.service';
 import { ProductSetDTO } from 'src/tcgcommerce/modules/product/set/dto/product.set.dto';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class PriceProductCardServiceUpdateService {
        @InjectRepository(PriceProductCardServiceUpdate) private priceProductCardServiceUpdateRepository: Repository<PriceProductCardServiceUpdate>,
        private productLineService: ProductLineService,
        private productSetService: ProductSetService,
-       private priceProductCardLineUpdateMTGService: PriceProductCardLineUpdateMTGService,
+       private priceProductCardServiceLineMTGService: PriceProductCardServiceLineMTGService,
 
     ) { }
 
@@ -29,36 +29,15 @@ export class PriceProductCardServiceUpdateService {
             return null;
         }
 
-        let productSets = await this.getProductSetsByProductLineId(productLineId);
-        if (productSets == null) {
-            return null;
-        }
-
         if(productLine.productLineCode === 'MTG') {
-            await this.updateMTGProductCardPrices(productLineId, productCardLanguageCode, commerceAccountId);
+            await this.priceProductCardServiceLineMTGService.updateMTGProductCardPrices(productVendorId, productLineId, productTypeId, productCardLanguageCode, commerceAccountId);
         }
 
        
 
 
     }
-
-    async updateMTGProductCardPrices(productLineId: string, productCardLanguageCode: string, commerceAccountId: string) {
-        
-    }
     
-    
-    
-    //UTILITY FUNCTIONS
-    async getProductSetsByProductLineId(productLineId: string) {
-        let productSets = await this.productSetService.getProductSetsByProductLineId(productLineId);
-        if (productSets == null) {
-            return null;
-        }
-        
-        return productSets;
-    }
-
     async getProductLine(productLineId: string) {
         let productLine = await this.productLineService.getProductLine(productLineId);
         if (productLine == null) {
