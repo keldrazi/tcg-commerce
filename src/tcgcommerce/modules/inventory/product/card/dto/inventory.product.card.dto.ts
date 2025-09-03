@@ -3,6 +3,7 @@ import { IsBoolean, IsDecimal, IsEmail, IsNumber, IsString } from "class-validat
 export class InventoryProductCardsDTO {
     commerceAccountId: string;
     productCardId: string;
+    productCardLanguageCode: string;
     inventoryProductCardDTOs: InventoryProductCardDTO[];
 }
 
@@ -34,6 +35,7 @@ export class InventoryProductCardDTO {
 export class CreateInventoryProductCardsDTO {
     commerceAccountId: string;
     productCardId: string;
+    productCardLanguageCode: string;
     createInventoryProductCardDTOs: CreateInventoryProductCardDTO[];
 }
 

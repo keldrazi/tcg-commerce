@@ -32,12 +32,13 @@ export class InventoryProductCardService {
         return inventoryProductCardDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductCardIdAndProductCardLanguageCode(commerceAccountId: string, commerceLocationId: string, productCardId: string, productCardLanguageCode: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
                 commerceLocationId: commerceLocationId,
-                productCardId: productCardId, 
+                productCardId: productCardId,
+                productCardLanguageCode: productCardLanguageCode
             }
         });
 
@@ -61,11 +62,12 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndProductCardId(commerceAccountId: string, productCardId: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndProductCardIdAndProductCardLanguageCode(commerceAccountId: string, productCardId: string, productCardLanguageCode: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
-                productCardId: productCardId, 
+                productCardId: productCardId,
+                productCardLanguageCode: productCardLanguageCode
             }
         });
 
@@ -89,11 +91,12 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndProductSetCode(commerceAccountId: string, productSetCode: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndProductSetCodeAndProductLanguageCode(commerceAccountId: string, productSetCode: string, productCardLanguageCode: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
                 productSetCode: productSetCode,
+                productCardLanguageCode: productCardLanguageCode
             }
         });
 
@@ -117,12 +120,13 @@ export class InventoryProductCardService {
         return inventoryProductCardsDTO;
     }
 
-    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductSetCode(commerceAccountId: string, commerceLocationId: string, productSetCode: string) {
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationIdAndProductSetCodeAndProductLanguageCode(commerceAccountId: string, commerceLocationId: string, productSetCode: string, productCardLanguageCode: string) {
         let inventoryProductCards = await this.inventoryProductCardRepository.find({ 
             where: {
                 commerceAccountId: commerceAccountId,
                 commerceLocationId: commerceLocationId,
                 productSetCode: productSetCode,
+                productCardLanguageCode: productCardLanguageCode
             }
         });
 
@@ -149,7 +153,7 @@ export class InventoryProductCardService {
     async createInventoryProductCard(createInventoryProductCardsDTO: CreateInventoryProductCardsDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD INVENTORY ALREADY EXISTS;
-        let inventoryProductCards = await this.getInventoryProductCardsByCommerceAccountIdAndProductCardId(createInventoryProductCardsDTO.commerceAccountId, createInventoryProductCardsDTO.productCardId);
+        let inventoryProductCards = await this.getInventoryProductCardsByCommerceAccountIdAndProductCardIdAndProductCardLanguageCode(createInventoryProductCardsDTO.commerceAccountId, createInventoryProductCardsDTO.productCardId, createInventoryProductCardsDTO.productCardLanguageCode);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if(inventoryProductCards != null) {

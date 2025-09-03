@@ -2,19 +2,19 @@ export interface PriceProductCardServiceUpdateData {
     data: [
         productLineCode: string,
         productSetCode: string,
-        prices: [
+        priceProductCardChanges: [
             {
-                productCardItemId: string;
-                productCardItemTCGdbId: string;
+                productCardId: string;
+                productCardTCGdbId: string;
                 productSetCode: string;
                 productCardRarityCode: string;
-                productCardItemNumber: string;
-                productCardItemName: string;
-                priceProductCardItemPriceChangeType: string;
-                priceProductCardItemPreviousPrice: number;
-                priceProductCardItemCurrentPrice: number;
-                priceProductCardItemPriceChange: number;
-                priceProductCardItemPriceChangePercent: number;
+                productCardNumber: string;
+                productCardName: string;
+                priceProductCardChangeType: string;
+                priceProductCardPreviousPrice: number;
+                priceProductCardCurrentPrice: number;
+                priceProductCardPriceChange: number;
+                priceProductCardPriceChangePercent: number;
             }
         ]
     ]
