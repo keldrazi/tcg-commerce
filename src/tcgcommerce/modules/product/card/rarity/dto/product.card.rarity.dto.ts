@@ -1,7 +1,9 @@
-import { IsBoolean, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsString } from "class-validator";
 
 export class ProductCardRarityDTO {
     productCardRarityId: string;
+    productCardRarityTCGdbId: string;
+    productCardRarityTCGPlayerId: number;
     productLineId: string;
     productCardRarityName: string;
     productCardRarityCode: string;
@@ -11,6 +13,10 @@ export class ProductCardRarityDTO {
 }
 
 export class CreateProductCardRarityDTO {
+    @IsString()
+    productCardRarityTCGdbId: string;
+    @IsNumber()
+    productCardRarityTCGPlayerId: number;
     @IsString()
     productLineId: string;
     @IsString()

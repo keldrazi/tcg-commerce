@@ -7,6 +7,8 @@ export class ProductCard {
     @Column()
     productCardTCGdbId: string;
     @Column()
+    productCardTCGPlayerId: number;
+    @Column()
     productVendorId: string;
     @Column()
     productLineId: string;

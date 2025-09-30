@@ -8,9 +8,9 @@ import { IMPORT_JOB_CARD_STATUS, IMPORT_SORT_CARD_TYPE_NAME, IMPORT_JOB_CARD_UPL
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateImportProductCardDTO } from 'src/tcgcommerce/modules/import/product/card/dto/import.product.card.dto';
 import { ImportProductCardService } from 'src/tcgcommerce/modules/import/product/card/import.product.card.service';
-import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.service';
-import { TCGdbMTGCard } from 'src/typeorm/entities/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.entity';
-import { TCGdbMTGCardDTO } from 'src/tcgdb/modules/tcgdb/mtg/card/dto/tcgdb.mtg.card.dto';
+import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.service';
+import { TCGdbMTGCard } from 'src/typeorm/entities/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.entity';
+import { TCGdbMTGCardDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/card/dto/tcgdb.mtg.card.dto';
 
 @Injectable()
 export class ImportProcessCardService {

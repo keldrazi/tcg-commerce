@@ -5,6 +5,8 @@ export class ProductCardPrinting {
     @PrimaryGeneratedColumn('uuid')
     productCardPrintingId: string;
     @Column()
+    productCardPrintingTCGdbId: string;
+    @Column()
     productCardPrintingTCGPlayerId: number;
     @Column()
     productLineId: string;

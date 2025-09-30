@@ -5,8 +5,8 @@ import { PriceProductCardServiceUpdate } from 'src/typeorm/entities/tcgcommerce/
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 //MTG Modules;
-import { TCGdbMTGPriceChangeDailyModule } from 'src/tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.module';
-import { TCGdbMTGSetModule } from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.module';
+import { TCGdbMTGPriceChangeDailyModule } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/daily/tcgdb.mtg.price.change.daily.module';
+import { TCGdbMTGSetModule } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.module';
 
 @Module({
     imports: [

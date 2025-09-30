@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductCardDTO, CreateProductCardDTO, UpdateProductCardDTO } from './dto/product.card.dto';
 import { ProductCard } from 'src/typeorm/entities/tcgcommerce/modules/product/card/product.card.entity';
-import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/mtg/card/tcgdb.mtg.card.service';
+import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 

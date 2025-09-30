@@ -1,8 +1,9 @@
-import { IsBoolean, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsString } from "class-validator";
 
 export class ProductCardDTO {
     productCardId: string;
     productCardTCGdbId: string;
+    productCardTCGPlayerId: number;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
@@ -25,9 +26,9 @@ export class ProductCardDTO {
 
 export class CreateProductCardDTO {
     @IsString()
-    commerceAccountId: string;
-    @IsString()
     productCardTCGdbId: string;
+    @IsNumber()
+    productCardTCGPlayerId: number;
     @IsString()
     productVendorId: string;
     @IsString()

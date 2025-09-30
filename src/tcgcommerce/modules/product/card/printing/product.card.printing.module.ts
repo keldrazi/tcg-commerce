@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ProductCardPrintingService } from './product.card.printing.service';
 import { ProductCardPrintingController } from './product.card.printing.controller';
 import { ProductCardPrinting } from 'src/typeorm/entities/tcgcommerce/modules/product/card/printing/product.card.printing.entity';
-import { TCGdbMTGPrintingModule } from 'src/tcgdb/modules/tcgdb/mtg/printing/tcgdb.mtg.printing.module';
+import { TCGdbMTGPrintingModule } from 'src/tcgdb/modules/tcgdb/api/mtg/printing/tcgdb.mtg.printing.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 
 

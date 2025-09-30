@@ -5,6 +5,10 @@ export class ProductSet {
     @PrimaryGeneratedColumn('uuid')
     productSetId: string;
     @Column()
+    productSetTCGdbId: string;
+    @Column()
+    productSetTCGPlayerId: number;
+    @Column()
     productVendorId: string;
     @Column()
     productLineId: string;

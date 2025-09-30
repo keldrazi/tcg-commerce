@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardLanguageDTO, ProductCardLanguageDTO, UpdateProductCardLanguageDTO } from './dto/product.card.language.dto';
 import { ProductCardLanguage } from 'src/typeorm/entities/tcgcommerce/modules/product/card/language/product.card.language.entity';
-import { TCGdbMTGLanguageService } from 'src/tcgdb/modules/tcgdb/mtg/language/tcgdb.mtg.language.service';
+import { TCGdbMTGLanguageService } from 'src/tcgdb/modules/tcgdb/api/mtg/language/tcgdb.mtg.language.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 
 @Injectable()
@@ -224,6 +224,7 @@ export class ProductCardLanguageService {
             let tcgdbMTGProductCardLanguage = tcgdbMTGProductCardLanguages[i];
             
             let createProductCardLanguageDTO = new CreateProductCardLanguageDTO();
+            createProductCardLanguageDTO.productCardLanguageTCGdbId = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageId;
             createProductCardLanguageDTO.productCardLanguageTCGPlayerId = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageTCGPlayerId;
             createProductCardLanguageDTO.productLineId = productLine.productLineId;
             createProductCardLanguageDTO.productCardLanguageName = tcgdbMTGProductCardLanguage.tcgdbMTGLanguageName;

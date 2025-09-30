@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardRarityDTO, ProductCardRarityDTO, UpdateProductCardRarityDTO } from './dto/product.card.rarity.dto';
 import { ProductCardRarity } from 'src/typeorm/entities/tcgcommerce/modules/product/card/rarity/product.card.rarity.entity';
-import { TCGdbMTGRarityService } from 'src/tcgdb/modules/tcgdb/mtg/rarity/tcgdb.mtg.rarity.service';
+import { TCGdbMTGRarityService } from 'src/tcgdb/modules/tcgdb/api/mtg/rarity/tcgdb.mtg.rarity.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 
 @Injectable()
@@ -184,6 +184,8 @@ export class ProductCardRarityService {
             
             let createProductCardRarityDTO = new CreateProductCardRarityDTO();
             createProductCardRarityDTO.productLineId = productLineId;
+            createProductCardRarityDTO.productCardRarityTCGdbId = tcgdbMTGProductCardRarity.tcgdbMTGRarityId;
+            createProductCardRarityDTO.productCardRarityTCGPlayerId = tcgdbMTGProductCardRarity.tcgdbMTGRarityTCGPlayerId;
             createProductCardRarityDTO.productCardRarityName = tcgdbMTGProductCardRarity.tcgdbMTGRarityName;
             createProductCardRarityDTO.productCardRarityCode = tcgdbMTGProductCardRarity.tcgdbMTGRarityCode;
             createProductCardRarityDTO.productCardRarityIsActive = true;

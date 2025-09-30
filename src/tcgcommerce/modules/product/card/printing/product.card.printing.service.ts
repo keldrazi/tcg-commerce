@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardPrintingDTO, ProductCardPrintingDTO, UpdateProductCardPrintingDTO } from './dto/product.card.printing.dto';
 import { ProductCardPrinting } from 'src/typeorm/entities/tcgcommerce/modules/product/card/printing/product.card.printing.entity';
-import { TCGdbMTGPrintingService } from 'src/tcgdb/modules/tcgdb/mtg/printing/tcgdb.mtg.printing.service';
+import { TCGdbMTGPrintingService } from 'src/tcgdb/modules/tcgdb/api/mtg/printing/tcgdb.mtg.printing.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 
 @Injectable()
@@ -220,6 +220,7 @@ export class ProductCardPrintingService {
             
             let createProductCardPrintingDTO = new CreateProductCardPrintingDTO();
             createProductCardPrintingDTO.productLineId = productLine.productLineId;
+            createProductCardPrintingDTO.productCardPrintingTCGdbId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingId;
             createProductCardPrintingDTO.productCardPrintingTCGPlayerId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingTCGPlayerId;
             createProductCardPrintingDTO.productCardPrintingName = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName;
             createProductCardPrintingDTO.productCardPrintingDisplayOrder = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingDisplayOrder;

@@ -5,6 +5,8 @@ export class ProductCardLanguage {
     @PrimaryGeneratedColumn('uuid')
     productCardLanguageId: string;
     @Column()
+    productCardLanguageTCGdbId: string;
+    @Column()
     productCardLanguageTCGPlayerId: number;
     @Column()
     productLineId: string;

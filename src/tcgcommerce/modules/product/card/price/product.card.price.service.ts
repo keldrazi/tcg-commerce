@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProductCardPriceDTO} from './dto/product.card.price.dto';
-import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
+import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.service';
 import { PRODUCT_LINE_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductSetDTO, CreateProductSetDTO, UpdateProductSetDTO } from './dto/product.set.dto';
 import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set/product.set.entity';
-import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/mtg/set/tcgdb.mtg.set.service';
+import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.service';
 
 @Injectable()
 export class ProductSetService {
@@ -197,6 +197,8 @@ export class ProductSetService {
             }
 
             let newProductSet = this.productSetRepository.create({
+                productSetTCGdbId: tcgdbMTGSet.tcgdbMTGSetId,
+                productSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
                 productVendorId: this.MTG_SET_VENDOR_ID,
                 productLineId: this.MTG_SET_LINE_ID,
                 productSetName: tcgdbMTGSet.tcgdbMTGSetName,

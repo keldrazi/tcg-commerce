@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardConditionDTO, ProductCardConditionDTO, UpdateProductCardConditionDTO } from './dto/product.card.condition.dto';
 import { ProductCardCondition } from 'src/typeorm/entities/tcgcommerce/modules/product/card/condition/product.card.condition.entity';
-import { TCGdbMTGConditionService } from 'src/tcgdb/modules/tcgdb/mtg/condition/tcgdb.mtg.condition.service';
+import { TCGdbMTGConditionService } from 'src/tcgdb/modules/tcgdb/api/mtg/condition/tcgdb.mtg.condition.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 
 @Injectable()
@@ -221,6 +221,7 @@ export class ProductCardConditionService {
             
             let createProductCardConditionDTO = new CreateProductCardConditionDTO();
             createProductCardConditionDTO.productLineId = productLineId;
+            createProductCardConditionDTO.productCardConditionTCGdbId = tcgdbMTGProductCardCondition.tcgdbMTGConditionId;
             createProductCardConditionDTO.productCardConditionTCGPlayerId = tcgdbMTGProductCardCondition.tcgdbMTGConditionTCGPlayerId;
             createProductCardConditionDTO.productCardConditionName = tcgdbMTGProductCardCondition.tcgdbMTGConditionName;
             createProductCardConditionDTO.productCardConditionCode = tcgdbMTGProductCardCondition.tcgdbMTGConditionCode;

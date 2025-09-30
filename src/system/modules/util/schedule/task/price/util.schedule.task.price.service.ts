@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { TCGPlayerMTGPriceService } from 'src/tcgdb/modules/tcgplayer/mtg/price/tcgplayer.mtg.price.service'
-import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/mtg/price/current/tcgdb.mtg.price.current.service';
-import { TCGdbMTGPriceChangeDailyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/daily/tcgdb.mtg.price.change.daily.service';
-import { TCGdbMTGPriceChangeWeeklyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/weekly/tcgdb.mtg.price.change.weekly.service';
-import { TCGdbMTGPriceChangeMonthlyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/monthly/tcgdb.mtg.price.change.monthly.service';
-import { TCGdbMTGPriceChangeYearlyService } from 'src/tcgdb/modules/tcgdb/mtg/price/change/yearly/tcgdb.mtg.price.change.yearly.service';
+import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.service';
+import { TCGdbMTGPriceChangeDailyService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/daily/tcgdb.mtg.price.change.daily.service';
+import { TCGdbMTGPriceChangeWeeklyService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/weekly/tcgdb.mtg.price.change.weekly.service';
+import { TCGdbMTGPriceChangeMonthlyService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/monthly/tcgdb.mtg.price.change.monthly.service';
+import { TCGdbMTGPriceChangeYearlyService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/yearly/tcgdb.mtg.price.change.yearly.service';
 
 
 

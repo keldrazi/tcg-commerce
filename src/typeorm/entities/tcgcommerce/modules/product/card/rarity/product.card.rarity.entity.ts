@@ -5,6 +5,10 @@ export class ProductCardRarity {
     @PrimaryGeneratedColumn('uuid')
     productCardRarityId: string;
     @Column()
+    productCardRarityTCGdbId: string;
+    @Column()
+    productCardRarityTCGPlayerId: number;
+    @Column()
     productLineId: string;
     @Column()
     productCardRarityName: string;

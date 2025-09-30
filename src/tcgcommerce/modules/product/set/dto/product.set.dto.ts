@@ -2,6 +2,8 @@ import { IsBoolean, IsDate, IsNumber, IsString } from "class-validator";
 
 export class ProductSetDTO {
     productSetId: string;
+    productSetTCGdbId: string;
+    productSetTCGPlayerId: number;
     productVendorId: string;
     productLineId: string;
     productSetName: string;
@@ -14,6 +16,10 @@ export class ProductSetDTO {
 }
 
 export class CreateProductSetDTO {
+    @IsString()
+    productSetTCGdbId: string;
+    @IsNumber()
+    productSetTCGPlayerId: number;
     @IsString()
     productVendorId: string;
     @IsString()

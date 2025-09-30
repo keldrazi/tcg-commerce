@@ -2,6 +2,7 @@ import { IsBoolean, IsNumber, IsString } from "class-validator";
 
 export class ProductCardConditionDTO {
     productCardConditionId: string;
+    productCardConditionTCGdbId: string;
     productCardConditionTCGPlayerId: number;
     productLineId: string;
     productCardConditionName: string;
@@ -14,6 +15,8 @@ export class ProductCardConditionDTO {
 }
 
 export class CreateProductCardConditionDTO {
+    @IsString()
+    productCardConditionTCGdbId: string;
     @IsNumber()
     productCardConditionTCGPlayerId: number;
     @IsString()
@@ -33,6 +36,8 @@ export class CreateProductCardConditionDTO {
 export class UpdateProductCardConditionDTO {
     @IsString()
     productCardConditionId: string;
+    @IsString()
+    productCardConditionTCGdbId: string;
     @IsNumber()
     productCardConditionTCGPlayerId: number;
     @IsString()
