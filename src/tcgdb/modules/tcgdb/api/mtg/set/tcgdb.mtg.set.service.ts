@@ -46,80 +46,28 @@ export class TCGdbMTGSetService {
         return tcgdbMTGSetDTOs;
 
     }
-    /*
-    async getTCGdbMTGSetByTCGdbId(tcgdbId: string) {
 
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetId: tcgdbId,
-            }
-        })
-
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
-
-        return tcgdbMTGSetDTO;
-    }
-    
-    async getTCGdbMTGSetByTCGPlayerId(tcgPlayerId: number) {
-
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetTCGPlayerId: tcgPlayerId,
-            }
-        })
-
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
-        
-        return tcgdbMTGSetDTO;
-    }
-
-    
     async getTCGdbMTGSetBySetCode(setCode: string) {
 
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetCode: setCode,
-            }
-        })
+        //GET TCGDB SET BY SET CODE;
+        const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
 
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
+        const url = this.tcgdbAPIURL + '/mtg/set/all';
+        const headers = { 'Authorization': 'Bearer ' + accessToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
 
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
+        let data = await lastValueFrom(response);
+
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...data });
 
         return tcgdbMTGSetDTO;
         
     }
-
-    async getTCGdbMTGSetBySetName(setName: string) {
-        
-        const tcgdbMTGSet = await this.tcgdbMTGSetRepository.findOne({
-            where: {
-                tcgdbMTGSetName: setName,
-            }
-        })
-
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(tcgdbMTGSet == null) {
-            return null;
-        }
-
-        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...tcgdbMTGSet });
-
-        return tcgdbMTGSetDTO;
-    }
-    */
 
 }
 
