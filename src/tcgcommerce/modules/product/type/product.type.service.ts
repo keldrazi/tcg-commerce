@@ -89,6 +89,23 @@ export class ProductTypeService {
         return productTypeDTO;
         
     }
+
+    async getProductTypeByCode(code: string) {
+        let productType = await this.productTypeRepository.findOne({ 
+            where: { 
+                productTypeCode: code 
+            } 
+        });
+        
+        if (productType == null) {
+            return null;
+        }
+
+        let productTypeDTO: ProductTypeDTO = ({ ...productType });
+
+        return productTypeDTO;
+        
+    }
     
     async createProductType(createProductTypeDTO: CreateProductTypeDTO) {
     

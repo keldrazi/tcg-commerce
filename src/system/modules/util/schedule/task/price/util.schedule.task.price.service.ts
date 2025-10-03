@@ -12,7 +12,7 @@ import { TCGdbMTGPriceChangeYearlyService } from 'src/tcgdb/modules/tcgdb/api/mt
 
 @Injectable()
 export class UtilScheduleTaskPriceService {
-  
+    /*
     @Inject(TCGPlayerMTGPriceService)
     private tcgPlayerMTGPriceService: TCGPlayerMTGPriceService;
     @Inject(TCGdbMTGPriceCurrentService)
@@ -46,7 +46,7 @@ export class UtilScheduleTaskPriceService {
         const tcgdbMTGPriceChangeYearlyRecordCount = await this.tcgdbMTGPriceChangeYearlyService.createTCGdbMTGPriceChangeYearlyBySet();
         console.log(`TCGdb MTG Price Change Yearly Updated: ${tcgdbMTGPriceChangeYearlyRecordCount}`);
     }
-    
+    */
     
     
     

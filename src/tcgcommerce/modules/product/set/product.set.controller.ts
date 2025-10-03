@@ -12,9 +12,9 @@ export class ProductSetController {
     ) { }
     
     
-    @Get('vendor/:productVendorId/line/:productLineId')
-    async getProductSetsByProductVendorNameAndProductLineNameAndProductTypeName(@Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string) {
-        return await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendorId, productLineId);
+    @Get(':productVendorCode/:productLineCode')
+    async getProductSetsByProductVendorNameAndProductLineNameAndProductTypeName(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string) {
+        return await this.productSetService.getProductSetsByProductVendorCodeAndProductLineCode(productVendorCode.toUpperCase(), productLineCode.toUpperCase());
     }
 
     @Get('create/:productLineName')
@@ -30,7 +30,7 @@ export class ProductSetController {
 
     @Put()
     @UsePipes(new ValidationPipe())
-    async updateProductCardVariant(@Body() updateProductSetDTO: UpdateProductSetDTO) {
+    async updateProductSet(@Body() updateProductSetDTO: UpdateProductSetDTO) {
         return await this.productSetService.updateProductSet(updateProductSetDTO);
     }
     

@@ -5,41 +5,23 @@ export class InventoryProductCard {
     @PrimaryGeneratedColumn('uuid')
     inventoryProductCardId: string;
     @Column()
-    productVendorId: string;
-    @Column()
-    productLineId: string;
+    productCardId: string;
     @Column()
     commerceAccountId: string;
     @Column()
     commerceLocationId: string;
     @Column()
-    productCardId: string;
+    productVendorId: string;
+    @Column()
+    productLineId: string;
+    @Column()
+    productSetId: string;
     @Column()
     productSetCode: string;
     @Column()
-    productCardPrintingName: string;
-    @Column()
-    productCardConditionCode: string;
-    @Column()
     productCardLanguageCode: string;
-    @Column({ nullable: true })
-    inventoryProductCardSKU: string;
-    @Column({ nullable: true })
-    inventoryProductCardBarcode: string;
-    @Column()
-    inventoryProductCardQty: number;
-    @Column()
-    inventoryProductCardMaxQty: number;
-    @Column()
-    inventoryProductCardReserveQty: number;
-    @Column({type: 'decimal'})
-    inventoryProductCardPrice: number;
-    @Column({type: 'boolean', default: false})
-    inventoryProductCardOverridePriceEnabled: boolean;
-    @Column({type: 'decimal'})
-    inventoryProductCardOverridePrice: number;
     @Column('jsonb')
-    inventoryProductCardMetadata: string;
+    inventoryProductCardItems: string;
     @CreateDateColumn()
     inventoryProductCardCreateDate: Date;
     @UpdateDateColumn()

@@ -71,7 +71,7 @@ export class ImportJobCardService {
         });
     }
 
-
+    /*
     async createImportJob(importJobCardFile: Express.Multer.File, createImportJobCardDTO: CreateImportJobCardDTO) {
 
         //CHECK TO SEE IF A FILE WITH THE SAME NAME EXISTS;
@@ -109,6 +109,7 @@ export class ImportJobCardService {
         return importJobCardDTO;
 
     }
+        */
 
     async createImportJobCardCode(productLineCode: string, importSortCardTypeName: string, commerceLocationName:string) {
 

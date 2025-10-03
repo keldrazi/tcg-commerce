@@ -64,6 +64,23 @@ export class ProductVendorService {
         return productVendorDTO;
         
     }
+
+    async getProductVendorByCode(code: string) {
+        let productVendor = await this.productVendorRepository.findOne({ 
+            where: { 
+                productVendorCode: code 
+            } 
+        });
+        
+        if (productVendor == null) {
+            return null;
+        }
+
+        let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
+        
+        return productVendorDTO;
+        
+    }
     
     async createProductVendor(createProductVendorDTO: CreateProductVendorDTO) {
     

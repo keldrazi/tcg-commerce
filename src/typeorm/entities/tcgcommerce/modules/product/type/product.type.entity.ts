@@ -10,6 +10,8 @@ export class ProductType {
     productLineId: string;
     @Column()
     productTypeName: string;
+    @Column({nullable: true})
+    productTypeCode: string;
     @Column({type: 'boolean', default: false})
     productTypeIsActive: boolean;
     @CreateDateColumn()

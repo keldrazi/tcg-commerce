@@ -25,7 +25,7 @@ export class ImportProcessCardService {
     ) { }
 
     
-
+    /*
     async processImportCards(importJobCardDTO: ImportJobCardDTO, importJobCardFile: Express.Multer.File) {
 
         //UPDATE THE IMPORT JOB STATUS TO PROCESSING FILE;
@@ -82,6 +82,7 @@ export class ImportProcessCardService {
         }
         
     }
+    /*
     //NEED TO UPDATE THIS TO PRODUCT NOT TCGDB CARD;
     async createMTGImportCards(importJobCardId: string, importSortCardDTOs: ImportSortCardDTO[]) {
         
@@ -124,5 +125,6 @@ export class ImportProcessCardService {
             
         return;
     }
+        */
     
 }

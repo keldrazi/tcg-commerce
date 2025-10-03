@@ -6,6 +6,8 @@ import { ProductCard } from 'src/typeorm/entities/tcgcommerce/modules/product/ca
 import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
+import { ProductTypeService } from 'src/tcgcommerce/modules/product/type/product.type.service';
 
 @Injectable()
 export class ProductCardService {
@@ -16,6 +18,8 @@ export class ProductCardService {
         private tcgdbMTGCardService: TCGdbMTGCardService,
         private productSetService: ProductSetService,
         private productLineService: ProductLineService,
+        private productVendorService: ProductVendorService,
+        private productTypeService: ProductTypeService,
     ) { }
 
     async getProductCardByProductCardId(productCardId: string) {
@@ -106,6 +110,33 @@ export class ProductCardService {
         return productCardDTOs;
     }
 
+    async getProductCardsByProductSetCode(setCode: string) {
+        //TO DO: ADD LIMITS AND OFFSETS;
+        
+        let productCards = await this.productCardRepository.find({ 
+            where: {
+                productSetCode: setCode, 
+            }
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCards == null) {
+            return null;
+        }
+
+        let productCardDTOs: ProductCardDTO[] = [];
+
+        for(let i = 0; i < productCards.length; i++) {
+            let productCard = productCards[i];
+            let productCardDTO: ProductCardDTO = ({ ...productCard})
+            
+            productCardDTOs.push(productCardDTO);
+
+        }
+
+        return productCardDTOs;
+    }
+
 
     async createProductCard(createProductCardDTO: CreateProductCardDTO) {
 
@@ -157,13 +188,15 @@ export class ProductCardService {
     } 
 
     //CREATE PRODUCT CARDS;
-    async createProductCards(productVendorId: string, productLineId: string, productTypeId: string) {
+    async createProductCards(productVendorCode: string, productLineCode: string, productTypeCode: string) {
         
-        let productLine = await this.productLineService.getProductLine(productLineId);
+        let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
+        let productLine = await this.productLineService.getProductLineByCode(productLineCode);
+        let productType = await this.productTypeService.getProductTypeByCode(productTypeCode);
 
         let productCardRecordCount = 0;
         
-        if(productLine == null) {
+        if(productLine == null || productVendor == null || productType == null) {
             //TO DO: CREATE AN ERROR TO RETURN;
             return null;
         }
@@ -171,7 +204,7 @@ export class ProductCardService {
         switch (productLine.productLineCode) {
             case "MTG":
                 console.log("MTG");
-                productCardRecordCount = await this.createMTGProductCards(productVendorId, productLineId, productTypeId);
+                productCardRecordCount = await this.createMTGProductCards(productVendor.productVendorId, productLine.productLineId, productType.productTypeId);
                 break;
         }
 
@@ -192,11 +225,13 @@ export class ProductCardService {
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
             
-            let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetCode(productSet.productSetCode);
+            let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetId(productSet.productSetTCGdbId);
 
             if(productCardsBySet == null) {
                 return 0;
             }
+
+            //console.log(productCardsBySet);
 
             for(let j = 0; j < productCardsBySet.tcgdbMTGCards.length; j++) {
                 let tcgdbMTGCard = productCardsBySet.tcgdbMTGCards[j];
@@ -217,6 +252,7 @@ export class ProductCardService {
 
                 const newProductCard = this.productCardRepository.create({
                     productCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
+                    productCardTCGPlayerId: tcgdbMTGCard.tcgdbMTGCardTCGPlayerId,
                     productVendorId: productVendorId,
                     productLineId: productLineId,
                     productTypeId: productTypeId,

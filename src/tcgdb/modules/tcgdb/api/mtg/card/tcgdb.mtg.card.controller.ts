@@ -7,7 +7,7 @@ export class TCGdbMTGCardController {
     constructor(
         private tcgdbMTGCardService: TCGdbMTGCardService
     ) {}
-
+    /*
     @Get('/tcgplayer/id/:id')
     async getTCGdbCardsByTCGPlayerId(@Param('id') id: number) {
         return this.tcgdbMTGCardService.getTCGdbMTGCardByTCGPlayerId(id);
@@ -32,14 +32,15 @@ export class TCGdbMTGCardController {
     async getTCGdbMTGCardsBySetName(@Param('setName') setName: string) {
         return this.tcgdbMTGCardService.getTCGdbMTGCardsBySetName(setName);
     }
-    
+    */
     @Get('/setCode/:setCode')
     async getTCGdbMTGCardsBySetCode(@Param('setCode') setAbbrevation: string) {
         return this.tcgdbMTGCardService.getTCGdbMTGCardsBySetCode(setAbbrevation);
     }
-    
+    /*
     @Get('/create')
     async createTCGdbMTGCards() {
         return this.tcgdbMTGCardService.createTCGdbMTGCards();
     }
+        */
 }  

@@ -74,7 +74,7 @@ import { ProductCardConditionModule } from './tcgcommerce/modules/product/card/c
 import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/language/product.card.language.module';
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
-import { ProductCardPriceModule } from './tcgcommerce/modules/product/card/price/product.card.price.module';
+//import { ProductCardPriceModule } from './tcgcommerce/modules/product/card/price/product.card.price.module';
 //Product Card Price Modules;
 import { PriceProductCardTypeModule } from './tcgcommerce/modules/price/product/card/type/price.product.card.type.module';
 import { PriceProductCardRuleTypeModule } from './tcgcommerce/modules/price/product/card/rule/type/price.product.card.rule.type.module';
@@ -134,9 +134,9 @@ const NODE_ENV = process.env.NODE_ENV;
     //TCDdb MTG Modules;
     TCGdbMTGCardModule,
     TCGdbMTGSetModule,
-    TCGdbMTGPriceCurrentModule,
-    TCGdbMTGPriceHistoryModule,
-    TCGdbMTGPriceChangeDailyModule,
+    //TCGdbMTGPriceCurrentModule,
+    //TCGdbMTGPriceHistoryModule,
+    //TCGdbMTGPriceChangeDailyModule,
     TCGdbMTGConditionModule,
     TCGdbMTGLanguageModule,
     TCGdbMTGPrintingModule,
@@ -165,7 +165,7 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductCardLanguageModule,
     ProductCardPrintingModule,
     ProductCardRarityModule,
-    ProductCardPriceModule,
+    //ProductCardPriceModule,
     //Product Card Price Modules;
     PriceProductCardTypeModule,
     PriceProductCardRuleTypeModule,

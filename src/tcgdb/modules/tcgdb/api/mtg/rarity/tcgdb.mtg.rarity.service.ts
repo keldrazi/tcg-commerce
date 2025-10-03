@@ -23,7 +23,7 @@ export class TCGdbMTGRarityService {
         //GET ALL TCGDB RARITIES;
         const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
 
-        const url = this.tcgdbAPIURL + '/mtg/rarity/all';
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/rarity/all';
         const headers = { 'Authorization': 'Bearer ' + accessToken };
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),

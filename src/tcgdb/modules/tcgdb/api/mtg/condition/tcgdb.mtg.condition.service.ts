@@ -23,7 +23,7 @@ export class TCGdbMTGConditionService {
         //GET ALL TCGDB CONDITIONS;
         const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
 
-        const url = this.tcgdbAPIURL + '/mtg/set/all';
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/condition/all';
         const headers = { 'Authorization': 'Bearer ' + accessToken };
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),

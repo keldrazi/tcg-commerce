@@ -83,7 +83,7 @@ export class TCGdbMTGPriceCurrentService {
         return tcgdbMTGPriceCurrentDTOs;
 
     } 
-    
+    /*
     async createTCGdbMTGPricesCurrent() {
 
         //REMOVE ALL CURRENT PRICES;
@@ -133,7 +133,8 @@ export class TCGdbMTGPriceCurrentService {
         
         return tcgdbMTGPriceCurrentRecordCount;
 
-    }    
+    } 
+        */   
 }
 
 

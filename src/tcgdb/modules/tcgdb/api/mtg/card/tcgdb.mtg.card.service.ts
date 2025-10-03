@@ -39,20 +39,33 @@ export class TCGdbMTGCardService {
 
         let data = await lastValueFrom(response);
 
-        for(let i = 0; i < data.length; i++) {
-            let tcgdbMTGCard = data[i];
-
-            let tcgdbMTGCardDTO: TCGdbMTGCardDTO = ({ ...tcgdbMTGCard });
-
-            tcgdbMTGCardDTOs.push(tcgdbMTGCardDTO);
-        }
         
-        let tcgdbMTGSetCardDTO: TCGdbMTGSetCardDTO = {
-            tcgdbMTGSet: tcgdbMTGSetDTO,
-            tcgdbMTGCards: tcgdbMTGCardDTOs,
-        }
+        return data;
+    }
+
+    async getTCGdbMTGCardsBySetId(setId: string) {
         
-        return tcgdbMTGSetCardDTO;
+        let tcgdbMTGCardDTOs: TCGdbMTGCardDTO[] = [];
+        
+        //GET TCGDB SET BY SET ID;
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = await this.tcgdbMTGSetService.getTCGdbMTGSetBySetId(setId);
+
+        //GET ALL TCGDB CARDS BY SET CODE;
+        const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/card/set/id/' + setId;
+        const headers = { 'Authorization': 'Bearer ' + accessToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
+
+        let data = await lastValueFrom(response);
+
+        
+        return data;
+
     }
 
 }

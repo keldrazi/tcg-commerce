@@ -23,7 +23,7 @@ export class TCGdbMTGPrintingService {
         //GET ALL TCGDB PRINTINGS;
         const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
 
-        const url = this.tcgdbAPIURL + '/mtg/printing/all';
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/printing/all';
         const headers = { 'Authorization': 'Bearer ' + accessToken };
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),

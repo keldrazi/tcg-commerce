@@ -9,7 +9,7 @@ export class ImportJobCardController {
     constructor(
         private importJobCardService: ImportJobCardService,
     ) { }
-    
+    /*
     @Post()
     @UseInterceptors(FileInterceptor('file'))
     async createImportJob(
@@ -29,6 +29,7 @@ export class ImportJobCardController {
 
         return importJobCode;
     }
+        */
 
     //GET ALL IMPORT JOBS FOR A COMMERCE ACCOUNT;
     //REVIEW IMPORT JOB

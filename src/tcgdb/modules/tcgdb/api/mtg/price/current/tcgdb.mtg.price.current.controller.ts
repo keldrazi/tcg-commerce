@@ -13,11 +13,11 @@ export class TCGdbMTGPriceCurrentController {
     async getTCGdbPricesByTCGPlayerId(@Param('id') tcgPlayerId: number) {
         return this.tcgdbMTGPriceService.getTCGdbMTGPricesByTCGPlayerId(tcgPlayerId);
     }
-    */
+    
 
     @Get('/create')
     async createTCGdbMTGPricesCurrent() {
         return this.tcgdbMTGPriceCurrentService.createTCGdbMTGPricesCurrent();
     }
-
+*/
 }

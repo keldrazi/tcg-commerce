@@ -22,7 +22,7 @@ export class PriceProductCardServiceUpdateService {
     ) { }
 
     
-    
+    /*
     async updateProductCardPrices(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageCode: string, commerceAccountId: string) {
 
         let productLine = await this.getProductLine(productLineId);
@@ -49,6 +49,7 @@ export class PriceProductCardServiceUpdateService {
         
         return productLine;
     }
+        */
 
     
 }

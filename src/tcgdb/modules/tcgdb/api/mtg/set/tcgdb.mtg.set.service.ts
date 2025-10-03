@@ -24,7 +24,7 @@ export class TCGdbMTGSetService {
         //GET ALL TCGDB SETS;
         const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
 
-        const url = this.tcgdbAPIURL + '/mtg/set/all';
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/set/all';
         const headers = { 'Authorization': 'Bearer ' + accessToken };
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
@@ -52,7 +52,29 @@ export class TCGdbMTGSetService {
         //GET TCGDB SET BY SET CODE;
         const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
 
-        const url = this.tcgdbAPIURL + '/mtg/set/all';
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/set/code/' + setCode;
+        const headers = { 'Authorization': 'Bearer ' + accessToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
+
+        let data = await lastValueFrom(response);
+
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = ({ ...data });
+
+        return tcgdbMTGSetDTO;
+        
+    }
+
+    async getTCGdbMTGSetBySetId(setId: string) {
+
+        //GET TCGDB SET BY SET CODE;
+        const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
+
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/set/id/' + setId;
         const headers = { 'Authorization': 'Bearer ' + accessToken };
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),

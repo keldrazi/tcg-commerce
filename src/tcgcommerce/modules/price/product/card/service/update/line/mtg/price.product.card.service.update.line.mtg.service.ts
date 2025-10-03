@@ -21,7 +21,7 @@ export class PriceProductCardServiceLineMTGService {
        private tcgdbMTGPriceChangeDailyService: TCGdbMTGPriceChangeDailyService
     ) { }
 
-    
+    /*
     async updateMTGPriceProductCards(productVendorId: string, productLineId: string, productTypeId: string, productCardLanguageCode: string, commerceAccountId: string) {
         
         let productSets = await this.getProductSetsByProductLineId(productLineId);
@@ -44,7 +44,7 @@ export class PriceProductCardServiceLineMTGService {
         }
 
     }
-
+    /*
     async processMTGPriceProductCards(tcgdbMTGPriceChangesDaily: TCGdbMTGPriceChangeDailyDTO[], productCardLanguageCode: string, commerceAccountId: string) {
         for(let i=0; i < tcgdbMTGPriceChangesDaily.length; i++) {
             let tcgdbMTGPriceChangeDaily = tcgdbMTGPriceChangesDaily[i];
@@ -54,7 +54,7 @@ export class PriceProductCardServiceLineMTGService {
                 continue;
             }
 
-            let inventoryProductCards = await this.getInventoryProductCardsByCommerceAccountIdAndProductCardIdAndProductCardLanguageCode(commerceAccountId, productCard.productCardId, productCardLanguageCode);
+            /*let inventoryProductCards = await this.getInventoryProductCardsByCommerceAccountIdAndProductCardIdAndProductCardLanguageCode(commerceAccountId, productCard.productCardId, productCardLanguageCode);
             if (inventoryProductCards == null) {
                 continue;
             }
@@ -101,6 +101,7 @@ export class PriceProductCardServiceLineMTGService {
     }
 
     //GET INVENTORY PRODUCT CARDS;
+    /*
     async getInventoryProductCardsByCommerceAccountIdAndProductCardIdAndProductCardLanguageCode(commerceAccountId: string, productCardId: string, productCardLanguageCode: string) {
         let inventoryProductCards = await this.inventoryProductCardService.getInventoryProductCardsByCommerceAccountIdAndProductCardIdAndProductCardLanguageCode(commerceAccountId, productCardId, productCardLanguageCode);
         //TO DO: THROW CUSTOM ERROR;
@@ -110,4 +111,5 @@ export class PriceProductCardServiceLineMTGService {
 
         return inventoryProductCards;
     }
+    */
 }
