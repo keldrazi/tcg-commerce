@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product.card.dto';
-import { InventoryProductCardsDTO, InventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
+import { InventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
-import { InventoryProductCardItems } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.items.interface';
+import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.items.interface';
 import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
@@ -114,6 +114,17 @@ export class InventoryBatchLoadProductCardService {
             //CHECK TO SEE IF THE INVENTORY PRODUCT CARD ALREADY EXISTS FOR THE COMMERCE ACCOUNT/COMMERCE LOCATION/PRODUCT CARD/PRODUCT CARD LANGUAGE;
 
             let productCard: ProductCardDTO = productCards[i];
+            
+            let inventoryProductCardDTO: InventoryProductCardDTO = new InventoryProductCardDTO();
+            inventoryProductCardDTO.commerceAccountId = commerceAccountId;
+            inventoryProductCardDTO.commerceLocationId = commerceLocationId;
+            inventoryProductCardDTO.productCardId = productCard.productCardId;
+            inventoryProductCardDTO.productVendorId = productVendorId;
+            inventoryProductCardDTO.productLineId = productLineId;
+            inventoryProductCardDTO.productSetId = productSetId;
+            inventoryProductCardDTO.productSetCode = productSet.productSetCode;
+            inventoryProductCardDTO.productCardLanguageCode = productCardLanguageCode;
+           
 
             for(let j = 0; j < productCardPrintings.length; j++) {
                 let productCardPrinting = productCardPrintings[j];
@@ -124,16 +135,18 @@ export class InventoryBatchLoadProductCardService {
                     continue;
                 }
 
-                let inventoryProductCardItems: any[] = [];
+                inventoryProductCardDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
+
+                let inventoryProductCardItems: InventoryProductCardItem[] = [];
                 for(let k = 0; k < productCardConditions.length; k++) {
                     let productCardCondition = productCardConditions[k];
-                    let inventoryProductCardItemTCGPlayerSKU = this.getProductCardSKUByCondition(productCard.productCardSKUs, productCardLanguage.productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
+                    let inventoryProductCardItemTCGPlayerSKU = await this.getProductCardSKUByCondition(productCard.productCardSKUs, productCardLanguage.productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
                     
-                    let inventoryProductCardItem = {
+                    let inventoryProductCardItem: InventoryProductCardItem = {
                         productCardConditionCode: productCardCondition.productCardConditionCode,
                         inventoryProductCardItemTCGPlayerSKU: inventoryProductCardItemTCGPlayerSKU,
-                        inventoryProductCardItemSKU: null,
-                        inventoryProductCardItemBarcode: null,
+                        inventoryProductCardItemSKU: '',
+                        inventoryProductCardItemBarcode: '',
                         inventoryProductCardItemQty: 0,
                         inventoryProductCardItemMaxQty: 0,
                         inventoryProductCardItemReserveQty: 0,
@@ -157,12 +170,10 @@ export class InventoryBatchLoadProductCardService {
                 });
 
                 await this.inventoryProductCardRepository.save(newInventoryProductCard);
-            
+                inventoryProductCardDTO.inventoryProductCardId = newInventoryProductCard.inventoryProductCardId;
+                inventoryProductCardDTO.inventoryProductCardItems = inventoryProductCardItems;
             }
-
-            
-
-            
+             
 
 
         }
