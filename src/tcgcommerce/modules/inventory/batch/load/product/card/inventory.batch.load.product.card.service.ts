@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product.card.dto';
 import { InventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
-import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.items.interface';
+import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
 import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
@@ -128,7 +128,7 @@ export class InventoryBatchLoadProductCardService {
 
             for(let j = 0; j < productCardPrintings.length; j++) {
                 let productCardPrinting = productCardPrintings[j];
-                let productCardSKUByPrinting = await this.getProductCardSKUByPrinting(productCard.productCardSKUs, productCardLanguage.productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId);
+                let productCardSKUByPrinting = await this.getProductCardTCGPlayerSKUByPrinting(productCard.productCardSKUs, productCardLanguage.productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId);
                 
                 //IF THE PRODUCT CARD SKU BY PRINTING IS NULL, THEN SKIP THIS PRINTING AS IT DOES NOT EXIST;
                 if (productCardSKUByPrinting == null) {
@@ -140,13 +140,16 @@ export class InventoryBatchLoadProductCardService {
                 let inventoryProductCardItems: InventoryProductCardItem[] = [];
                 for(let k = 0; k < productCardConditions.length; k++) {
                     let productCardCondition = productCardConditions[k];
-                    let inventoryProductCardItemTCGPlayerSKU = await this.getProductCardSKUByCondition(productCard.productCardSKUs, productCardLanguage.productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
+                    let inventoryProductCardItemTCGPlayerSKU = await this.getProductCardTCGPlayerSKUByCondition(productCard.productCardSKUs, productCardLanguage.productCardLanguageTCGPlayerId, productCardPrinting.productCardPrintingTCGPlayerId, productCardCondition.productCardConditionTCGPlayerId);
                     
+                    if(inventoryProductCardItemTCGPlayerSKU == null) {
+                        continue;
+                    }
+
                     let inventoryProductCardItem: InventoryProductCardItem = {
                         productCardConditionCode: productCardCondition.productCardConditionCode,
                         inventoryProductCardItemTCGPlayerSKU: inventoryProductCardItemTCGPlayerSKU,
                         inventoryProductCardItemSKU: '',
-                        inventoryProductCardItemBarcode: '',
                         inventoryProductCardItemQty: 0,
                         inventoryProductCardItemMaxQty: 0,
                         inventoryProductCardItemReserveQty: 0,
@@ -154,6 +157,7 @@ export class InventoryBatchLoadProductCardService {
                         inventoryProductCardItemOverridePriceEnabled: false,
                         inventoryProductCardItemOverridePrice: 0,
                     };
+                    
                     inventoryProductCardItems.push(inventoryProductCardItem);
                 }
 
@@ -182,28 +186,27 @@ export class InventoryBatchLoadProductCardService {
     }
 
     //GET TCPLAYER SKU BY PRINTING/LANGUAGE;
-    async getProductCardSKUByPrinting(productCardSKUs: string, productCardLanguageId: number, productCardPrintingId: number) {
+    async getProductCardTCGPlayerSKUByPrinting(productCardTCGPlayerSKUs: string, productCardLanguageId: number, productCardPrintingId: number) {
 
-        const productCardSKUsJson = JSON.parse(productCardSKUs);
-        const productCardSKU = productCardSKUsJson.filter(item => 
+        const productCardTCGPlayerSKUsJson = JSON.parse(productCardTCGPlayerSKUs);
+        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.filter(item => 
             item.languageId === productCardLanguageId &&
             item.printingId === productCardPrintingId
         );
 
-        return productCardSKU.length > 0 ? productCardSKU[0] : null;
+        return productCardTCGPlayerSKU.length > 0 ? productCardTCGPlayerSKU[0] : null;
     }
 
     //GET TCPLAYER SKU BY CONDITION/PRINTING/LANGUAGE;
-    async getProductCardSKUByCondition(productCardSKUs: string, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
-          
-        const productCardSKUsJson = JSON.parse(productCardSKUs);
-        const productCardSKU = productCardSKUsJson.find(item => 
+    async getProductCardTCGPlayerSKUByCondition(productCardTCGPlayerSKUs: string, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
+        const productCardTCGPlayerSKUsJson = JSON.parse(productCardTCGPlayerSKUs);
+        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
             item.languageId === productCardLanguageId &&
             item.printingId === productCardPrintingId &&
             item.conditionId === productCardConditionId
         );
 
-        return productCardSKU.length > 0 ? productCardSKU[0] : null;
+        return productCardTCGPlayerSKU.length > 0 ? productCardTCGPlayerSKU[0] : null;
     }
     
     

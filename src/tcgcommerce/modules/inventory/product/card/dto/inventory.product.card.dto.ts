@@ -1,5 +1,5 @@
 import { IsBoolean, IsDecimal, IsEmail, IsNumber, IsString } from 'class-validator';
-import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.items.interface';
+import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
 import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product.card.dto';
 import { CommerceLocation } from 'src/typeorm/entities/tcgcommerce/modules/commerce/location/commerce.location.entity';
 

@@ -15,11 +15,13 @@ export class InventoryProductCard {
     @Column()
     productLineId: string;
     @Column()
+    productTypeId: string;
+    @Column()
+    productCardLanguageId: string;
+    @Column()
     productSetId: string;
     @Column()
     productSetCode: string;
-    @Column()
-    productCardLanguageCode: string;
     @Column('jsonb')
     inventoryProductCardItems: string;
     @CreateDateColumn()

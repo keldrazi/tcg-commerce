@@ -3,7 +3,7 @@ import { InventoryBatchLoadJobProductCardService } from './inventory.batch.load.
 import { FileInterceptor } from "@nestjs/platform-express";
 
 
-@Controller('inventory/batch/job/product/card')
+@Controller('inventory/batch/load/job/product/card')
 export class InventoryBatchLoadJobProductCardController {
 
     constructor(
