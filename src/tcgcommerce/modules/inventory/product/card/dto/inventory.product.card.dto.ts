@@ -14,6 +14,7 @@ export class InventoryProductCardDTO {
     productSetId: string;
     productSetCode: string;
     productCardLanguageCode: string;
+    productCardPrintingId: string;
     productCardPrintingName: string;
     inventoryProductCardItems: InventoryProductCardItem[];
     inventoryProductCardCreateDate: Date;

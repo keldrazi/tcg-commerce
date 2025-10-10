@@ -22,6 +22,10 @@ export class InventoryProductCard {
     productSetId: string;
     @Column()
     productSetCode: string;
+    @Column()
+    productCardPrintingId: string;
+    @Column()
+    productCardPrintingName: string;
     @Column('jsonb')
     inventoryProductCardItems: string;
     @CreateDateColumn()

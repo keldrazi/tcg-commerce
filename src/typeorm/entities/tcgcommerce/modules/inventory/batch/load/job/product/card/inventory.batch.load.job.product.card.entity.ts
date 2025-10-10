@@ -9,19 +9,31 @@ export class InventoryBatchLoadJobProductCard {
     @Column()
     commerceLocationId: string;
     @Column()
+    commerceLocationName: string;
+    @Column()
     commerceUserId: string;
+    @Column()
+    commerceUserName: string;
     @Column()
     productVendorId: string;
     @Column()
+    productVendorCode: string;
+    @Column()
     productLineId: string;
+    @Column()
+    productLineCode: string;
     @Column()
     productTypeId: string;
     @Column()
+    productTypeCode: string;
+    @Column()
     productCardLanguageId: string;
     @Column()
-    productCardSetId: string;
+    productCardLanguageCode: string;
     @Column()
-    productCardSetCode: string;
+    productSetId: string;
+    @Column()
+    productSetCode: string;
     @Column()
     inventoryBatchLoadJobProductCardDate: Date;
     @Column()
