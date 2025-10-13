@@ -27,9 +27,9 @@ export class InventoryBatchLoadJobProductCard {
     @Column()
     productTypeCode: string;
     @Column()
-    productCardLanguageId: string;
+    productLanguageId: string;
     @Column()
-    productCardLanguageCode: string;
+    productLanguageCode: string;
     @Column()
     productSetId: string;
     @Column()
@@ -40,8 +40,8 @@ export class InventoryBatchLoadJobProductCard {
     inventoryBatchLoadJobProductCardCode: string;
     @Column()
     inventoryBatchLoadJobProductCardStatus: string;
-    @Column('jsonb')
-    inventoryBatchLoadJobProductCardData: string;
+    @Column({ default: 0 })
+    inventoryBatchLoadJobProductCardCount: number;
     @CreateDateColumn()
     inventoryBatchLoadJobProductCardCreateDate: Date;
     @UpdateDateColumn()

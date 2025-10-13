@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 //Config Modules;
 import { ConfigModule } from '@nestjs/config';
 import { ConfigDatabasePGModule } from './config/database/pg/config.database.pg.module';
@@ -71,7 +72,7 @@ import { ProductSetModule } from './tcgcommerce/modules/product/set/product.set.
 //Product Card Modules;
 import { ProductCardModule } from './tcgcommerce/modules/product/card/product.card.module';
 import { ProductCardConditionModule } from './tcgcommerce/modules/product/card/condition/product.card.condition.module';
-import { ProductCardLanguageModule } from './tcgcommerce/modules/product/card/language/product.card.language.module';
+import { ProductLanguageModule } from './tcgcommerce/modules/product/language/product.language.module';
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
 //import { ProductCardPriceModule } from './tcgcommerce/modules/product/card/price/product.card.price.module';
@@ -98,6 +99,7 @@ const NODE_ENV = process.env.NODE_ENV;
     ConfigDatabasePGModule,
     ConfigEmailModule,
     ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
     //TCGPlayer API Modules;
     TCGPlayerAPICardModule,
     TCGPlayerAPISetModule,
@@ -162,7 +164,7 @@ const NODE_ENV = process.env.NODE_ENV;
     //Product Card Modules;
     ProductCardModule,
     ProductCardConditionModule,
-    ProductCardLanguageModule,
+    ProductLanguageModule,
     ProductCardPrintingModule,
     ProductCardRarityModule,
     //ProductCardPriceModule,

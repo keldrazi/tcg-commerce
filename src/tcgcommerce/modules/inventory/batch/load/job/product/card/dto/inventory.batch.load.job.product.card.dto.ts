@@ -14,14 +14,14 @@ export class InventoryBatchLoadJobProductCardDTO {
     productLineCode: string;
     productTypeId: string;
     productTypeCode: string;
-    productCardLanguageId: string;
-    productCardLanguageCode: string;
+    productLanguageId: string;
+    productLanguageCode: string;
     productSetId: string;
     productSetCode: string;
     inventoryBatchLoadJobProductCardDate: Date;
     inventoryBatchLoadJobProductCardCode: string;
+    inventoryBatchLoadJobProductCardCount: number;
     inventoryBatchLoadJobProductCardStatus: string;
-    inventoryBatchLoadJobProductCardData: string;
     inventoryBatchLoadJobProductCardCreateDate: Date;
     inventoryBatchLoadJobProductCardUpdateDate: Date;
 }
@@ -50,9 +50,9 @@ export class CreateInventoryBatchLoadJobsProductCardDTO {
     @IsString()
     productTypeCode: string;
     @IsString()
-    productCardLanguageId: string;
+    productLanguageId: string;
     @IsString()
-    productCardLanguageCode: string;
+    productLanguageCode: string;
 }
 
 export class CreateInventoryBatchLoadJobProductCardDTO {
@@ -79,9 +79,9 @@ export class CreateInventoryBatchLoadJobProductCardDTO {
     @IsString()
     productTypeCode: string;
     @IsString()
-    productCardLanguageId: string;
+    productLanguageId: string;
     @IsString()
-    productCardLanguageCode: string;
+    productLanguageCode: string;
     @IsString()
     productSetId: string;
     @IsString()

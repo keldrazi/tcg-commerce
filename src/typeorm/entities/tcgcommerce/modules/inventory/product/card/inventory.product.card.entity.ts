@@ -7,6 +7,10 @@ export class InventoryProductCard {
     @Column()
     productCardId: string;
     @Column()
+    productCardTCGdbId: string;
+    @Column()
+    productCardTCGPlayerId: number;
+    @Column()
     commerceAccountId: string;
     @Column()
     commerceLocationId: string;
@@ -17,7 +21,9 @@ export class InventoryProductCard {
     @Column()
     productTypeId: string;
     @Column()
-    productCardLanguageId: string;
+    productLanguageId: string;
+    @Column()
+    productLanguageCode: string;
     @Column()
     productSetId: string;
     @Column()

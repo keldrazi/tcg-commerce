@@ -7,13 +7,17 @@ import { CommerceLocation } from 'src/typeorm/entities/tcgcommerce/modules/comme
 export class InventoryProductCardDTO {
     inventoryProductCardId: string;
     productCardId: string;
+    productCardTCGdbId: string;
+    productCardTCGPlayerId: number;
     commerceAccountId: string;
     commerceLocationId: string;
     productVendorId: string;
     productLineId: string;
+    productTypeId: string;
+    productLanguageId: string;
+    productLanguageCode: string;
     productSetId: string;
     productSetCode: string;
-    productCardLanguageCode: string;
     productCardPrintingId: string;
     productCardPrintingName: string;
     inventoryProductCardItems: InventoryProductCardItem[];
@@ -21,6 +25,7 @@ export class InventoryProductCardDTO {
     inventoryProductCardUpdateDate: Date; 
     
 }
+
 
 export class CreateInventoryProductCardsDTO {
     commerceAccountId: string;
@@ -45,7 +50,7 @@ export class CreateInventoryProductCardDTO {
     @IsString()
     productSetCode: string;
     @IsString()
-    productCardLanguageCode: string;
+    productLanguageCode: string;
     @IsString()
     productCardPrintingName: string;
     @IsString()

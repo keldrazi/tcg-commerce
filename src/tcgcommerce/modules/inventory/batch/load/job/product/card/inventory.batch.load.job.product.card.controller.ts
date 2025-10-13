@@ -10,10 +10,18 @@ export class InventoryBatchLoadJobProductCardController {
         private inventoryLoadJobCardService: InventoryBatchLoadJobProductCardService,
     ) { }
     
-    @Post()
+    @Post('create/all')
+    async createInventoryBatchLoadJobsProductCard(@Body() body: any)
+    {
+        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardAll(body.createInventoryBatchLoadJobsProductCardDTO);
+        
+        return inventoryLoadJobCardDTO;
+    }
+
+    @Post('create/set')
     async createInventoryBatchLoadJobProductCard(@Body() body: any)
     {
-        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCard(body.createInventoryBatchLoadJobProductCardDTO);
+        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardSet(body.createInventoryBatchLoadJobProductCardDTO);
         
         return inventoryLoadJobCardDTO;
     }

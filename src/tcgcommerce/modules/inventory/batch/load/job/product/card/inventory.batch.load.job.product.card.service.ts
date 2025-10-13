@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InventoryBatchLoadJobProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.entity';
 import { InventoryBatchLoadJobProductCardDTO, CreateInventoryBatchLoadJobsProductCardDTO, CreateInventoryBatchLoadJobProductCardDTO } from './dto/inventory.batch.load.job.product.card.dto';
-import { INVENTORY_LOAD_JOB_CARD_STATUS } from 'src/system/constants/tcgcommerce/inventory/load/job/card/inventory.load.job.card.contants';
+import { INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS } from 'src/system/constants/tcgcommerce/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.contants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.service';
@@ -61,7 +61,7 @@ export class InventoryBatchLoadJobProductCardService {
 
     }
 
-    async createInventryBatchLoadJobsProductCard(createInventoryBatchLoadJobsProductCardDTO: CreateInventoryBatchLoadJobsProductCardDTO) {
+    async createInventoryBatchLoadJobProductCardAll(createInventoryBatchLoadJobsProductCardDTO: CreateInventoryBatchLoadJobsProductCardDTO) {
 
         //GET THE SETS OF THE PRODUCT LINE;
         let productVendorId = createInventoryBatchLoadJobsProductCardDTO.productVendorId;
@@ -78,6 +78,7 @@ export class InventoryBatchLoadJobProductCardService {
 
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
+            console.log('Creating Inventory Batch Load Job for Product Set: ' + productSet.productSetCode);
             let createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO = {
                 commerceAccountId: createInventoryBatchLoadJobsProductCardDTO.commerceAccountId,
                 commerceLocationId: createInventoryBatchLoadJobsProductCardDTO.commerceLocationId,
@@ -90,13 +91,13 @@ export class InventoryBatchLoadJobProductCardService {
                 productLineCode: createInventoryBatchLoadJobsProductCardDTO.productLineCode,
                 productTypeId: createInventoryBatchLoadJobsProductCardDTO.productTypeId,
                 productTypeCode: createInventoryBatchLoadJobsProductCardDTO.productTypeCode,
-                productCardLanguageId: createInventoryBatchLoadJobsProductCardDTO.productCardLanguageId,
-                productCardLanguageCode: createInventoryBatchLoadJobsProductCardDTO.productCardLanguageCode,
+                productLanguageId: createInventoryBatchLoadJobsProductCardDTO.productLanguageId,
+                productLanguageCode: createInventoryBatchLoadJobsProductCardDTO.productLanguageCode,
                 productSetId: productSet.productSetId,
                 productSetCode: productSet.productSetCode
             }
             
-            let inventoryBatchLoadJobProductCardDTO = await this.createInventoryBatchLoadJobProductCard(createInventoryBatchLoadJobProductCardDTO);
+            let inventoryBatchLoadJobProductCardDTO = await this.createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO);
 
             inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
 
@@ -106,7 +107,7 @@ export class InventoryBatchLoadJobProductCardService {
 
     }
 
-    async createInventoryBatchLoadJobProductCard(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
+    async createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
 
         let inventoryBatchLoadJobProductCardCode = await this.createInventoryBatchLoadJobProductCardCode(createInventoryBatchLoadJobProductCardDTO.productLineCode, createInventoryBatchLoadJobProductCardDTO.productSetCode, createInventoryBatchLoadJobProductCardDTO.commerceLocationName);
 
@@ -114,14 +115,16 @@ export class InventoryBatchLoadJobProductCardService {
 
         inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardCode = inventoryBatchLoadJobProductCardCode;
         inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardDate = new Date();
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardStatus = INVENTORY_LOAD_JOB_CARD_STATUS.PROCESSING;
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardData = JSON.stringify({});
+        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardStatus = INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING;
         inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.save(inventoryBatchLoadJobProductCard);
         
         
         let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard });
+        console.log('Created Inventory Batch Load Job Product Card: ' + inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId);
+        console.log('Set: ' + inventoryBatchLoadJobProductCardDTO.productSetCode);
 
         //START THE PROCESS OF CREATING THE INVENTORY FOR THE SET;
+        this.inventoryBatchLoadProductCardService.createBatchInventoryProductCardsBySetId(inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardDTO.commerceAccountId, inventoryBatchLoadJobProductCardDTO.commerceLocationId, inventoryBatchLoadJobProductCardDTO.productSetId, inventoryBatchLoadJobProductCardDTO.productVendorId, inventoryBatchLoadJobProductCardDTO.productLineId, inventoryBatchLoadJobProductCardDTO.productTypeId, inventoryBatchLoadJobProductCardDTO.productLanguageId);
         
         return inventoryBatchLoadJobProductCardDTO;
         
@@ -155,7 +158,7 @@ export class InventoryBatchLoadJobProductCardService {
         return true;
     }
 
-    async updateInventoryBatchLoadJobProductCardData(inventoryBatchLoadJobProductCardId: string, inventoryBatchLoadJobProductCardData: any) {
+    async updateInventoryBatchLoadJobProductCardCount(inventoryBatchLoadJobProductCardId: string, inventoryBatchLoadJobProductCardCount: number) {
         let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardByInventoryBatchLoadJobProductCardId(inventoryBatchLoadJobProductCardId);
 
         if(inventoryBatchLoadJobProductCard == undefined) {
@@ -163,7 +166,7 @@ export class InventoryBatchLoadJobProductCardService {
             return false; //RETURN AN ERROR;
         }
 
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardData = JSON.stringify(inventoryBatchLoadJobProductCardData);
+        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardCount = inventoryBatchLoadJobProductCardCount;
         inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardUpdateDate = new Date();
 
         await this.inventoryBatchLoadJobProductCardRepository.save(inventoryBatchLoadJobProductCard);
@@ -172,26 +175,21 @@ export class InventoryBatchLoadJobProductCardService {
     }
 
 
-
     /* EVENT LISTENERS */
-    @OnEvent('inventory.load.job.card.update.status')
+    @OnEvent('inventory.batch.load.job.card.update.status')
     async handleInventoryBatchLoadJobProductCardStatusEvent(payload: any) {
-
+        console.log('Received Event: inventory.batch.load.job.card.update.status');
         let inventoryBatchLoadJobProductCardId = payload.inventoryBatchLoadJobProductCardId;
         let inventoryBatchLoadJobProductCardStatus = payload.inventoryBatchLoadJobProductCardStatus;
+
+        if(inventoryBatchLoadJobProductCardStatus == INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE) {
+            let inventoryBatchLoadJobProductCardCount = payload.inventoryBatchLoadJobProductCardCount;
+            await this.updateInventoryBatchLoadJobProductCardCount(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardCount);
+        }
 
         await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardStatus);
 
     }
 
-    @OnEvent('inventory.load.job.card.update.data')
-    async handleInventoryBatchLoadJobProductCardDataEvent(payload: any) {
-
-        let inventoryBatchLoadJobProductCardId = payload.inventoryBatchLoadJobProductCardId;
-        let inventoryBatchLoadJobProductCardData = payload.inventoryBatchLoadJobProductCardData;
-
-        await this.updateInventoryBatchLoadJobProductCardData(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardData);
-
-    }
 
 }

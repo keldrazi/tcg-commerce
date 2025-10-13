@@ -1,3 +1,4 @@
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { InventoryBatchLoadProductCardService } from './inventory.batch.load.product.card.service';

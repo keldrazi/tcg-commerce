@@ -18,7 +18,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ProductSetDTO } from 'src/tcgcommerce/modules/product/set/dto/product.set.dto';
 
 @Injectable()
-export class InventoryBatchLoadProductCardService {
+export class InventoryBatchLoadProductPriceService {
 
     constructor(
         @InjectRepository(InventoryProductCard) private inventoryProductCardRepository: Repository<InventoryProductCard>,
