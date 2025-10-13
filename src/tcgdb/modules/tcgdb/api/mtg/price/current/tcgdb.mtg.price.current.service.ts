@@ -1,22 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { TCGPlayerMTGPriceService } from 'src/tcgdb/modules/tcgplayer/mtg/price/tcgplayer.mtg.price.service';
 import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.service';
 import { TCGdbMTGPriceHistoryService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/history/tcgdb.mtg.price.history.service';
 import { TCGdbMTGPricesCurrentDTO, TCGdbMTGPriceCurrentDTO } from './dto/tcgdb.mtg.price.current.dto';
-import { TCGdbMTGPriceCurrent } from 'src/typeorm/entities/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.entity';
+import { TCGdbAPIUtilService } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.util.service';
+import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
+import { map, catchError, lastValueFrom } from 'rxjs';
+import { ForbiddenException } from '@nestjs/common';
 
 @Injectable()
 export class TCGdbMTGPriceCurrentService {
 
     constructor(
-        @InjectRepository(TCGdbMTGPriceCurrent) private tcgdbMTGPriceCurrentRepository: Repository<TCGdbMTGPriceCurrent>, 
         private tcgPlayerMTGPriceService: TCGPlayerMTGPriceService,
         private tcgdbMTGCardService: TCGdbMTGCardService,
         private tcgdbMTGPriceHistoryService: TCGdbMTGPriceHistoryService,
+        private tcgdbAPIUtilService: TCGdbAPIUtilService,
+        private configService: ConfigService,
+        private httpService: HttpService,
     ) {}
 
+
+    private tcgdbAPIURL = this.configService.get('TCGDB_API_URL');
+    /*
     async getTCGdbMTGPricesCurrentByCardId(cardId: string) {
         
         const tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentRepository.find({
@@ -60,27 +67,24 @@ export class TCGdbMTGPriceCurrentService {
         return tcgdbMTGPriceCurrentDTO;
 
     }
-
+    */
+    
     async getTCGdbMTGPricesCurrentBySetCode(setCode: string) {
         
-        const tcgdbMTGPriceCurrents = await this.tcgdbMTGPriceCurrentRepository.find({
-            where: {
-                tcgdbMTGPriceCurrentSetCode: setCode,
-            }
-        });
+        //GET ALL TCGDB PRICES BY SET CODE;
+        const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/price/current/set/code/' + setCode;
+        const headers = { 'Authorization': 'Bearer ' + accessToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
 
-        let tcgdbMTGPriceCurrentDTOs: TCGdbMTGPriceCurrentDTO[] = [];
+        let data = await lastValueFrom(response);
 
-        for(let i = 0; i < tcgdbMTGPriceCurrents.length; i++) {
-            let tcgdbMTGPriceCurrent = tcgdbMTGPriceCurrents[i];
-
-            let tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO = { ...tcgdbMTGPriceCurrent };
-
-            tcgdbMTGPriceCurrentDTOs.push(tcgdbMTGPriceCurrentDTO);
-
-        }
-
-        return tcgdbMTGPriceCurrentDTOs;
+        return data;
 
     } 
     /*
