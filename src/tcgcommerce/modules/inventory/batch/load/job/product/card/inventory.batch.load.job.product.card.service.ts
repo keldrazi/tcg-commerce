@@ -7,6 +7,7 @@ import { INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS } from 'src/system/constan
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.service';
+import { InventoryBatchLoadProductPriceService } from 'src/tcgcommerce/modules/inventory/batch/load/price/card/inventory.batch.load.price.card.service';
 
 @Injectable()
 export class InventoryBatchLoadJobProductCardService {
@@ -15,6 +16,7 @@ export class InventoryBatchLoadJobProductCardService {
         @InjectRepository(InventoryBatchLoadJobProductCard) private inventoryBatchLoadJobProductCardRepository: Repository<InventoryBatchLoadJobProductCard>, 
         private productSetService: ProductSetService,
         private inventoryBatchLoadProductCardService: InventoryBatchLoadProductCardService,
+        private inventoryBatchLoadProductPriceService: InventoryBatchLoadProductPriceService,
     ) { }
 
     async getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId: string, productLineId: string) {
@@ -61,6 +63,7 @@ export class InventoryBatchLoadJobProductCardService {
 
     }
 
+    /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
     async createInventoryBatchLoadJobProductCardAll(createInventoryBatchLoadJobsProductCardDTO: CreateInventoryBatchLoadJobsProductCardDTO) {
 
         //GET THE SETS OF THE PRODUCT LINE;
@@ -106,7 +109,7 @@ export class InventoryBatchLoadJobProductCardService {
         return inventoryBatchLoadJobProductCardDTOs;
 
     }
-
+    /* CREATE PRODUCT CARD INVENTORY BATCH LOAD JOBS BY SET */
     async createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
 
         let inventoryBatchLoadJobProductCardCode = await this.createInventoryBatchLoadJobProductCardCode(createInventoryBatchLoadJobProductCardDTO.productLineCode, createInventoryBatchLoadJobProductCardDTO.productSetCode, createInventoryBatchLoadJobProductCardDTO.commerceLocationName);
@@ -129,6 +132,24 @@ export class InventoryBatchLoadJobProductCardService {
         return inventoryBatchLoadJobProductCardDTO;
         
     }
+
+    /* UPDATE PRODUCT CARD INVENTORY BATCH LOAD JOBS WITH PRICING */
+    async updateInventoryBatchLoadJobProductCardPricing(inventoryBatchLoadJobProductCardId: string) {
+        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardByInventoryBatchLoadJobProductCardId(inventoryBatchLoadJobProductCardId);
+
+        if(inventoryBatchLoadJobProductCard == undefined) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return false; //RETURN AN ERROR;
+        }
+
+        await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
+
+        
+
+
+
+    }
+
 
     
     async createInventoryBatchLoadJobProductCardCode(productLineCode: string, productSetCode: string, commerceLocationName:string) {
@@ -175,6 +196,13 @@ export class InventoryBatchLoadJobProductCardService {
     }
 
 
+    
+    
+    
+    
+    
+    
+    
     /* EVENT LISTENERS */
     @OnEvent('inventory.batch.load.job.card.update.status')
     async handleInventoryBatchLoadJobProductCardStatusEvent(payload: any) {
@@ -185,6 +213,8 @@ export class InventoryBatchLoadJobProductCardService {
         if(inventoryBatchLoadJobProductCardStatus == INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE) {
             let inventoryBatchLoadJobProductCardCount = payload.inventoryBatchLoadJobProductCardCount;
             await this.updateInventoryBatchLoadJobProductCardCount(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardCount);
+
+            //TO DO: UPDATE PRICING;
         }
 
         await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardStatus);
