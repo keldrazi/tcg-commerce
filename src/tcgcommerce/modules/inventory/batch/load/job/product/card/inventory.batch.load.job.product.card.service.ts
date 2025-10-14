@@ -127,7 +127,7 @@ export class InventoryBatchLoadJobProductCardService {
         console.log('Set: ' + inventoryBatchLoadJobProductCardDTO.productSetCode);
 
         //START THE PROCESS OF CREATING THE INVENTORY FOR THE SET;
-        this.inventoryBatchLoadProductCardService.createBatchInventoryProductCardsBySetId(inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardDTO.commerceAccountId, inventoryBatchLoadJobProductCardDTO.commerceLocationId, inventoryBatchLoadJobProductCardDTO.productSetId, inventoryBatchLoadJobProductCardDTO.productVendorId, inventoryBatchLoadJobProductCardDTO.productLineId, inventoryBatchLoadJobProductCardDTO.productTypeId, inventoryBatchLoadJobProductCardDTO.productLanguageId);
+        this.inventoryBatchLoadProductCardService.createBatchInventoryProductCardsBySetId(inventoryBatchLoadJobProductCardDTO);
         
         return inventoryBatchLoadJobProductCardDTO;
         
@@ -144,10 +144,10 @@ export class InventoryBatchLoadJobProductCardService {
 
         await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
 
+        this.inventoryBatchLoadProductPriceService.updateBatchInventoryLoadJobProductPricesByJob(inventoryBatchLoadJobProductCard);
+
+        return true;
         
-
-
-
     }
 
 
@@ -215,6 +215,7 @@ export class InventoryBatchLoadJobProductCardService {
             await this.updateInventoryBatchLoadJobProductCardCount(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardCount);
 
             //TO DO: UPDATE PRICING;
+            this.updateInventoryBatchLoadJobProductCardPricing(inventoryBatchLoadJobProductCardId);
         }
 
         await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardStatus);

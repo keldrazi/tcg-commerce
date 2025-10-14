@@ -9,10 +9,10 @@ export class ProductCardPriceController {
     ) { }
     
     
-    @Get(':productLineCode/:productCardItemTCGdbId/:productCardItemId')
+    /*@Get(':productLineCode/:productCardItemTCGdbId/:productCardItemId')
     async getProductCardPricesByProductLineCode(@Param('productLineCode') productLineCode: string, @Param('productCardItemTCGdbId') productCardItemTCGdbId: string, @Param('productCardItemId') productCardItemId: string) {
         return await this.productCardPriceService.getProductCardPrices(productLineCode, productCardItemTCGdbId, productCardItemId);
-    }
+    }*/
    
    
 

@@ -12,12 +12,12 @@ export class InventoryProductCardController {
     ) { }
     
     
-    /*@Get('/:commerceAccountId')
-    async getCommerceAccount(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountService.getCommerceAccount(commerceAccountId);
+    @Get('/:commerceAccountId')
+    async getInventoryProductCardsByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
+        return await this.inventoryProductCardService.getInventoryProductCardsByCommerceAccountId(commerceAccountId);
     }
 
-    @Post()
+    /*@Post()
     @UsePipes(new ValidationPipe())
     async createCommerceAccount(@Body() createCommerceAcountDTO: CreateCommerceAccountDTO) {
         return await this.commerceAccountService.createCommerceAccount(createCommerceAcountDTO);

@@ -11,7 +11,7 @@ export class ProductCardPriceService {
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
     ) { }
 
-    async getProductCardPrices(productLineCode:string, productCardItemTCGdbId: string, productCardItemId: string) {
+    /*async getProductCardPrices(productLineCode:string, productCardItemTCGdbId: string, productCardItemId: string) {
         switch (productLineCode) {
             case PRODUCT_LINE_CODE.MAGIC_THE_GATHERING:
                 return this.getMTGProductCardPrices(productCardItemTCGdbId, productCardItemId);
@@ -45,5 +45,6 @@ export class ProductCardPriceService {
 
         return productCardPriceDTOs;
     }
+        */
 
 }

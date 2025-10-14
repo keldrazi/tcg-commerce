@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS } from 'src/system/constants/tcgcommerce/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.contants';
 import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product.card.dto';
+import { InventoryBatchLoadJobProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/load/job/product/card/dto/inventory.batch.load.job.product.card.dto';
 import { InventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
@@ -35,19 +36,19 @@ export class InventoryBatchLoadProductCardService {
 
 
 
-    async getBatchInventoryProductCardsBySetId(commerceAccountId: string, commerceLocationId: string,productSetId: string, productVendorId: string, productLineId: string, productTypeId: string, productLanguageId: string) {
+    async getInventoryBatchProductCardsBySetId(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
 
         let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
         
         let inventoryProductCards = await this.inventoryProductCardRepository.find({
             where: {
-                commerceAccountId: commerceAccountId,
-                commerceLocationId: commerceLocationId,
-                productSetId: productSetId,
-                productVendorId: productVendorId,
-                productLineId: productLineId,
-                productTypeId: productTypeId,
-                productLanguageId: productLanguageId,
+                commerceAccountId: inventoryBatchLoadJobProductCardDTO.commerceAccountId,
+                commerceLocationId: inventoryBatchLoadJobProductCardDTO.commerceLocationId,
+                productSetId: inventoryBatchLoadJobProductCardDTO.productSetId,
+                productVendorId: inventoryBatchLoadJobProductCardDTO.productVendorId,
+                productLineId: inventoryBatchLoadJobProductCardDTO.productLineId,
+                productTypeId: inventoryBatchLoadJobProductCardDTO.productTypeId,
+                productLanguageId: inventoryBatchLoadJobProductCardDTO.productLanguageId,
             }
         });
 
@@ -81,9 +82,9 @@ export class InventoryBatchLoadProductCardService {
     }
 
 
-    async createBatchInventoryProductCardsBySetId(inventoryBatchLoadJobProductCardId:string, commerceAccountId: string, commerceLocationId: string,productSetId: string, productVendorId: string, productLineId: string, productTypeId: string, productLanguageId: string) {
+    async createBatchInventoryProductCardsBySetId(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
         //GET THE PRODUCT SET BY CODE;
-        let productSet = await this.productSetService.getProductSet(productSetId);
+        let productSet = await this.productSetService.getProductSet(inventoryBatchLoadJobProductCardDTO.productSetId);
         
         //TO DO: CREATE AN ERROR TO RETURN;
         if (productSet == null) {
@@ -93,20 +94,20 @@ export class InventoryBatchLoadProductCardService {
         this.eventEmitter.emit(
             'inventory.batch.load.job.card.update.status',
             {
-                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId,
+                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
                 inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARDS
             }
         )
 
 
         //CREATE THE BATCH INVENTORY PRODUCT CARDS BY SET;
-        let inventoryProductCardDTOs = await this.createBatchInventoryProductCardsBySet(inventoryBatchLoadJobProductCardId, commerceAccountId, commerceLocationId, productSetId, productVendorId, productLineId, productTypeId, productLanguageId);
+        let inventoryProductCardDTOs = await this.createBatchInventoryProductCardsBySet(inventoryBatchLoadJobProductCardDTO);
         
         if(inventoryProductCardDTOs == null) {
             this.eventEmitter.emit(
                 'inventory.batch.load.job.card.update.status',
                 {
-                    inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId,
+                    inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
                     inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_FAILED,
                 }
             )            
@@ -115,7 +116,7 @@ export class InventoryBatchLoadProductCardService {
             this.eventEmitter.emit(
                 'inventory.batch.load.job.card.update.status',
                 {
-                    inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId,
+                    inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
                     inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE,
                     inventoryBatchLoadJobProductCardCount: inventoryProductCardDTOs.length
                 }
@@ -126,12 +127,12 @@ export class InventoryBatchLoadProductCardService {
 
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/COMMERCE LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
-    async createBatchInventoryProductCardsBySet(inventoryBatchLoadJobProductCardId:string, commerceAccountId: string, commerceLocationId: string, productSetId: string, productVendorId: string, productLineId: string, productTypeId:string, productLanguageId: string) {
+    async createBatchInventoryProductCardsBySet(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
 
         //GET THE COMMERCE LOCATION;
-        let commerceLocation = await this.commerceLocationService.getCommerceLocation(commerceLocationId);
-        let productVendor = await this.productVendorService.getProductVendor(productVendorId);
-        let productLine = await this.productLineService.getProductLine(productLineId);
+        let commerceLocation = await this.commerceLocationService.getCommerceLocation(inventoryBatchLoadJobProductCardDTO.commerceLocationId);
+        let productVendor = await this.productVendorService.getProductVendor(inventoryBatchLoadJobProductCardDTO.productVendorId);
+        let productLine = await this.productLineService.getProductLine(inventoryBatchLoadJobProductCardDTO.productLineId);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if (commerceLocation == null || productVendor == null || productLine == null) {
@@ -139,16 +140,16 @@ export class InventoryBatchLoadProductCardService {
         }
 
 
-        let productCardConditions = await this.productCardConditionService.getProductCardConditionsByProductLineId(productLineId);
-        let productLanguage = await this.productLanguageService.getProductLanguage(productLanguageId);
-        let productCardPrintings = await this.productCardPrintingService.getProductCardPrintingsByProductLineId(productLineId);
+        let productCardConditions = await this.productCardConditionService.getProductCardConditionsByProductLineId(inventoryBatchLoadJobProductCardDTO.productLineId);
+        let productLanguage = await this.productLanguageService.getProductLanguage(inventoryBatchLoadJobProductCardDTO.productLanguageId);
+        let productCardPrintings = await this.productCardPrintingService.getProductCardPrintingsByProductLineId(inventoryBatchLoadJobProductCardDTO.productLineId);
 
          //TO DO: CREATE AN ERROR TO RETURN;
         if (productCardConditions == null || productLanguage == null || productCardPrintings == null) {
             return null;
         }
 
-        let productSet = await this.productSetService.getProductSet(productSetId);
+        let productSet = await this.productSetService.getProductSet(inventoryBatchLoadJobProductCardDTO.productSetId);
         if(productSet == null) {
             return null;
         }
@@ -175,11 +176,11 @@ export class InventoryBatchLoadProductCardService {
             inventoryProductCardDTO.productCardId = productCard.productCardId;
             inventoryProductCardDTO.productCardTCGdbId = productCard.productCardTCGdbId;
             inventoryProductCardDTO.productCardTCGPlayerId = productCard.productCardTCGPlayerId;
-            inventoryProductCardDTO.commerceAccountId = commerceAccountId;
-            inventoryProductCardDTO.commerceLocationId = commerceLocationId;
-            inventoryProductCardDTO.productVendorId = productVendorId;
-            inventoryProductCardDTO.productLineId = productLineId;
-            inventoryProductCardDTO.productTypeId = productTypeId;
+            inventoryProductCardDTO.commerceAccountId = inventoryBatchLoadJobProductCardDTO.commerceAccountId;
+            inventoryProductCardDTO.commerceLocationId = inventoryBatchLoadJobProductCardDTO.commerceLocationId;
+            inventoryProductCardDTO.productVendorId = inventoryBatchLoadJobProductCardDTO.productVendorId;
+            inventoryProductCardDTO.productLineId = inventoryBatchLoadJobProductCardDTO.productLineId;
+            inventoryProductCardDTO.productTypeId = inventoryBatchLoadJobProductCardDTO.productTypeId;
             inventoryProductCardDTO.productLanguageId = productLanguage.productLanguageId;
             inventoryProductCardDTO.productLanguageCode = productLanguage.productLanguageCode;
             inventoryProductCardDTO.productSetId = productSet.productSetId;
@@ -224,12 +225,12 @@ export class InventoryBatchLoadProductCardService {
                     productCardId: productCard.productCardId,
                     productCardTCGdbId: productCard.productCardTCGdbId,
                     productCardTCGPlayerId: productCard.productCardTCGPlayerId,
-                    commerceAccountId: commerceAccountId,
-                    commerceLocationId: commerceLocationId,
-                    productVendorId: productVendorId,
-                    productLineId: productLineId,
-                    productTypeId: productTypeId,
-                    productLanguageId: productLanguage.productLanguageId,
+                    commerceAccountId: inventoryBatchLoadJobProductCardDTO.commerceAccountId,
+                    commerceLocationId: inventoryBatchLoadJobProductCardDTO.commerceLocationId,
+                    productVendorId: inventoryBatchLoadJobProductCardDTO.productVendorId,
+                    productLineId: inventoryBatchLoadJobProductCardDTO.productLineId,
+                    productTypeId: inventoryBatchLoadJobProductCardDTO.productTypeId,
+                    productLanguageId: inventoryBatchLoadJobProductCardDTO.productLanguageId,
                     productLanguageCode: productLanguage.productLanguageCode,
                     productSetId: productSet.productSetId,
                     productSetCode: productSet.productSetCode,
