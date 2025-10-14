@@ -1,90 +1,92 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PriceProductCardTypeDTO, CreatePriceProductCardTypeDTO, UpdatePriceProductCardTypeDTO} from './dto/price.product.card.type.dto';
-import { PriceProductCardType } from 'src/typeorm/entities/tcgcommerce/modules/price/product/card/type/price.product.card.type.entity';
+import { PriceProductCardBaseDTO, CreatePriceProductCardBaseDTO, UpdatePriceProductCardBaseDTO} from './dto/price.product.card.base.dto';
+import { PriceProductCardBase } from 'src/typeorm/entities/tcgcommerce/modules/price/product/card/base/price.product.card.base.entity';
 
 @Injectable()
-export class PriceProductCardTypeService {
+export class PriceProductCardBaseService {
 
     constructor(
-        @InjectRepository(PriceProductCardType) private priceProductCardTypeRepository: Repository<PriceProductCardType>,
+        @InjectRepository(PriceProductCardBase) private priceProductCardBaseRepository: Repository<PriceProductCardBase>,
     ) { }
 
-    async getPriceProductCardType(priceProductCardTypeId: string) {
-        let priceProductCardType = await this.priceProductCardTypeRepository.findOne({
+
+    async getPriceProductCardBaseById(priceProductCardBaseId: string) {
+        let priceProductCardBase = await this.priceProductCardBaseRepository.findOne({
             where: {
-                priceProductCardTypeId: priceProductCardTypeId,
+                priceProductCardBaseId: priceProductCardBaseId,
             }
         });
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(priceProductCardType == null) {
+        if(priceProductCardBase == null) {
             return null;
         }
 
-        let priceProductCardTypeDTO: PriceProductCardTypeDTO = ({ ...priceProductCardType})
-        
-        priceProductCardTypeDTO.priceProductCardTypeUpdateDate = priceProductCardType.priceProductCardTypeUpdateDate;
-        
-        return priceProductCardTypeDTO;
+        let priceProductCardBaseDTO: PriceProductCardBaseDTO = ({ ...priceProductCardBase})
 
+        priceProductCardBaseDTO.priceProductCardBaseUpdateDate = priceProductCardBase.priceProductCardBaseUpdateDate;
+
+        return priceProductCardBaseDTO;
     }
 
-    async getPriceProductCardTypes() {
-        let priceProductCardTypes = await this.priceProductCardTypeRepository.find();
+    async getPriceProductCardBaseByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string) {
+        let priceProductCardBase = await this.priceProductCardBaseRepository.findOne({
+            where: {
+                commerceAccountId: commerceAccountId,
+                productVendorId: productVendorId,
+                productLineId: productLineId,
+                productTypeId: productTypeId
+            }
+        });
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(priceProductCardTypes == null) {
+        if(priceProductCardBase == null) {
             return null;
         }
 
-        let priceProductCardTypesDTO: PriceProductCardTypeDTO[] = [];
-        for(let i = 0; i < priceProductCardTypes.length; i++) {
-            let priceProductCardType = priceProductCardTypes[i];
-        
-            let priceProductCardTypeDTO: PriceProductCardTypeDTO = ({ ...priceProductCardType})
-            
-            priceProductCardTypesDTO.push(priceProductCardTypeDTO);
-        }
+        let priceProductCardBaseDTO: PriceProductCardBaseDTO = ({ ...priceProductCardBase})
 
-        return priceProductCardTypesDTO;
+        priceProductCardBaseDTO.priceProductCardBaseUpdateDate = priceProductCardBase.priceProductCardBaseUpdateDate;
+
+        return priceProductCardBaseDTO;
     }
-    
-    async createPriceProductCardType(createPriceProductCardTypeDTO: CreatePriceProductCardTypeDTO) {
+
+
+
+    async createPriceProductCardBase(createPriceProductCardBaseDTO: CreatePriceProductCardBaseDTO) {
         
-        let newPriceProductCardType = this.priceProductCardTypeRepository.create({ ...createPriceProductCardTypeDTO });
-        newPriceProductCardType = await this.priceProductCardTypeRepository.save(newPriceProductCardType);
+        let newPriceProductCardBase = this.priceProductCardBaseRepository.create({ ...createPriceProductCardBaseDTO });
+        newPriceProductCardBase = await this.priceProductCardBaseRepository.save(newPriceProductCardBase);
 
-        let priceProductCardTypeDTO = this.getPriceProductCardType(newPriceProductCardType.priceProductCardTypeId);
+        let priceProductCardBaseDTO = this.getPriceProductCardBaseById(newPriceProductCardBase.priceProductCardBaseId);
 
-        return priceProductCardTypeDTO;
+        return priceProductCardBaseDTO;
     }   
 
-    async updatePriceProductCardType(updatePriceProductCardTypeDTO: UpdatePriceProductCardTypeDTO) {
+    async updatePriceProductCardBase(updatePriceProductCardBaseDTO: UpdatePriceProductCardBaseDTO) {
     
-        //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let priceProductCardType = await this.priceProductCardTypeRepository.findOne({
+        //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
+        let priceProductCardBase = await this.priceProductCardBaseRepository.findOne({
             where: {
-                priceProductCardTypeId: updatePriceProductCardTypeDTO.priceProductCardTypeId
+                priceProductCardBaseId: updatePriceProductCardBaseDTO.priceProductCardBaseId
             }
         });
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
-        if (priceProductCardType == null) {
+        if (priceProductCardBase == null) {
             return null;
         }
 
-        priceProductCardType.priceProductCardTypeId = updatePriceProductCardTypeDTO.priceProductCardTypeId;
-        priceProductCardType.priceProductCardTypeName = updatePriceProductCardTypeDTO.priceProductCardTypeName;
-        priceProductCardType.priceProductCardTypeIsActive = updatePriceProductCardTypeDTO.priceProductCardTypeIsActive;
-        priceProductCardType.priceProductCardTypeUpdateDate = new Date();
-        
-        priceProductCardType = await this.priceProductCardTypeRepository.save(priceProductCardType);
+        priceProductCardBase.priceProductCardBaseId = updatePriceProductCardBaseDTO.priceProductCardBaseId;
+        priceProductCardBase.priceProductCardBaseOption = updatePriceProductCardBaseDTO.priceProductCardBaseOption;
+        priceProductCardBase.priceProductCardBaseUpdateDate = new Date();
 
-        let priceProductCardDTO = this.getPriceProductCardType(priceProductCardType.priceProductCardTypeId);
+        priceProductCardBase = await this.priceProductCardBaseRepository.save(priceProductCardBase);
+        let priceProductCardBaseDTO = this.getPriceProductCardBaseById(priceProductCardBase.priceProductCardBaseId);
 
-        return priceProductCardDTO;
-        
+        return priceProductCardBaseDTO;
+
     }   
 }

@@ -1,37 +1,32 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreatePriceProductCardTypeDTO, UpdatePriceProductCardTypeDTO, PriceProductCardTypeDTO } from './dto/price.product.card.type.dto';
-import { PriceProductCardTypeService } from './price.product.card.type.service';
+import { CreatePriceProductCardBaseDTO, UpdatePriceProductCardBaseDTO, PriceProductCardBaseDTO } from './dto/price.product.card.base.dto';
+import { PriceProductCardBaseService } from './price.product.card.base.service';
 
 
 
-@Controller('price/product/card/type')
-export class PriceProductCardTypeController {
+@Controller('price/product/card/base')
+export class PriceProductCardBaseController {
 
     constructor(
-        private priceProductCardTypeService: PriceProductCardTypeService,
+        private priceProductCardBaseService: PriceProductCardBaseService,
     ) { }
-    
-    
-    @Get(':priceProductCardTypeId')
-    async getPriceProductCardType(@Param('priceProductCardTypeId') priceProductCardTypeId: string) {
-        return await this.priceProductCardTypeService.getPriceProductCardType(priceProductCardTypeId);
-    }
 
-    @Get()
-    async getPriceProductCardTypes() {
-        return await this.priceProductCardTypeService.getPriceProductCardTypes();
+
+    @Get('id/:priceProductCardBaseId')
+    async getPriceProductCardBase(@Param('priceProductCardBaseId') priceProductCardBaseId: string) {
+        return await this.priceProductCardBaseService.getPriceProductCardBaseById(priceProductCardBaseId);
     }
 
     @Post()
     @UsePipes(new ValidationPipe())
-    async createPriceProductCardType(@Body() createPriceProductCardTypeDTO: CreatePriceProductCardTypeDTO) {
-        return await this.priceProductCardTypeService.createPriceProductCardType(createPriceProductCardTypeDTO);
+    async createPriceProductCardBase(@Body() createPriceProductCardBaseDTO: CreatePriceProductCardBaseDTO) {
+        return await this.priceProductCardBaseService.createPriceProductCardBase(createPriceProductCardBaseDTO);
     }
 
     @Put()
     @UsePipes(new ValidationPipe())
-    async updatePriceProductCardType(@Body() updatePriceProductCardTypeDTO: UpdatePriceProductCardTypeDTO) {
-        return await this.priceProductCardTypeService.updatePriceProductCardType(updatePriceProductCardTypeDTO);
+    async updatePriceProductCardBase(@Body() updatePriceProductCardBaseDTO: UpdatePriceProductCardBaseDTO) {
+        return await this.priceProductCardBaseService.updatePriceProductCardBase(updatePriceProductCardBaseDTO);
     }
 
 }

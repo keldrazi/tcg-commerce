@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { PriceProductCardTypeService } from './price.product.card.type.service';
-import { PriceProductCardTypeController } from './price.product.card.type.controller';
-import { PriceProductCardType } from 'src/typeorm/entities/tcgcommerce/modules/price/product/card/type/price.product.card.type.entity';
+import { PriceProductCardBaseService } from './price.product.card.base.service';
+import { PriceProductCardBaseController } from './price.product.card.base.controller';
+import { PriceProductCardBase } from 'src/typeorm/entities/tcgcommerce/modules/price/product/card/base/price.product.card.base.entity';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([PriceProductCardType])
+        TypeOrmModule.forFeature([PriceProductCardBase])
     ],
-    controllers: [PriceProductCardTypeController],
-    providers: [PriceProductCardTypeService],
-    exports: [PriceProductCardTypeService]
+    controllers: [PriceProductCardBaseController],
+    providers: [PriceProductCardBaseService],
+    exports: [PriceProductCardBaseService]
 })
-export class PriceProductCardTypeModule {}
+export class PriceProductCardBaseModule {}

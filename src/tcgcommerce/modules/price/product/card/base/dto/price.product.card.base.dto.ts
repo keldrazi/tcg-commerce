@@ -1,18 +1,25 @@
-import { IsBoolean, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsString } from "class-validator";
 
-export class PriceProductCardTypeDTO {
-    priceProductCardTypeId: string;
+export class PriceProductCardBaseDTO {
+    priceProductCardBaseId: string;
+    commerceAccountId: string;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
-    priceProductCardTypeName: string;
-    priceProductCardTypeDescription: string;
-    priceProductCardTypeIsActive: boolean;
-    priceProductCardTypeCreateDate: Date; 
-    priceProductCardTypeUpdateDate: Date;
+    priceProductCardBaseOption: string;
+    priceProductCardBaseNMPercentage: number;
+    priceProductCardBaseLPPercentage: number;
+    priceProductCardBaseMPPercentage: number;
+    priceProductCardBaseHPPercentage: number;
+    priceProductCardBaseDMPercentage: number;
+    priceProductCardBaseCreateDate: Date;
+    priceProductCardBaseUpdateDate: Date;
+
 }
 
-export class CreatePriceProductCardTypeDTO {
+export class CreatePriceProductCardBaseDTO {
+    @IsString()
+    commerceAccountId: string;
     @IsString()
     productVendorId: string;
     @IsString()
@@ -20,20 +27,41 @@ export class CreatePriceProductCardTypeDTO {
     @IsString()
     productTypeId: string;
     @IsString()
-    priceProductCardTypeName: string;
-    @IsString()
-    priceProductCardTypeDescription: string;
-    @IsBoolean()
-    priceProductCardTypeIsActive: boolean;
+    priceProductCardBaseOption: string;
+    @IsNumber()
+    priceProductCardBaseNMPercentage: number;
+    @IsNumber()
+    priceProductCardBaseLPPercentage: number;
+    @IsNumber()
+    priceProductCardBaseMPPercentage: number;
+    @IsNumber()
+    priceProductCardBaseHPPercentage: number;
+    @IsNumber()
+    priceProductCardBaseDMPercentage: number;
 }
 
-export class UpdatePriceProductCardTypeDTO {
+export class UpdatePriceProductCardBaseDTO {
     @IsString()
-    priceProductCardTypeId: string;
+    priceProductCardBaseId: string;
     @IsString()
-    priceProductCardTypeName: string;
+    commerceAccountId: string;
     @IsString()
-    priceProductCardTypeDescription: string;
-    @IsBoolean()
-    priceProductCardTypeIsActive: boolean;
+    productVendorId: string;
+    @IsString()
+    productLineId: string;
+    @IsString()
+    productTypeId: string;
+    @IsString()
+    priceProductCardBaseOption: string;
+    @IsNumber()
+    priceProductCardBaseNMPercentage: number;
+    @IsNumber()
+    priceProductCardBaseLPPercentage: number;
+    @IsNumber()
+    priceProductCardBaseMPPercentage: number;
+    @IsNumber()
+    priceProductCardBaseHPPercentage: number;
+    @IsNumber()
+    priceProductCardBaseDMPercentage: number;
+
 }
