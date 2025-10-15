@@ -54,27 +54,7 @@ export class InventoryBatchLoadProductCardService {
 
         for(let i = 0; i < inventoryProductCards.length; i++) {
             let inventoryProductCard = inventoryProductCards[i];
-            let inventoryProductCardDTO: InventoryProductCardDTO = new InventoryProductCardDTO();
-            inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
-            inventoryProductCardDTO.productCardId = inventoryProductCard.productCardId;
-            inventoryProductCardDTO.productCardTCGdbId = inventoryProductCard.productCardTCGdbId;
-            inventoryProductCardDTO.productCardTCGPlayerId = inventoryProductCard.productCardTCGPlayerId;
-            inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
-            inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
-            inventoryProductCardDTO.productVendorId = inventoryProductCard.productVendorId;
-            inventoryProductCardDTO.productLineId = inventoryProductCard.productLineId;
-            inventoryProductCardDTO.productTypeId = inventoryProductCard.productTypeId;
-            inventoryProductCardDTO.productLanguageId = inventoryProductCard.productLanguageId;
-            inventoryProductCardDTO.productLanguageCode = inventoryProductCard.productLanguageCode;
-            inventoryProductCardDTO.productSetId = inventoryProductCard.productSetId;
-            inventoryProductCardDTO.productSetCode = inventoryProductCard.productSetCode;
-            inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
-            inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
-            inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
-            inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
-            inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
-            inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
-            inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
+            let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
             
             inventoryProductCardDTOs.push(inventoryProductCardDTO);
         }
@@ -83,6 +63,68 @@ export class InventoryBatchLoadProductCardService {
 
     }
 
+    async getInventoryBatchProductCardByProductCardId(productCardId: string) {
+        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+            where: {
+                productCardId: productCardId
+            }
+        });
+
+        if(inventoryProductCard == null) {
+            //TO DO: THROW AN ERROR;
+            return null;
+        }
+
+        let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
+
+        return inventoryProductCardDTO;
+    }
+
+    async getUnverifiedInventoryBatchProductCardByProductCardId(productCardId: string) {
+        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+            where: {
+                productCardId: productCardId,
+                inventoryProductCardIsActive: false
+            }
+        });
+
+        if(inventoryProductCard == null) {
+            //TO DO: THROW AN ERROR;
+            return null;
+        }
+
+        let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
+
+        return inventoryProductCardDTO;
+    }
+
+    async createInventoryProductCardDTO(inventoryProductCard: InventoryProductCard) {
+        
+        let inventoryProductCardDTO: InventoryProductCardDTO = new InventoryProductCardDTO();
+        inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
+        inventoryProductCardDTO.productCardId = inventoryProductCard.productCardId;
+        inventoryProductCardDTO.productCardTCGdbId = inventoryProductCard.productCardTCGdbId;
+        inventoryProductCardDTO.productCardTCGPlayerId = inventoryProductCard.productCardTCGPlayerId;
+        inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
+        inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
+        inventoryProductCardDTO.productVendorId = inventoryProductCard.productVendorId;
+        inventoryProductCardDTO.productLineId = inventoryProductCard.productLineId;
+        inventoryProductCardDTO.productTypeId = inventoryProductCard.productTypeId;
+        inventoryProductCardDTO.productLanguageId = inventoryProductCard.productLanguageId;
+        inventoryProductCardDTO.productLanguageCode = inventoryProductCard.productLanguageCode;
+        inventoryProductCardDTO.productSetId = inventoryProductCard.productSetId;
+        inventoryProductCardDTO.productSetCode = inventoryProductCard.productSetCode;
+        inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
+        inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
+        inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
+        inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
+        inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
+        inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
+        inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
+
+        return inventoryProductCardDTO;
+
+    }
 
     async createBatchInventoryProductCardsBySetId(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
         //GET THE PRODUCT SET BY CODE;

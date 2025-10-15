@@ -7,7 +7,8 @@ import { INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS } from 'src/system/constan
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.service';
-import { InventoryBatchLoadProductPriceService } from 'src/tcgcommerce/modules/inventory/batch/load/price/card/inventory.batch.load.price.card.service';
+import { InventoryBatchLoadProductPriceCardService } from 'src/tcgcommerce/modules/inventory/batch/load/price/card/inventory.batch.load.price.card.service';
+import { InventoryBatchLoadProductVerifyCardService } from 'src/tcgcommerce/modules/inventory/batch/load/verify/card/inventory.batch.load.verify.card.service';
 
 @Injectable()
 export class InventoryBatchLoadJobProductCardService {
@@ -16,7 +17,8 @@ export class InventoryBatchLoadJobProductCardService {
         @InjectRepository(InventoryBatchLoadJobProductCard) private inventoryBatchLoadJobProductCardRepository: Repository<InventoryBatchLoadJobProductCard>, 
         private productSetService: ProductSetService,
         private inventoryBatchLoadProductCardService: InventoryBatchLoadProductCardService,
-        private inventoryBatchLoadProductPriceService: InventoryBatchLoadProductPriceService,
+        private inventoryBatchLoadProductPriceCardService: InventoryBatchLoadProductPriceCardService,
+        private inventoryBatchLoadProductVerifyCardService: InventoryBatchLoadProductVerifyCardService,
     ) { }
 
     async getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId: string, productLineId: string) {
@@ -45,7 +47,7 @@ export class InventoryBatchLoadJobProductCardService {
         return inventoryBatchLoadJobProductCardDTOs;
     }
 
-    async getInventoryBatchLoadJobProductCardByInventoryBatchLoadJobProductCardId(inventoryBatchLoadJobProductCardId: string) {
+    async getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId: string) {
         let inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.findOne({
             where: {
                 inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId
@@ -84,6 +86,18 @@ export class InventoryBatchLoadJobProductCardService {
         let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
 
         return inventoryBatchLoadJobProductCardDTO;
+    }
+
+    async getInventoryBatchLoadJobProductCardToVerify(inventoryBatchLoadJobProductCardId: string) {
+        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
+
+        if(inventoryBatchLoadJobProductCardDTO == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return null;
+        }
+
+
+
     }
 
     /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
@@ -176,7 +190,7 @@ export class InventoryBatchLoadJobProductCardService {
 
     /* UPDATE PRODUCT CARD INVENTORY BATCH LOAD JOBS WITH PRICING */
     async updateInventoryBatchLoadJobProductCardPricing(inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardByInventoryBatchLoadJobProductCardId(inventoryBatchLoadJobProductCardId);
+        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
 
         if(inventoryBatchLoadJobProductCard == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
@@ -185,7 +199,7 @@ export class InventoryBatchLoadJobProductCardService {
 
         await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
 
-        this.inventoryBatchLoadProductPriceService.updateBatchInventoryLoadJobProductPricesByJob(inventoryBatchLoadJobProductCard);
+        this.inventoryBatchLoadProductPriceCardService.updateBatchInventoryLoadJobProductPricesByJob(inventoryBatchLoadJobProductCard);
 
         return true;
         
@@ -205,7 +219,7 @@ export class InventoryBatchLoadJobProductCardService {
 
 
     async updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId: string, inventoryBatchLoadJobProductCardStatus: string) {
-        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardByInventoryBatchLoadJobProductCardId(inventoryBatchLoadJobProductCardId);
+        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
 
         if(inventoryBatchLoadJobProductCard == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
@@ -221,7 +235,7 @@ export class InventoryBatchLoadJobProductCardService {
     }
 
     async updateInventoryBatchLoadJobProductCardCount(inventoryBatchLoadJobProductCardId: string, inventoryBatchLoadJobProductCardCount: number) {
-        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardByInventoryBatchLoadJobProductCardId(inventoryBatchLoadJobProductCardId);
+        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
 
         if(inventoryBatchLoadJobProductCard == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
@@ -235,14 +249,6 @@ export class InventoryBatchLoadJobProductCardService {
 
         return true;
     }
-
-
-    
-    
-    
-    
-    
-    
     
     /* EVENT LISTENERS */
     @OnEvent('inventory.batch.load.job.product.card.update.status')

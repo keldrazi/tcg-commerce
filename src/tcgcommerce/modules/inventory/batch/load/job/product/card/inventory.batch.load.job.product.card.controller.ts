@@ -26,5 +26,10 @@ export class InventoryBatchLoadJobProductCardController {
         return inventoryLoadJobCardDTO;
     }
 
-       
+    @Get('verify/:inventoryBatchLoadJobProductCardId')
+    async verifyInventoryBatchLoadJobProductCard(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
+        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardToVerify(inventoryBatchLoadJobProductCardId);
+        return inventoryLoadJobCardDTO;
+    }
+
 }

@@ -1,7 +1,7 @@
 
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryBatchLoadProductPriceService } from './inventory.batch.load.price.card.service';
+import { InventoryBatchLoadProductPriceCardService } from './inventory.batch.load.price.card.service';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { InventoryBatchLoadProductCardModule } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.module';
 import { ProductCardConditionModule } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.module';
@@ -22,7 +22,7 @@ import { PriceProductCardBaseModule } from 'src/tcgcommerce/modules/price/produc
         PriceProductCardBaseModule,
     ],
     controllers: [],
-    providers: [InventoryBatchLoadProductPriceService],
-    exports: [InventoryBatchLoadProductPriceService]
+    providers: [InventoryBatchLoadProductPriceCardService],
+    exports: [InventoryBatchLoadProductPriceCardService]
 })
 export class InventoryBatchLoadPriceCardModule {}
