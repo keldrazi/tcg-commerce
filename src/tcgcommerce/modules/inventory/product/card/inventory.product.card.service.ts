@@ -24,27 +24,7 @@ export class InventoryProductCardService {
 
         for (let i=0; i < inventoryProductCards.length; i++) {
             let inventoryProductCard = inventoryProductCards[i];
-            let inventoryProductCardDTO: InventoryProductCardDTO = new InventoryProductCardDTO();
-            inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
-            inventoryProductCardDTO.productCardId = inventoryProductCard.productCardId;
-            inventoryProductCardDTO.productCardTCGdbId = inventoryProductCard.productCardTCGdbId;
-            inventoryProductCardDTO.productCardTCGPlayerId = inventoryProductCard.productCardTCGPlayerId;
-            inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
-            inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
-            inventoryProductCardDTO.productVendorId = inventoryProductCard.productVendorId;
-            inventoryProductCardDTO.productLineId = inventoryProductCard.productLineId;
-            inventoryProductCardDTO.productTypeId = inventoryProductCard.productTypeId;
-            inventoryProductCardDTO.productLanguageId = inventoryProductCard.productLanguageId;
-            inventoryProductCardDTO.productLanguageCode = inventoryProductCard.productLanguageCode;
-            inventoryProductCardDTO.productSetId = inventoryProductCard.productSetId;
-            inventoryProductCardDTO.productSetCode = inventoryProductCard.productSetCode;
-            inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
-            inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
-            inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
-            inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
-            inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
-            inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
-            inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
+            let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
             
             inventoryProductCardDTOs.push(inventoryProductCardDTO);
         }
@@ -70,32 +50,63 @@ export class InventoryProductCardService {
 
         for (let i=0; i < inventoryProductCards.length; i++) {
             let inventoryProductCard = inventoryProductCards[i];
-            let inventoryProductCardDTO: InventoryProductCardDTO = new InventoryProductCardDTO();
-            inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
-            inventoryProductCardDTO.productCardId = inventoryProductCard.productCardId;
-            inventoryProductCardDTO.productCardTCGdbId = inventoryProductCard.productCardTCGdbId;
-            inventoryProductCardDTO.productCardTCGPlayerId = inventoryProductCard.productCardTCGPlayerId;
-            inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
-            inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
-            inventoryProductCardDTO.productVendorId = inventoryProductCard.productVendorId;
-            inventoryProductCardDTO.productLineId = inventoryProductCard.productLineId;
-            inventoryProductCardDTO.productTypeId = inventoryProductCard.productTypeId;
-            inventoryProductCardDTO.productLanguageId = inventoryProductCard.productLanguageId;
-            inventoryProductCardDTO.productLanguageCode = inventoryProductCard.productLanguageCode;
-            inventoryProductCardDTO.productSetId = inventoryProductCard.productSetId;
-            inventoryProductCardDTO.productSetCode = inventoryProductCard.productSetCode;
-            inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
-            inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
-            inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
-            inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
-            inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
-            inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
-            inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
+            let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
             
             inventoryProductCardDTOs.push(inventoryProductCardDTO);
         }
 
         return inventoryProductCardDTOs;
     }
+
+    async getInventoryProductCardByCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
+
+        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+            where: {
+                productCardId: productCardId,
+                commerceAccountId: commerceAccountId,
+                commerceLocationId: commerceLocationId,
+                productLanguageId: productLanguageId
+            }
+        });
+
+        if(inventoryProductCard == null) {
+            return null;
+        }
+        
+        let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
+        
+        return inventoryProductCardDTO;
+        
+    }
+
+
+    async createInventoryProductCardDTO(inventoryProductCard: InventoryProductCard) {
+        
+        let inventoryProductCardDTO: InventoryProductCardDTO = new InventoryProductCardDTO();
+        inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
+        inventoryProductCardDTO.productCardId = inventoryProductCard.productCardId;
+        inventoryProductCardDTO.productCardTCGdbId = inventoryProductCard.productCardTCGdbId;
+        inventoryProductCardDTO.productCardTCGPlayerId = inventoryProductCard.productCardTCGPlayerId;
+        inventoryProductCardDTO.commerceAccountId = inventoryProductCard.commerceAccountId;
+        inventoryProductCardDTO.commerceLocationId = inventoryProductCard.commerceLocationId;
+        inventoryProductCardDTO.productVendorId = inventoryProductCard.productVendorId;
+        inventoryProductCardDTO.productLineId = inventoryProductCard.productLineId;
+        inventoryProductCardDTO.productTypeId = inventoryProductCard.productTypeId;
+        inventoryProductCardDTO.productLanguageId = inventoryProductCard.productLanguageId;
+        inventoryProductCardDTO.productLanguageCode = inventoryProductCard.productLanguageCode;
+        inventoryProductCardDTO.productSetId = inventoryProductCard.productSetId;
+        inventoryProductCardDTO.productSetCode = inventoryProductCard.productSetCode;
+        inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
+        inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
+        inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
+        inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
+        inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
+        inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
+        inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
+
+        return inventoryProductCardDTO;
+
+    }
+
             
 }

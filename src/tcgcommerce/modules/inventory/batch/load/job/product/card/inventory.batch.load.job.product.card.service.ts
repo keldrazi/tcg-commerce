@@ -53,7 +53,7 @@ export class InventoryBatchLoadJobProductCardService {
         });
 
         if(inventoryBatchLoadJobProductCard == null) {
-            return undefined;
+            return null;
         }
 
         //MAP TO DTO;
@@ -61,6 +61,29 @@ export class InventoryBatchLoadJobProductCardService {
 
         return inventoryBatchLoadJobProductCardDTO;
 
+    }
+
+    async getInventoryBatchLoadJobProductCardByDTO(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
+        let inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.findOne({
+            where: {
+                commerceAccountId: createInventoryBatchLoadJobProductCardDTO.commerceAccountId,
+                commerceLocationId: createInventoryBatchLoadJobProductCardDTO.commerceLocationId,
+                productVendorId: createInventoryBatchLoadJobProductCardDTO.productVendorId,
+                productLineId: createInventoryBatchLoadJobProductCardDTO.productLineId,
+                productTypeId: createInventoryBatchLoadJobProductCardDTO.productTypeId,
+                productSetId: createInventoryBatchLoadJobProductCardDTO.productSetId,
+                productLanguageId: createInventoryBatchLoadJobProductCardDTO.productLanguageId,
+            }
+        });
+
+        if(inventoryBatchLoadJobProductCard == null) {
+            return null;
+        }
+
+        //MAP TO DTO;
+        let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
+
+        return inventoryBatchLoadJobProductCardDTO;
     }
 
     /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
@@ -102,6 +125,10 @@ export class InventoryBatchLoadJobProductCardService {
             
             let inventoryBatchLoadJobProductCardDTO = await this.createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO);
 
+            if(inventoryBatchLoadJobProductCardDTO == null) {
+                continue;
+            }
+
             inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
 
         }
@@ -111,6 +138,20 @@ export class InventoryBatchLoadJobProductCardService {
     }
     /* CREATE PRODUCT CARD INVENTORY BATCH LOAD JOBS BY SET */
     async createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
+
+        //CHECK IF THE JOB ALREADY EXISTS;
+        let existingInventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardByDTO(createInventoryBatchLoadJobProductCardDTO);
+
+        if(existingInventoryBatchLoadJobProductCardDTO != null) {
+            if(existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_CANCELLED ||
+                existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_FAILED ||
+                existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_COMPLETE) {
+                
+                console.log('Inventory Batch Load Job Product Card already exists and is in progress for Set: ' + createInventoryBatchLoadJobProductCardDTO.productSetCode);
+                //TO DO THROW AN ERROR;
+                return null;
+            }
+        }
 
         let inventoryBatchLoadJobProductCardCode = await this.createInventoryBatchLoadJobProductCardCode(createInventoryBatchLoadJobProductCardDTO.productLineCode, createInventoryBatchLoadJobProductCardDTO.productSetCode, createInventoryBatchLoadJobProductCardDTO.commerceLocationName);
 
@@ -204,9 +245,9 @@ export class InventoryBatchLoadJobProductCardService {
     
     
     /* EVENT LISTENERS */
-    @OnEvent('inventory.batch.load.job.card.update.status')
+    @OnEvent('inventory.batch.load.job.product.card.update.status')
     async handleInventoryBatchLoadJobProductCardStatusEvent(payload: any) {
-        console.log('Received Event: inventory.batch.load.job.card.update.status');
+        console.log('Received Event: inventory.batch.load.job.product.card.update.status');
         let inventoryBatchLoadJobProductCardId = payload.inventoryBatchLoadJobProductCardId;
         let inventoryBatchLoadJobProductCardStatus = payload.inventoryBatchLoadJobProductCardStatus;
 

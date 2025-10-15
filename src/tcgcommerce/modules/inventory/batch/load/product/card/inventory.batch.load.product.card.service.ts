@@ -94,7 +94,7 @@ export class InventoryBatchLoadProductCardService {
         }
 
         this.eventEmitter.emit(
-            'inventory.batch.load.job.card.update.status',
+            'inventory.batch.load.job.product.card.update.status',
             {
                 inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
                 inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARDS
@@ -107,7 +107,7 @@ export class InventoryBatchLoadProductCardService {
         
         if(inventoryProductCardDTOs == null) {
             this.eventEmitter.emit(
-                'inventory.batch.load.job.card.update.status',
+                'inventory.batch.load.job.product.card.update.status',
                 {
                     inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
                     inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_FAILED,
@@ -116,7 +116,7 @@ export class InventoryBatchLoadProductCardService {
         }
         else {
             this.eventEmitter.emit(
-                'inventory.batch.load.job.card.update.status',
+                'inventory.batch.load.job.product.card.update.status',
                 {
                     inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
                     inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE,
@@ -171,6 +171,19 @@ export class InventoryBatchLoadProductCardService {
         for (let i = 0; i < productCards.length; i++) {
             console.log('Creating Inventory Product Card for: ' + productCards[i].productCardName);
             //TO DO: CHECK TO SEE IF THE INVENTORY PRODUCT CARD ALREADY EXISTS FOR THE COMMERCE ACCOUNT/COMMERCE LOCATION/PRODUCT CARD/PRODUCT CARD LANGUAGE;
+            let existingInventoryProductCard = await this.inventoryProductCardRepository.findOne({
+                where: {
+                    productCardId: productCards[i].productCardId,
+                    commerceAccountId: inventoryBatchLoadJobProductCardDTO.commerceAccountId,
+                    commerceLocationId: inventoryBatchLoadJobProductCardDTO.commerceLocationId,
+                    productLanguageId: productLanguage.productLanguageId
+                }
+            });
+
+            if(existingInventoryProductCard != null) {
+                console.log('Inventory Product Card already exists for: ' + productCards[i].productCardName + ' - Skipping Creation');
+                continue;
+            }
 
             let productCard: ProductCardDTO = productCards[i];
             

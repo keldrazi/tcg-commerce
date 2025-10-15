@@ -59,6 +59,12 @@ export class InventoryBatchLoadProductPriceService {
             );
 
             if(inventoryProductCardDTO != undefined) {
+
+                if(inventoryProductCardDTO.inventoryProductCardIsVerified == true) {
+                    console.log('Skipping Verified Inventory Product Card: ' + inventoryProductCardDTO.productCardPrintingName + ' - ' + inventoryProductCardDTO.productCardTCGdbId);
+                    continue;
+                }
+
                 let inventoryProductCardItems: InventoryProductCardItem[] = inventoryProductCardDTO.inventoryProductCardItems;
                 for(let j = 0; j < inventoryProductCardItems.length; j++) {
                     let inventoryProductCardItem = inventoryProductCardItems[j];
@@ -90,6 +96,7 @@ export class InventoryBatchLoadProductPriceService {
                     
                 }
                 inventoryProductCardDTO.inventoryProductCardItems = inventoryProductCardItems;
+                console.log('Update Inventory Product Card Price for: ' + inventoryProductCardDTO.productCardPrintingName + ' - ' + inventoryProductCardDTO.productCardTCGdbId);
                 await this.inventoryBatchLoadProductCardService.updateBatchInventoryProductCard(inventoryProductCardDTO);
             }
 
