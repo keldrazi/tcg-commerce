@@ -34,6 +34,10 @@ export class InventoryProductCard {
     productCardPrintingName: string;
     @Column('jsonb')
     inventoryProductCardItems: string;
+    @Column({ default: false })
+    inventoryProductCardIsVerified: boolean;
+    @Column({ default: true })
+    inventoryProductCardIsActive: boolean;
     @CreateDateColumn()
     inventoryProductCardCreateDate: Date;
     @UpdateDateColumn()

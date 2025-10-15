@@ -21,6 +21,8 @@ export class InventoryProductCardDTO {
     productCardPrintingId: string;
     productCardPrintingName: string;
     inventoryProductCardItems: InventoryProductCardItem[];
+    inventoryProductCardIsVerified: boolean;
+    inventoryProductCardIsActive: boolean;
     inventoryProductCardCreateDate: Date;
     inventoryProductCardUpdateDate: Date; 
     
@@ -55,6 +57,10 @@ export class CreateInventoryProductCardDTO {
     productCardPrintingName: string;
     @IsString()
     inventoryProductCardItems: InventoryProductCardItem[];
+    @IsBoolean()
+    inventoryProductCardIsVerified: boolean;
+    @IsBoolean()
+    inventoryProductCardIsActive: boolean;
    
 }
 
@@ -88,5 +94,9 @@ export class UpdateInventoryProductCardDTO {
     productCardPrintingName: string;
     @IsString()
     inventoryProductCardItems: InventoryProductCardItem[];
+    @IsBoolean()
+    inventoryProductCardIsVerified: boolean;
+    @IsBoolean()
+    inventoryProductCardIsActive: boolean;
    
 }

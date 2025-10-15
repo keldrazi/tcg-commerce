@@ -218,6 +218,7 @@ export class InventoryBatchLoadJobProductCardService {
             this.updateInventoryBatchLoadJobProductCardPricing(inventoryBatchLoadJobProductCardId);
         }
 
+
         await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardStatus);
 
     }

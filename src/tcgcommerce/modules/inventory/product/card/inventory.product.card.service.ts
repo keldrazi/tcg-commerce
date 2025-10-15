@@ -41,6 +41,8 @@ export class InventoryProductCardService {
             inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
             inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
             inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
+            inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
+            inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
             inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
             inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
             
@@ -85,6 +87,8 @@ export class InventoryProductCardService {
             inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
             inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
             inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
+            inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
+            inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
             inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
             inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
             

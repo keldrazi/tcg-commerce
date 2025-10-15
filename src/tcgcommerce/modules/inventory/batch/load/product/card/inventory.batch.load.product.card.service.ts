@@ -71,6 +71,8 @@ export class InventoryBatchLoadProductCardService {
             inventoryProductCardDTO.productCardPrintingId = inventoryProductCard.productCardPrintingId;
             inventoryProductCardDTO.productCardPrintingName = inventoryProductCard.productCardPrintingName;
             inventoryProductCardDTO.inventoryProductCardItems = JSON.parse(inventoryProductCard.inventoryProductCardItems) as InventoryProductCardItem[];
+            inventoryProductCardDTO.inventoryProductCardIsVerified = inventoryProductCard.inventoryProductCardIsVerified;
+            inventoryProductCardDTO.inventoryProductCardIsActive = inventoryProductCard.inventoryProductCardIsActive;
             inventoryProductCardDTO.inventoryProductCardCreateDate = inventoryProductCard.inventoryProductCardCreateDate;
             inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
             
@@ -185,6 +187,8 @@ export class InventoryBatchLoadProductCardService {
             inventoryProductCardDTO.productLanguageCode = productLanguage.productLanguageCode;
             inventoryProductCardDTO.productSetId = productSet.productSetId;
             inventoryProductCardDTO.productSetCode = productSet.productSetCode;
+            inventoryProductCardDTO.inventoryProductCardIsVerified = false;
+            inventoryProductCardDTO.inventoryProductCardIsActive = true;
             
             for(let j = 0; j < productCardPrintings.length; j++) {
                 let productCardPrinting = productCardPrintings[j];
@@ -236,7 +240,9 @@ export class InventoryBatchLoadProductCardService {
                     productSetCode: productSet.productSetCode,
                     productCardPrintingId: productCardPrinting.productCardPrintingId,
                     productCardPrintingName: productCardPrinting.productCardPrintingName,
-                    inventoryProductCardItems: JSON.stringify(inventoryProductCardItems)
+                    inventoryProductCardItems: JSON.stringify(inventoryProductCardItems),
+                    inventoryProductCardIsVerified: false,
+                    inventoryProductCardIsActive: true,
                 });
 
                 await this.inventoryProductCardRepository.save(newInventoryProductCard);
@@ -249,6 +255,24 @@ export class InventoryBatchLoadProductCardService {
         }
 
         return inventoryProductCardDTOs;
+        
+    }
+
+    async updateBatchInventoryProductCard(inventoryProductCardDTO: InventoryProductCardDTO) {
+        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+            where: {
+                inventoryProductCardId: inventoryProductCardDTO.inventoryProductCardId
+            }
+        });
+
+        if(inventoryProductCard == null) {
+            //TO DO: CREATE AN ERROR TO RETURN;
+            return null;
+        }
+
+        inventoryProductCard.inventoryProductCardItems = JSON.stringify(inventoryProductCardDTO.inventoryProductCardItems);
+        inventoryProductCard.inventoryProductCardUpdateDate = new Date();
+        inventoryProductCard = await this.inventoryProductCardRepository.save(inventoryProductCard);
         
     }
 
