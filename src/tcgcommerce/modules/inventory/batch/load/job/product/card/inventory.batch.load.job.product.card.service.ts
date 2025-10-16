@@ -8,7 +8,6 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.service';
 import { InventoryBatchLoadProductPriceCardService } from 'src/tcgcommerce/modules/inventory/batch/load/price/card/inventory.batch.load.price.card.service';
-import { InventoryBatchLoadProductVerifyCardService } from 'src/tcgcommerce/modules/inventory/batch/load/verify/card/inventory.batch.load.verify.card.service';
 
 @Injectable()
 export class InventoryBatchLoadJobProductCardService {
@@ -18,7 +17,6 @@ export class InventoryBatchLoadJobProductCardService {
         private productSetService: ProductSetService,
         private inventoryBatchLoadProductCardService: InventoryBatchLoadProductCardService,
         private inventoryBatchLoadProductPriceCardService: InventoryBatchLoadProductPriceCardService,
-        private inventoryBatchLoadProductVerifyCardService: InventoryBatchLoadProductVerifyCardService,
     ) { }
 
 

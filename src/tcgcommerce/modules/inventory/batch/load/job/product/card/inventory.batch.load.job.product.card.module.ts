@@ -6,8 +6,6 @@ import { InventoryBatchLoadJobProductCard } from 'src/typeorm/entities/tcgcommer
 import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
 import { InventoryBatchLoadProductCardModule } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.module';
 import { InventoryBatchLoadPriceCardModule } from 'src/tcgcommerce/modules/inventory/batch/load/price/card/inventory.batch.load.price.card.module';
-import { InventoryBatchLoadVerifyCardModule } from 'src/tcgcommerce/modules/inventory/batch/load/verify/card/inventory.batch.load.verify.card.module';
-
 
 @Module({
     imports: [
@@ -15,7 +13,6 @@ import { InventoryBatchLoadVerifyCardModule } from 'src/tcgcommerce/modules/inve
         ProductSetModule,
         InventoryBatchLoadProductCardModule,
         InventoryBatchLoadPriceCardModule,
-        InventoryBatchLoadVerifyCardModule
     ],
     controllers: [InventoryBatchLoadJobProductCardController],
     providers: [InventoryBatchLoadJobProductCardService],
