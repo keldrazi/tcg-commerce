@@ -15,36 +15,6 @@ export class InventoryBatchLoadProductVerifyCardService {
     ) { }
 
     
-    async getInventoryBatchLoadJobProductCardsToVerify(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
-        //GET THE PRODUCT CARDS FOR THE SET;
-        let productCards = await this.productCardService.getProductCardsByProductSetId(inventoryBatchLoadJobProductCardDTO.productSetId);
-
-        if(productCards == null) {
-            //TO DO HANDLE ERROR FOR NON EXISTENT SET;
-            return null;
-        }
-
-        let inventoryBatchLoadProductCardsToVerify: any[] = [];
-
-        for(let i = 0; i < productCards.length; i++) {
-            let productCard = productCards[i];
-            let productCardDTO: ProductCardDTO = { ...productCard };
-
-            //GET THE INVENTORY FOR THE THE PRODUCT CARD;
-            let inventoryBatchLoadProductCardDTO = await this.inventoryBatchLoadProductCardService.getUnverifiedInventoryBatchLoadProductCardByProductCardId(productCard.productCardId);
-
-            if(inventoryBatchLoadProductCardDTO != null) {
-                let inventoryBatchLoadProductCardToVerify = {
-                    productCardDTO: productCardDTO,
-                    inventoryBatchLoadProductCardDTO: inventoryBatchLoadProductCardDTO
-                };
-
-                inventoryBatchLoadProductCardsToVerify.push(inventoryBatchLoadProductCardToVerify);
-            }
-        }
-
-        return inventoryBatchLoadProductCardsToVerify;
- 
-    }
+    
 
 }

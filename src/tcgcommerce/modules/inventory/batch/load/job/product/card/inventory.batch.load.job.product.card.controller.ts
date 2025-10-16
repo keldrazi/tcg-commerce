@@ -26,9 +26,21 @@ export class InventoryBatchLoadJobProductCardController {
         return inventoryLoadJobCardDTO;
     }
 
-    @Get('verify/:inventoryBatchLoadJobProductCardId')
-    async verifyInventoryBatchLoadJobProductCard(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
-        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardToVerify(inventoryBatchLoadJobProductCardId);
+    @Get(':inventoryBatchLoadJobProductCardId')
+    async getInventoryBatchLoadJobProductCardDetailsById(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
+        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId);
+        return inventoryLoadJobCardDTO;
+    }
+
+    @Get('all/:commerceAccountId')
+    async getInventoryBatchLoadJobProductCards(@Param('commerceAccountId') commerceAccountId: string) {
+        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId);
+        return inventoryLoadJobCardDTO;
+    }
+
+    @Get('location/:commerceLocationId')
+    async getInventoryBatchLoadJobProductCardsByLocation(@Param('commerceLocationId') commerceLocationId: string) {
+        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceLocationId(commerceLocationId);
         return inventoryLoadJobCardDTO;
     }
 

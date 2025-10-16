@@ -81,22 +81,40 @@ export class InventoryBatchLoadProductCardService {
         return inventoryBatchLoadProductCardDTO;
     }
 
-    async getUnverifiedInventoryBatchLoadProductCardByProductCardId(productCardId: string) {
-        let inventoryBatchLoadProductCard = await this.inventoryBatchLoadProductCardRepository.findOne({
-            where: {
-                productCardId: productCardId,
-                inventoryBatchLoadProductCardIsActive: false
-            }
-        });
+    async getInventoryBatchLoadProductCardDetailsByJob(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
+        //GET THE PRODUCT CARDS FOR THE SET;
+        let productCards = await this.productCardService.getProductCardsByProductSetId(inventoryBatchLoadJobProductCardDTO.productSetId);
 
-        if(inventoryBatchLoadProductCard == null) {
-            //TO DO: THROW AN ERROR;
+        if(productCards == null) {
+            //TO DO HANDLE ERROR FOR NON EXISTENT SET;
             return null;
         }
 
-        let inventoryBatchLoadProductCardDTO: InventoryBatchLoadProductCardDTO = await this.createInventoryBatchLoadProductCardDTO(inventoryBatchLoadProductCard);
+        let inventoryBatchLoadProductCardDetails: any[] = [];
 
-        return inventoryBatchLoadProductCardDTO;
+        for(let i = 0; i < productCards.length; i++) {
+            let productCard = productCards[i];
+            let productCardDTO: ProductCardDTO = { ...productCard };
+
+            //GET THE INVENTORY FOR THE THE PRODUCT CARD;
+            let inventoryBatchLoadProductCardDTO = await this.getInventoryBatchLoadProductCardByProductCardId(productCard.productCardId);
+
+            if(inventoryBatchLoadProductCardDTO != null) {
+                let inventoryBatchLoadProductCardDetail = {
+                    productCardNumber: productCardDTO.productCardNumber,
+                    productCardName: productCardDTO.productCardName,
+                    productCardImage: productCardDTO.productCardImage,
+                    inventoryBatchLoadProductCardDTO: inventoryBatchLoadProductCardDTO
+                };
+
+                inventoryBatchLoadProductCardDetails.push(inventoryBatchLoadProductCardDetail);
+            }
+        }
+
+        return inventoryBatchLoadProductCardDetails;
+ 
+    
+
     }
 
     async createInventoryBatchLoadProductCardDTO(inventoryBatchLoadProductCard: InventoryBatchLoadProductCard) {

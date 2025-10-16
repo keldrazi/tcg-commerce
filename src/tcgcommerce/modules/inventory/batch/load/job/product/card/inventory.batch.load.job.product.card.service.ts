@@ -21,7 +21,58 @@ export class InventoryBatchLoadJobProductCardService {
         private inventoryBatchLoadProductVerifyCardService: InventoryBatchLoadProductVerifyCardService,
     ) { }
 
-    async getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId: string, productLineId: string) {
+
+    async getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId: string) {
+
+        let inventoryBatchLoadJobProductCards = await this.inventoryBatchLoadJobProductCardRepository.find({
+            where: {
+                commerceAccountId: commerceAccountId
+            }
+        });
+
+        if(inventoryBatchLoadJobProductCards == null) {
+            return [];
+        }
+
+        let inventoryBatchLoadJobProductCardDTOs: InventoryBatchLoadJobProductCardDTO[] = [];
+
+        for(let i = 0; i < inventoryBatchLoadJobProductCards.length; i++) {
+            let inventoryBatchLoadJobProductCard = inventoryBatchLoadJobProductCards[i];
+            //MAP TO DTO;
+            let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
+
+            inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
+        }
+
+        return inventoryBatchLoadJobProductCardDTOs;
+    }
+
+    async getInventoryBatchLoadJobProductCardsByCommerceLocationId(commerceLocationId: string) {
+
+        let inventoryBatchLoadJobProductCards = await this.inventoryBatchLoadJobProductCardRepository.find({
+            where: {
+                commerceLocationId: commerceLocationId
+            }
+        });
+
+        if(inventoryBatchLoadJobProductCards == null) {
+            return [];
+        }
+
+        let inventoryBatchLoadJobProductCardDTOs: InventoryBatchLoadJobProductCardDTO[] = [];
+
+        for(let i = 0; i < inventoryBatchLoadJobProductCards.length; i++) {
+            let inventoryBatchLoadJobProductCard = inventoryBatchLoadJobProductCards[i];
+            //MAP TO DTO;
+            let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
+
+            inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
+        }
+
+        return inventoryBatchLoadJobProductCardDTOs;
+    }
+
+    async getInventoryBatchLoadJobProductCardsByCommerceAccountIdAndLineId(commerceAccountId: string, productLineId: string) {
 
         let inventoryBatchLoadJobProductCards = await this.inventoryBatchLoadJobProductCardRepository.find({
             where: {
@@ -65,6 +116,36 @@ export class InventoryBatchLoadJobProductCardService {
 
     }
 
+    async getInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId: string) {
+        let inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.findOne({
+            where: {
+                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId
+            }
+        });
+
+        if(inventoryBatchLoadJobProductCard == null) {
+            //TO DOL: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return null;
+        }
+
+        //MAP TO DTO;
+        let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
+        let inventoryBatchLoadProductCardDetails = await this.inventoryBatchLoadProductCardService.getInventoryBatchLoadProductCardDetailsByJob(inventoryBatchLoadJobProductCardDTO);
+
+        if(inventoryBatchLoadProductCardDetails == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB DETAILS;
+            return null;
+        }
+
+        let inventoryBatchLoadJobProductCardDetails = {
+            inventoryBatchLoadJobProductCardDTO,
+            inventoryBatchLoadProductCardDetails
+        };
+
+        return inventoryBatchLoadJobProductCardDetails;
+
+    }
+
     async getInventoryBatchLoadJobProductCardByDTO(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
         let inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.findOne({
             where: {
@@ -88,31 +169,7 @@ export class InventoryBatchLoadJobProductCardService {
         return inventoryBatchLoadJobProductCardDTO;
     }
 
-    async getInventoryBatchLoadJobProductCardToVerify(inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
-
-        if(inventoryBatchLoadJobProductCardDTO == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return null;
-        }
-
-        
-
-        let inventoryBatchLoadProductCardsToVerify = await this.inventoryBatchLoadProductVerifyCardService.getInventoryBatchLoadJobProductCardsToVerify(inventoryBatchLoadJobProductCardDTO);
-        if(inventoryBatchLoadProductCardsToVerify == null) {
-            //TO DO HANDLE ERROR FOR NON EXISTENT SET;
-            return null;
-        }
-
-        let inventoryBatchLoadJobProductCardToVerify = {
-            inventoryBatchLoadJobProductCardDTO: inventoryBatchLoadJobProductCardDTO,
-            inventoryBatchLoadProductCardsToVerify: inventoryBatchLoadProductCardsToVerify
-        };
-
-        return inventoryBatchLoadJobProductCardToVerify;
-
-
-    }
+    
 
     /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
     async createInventoryBatchLoadJobProductCardAll(createInventoryBatchLoadJobsProductCardDTO: CreateInventoryBatchLoadJobsProductCardDTO) {
