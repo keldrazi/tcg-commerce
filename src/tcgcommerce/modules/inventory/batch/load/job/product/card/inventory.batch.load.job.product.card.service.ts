@@ -96,6 +96,20 @@ export class InventoryBatchLoadJobProductCardService {
             return null;
         }
 
+        
+
+        let inventoryBatchLoadProductCardsToVerify = await this.inventoryBatchLoadProductVerifyCardService.getInventoryBatchLoadJobProductCardsToVerify(inventoryBatchLoadJobProductCardDTO);
+        if(inventoryBatchLoadProductCardsToVerify == null) {
+            //TO DO HANDLE ERROR FOR NON EXISTENT SET;
+            return null;
+        }
+
+        let inventoryBatchLoadJobProductCardToVerify = {
+            inventoryBatchLoadJobProductCardDTO: inventoryBatchLoadJobProductCardDTO,
+            inventoryBatchLoadProductCardsToVerify: inventoryBatchLoadProductCardsToVerify
+        };
+
+        return inventoryBatchLoadJobProductCardToVerify;
 
 
     }
@@ -182,7 +196,7 @@ export class InventoryBatchLoadJobProductCardService {
         console.log('Set: ' + inventoryBatchLoadJobProductCardDTO.productSetCode);
 
         //START THE PROCESS OF CREATING THE INVENTORY FOR THE SET;
-        this.inventoryBatchLoadProductCardService.createBatchInventoryProductCardsBySetId(inventoryBatchLoadJobProductCardDTO);
+        this.inventoryBatchLoadProductCardService.createInventoryBatchLoadProductCardsBySetId(inventoryBatchLoadJobProductCardDTO);
         
         return inventoryBatchLoadJobProductCardDTO;
         

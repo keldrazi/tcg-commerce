@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS } from 'src/system/constants/tcgcommerce/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.contants';
 import { InventoryBatchLoadJobProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/load/job/product/card/dto/inventory.batch.load.job.product.card.dto';
-import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
-import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
+import { InventoryBatchLoadProductCardItem } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/interface/inventory.batch.load.product.card.item.interface';
+import { InventoryBatchLoadProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.entity';
 import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.service';
 import { TCGdbMTGPriceCurrentDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/dto/tcgdb.mtg.price.current.dto';
 import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.service';
@@ -15,7 +15,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 export class InventoryBatchLoadProductPriceCardService {
 
     constructor(
-        @InjectRepository(InventoryProductCard) private inventoryProductCardRepository: Repository<InventoryProductCard>,
+        @InjectRepository(InventoryBatchLoadProductCard) private inventoryBatchLoadProductCardRepository: Repository<InventoryBatchLoadProductCard>,
 
         private inventoryBatchLoadProductCardService: InventoryBatchLoadProductCardService,
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
@@ -27,7 +27,7 @@ export class InventoryBatchLoadProductPriceCardService {
     async updateBatchInventoryLoadJobProductPricesByJob(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
         
         //GET THE INVENTORY PRODUCT CARDS FOR THE SET;
-        let inventoryProductCardDTOs = await this.inventoryBatchLoadProductCardService.getInventoryBatchProductCardsBySetId(inventoryBatchLoadJobProductCardDTO);
+        let inventoryBatchLoadProductCardDTOs = await this.inventoryBatchLoadProductCardService.getInventoryBatchLoadProductCardsBySetId(inventoryBatchLoadJobProductCardDTO);
         //GET THE CURRENT PRICES FOR THE SET;
         let tcgdbMTGPriceCurrentDTOs = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(inventoryBatchLoadJobProductCardDTO.productSetCode);
 
@@ -47,51 +47,51 @@ export class InventoryBatchLoadProductPriceCardService {
             let tcgdbPriceCurrent = await this.getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO, priceProductCardBaseDTO);
 
 
-            let inventoryProductCardDTO = inventoryProductCardDTOs.find(item => 
+            let inventoryBatchLoadProductCardDTO = inventoryBatchLoadProductCardDTOs.find(item => 
                 item.productCardTCGdbId === productCardTCGdbId &&
                 item.productCardPrintingName === productCardPrintingName
             );
 
-            if(inventoryProductCardDTO != undefined) {
+            if(inventoryBatchLoadProductCardDTO != undefined) {
 
-                if(inventoryProductCardDTO.inventoryProductCardIsVerified == true) {
-                    console.log('Skipping Verified Inventory Product Card: ' + inventoryProductCardDTO.productCardPrintingName + ' - ' + inventoryProductCardDTO.productCardTCGdbId);
+                if(inventoryBatchLoadProductCardDTO.inventoryBatchLoadProductCardIsVerified == true) {
+                    console.log('Skipping Verified Inventory Batch Load Product Card: ' + inventoryBatchLoadProductCardDTO.productCardPrintingName + ' - ' + inventoryBatchLoadProductCardDTO.productCardTCGdbId);
                     continue;
                 }
 
-                let inventoryProductCardItems: InventoryProductCardItem[] = inventoryProductCardDTO.inventoryProductCardItems;
-                for(let j = 0; j < inventoryProductCardItems.length; j++) {
-                    let inventoryProductCardItem = inventoryProductCardItems[j];
+                let inventoryBatchLoadProductCardItems: InventoryBatchLoadProductCardItem[] = inventoryBatchLoadProductCardDTO.inventoryBatchLoadProductCardItems;
+                for(let j = 0; j < inventoryBatchLoadProductCardItems.length; j++) {
+                    let inventoryBatchLoadProductCardItem = inventoryBatchLoadProductCardItems[j];
 
-                    switch(inventoryProductCardItem.productCardConditionCode) {
+                    switch(inventoryBatchLoadProductCardItem.productCardConditionCode) {
                         case 'NM':
                             let price = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseNMPercentage / 100);
-                            inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(price.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(price.toFixed(2));
                             break;
                         case 'LP':
                             let priceLP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseLPPercentage / 100);
-                            inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceLP.toFixed(2));
                             break;
                         case 'MP':
                             let priceMP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseMPPercentage / 100);
-                            inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceMP.toFixed(2));
                             break;
                         case 'HP':
                             let priceHP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseHPPercentage / 100);
-                            inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceHP.toFixed(2));
                             break;
                         case 'DM':
                             let priceDM = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseDMPercentage / 100);
-                            inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceDM.toFixed(2));
                             break;
                     }
 
-                    inventoryProductCardItems[j] = inventoryProductCardItem;
+                    inventoryBatchLoadProductCardItems[j] = inventoryBatchLoadProductCardItem;
                     
                 }
-                inventoryProductCardDTO.inventoryProductCardItems = inventoryProductCardItems;
-                console.log('Update Inventory Product Card Price for: ' + inventoryProductCardDTO.productCardPrintingName + ' - ' + inventoryProductCardDTO.productCardTCGdbId);
-                await this.inventoryBatchLoadProductCardService.updateBatchInventoryProductCard(inventoryProductCardDTO);
+                inventoryBatchLoadProductCardDTO.inventoryBatchLoadProductCardItems = inventoryBatchLoadProductCardItems;
+                console.log('Update Inventory Batch Load Product Card Price for: ' + inventoryBatchLoadProductCardDTO.productCardPrintingName + ' - ' + inventoryBatchLoadProductCardDTO.productCardTCGdbId);
+                await this.inventoryBatchLoadProductCardService.updateInventoryBatchLoadProductCard(inventoryBatchLoadProductCardDTO);
             }
 
         }

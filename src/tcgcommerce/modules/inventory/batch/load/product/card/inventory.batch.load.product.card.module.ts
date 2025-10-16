@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { InventoryBatchLoadProductCardService } from './inventory.batch.load.product.card.service';
-import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
+import { InventoryBatchLoadProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.entity';
+import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
@@ -14,7 +15,7 @@ import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/locatio
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryProductCard]),
+        TypeOrmModule.forFeature([InventoryBatchLoadProductCard]),
         ProductCardModule,
         ProductVendorModule,
         ProductLineModule,
@@ -22,7 +23,8 @@ import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/locatio
         ProductCardConditionModule,
         ProductLanguageModule,
         ProductCardPrintingModule,
-        CommerceLocationModule
+        CommerceLocationModule,
+        InventoryProductCardModule,
     ],
     controllers: [],
     providers: [InventoryBatchLoadProductCardService],

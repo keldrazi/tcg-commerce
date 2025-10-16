@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS } from 'src/system/constants/tcgcommerce/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.contants';
 import { InventoryBatchLoadJobProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/load/job/product/card/dto/inventory.batch.load.job.product.card.dto';
-import { InventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
-import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
-import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.service';
 import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -35,12 +31,12 @@ export class InventoryBatchLoadProductVerifyCardService {
             let productCardDTO: ProductCardDTO = { ...productCard };
 
             //GET THE INVENTORY FOR THE THE PRODUCT CARD;
-            let inventoryProductCardDTO = await this.inventoryBatchLoadProductCardService.getUnverifiedInventoryBatchProductCardByProductCardId(productCard.productCardId);
+            let inventoryBatchLoadProductCardDTO = await this.inventoryBatchLoadProductCardService.getUnverifiedInventoryBatchLoadProductCardByProductCardId(productCard.productCardId);
 
-            if(inventoryProductCardDTO != null) {
+            if(inventoryBatchLoadProductCardDTO != null) {
                 let inventoryBatchLoadProductCardToVerify = {
                     productCardDTO: productCardDTO,
-                    inventoryProductCardDTO: inventoryProductCardDTO
+                    inventoryBatchLoadProductCardDTO: inventoryBatchLoadProductCardDTO
                 };
 
                 inventoryBatchLoadProductCardsToVerify.push(inventoryBatchLoadProductCardToVerify);
@@ -48,7 +44,7 @@ export class InventoryBatchLoadProductVerifyCardService {
         }
 
         return inventoryBatchLoadProductCardsToVerify;
-
+ 
     }
 
 }
