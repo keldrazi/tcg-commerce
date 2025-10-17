@@ -285,6 +285,7 @@ export class InventoryBatchLoadProductCardService {
                         inventoryBatchLoadProductCardItemMaxQty: 0,
                         inventoryBatchLoadProductCardItemReserveQty: 0,
                         inventoryBatchLoadProductCardItemPrice: 0,
+                        inventoryBatchLoadProductCardItemCost: 0,
                         inventoryBatchLoadProductCardItemOverridePriceEnabled: false,
                         inventoryBatchLoadProductCardItemOverridePrice: 0,
                     };

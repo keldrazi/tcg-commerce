@@ -105,7 +105,7 @@ export class InventoryBatchLoadProductPriceCardService {
         //EMIT THE EVENT TO UPDATE THE JOB STATUS;
         this.eventEmitter.emit('inventory.batch.load.job.product.card.update.status', {
             inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
-            inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_READY_FOR_VERIFICATION,
+            inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_READY_FOR_REVIEW,
         });
     }
 
