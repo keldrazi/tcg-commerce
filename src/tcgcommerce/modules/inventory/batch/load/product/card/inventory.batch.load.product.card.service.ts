@@ -35,7 +35,26 @@ export class InventoryBatchLoadProductCardService {
         private eventEmitter: EventEmitter2,
     ) { }
 
+    async getInventoryBatchLoadProductCardsByJobId(inventoryBatchLoadJobProductCardId: string) {
 
+        let inventoryBatchLoadProductCardDTOs: InventoryBatchLoadProductCardDTO[] = [];
+
+        let inventoryBatchLoadProductCards = await this.inventoryBatchLoadProductCardRepository.find({
+            where: {
+                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId,
+            }
+        });
+
+        for(let i = 0; i < inventoryBatchLoadProductCards.length; i++) {
+            let inventoryBatchLoadProductCard = inventoryBatchLoadProductCards[i];
+            let inventoryBatchLoadProductCardDTO: InventoryBatchLoadProductCardDTO = await this.createInventoryBatchLoadProductCardDTO(inventoryBatchLoadProductCard);
+            
+            inventoryBatchLoadProductCardDTOs.push(inventoryBatchLoadProductCardDTO);
+        }
+
+        return inventoryBatchLoadProductCardDTOs;
+
+    }
 
     async getInventoryBatchLoadProductCardsBySetId(inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO) {
 
@@ -64,9 +83,10 @@ export class InventoryBatchLoadProductCardService {
 
     }
 
-    async getInventoryBatchLoadProductCardByProductCardId(productCardId: string) {
+    async getInventoryBatchLoadProductCardByProductCardId(inventoryBatchLoadJobProductCardId: string, productCardId: string) {
         let inventoryBatchLoadProductCard = await this.inventoryBatchLoadProductCardRepository.findOne({
             where: {
+                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId,
                 productCardId: productCardId
             }
         });
@@ -97,7 +117,7 @@ export class InventoryBatchLoadProductCardService {
             let productCardDTO: ProductCardDTO = { ...productCard };
 
             //GET THE INVENTORY FOR THE THE PRODUCT CARD;
-            let inventoryBatchLoadProductCardDTO = await this.getInventoryBatchLoadProductCardByProductCardId(productCard.productCardId);
+            let inventoryBatchLoadProductCardDTO = await this.getInventoryBatchLoadProductCardByProductCardId(inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId, productCard.productCardId);
 
             if(inventoryBatchLoadProductCardDTO != null) {
                 let inventoryBatchLoadProductCardDetail = {
@@ -121,6 +141,7 @@ export class InventoryBatchLoadProductCardService {
 
         let inventoryBatchLoadProductCardDTO: InventoryBatchLoadProductCardDTO = new InventoryBatchLoadProductCardDTO();
         inventoryBatchLoadProductCardDTO.inventoryBatchLoadProductCardId = inventoryBatchLoadProductCard.inventoryBatchLoadProductCardId;
+        inventoryBatchLoadProductCardDTO.inventoryBatchLoadJobProductCardId = inventoryBatchLoadProductCard.inventoryBatchLoadJobProductCardId;
         inventoryBatchLoadProductCardDTO.productCardId = inventoryBatchLoadProductCard.productCardId;
         inventoryBatchLoadProductCardDTO.productCardTCGdbId = inventoryBatchLoadProductCard.productCardTCGdbId;
         inventoryBatchLoadProductCardDTO.productCardTCGPlayerId = inventoryBatchLoadProductCard.productCardTCGPlayerId;
@@ -242,6 +263,7 @@ export class InventoryBatchLoadProductCardService {
             let productCard: ProductCardDTO = productCards[i];
             
             let inventoryBatchLoadProductCardDTO: InventoryBatchLoadProductCardDTO = new InventoryBatchLoadProductCardDTO();
+            inventoryBatchLoadProductCardDTO.inventoryBatchLoadJobProductCardId = inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId;
             inventoryBatchLoadProductCardDTO.productCardId = productCard.productCardId;
             inventoryBatchLoadProductCardDTO.productCardTCGdbId = productCard.productCardTCGdbId;
             inventoryBatchLoadProductCardDTO.productCardTCGPlayerId = productCard.productCardTCGPlayerId;
@@ -279,21 +301,22 @@ export class InventoryBatchLoadProductCardService {
 
                     let inventoryBatchLoadProductCardItem: InventoryBatchLoadProductCardItem = {
                         productCardConditionCode: productCardCondition.productCardConditionCode,
-                        inventoryBatchLoadProductCardItemTCGPlayerSKU: inventoryProductCardItemTCGPlayerSKU,
-                        inventoryBatchLoadProductCardItemSKU: '',
-                        inventoryBatchLoadProductCardItemQty: 0,
-                        inventoryBatchLoadProductCardItemMaxQty: 0,
-                        inventoryBatchLoadProductCardItemReserveQty: 0,
-                        inventoryBatchLoadProductCardItemPrice: 0,
-                        inventoryBatchLoadProductCardItemCost: 0,
-                        inventoryBatchLoadProductCardItemOverridePriceEnabled: false,
-                        inventoryBatchLoadProductCardItemOverridePrice: 0,
+                        inventoryProductCardItemTCGPlayerSKU: inventoryProductCardItemTCGPlayerSKU,
+                        inventoryProductCardItemSKU: '',
+                        inventoryProductCardItemQty: 0,
+                        inventoryProductCardItemMaxQty: 0,
+                        inventoryProductCardItemReserveQty: 0,
+                        inventoryProductCardItemPrice: 0,
+                        inventoryProductCardItemCost: 0,
+                        inventoryProductCardItemOverridePriceEnabled: false,
+                        inventoryProductCardItemOverridePrice: 0,
                     };
 
                     inventoryBatchLoadProductCardItems.push(inventoryBatchLoadProductCardItem);
                 }
 
                 let newInventoryBatchLoadProductCard = this.inventoryBatchLoadProductCardRepository.create({
+                    inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId,
                     productCardId: productCard.productCardId,
                     productCardTCGdbId: productCard.productCardTCGdbId,
                     productCardTCGPlayerId: productCard.productCardTCGPlayerId,
@@ -324,6 +347,35 @@ export class InventoryBatchLoadProductCardService {
 
         return inventoryBatchLoadProductCardDTOs;
         
+    }
+
+    async approveInventoryBatchLoadProductCardsByJobId(inventoryBatchLoadJobProductCardId: string) {
+        
+        this.eventEmitter.emit(
+            'inventory.batch.load.job.product.card.update.status',
+            {
+                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId,
+                inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_ADDING_TO_INVENTORY,
+            }
+        )   
+        
+        let inventoryBatchLoadProductCardDTOs = await this.getInventoryBatchLoadProductCardsByJobId(inventoryBatchLoadJobProductCardId);
+
+        for(let i = 0; i < inventoryBatchLoadProductCardDTOs.length; i++) {
+            let inventoryBatchLoadProductCardDTO = inventoryBatchLoadProductCardDTOs[i];
+            await this.inventoryProductCardService.createInventoryProductCardFromBatchLoad(inventoryBatchLoadProductCardDTO);
+        }
+
+        this.eventEmitter.emit(
+            'inventory.batch.load.job.product.card.update.status',
+            {
+                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId,
+                inventoryBatchLoadJobProductCardStatus: INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_COMPLETE,
+            }
+        )
+        
+        return true;
+
     }
 
     async updateInventoryBatchLoadProductCard(inventoryBatchLoadProductCardDTO: InventoryBatchLoadProductCardDTO) {

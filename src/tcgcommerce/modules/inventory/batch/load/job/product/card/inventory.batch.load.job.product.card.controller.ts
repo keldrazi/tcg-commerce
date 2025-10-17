@@ -1,5 +1,6 @@
 import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { InventoryBatchLoadJobProductCardService } from './inventory.batch.load.job.product.card.service';
+import { InventoryBatchLoadJobProductCardDTO } from "src/tcgcommerce/modules/inventory/batch/load/job/product/card/dto/inventory.batch.load.job.product.card.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 
@@ -13,35 +14,46 @@ export class InventoryBatchLoadJobProductCardController {
     @Post('create/all')
     async createInventoryBatchLoadJobsProductCard(@Body() body: any)
     {
-        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardAll(body.createInventoryBatchLoadJobsProductCardDTO);
-        
-        return inventoryLoadJobCardDTO;
+        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardAll(body.createInventoryBatchLoadJobsProductCardDTO);
+
+        return inventoryBatchLoadJobProductCardDTO;
     }
 
     @Post('create/set')
     async createInventoryBatchLoadJobProductCard(@Body() body: any)
     {
-        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardSet(body.createInventoryBatchLoadJobProductCardDTO);
+        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardSet(body.createInventoryBatchLoadJobProductCardDTO);
         
-        return inventoryLoadJobCardDTO;
-    }
-
-    @Get(':inventoryBatchLoadJobProductCardId')
-    async getInventoryBatchLoadJobProductCardDetailsById(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
-        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId);
-        return inventoryLoadJobCardDTO;
+        return inventoryBatchLoadJobProductCardDTO;
     }
 
     @Get('all/:commerceAccountId')
     async getInventoryBatchLoadJobProductCards(@Param('commerceAccountId') commerceAccountId: string) {
-        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId);
-        return inventoryLoadJobCardDTO;
+        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId);
+        
+        return inventoryBatchLoadJobProductCardDTO;
     }
 
     @Get('location/:commerceLocationId')
     async getInventoryBatchLoadJobProductCardsByLocation(@Param('commerceLocationId') commerceLocationId: string) {
-        let inventoryLoadJobCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceLocationId(commerceLocationId);
-        return inventoryLoadJobCardDTO;
+        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceLocationId(commerceLocationId);
+        
+        return inventoryBatchLoadJobProductCardDTO;
     }
+
+    @Get('review/:inventoryBatchLoadJobProductCardId')
+    async getInventoryBatchLoadJobProductCardDetailsById(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
+        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId);
+        
+        return inventoryBatchLoadJobProductCardDTO;
+    }
+
+    @Get('approve/:inventoryBatchLoadJobProductCardId')
+    async approveInventoryBatchLoadJobProductCardDetailsById(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
+        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.approveInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId);
+        
+        return inventoryBatchLoadJobProductCardDTO;
+    }
+
 
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InventoryProductCardDTO, CreateInventoryProductCardsDTO, CreateInventoryProductCardDTO, UpdateInventoryProductCardsDTO, UpdateInventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
+import { InventoryBatchLoadProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/dto/inventory.batch.load.product.card.dto';
 
 @Injectable()
 export class InventoryProductCardService {
@@ -77,6 +78,34 @@ export class InventoryProductCardService {
         
         return inventoryProductCardDTO;
         
+    }
+
+    async createInventoryProductCardFromBatchLoad(inventoryBatchLoadProductCardDTO: InventoryBatchLoadProductCardDTO) {
+        let inventoryProductCard = this.inventoryProductCardRepository.create({
+            productCardId: inventoryBatchLoadProductCardDTO.productCardId,
+            productCardTCGdbId: inventoryBatchLoadProductCardDTO.productCardTCGdbId,
+            productCardTCGPlayerId: inventoryBatchLoadProductCardDTO.productCardTCGPlayerId,
+            commerceAccountId: inventoryBatchLoadProductCardDTO.commerceAccountId,
+            commerceLocationId: inventoryBatchLoadProductCardDTO.commerceLocationId,
+            productVendorId: inventoryBatchLoadProductCardDTO.productVendorId,
+            productLineId: inventoryBatchLoadProductCardDTO.productLineId,
+            productTypeId: inventoryBatchLoadProductCardDTO.productTypeId,
+            productLanguageId: inventoryBatchLoadProductCardDTO.productLanguageId,
+            productLanguageCode: inventoryBatchLoadProductCardDTO.productLanguageCode,
+            productSetId: inventoryBatchLoadProductCardDTO.productSetId,
+            productSetCode: inventoryBatchLoadProductCardDTO.productSetCode,
+            productCardPrintingId: inventoryBatchLoadProductCardDTO.productCardPrintingId,
+            productCardPrintingName: inventoryBatchLoadProductCardDTO.productCardPrintingName,
+            inventoryProductCardItems: JSON.stringify(inventoryBatchLoadProductCardDTO.inventoryBatchLoadProductCardItems),
+            inventoryProductCardIsVerified: true,
+            inventoryProductCardIsActive: true
+        });
+
+        await this.inventoryProductCardRepository.save(inventoryProductCard);
+        console.log('Created Inventory Product Card from Batch Load: ' + inventoryProductCard.inventoryProductCardId);
+        
+        return await this.createInventoryProductCardDTO(inventoryProductCard);
+
     }
 
 

@@ -4,6 +4,7 @@ import { InventoryBatchLoadProductCardItem } from 'src/tcgcommerce/modules/inven
 
 export class InventoryBatchLoadProductCardDTO {
     inventoryBatchLoadProductCardId: string;
+    inventoryBatchLoadJobProductCardId: string;
     productCardId: string;
     productCardTCGdbId: string;
     productCardTCGPlayerId: number;

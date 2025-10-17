@@ -219,6 +219,7 @@ export class InventoryBatchLoadJobProductCardService {
         return inventoryBatchLoadJobProductCardDTOs;
 
     }
+    
     /* CREATE PRODUCT CARD INVENTORY BATCH LOAD JOBS BY SET */
     async createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
 
@@ -230,7 +231,7 @@ export class InventoryBatchLoadJobProductCardService {
                 existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_FAILED ||
                 existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_COMPLETE) {
                 
-                console.log('Inventory Batch Load Job Product Card already exists and is in progress for Set: ' + createInventoryBatchLoadJobProductCardDTO.productSetCode);
+                console.log('Inventory Batch Load Job Product Card already exists or is in progress for Set: ' + createInventoryBatchLoadJobProductCardDTO.productSetCode);
                 //TO DO THROW AN ERROR;
                 return null;
             }
@@ -246,7 +247,13 @@ export class InventoryBatchLoadJobProductCardService {
         inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.save(inventoryBatchLoadJobProductCard);
         
         
-        let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard });
+        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardId);``
+        
+        if(inventoryBatchLoadJobProductCardDTO == null) {
+            //TO DO: HANDLE ERROR FOR FAILED CREATION OF IMPORT JOB;
+            return null; //RETURN AN ERROR;
+        }
+        
         console.log('Created Inventory Batch Load Job Product Card: ' + inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId);
         console.log('Set: ' + inventoryBatchLoadJobProductCardDTO.productSetCode);
 
@@ -259,16 +266,16 @@ export class InventoryBatchLoadJobProductCardService {
 
     /* UPDATE PRODUCT CARD INVENTORY BATCH LOAD JOBS WITH PRICING */
     async updateInventoryBatchLoadJobProductCardPricing(inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
+        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
 
-        if(inventoryBatchLoadJobProductCard == undefined) {
+        if(inventoryBatchLoadJobProductCardDTO == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
         await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
 
-        this.inventoryBatchLoadProductPriceCardService.updateBatchInventoryLoadJobProductPricesByJob(inventoryBatchLoadJobProductCard);
+        this.inventoryBatchLoadProductPriceCardService.updateBatchInventoryLoadJobProductPricesByJob(inventoryBatchLoadJobProductCardDTO);
 
         return true;
         
@@ -318,6 +325,27 @@ export class InventoryBatchLoadJobProductCardService {
 
         return true;
     }
+
+    async approveInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId: string) {
+        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
+
+        if(inventoryBatchLoadJobProductCardDTO == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return false; //RETURN AN ERROR;
+        }
+
+        if(inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_READY_FOR_REVIEW) {
+            //TO DO: HANDLE ERROR FOR INVALID STATUS TO APPROVE IMPORT JOB;
+            return false; //RETURN AN ERROR;
+        }
+
+        await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_ADDING_TO_INVENTORY);
+
+        await this.inventoryBatchLoadProductCardService.approveInventoryBatchLoadProductCardsByJobId(inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId);
+
+        return true;
+    }
+    
     
     /* EVENT LISTENERS */
     @OnEvent('inventory.batch.load.job.product.card.update.status')

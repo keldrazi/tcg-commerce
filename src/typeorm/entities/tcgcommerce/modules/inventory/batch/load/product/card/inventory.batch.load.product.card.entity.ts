@@ -5,6 +5,8 @@ export class InventoryBatchLoadProductCard {
     @PrimaryGeneratedColumn('uuid')
     inventoryBatchLoadProductCardId: string;
     @Column()
+    inventoryBatchLoadJobProductCardId: string;
+    @Column()
     productCardId: string;
     @Column()
     productCardTCGdbId: string;

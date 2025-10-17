@@ -66,23 +66,23 @@ export class InventoryBatchLoadProductPriceCardService {
                     switch(inventoryBatchLoadProductCardItem.productCardConditionCode) {
                         case 'NM':
                             let price = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseNMPercentage / 100);
-                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(price.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(price.toFixed(2));
                             break;
                         case 'LP':
                             let priceLP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseLPPercentage / 100);
-                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceLP.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
                             break;
                         case 'MP':
                             let priceMP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseMPPercentage / 100);
-                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceMP.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
                             break;
                         case 'HP':
                             let priceHP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseHPPercentage / 100);
-                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceHP.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
                             break;
                         case 'DM':
                             let priceDM = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseDMPercentage / 100);
-                            inventoryBatchLoadProductCardItem.inventoryBatchLoadProductCardItemPrice = parseFloat(priceDM.toFixed(2));
+                            inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
                             break;
                     }
 
