@@ -8,7 +8,7 @@ import { InventoryBatchLoadProductCard } from 'src/typeorm/entities/tcgcommerce/
 import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.service';
 import { TCGdbMTGPriceCurrentDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/dto/tcgdb.mtg.price.current.dto';
 import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.service';
-import { PriceProductCardBaseService } from 'src/tcgcommerce/modules/price/product/card/base/price.product.card.base.service';
+import { PriceRuleProductCardBaseService } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class InventoryBatchLoadProductPriceCardService {
 
         private inventoryBatchLoadProductCardService: InventoryBatchLoadProductCardService,
         private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
-        private priceProductCardBaseService: PriceProductCardBaseService,
+        private priceRuleProductCardBaseService: PriceRuleProductCardBaseService,
         private eventEmitter: EventEmitter2,
     ) { }
 
@@ -32,9 +32,9 @@ export class InventoryBatchLoadProductPriceCardService {
         let tcgdbMTGPriceCurrentDTOs = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(inventoryBatchLoadJobProductCardDTO.productSetCode);
 
         //GET THE BASE PRICE RULES;
-        let priceProductCardBaseDTO = await this.priceProductCardBaseService.getPriceProductCardBaseByCommerceAccountId(inventoryBatchLoadJobProductCardDTO.commerceAccountId, inventoryBatchLoadJobProductCardDTO.productVendorId, inventoryBatchLoadJobProductCardDTO.productLineId, inventoryBatchLoadJobProductCardDTO.productTypeId);
+        let priceRuleProductCardBaseDTO = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(inventoryBatchLoadJobProductCardDTO.commerceAccountId, inventoryBatchLoadJobProductCardDTO.productVendorId, inventoryBatchLoadJobProductCardDTO.productLineId, inventoryBatchLoadJobProductCardDTO.productTypeId);
 
-        if(priceProductCardBaseDTO == null) {
+        if(priceRuleProductCardBaseDTO == null) {
             //TO DO: USE THE DEFAULTS;
             return;
         }
@@ -44,7 +44,7 @@ export class InventoryBatchLoadProductPriceCardService {
             let productCardPrintingName = tcgdbMTGPriceCurrentDTO.tcgdbMTGPriceCurrentSubTypeName;
             let productCardTCGdbId = tcgdbMTGPriceCurrentDTO.tcgdbMTGCardId;
 
-            let tcgdbPriceCurrent = await this.getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO, priceProductCardBaseDTO);
+            let tcgdbPriceCurrent = await this.getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO, priceRuleProductCardBaseDTO);
 
 
             let inventoryBatchLoadProductCardDTO = inventoryBatchLoadProductCardDTOs.find(item => 
@@ -65,23 +65,23 @@ export class InventoryBatchLoadProductPriceCardService {
 
                     switch(inventoryBatchLoadProductCardItem.productCardConditionCode) {
                         case 'NM':
-                            let price = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseNMPercentage / 100);
+                            let price = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseNMPercentage / 100);
                             inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(price.toFixed(2));
                             break;
                         case 'LP':
-                            let priceLP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseLPPercentage / 100);
+                            let priceLP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseLPPercentage / 100);
                             inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
                             break;
                         case 'MP':
-                            let priceMP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseMPPercentage / 100);
+                            let priceMP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseMPPercentage / 100);
                             inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
                             break;
                         case 'HP':
-                            let priceHP = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseHPPercentage / 100);
+                            let priceHP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseHPPercentage / 100);
                             inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
                             break;
                         case 'DM':
-                            let priceDM = tcgdbPriceCurrent * (priceProductCardBaseDTO.priceProductCardBaseDMPercentage / 100);
+                            let priceDM = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseDMPercentage / 100);
                             inventoryBatchLoadProductCardItem.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
                             break;
                     }
