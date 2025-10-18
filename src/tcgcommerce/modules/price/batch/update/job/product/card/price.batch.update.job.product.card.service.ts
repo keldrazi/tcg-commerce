@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceBatchUpdateJobProductCard } from 'src/typeorm/entities/tcgcommerce/modules/price/batch/update/job/product/card/price.batch.update.job.product.card.entity';
 import { PriceBatchUpdateJobProductCardDTO, CreatePriceBatchUpdateJobsProductCardDTO, CreatePriceBatchUpdateJobProductCardDTO } from './dto/price.batch.update.job.product.card.dto';
-import { INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS } from 'src/system/constants/tcgcommerce/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.contants';
+import { PRICE_BATCH_UPDATE_JOB_PRODUCT_CARD_STATUS } from 'src/system/constants/tcgcommerce/price/batch/update/job/product/card/price.batch.update.job.product.card.constants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { PriceBatchUpdateProductCardService } from 'src/tcgcommerce/modules/price/batch/update/product/card/price.batch.update.product.card.service';
