@@ -1,21 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryBatchLoadJobProductCardController } from './inventory.product.card.service.create.job.controller';
-import { InventoryBatchLoadJobProductCardService } from './inventory.product.card.service.create.job.service';
-import { InventoryBatchLoadJobProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.entity';
+import { InventoryProductCardServiceCreateJobController } from './inventory.product.card.service.create.job.controller';
+import { InventoryProductCardServiceCreateJobService } from './inventory.product.card.service.create.job.service';
+import { InventoryProductCardServiceCreateJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/inventory.product.card.service.create.job.entity';
 import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
-import { InventoryBatchLoadProductCardModule } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.module';
-import { InventoryBatchLoadPriceCardModule } from 'src/tcgcommerce/modules/inventory/batch/load/price/card/inventory.batch.load.price.card.module';
+import { InventoryProductCardServiceCreateJobItemModule } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.module';
+
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryBatchLoadJobProductCard]),
+        TypeOrmModule.forFeature([InventoryProductCardServiceCreateJob]),
         ProductSetModule,
-        InventoryBatchLoadProductCardModule,
-        InventoryBatchLoadPriceCardModule,
+        InventoryProductCardServiceCreateJobItemModule,
     ],
-    controllers: [InventoryBatchLoadJobProductCardController],
-    providers: [InventoryBatchLoadJobProductCardService],
-    exports: [InventoryBatchLoadJobProductCardService]
+    controllers: [InventoryProductCardServiceCreateJobController],
+    providers: [InventoryProductCardServiceCreateJobService],
+    exports: [InventoryProductCardServiceCreateJobService]
 })
-export class InventoryBatchLoadJobProductCardModule {}
+export class InventoryProductCardServiceCreateJobModule {}

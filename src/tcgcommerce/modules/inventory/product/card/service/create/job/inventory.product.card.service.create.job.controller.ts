@@ -4,8 +4,8 @@ import { InventoryBatchLoadJobProductCardDTO } from "src/tcgcommerce/modules/inv
 import { FileInterceptor } from "@nestjs/platform-express";
 
 
-@Controller('inventory/batch/load/job/product/card')
-export class InventoryBatchLoadJobProductCardController {
+@Controller('inventory/product/card/service/create/job')
+export class InventoryProductCardServiceCreateJobController {
 
     constructor(
         private inventoryLoadJobCardService: InventoryBatchLoadJobProductCardService,

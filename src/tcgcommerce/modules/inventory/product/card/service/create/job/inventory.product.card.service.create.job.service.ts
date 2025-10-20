@@ -10,7 +10,7 @@ import { InventoryBatchLoadProductCardService } from 'src/tcgcommerce/modules/in
 import { InventoryBatchLoadProductPriceCardService } from 'src/tcgcommerce/modules/inventory/batch/load/price/card/inventory.batch.load.price.card.service';
 
 @Injectable()
-export class InventoryBatchLoadJobProductCardService {
+export class InventoryProductCardServiceCreateJobService {
 
     constructor(
         @InjectRepository(InventoryBatchLoadJobProductCard) private inventoryBatchLoadJobProductCardRepository: Repository<InventoryBatchLoadJobProductCard>, 
