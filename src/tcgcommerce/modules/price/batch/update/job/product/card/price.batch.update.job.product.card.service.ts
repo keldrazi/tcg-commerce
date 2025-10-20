@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceBatchUpdateJobProductCard } from 'src/typeorm/entities/tcgcommerce/modules/price/batch/update/job/product/card/price.batch.update.job.product.card.entity';
-import { PriceBatchUpdateJobProductCardDTO, CreatePriceBatchUpdateJobsProductCardDTO, CreatePriceBatchUpdateJobProductCardDTO } from './dto/price.batch.update.job.product.card.dto';
+import { PriceBatchUpdateJobProductCardDTO, CreatePriceBatchUpdateJobProductCardDTO } from './dto/price.batch.update.job.product.card.dto';
 import { PRICE_BATCH_UPDATE_JOB_PRODUCT_CARD_STATUS } from 'src/system/constants/tcgcommerce/price/batch/update/job/product/card/price.batch.update.job.product.card.constants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
+import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
+import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { ProductTypeService } from 'src/tcgcommerce/modules/product/type/product.type.service';
+import { ProductLanguageService } from 'src/tcgcommerce/modules/product/language/product.language.service';
 import { PriceBatchUpdateProductCardService } from 'src/tcgcommerce/modules/price/batch/update/product/card/price.batch.update.product.card.service';
 import { PriceRuleProductCardBaseService } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.service';
 
@@ -18,360 +22,155 @@ export class PriceBatchUpdateJobProductCardService {
         private productSetService: ProductSetService,
         private priceBatchUpdateProductCardService: PriceBatchUpdateProductCardService,
         private priceRuleProductCardBaseService: PriceRuleProductCardBaseService,
+        private productVendorService: ProductVendorService,
+        private productLineService: ProductLineService,
+        private productTypeService: ProductTypeService,
+        private productLanguageService: ProductLanguageService,
     ) { }
 
-    /*
-    async getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId: string) {
-
-        let inventoryBatchLoadJobProductCards = await this.inventoryBatchLoadJobProductCardRepository.find({
+    /* GET PRICE BATCH UPDATE JOB PRODUCT CARD BY ID */
+    async getPriceBatchUpdateJobProductCardById(priceBatchUpdateJobProductCardId: string) {
+        let priceBatchUpdateJobProductCard = await this.priceBatchUpdateJobProductCardRepository.findOne({
             where: {
-                commerceAccountId: commerceAccountId
+                priceBatchUpdateJobProductCardId: priceBatchUpdateJobProductCardId
             }
         });
 
-        if(inventoryBatchLoadJobProductCards == null) {
-            return [];
-        }
-
-        let inventoryBatchLoadJobProductCardDTOs: InventoryBatchLoadJobProductCardDTO[] = [];
-
-        for(let i = 0; i < inventoryBatchLoadJobProductCards.length; i++) {
-            let inventoryBatchLoadJobProductCard = inventoryBatchLoadJobProductCards[i];
-            //MAP TO DTO;
-            let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
-
-            inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
-        }
-
-        return inventoryBatchLoadJobProductCardDTOs;
-    }
-
-    async getInventoryBatchLoadJobProductCardsByCommerceLocationId(commerceLocationId: string) {
-
-        let inventoryBatchLoadJobProductCards = await this.inventoryBatchLoadJobProductCardRepository.find({
-            where: {
-                commerceLocationId: commerceLocationId
-            }
-        });
-
-        if(inventoryBatchLoadJobProductCards == null) {
-            return [];
-        }
-
-        let inventoryBatchLoadJobProductCardDTOs: InventoryBatchLoadJobProductCardDTO[] = [];
-
-        for(let i = 0; i < inventoryBatchLoadJobProductCards.length; i++) {
-            let inventoryBatchLoadJobProductCard = inventoryBatchLoadJobProductCards[i];
-            //MAP TO DTO;
-            let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
-
-            inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
-        }
-
-        return inventoryBatchLoadJobProductCardDTOs;
-    }
-
-    async getInventoryBatchLoadJobProductCardsByCommerceAccountIdAndLineId(commerceAccountId: string, productLineId: string) {
-
-        let inventoryBatchLoadJobProductCards = await this.inventoryBatchLoadJobProductCardRepository.find({
-            where: {
-                commerceAccountId: commerceAccountId,
-                productLineId: productLineId
-            }
-        });
-
-        if(inventoryBatchLoadJobProductCards == null) {
-            return [];
-        }
-
-        let inventoryBatchLoadJobProductCardDTOs: InventoryBatchLoadJobProductCardDTO[] = [];
-
-        for(let i = 0; i < inventoryBatchLoadJobProductCards.length; i++) {
-            let inventoryBatchLoadJobProductCard = inventoryBatchLoadJobProductCards[i];
-            //MAP TO DTO;
-            let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
-
-            inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
-        }
-
-        return inventoryBatchLoadJobProductCardDTOs;
-    }
-
-    async getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.findOne({
-            where: {
-                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId
-            }
-        });
-
-        if(inventoryBatchLoadJobProductCard == null) {
+        if(priceBatchUpdateJobProductCard == null) {
             return null;
         }
 
         //MAP TO DTO;
-        let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
+        let priceBatchUpdateJobProductCardDTO: PriceBatchUpdateJobProductCardDTO = ({ ...priceBatchUpdateJobProductCard});
 
-        return inventoryBatchLoadJobProductCardDTO;
-
+        return priceBatchUpdateJobProductCardDTO;
     }
 
-    async getInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.findOne({
-            where: {
-                inventoryBatchLoadJobProductCardId: inventoryBatchLoadJobProductCardId
-            }
-        });
-
-        if(inventoryBatchLoadJobProductCard == null) {
-            //TO DOL: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return null;
-        }
-
-        //MAP TO DTO;
-        let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
-        let inventoryBatchLoadProductCardDetails = await this.inventoryBatchLoadProductCardService.getInventoryBatchLoadProductCardDetailsByJob(inventoryBatchLoadJobProductCardDTO);
-
-        if(inventoryBatchLoadProductCardDetails == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB DETAILS;
-            return null;
-        }
-
-        let inventoryBatchLoadJobProductCardDetails = {
-            inventoryBatchLoadJobProductCardDTO,
-            inventoryBatchLoadProductCardDetails
-        };
-
-        return inventoryBatchLoadJobProductCardDetails;
-
-    }
-
-    async getInventoryBatchLoadJobProductCardByDTO(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
-        let inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.findOne({
-            where: {
-                commerceAccountId: createInventoryBatchLoadJobProductCardDTO.commerceAccountId,
-                commerceLocationId: createInventoryBatchLoadJobProductCardDTO.commerceLocationId,
-                productVendorId: createInventoryBatchLoadJobProductCardDTO.productVendorId,
-                productLineId: createInventoryBatchLoadJobProductCardDTO.productLineId,
-                productTypeId: createInventoryBatchLoadJobProductCardDTO.productTypeId,
-                productSetId: createInventoryBatchLoadJobProductCardDTO.productSetId,
-                productLanguageId: createInventoryBatchLoadJobProductCardDTO.productLanguageId,
-            }
-        });
-
-        if(inventoryBatchLoadJobProductCard == null) {
-            return null;
-        }
-
-        //MAP TO DTO;
-        let inventoryBatchLoadJobProductCardDTO: InventoryBatchLoadJobProductCardDTO = ({ ...inventoryBatchLoadJobProductCard});
-
-        return inventoryBatchLoadJobProductCardDTO;
-    }
-
-    
-
-    /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
-    /*
-    async createInventoryBatchLoadJobProductCardAll(createInventoryBatchLoadJobsProductCardDTO: CreateInventoryBatchLoadJobsProductCardDTO) {
+    /* CREATE ALL PRODUCT CARD PRICE BATCH UPDATE JOBS */
+    async createPriceBatchUpdateJobProductCardAll(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string, productLanguageId: string) {
 
         //GET THE SETS OF THE PRODUCT LINE;
-        let productVendorId = createInventoryBatchLoadJobsProductCardDTO.productVendorId;
-        let productLineId = createInventoryBatchLoadJobsProductCardDTO.productLineId;
+        let productVendor = await this.productVendorService.getProductVendor(productVendorId);
+        let productLine = await this.productLineService.getProductLine(productLineId);
+        let productType = await this.productTypeService.getProductType(productTypeId);
+        let productLanguage = await this.productLanguageService.getProductLanguage(productLanguageId);
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendorId, productLineId);
 
-        if(productSets == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT SETS;
-            return null; //RETURN AN ERROR;
+        if(productVendor == null || productLine == null || productType == null || productLanguage == null || productSets == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT OBJECTS;;
+            return null; 
         }
 
+        let priceRuleProductCardBase = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(productVendorId, productLineId, productTypeId, productLanguageId);
 
-        let inventoryBatchLoadJobProductCardDTOs: InventoryBatchLoadJobProductCardDTO[] = [];
+        if(priceRuleProductCardBase == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT PRICING RULE;;
+            return null; 
+        }
+
+        let priceBatchUpdateJobProductCardDTOs: PriceBatchUpdateJobProductCardDTO[] = [];
 
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
-            console.log('Creating Inventory Batch Load Job for Product Set: ' + productSet.productSetCode);
-            let createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO = {
-                commerceAccountId: createInventoryBatchLoadJobsProductCardDTO.commerceAccountId,
-                commerceLocationId: createInventoryBatchLoadJobsProductCardDTO.commerceLocationId,
-                commerceLocationName: createInventoryBatchLoadJobsProductCardDTO.commerceLocationName,
-                commerceUserId: createInventoryBatchLoadJobsProductCardDTO.commerceUserId,
-                commerceUserName: createInventoryBatchLoadJobsProductCardDTO.commerceUserName,
-                productVendorId: createInventoryBatchLoadJobsProductCardDTO.productVendorId,
-                productVendorCode: createInventoryBatchLoadJobsProductCardDTO.productVendorCode,
-                productLineId: createInventoryBatchLoadJobsProductCardDTO.productLineId,
-                productLineCode: createInventoryBatchLoadJobsProductCardDTO.productLineCode,
-                productTypeId: createInventoryBatchLoadJobsProductCardDTO.productTypeId,
-                productTypeCode: createInventoryBatchLoadJobsProductCardDTO.productTypeCode,
-                productLanguageId: createInventoryBatchLoadJobsProductCardDTO.productLanguageId,
-                productLanguageCode: createInventoryBatchLoadJobsProductCardDTO.productLanguageCode,
+            console.log('Creating Price Batch Update Job for Product Set: ' + productSet.productSetCode);
+            let createPriceBatchUpdateJobProductCardDTO: CreatePriceBatchUpdateJobProductCardDTO = {
+                commerceAccountId: commerceAccountId,
+                productVendorId: productVendor.productVendorId,
+                productVendorCode: productVendor.productVendorCode,
+                productLineId: productLine.productLineId,
+                productLineCode: productLine.productLineCode,
+                productTypeId: productType.productTypeId,
+                productTypeCode: productType.productTypeCode,
+                productLanguageId: productLanguage.productLanguageId,
+                productLanguageCode: productLanguage.productLanguageCode,
                 productSetId: productSet.productSetId,
-                productSetCode: productSet.productSetCode
+                productSetCode: productSet.productSetCode,
+                priceRuleProductCardBaseId: priceRuleProductCardBase.priceRuleProductCardBaseId,
+                priceRuleProductCardBaseOption: priceRuleProductCardBase.priceRuleProductCardBaseOption,
             }
-            
-            let inventoryBatchLoadJobProductCardDTO = await this.createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO);
 
-            if(inventoryBatchLoadJobProductCardDTO == null) {
+            let priceBatchUpdateJobProductCardDTO = await this.createPriceBatchUpdateJobProductCardSet(createPriceBatchUpdateJobProductCardDTO);
+
+            if(priceBatchUpdateJobProductCardDTO == null) {
                 continue;
             }
 
-            inventoryBatchLoadJobProductCardDTOs.push(inventoryBatchLoadJobProductCardDTO);
+            priceBatchUpdateJobProductCardDTOs.push(priceBatchUpdateJobProductCardDTO);
 
         }
             
-        return inventoryBatchLoadJobProductCardDTOs;
-
+        return priceBatchUpdateJobProductCardDTOs;
     }
-        */
+        
     
-    /* CREATE PRODUCT CARD INVENTORY BATCH LOAD JOBS BY SET */
-    /*
-    async createInventoryBatchLoadJobProductCardSet(createInventoryBatchLoadJobProductCardDTO: CreateInventoryBatchLoadJobProductCardDTO) {
+    /* CREATE PRODUCT CARD PRICE BATCH UPDATE JOBS BY SET */
+    async createPriceBatchUpdateJobProductCardSet(createPriceBatchUpdateJobProductCardDTO: CreatePriceBatchUpdateJobProductCardDTO) {
 
-        //CHECK IF THE JOB ALREADY EXISTS;
-        let existingInventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardByDTO(createInventoryBatchLoadJobProductCardDTO);
+        let priceBatchUpdateJobProductCardCode = await this.createPriceBatchUpdateJobProductCardCode(createPriceBatchUpdateJobProductCardDTO.productVendorCode, createPriceBatchUpdateJobProductCardDTO.productLineCode, createPriceBatchUpdateJobProductCardDTO.productSetCode);
 
-        if(existingInventoryBatchLoadJobProductCardDTO != null) {
-            if(existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_CANCELLED ||
-                existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_FAILED ||
-                existingInventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_COMPLETE) {
-                
-                console.log('Inventory Batch Load Job Product Card already exists or is in progress for Set: ' + createInventoryBatchLoadJobProductCardDTO.productSetCode);
-                //TO DO THROW AN ERROR;
-                return null;
-            }
-        }
+        let priceBatchUpdateJobProductCard = this.priceBatchUpdateJobProductCardRepository.create({ ...createPriceBatchUpdateJobProductCardDTO });
 
-        let inventoryBatchLoadJobProductCardCode = await this.createInventoryBatchLoadJobProductCardCode(createInventoryBatchLoadJobProductCardDTO.productLineCode, createInventoryBatchLoadJobProductCardDTO.productSetCode, createInventoryBatchLoadJobProductCardDTO.commerceLocationName);
+        priceBatchUpdateJobProductCard.priceBatchUpdateJobProductCardCode = priceBatchUpdateJobProductCardCode;
+        priceBatchUpdateJobProductCard.priceBatchUpdateJobProductCardDate = new Date();
+        priceBatchUpdateJobProductCard.priceBatchUpdateJobProductCardStatus = PRICE_BATCH_UPDATE_JOB_PRODUCT_CARD_STATUS.PROCESSING;
+        priceBatchUpdateJobProductCard = await this.priceBatchUpdateJobProductCardRepository.save(priceBatchUpdateJobProductCard);
 
-        let inventoryBatchLoadJobProductCard = this.inventoryBatchLoadJobProductCardRepository.create({ ...createInventoryBatchLoadJobProductCardDTO });
 
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardCode = inventoryBatchLoadJobProductCardCode;
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardDate = new Date();
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardStatus = INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING;
-        inventoryBatchLoadJobProductCard = await this.inventoryBatchLoadJobProductCardRepository.save(inventoryBatchLoadJobProductCard);
-        
-        
-        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardId);``
-        
-        if(inventoryBatchLoadJobProductCardDTO == null) {
+        let priceBatchUpdateJobProductCardDTO = await this.getPriceBatchUpdateJobProductCardById(priceBatchUpdateJobProductCard.priceBatchUpdateJobProductCardId);
+
+        if(priceBatchUpdateJobProductCardDTO == null) {
             //TO DO: HANDLE ERROR FOR FAILED CREATION OF IMPORT JOB;
             return null; //RETURN AN ERROR;
         }
-        
-        console.log('Created Inventory Batch Load Job Product Card: ' + inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId);
-        console.log('Set: ' + inventoryBatchLoadJobProductCardDTO.productSetCode);
 
-        //START THE PROCESS OF CREATING THE INVENTORY FOR THE SET;
-        this.inventoryBatchLoadProductCardService.createInventoryBatchLoadProductCardsBySetId(inventoryBatchLoadJobProductCardDTO);
-        
-        return inventoryBatchLoadJobProductCardDTO;
-        
-    }
-    */
-    /* UPDATE PRODUCT CARD INVENTORY BATCH LOAD JOBS WITH PRICING */
-/*    
-    async updateInventoryBatchLoadJobProductCardPricing(inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
+        console.log('Created Price Batch Update Job Product Card: ' + priceBatchUpdateJobProductCardDTO.priceBatchUpdateJobProductCardId);
+        console.log('Set: ' + priceBatchUpdateJobProductCardDTO.productSetCode);
 
-        if(inventoryBatchLoadJobProductCardDTO == undefined) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return false; //RETURN AN ERROR;
-        }
+        //START THE PROCESS OF CREATING THE PRICE BATCH UPDATE FOR THE SET;
+        //this.priceBatchUpdateProductCardService.createPriceBatchUpdateProductCardsBySetId(priceBatchUpdateJobProductCardDTO);
 
-        await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
+        return priceBatchUpdateJobProductCardDTO;
 
-        this.inventoryBatchLoadProductPriceCardService.updateBatchInventoryLoadJobProductPricesByJob(inventoryBatchLoadJobProductCardDTO);
-
-        return true;
-        
     }
 
-
-    
-    async createInventoryBatchLoadJobProductCardCode(productLineCode: string, productSetCode: string, commerceLocationName:string) {
+    async createPriceBatchUpdateJobProductCardCode(productVendorCode:string, productLineCode: string, productSetCode: string) {
 
         let now = new Date();
         let dateCode = now.getFullYear().toString() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + '-' + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
 
-        let inventoryBatchLoadJobProductCardCode = productLineCode.toUpperCase() + '-' + productSetCode.replace(/ /g, '-').toUpperCase() + '-' + commerceLocationName.replace(/ /g, '-').toUpperCase() + '-' + dateCode;
+        let priceBatchUpdateJobProductCardCode = productVendorCode.toUpperCase() + '-' + productLineCode.toUpperCase() + '-' + productSetCode.replace(/ /g, '-').toUpperCase() + '-' + dateCode;
 
-        return inventoryBatchLoadJobProductCardCode;
+        return priceBatchUpdateJobProductCardCode;
     }
 
 
-    async updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId: string, inventoryBatchLoadJobProductCardStatus: string) {
-        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
+    async updatePriceBatchUpdateJobProductCardStatus(priceBatchUpdateJobProductCardId: string, priceBatchUpdateJobProductCardStatus: string) {
+        let priceBatchUpdateJobProductCard = await this.getPriceBatchUpdateJobProductCardById(priceBatchUpdateJobProductCardId);
 
-        if(inventoryBatchLoadJobProductCard == undefined) {
+        if(priceBatchUpdateJobProductCard == undefined) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardStatus = inventoryBatchLoadJobProductCardStatus;
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardUpdateDate = new Date();
+        priceBatchUpdateJobProductCard.priceBatchUpdateJobProductCardStatus = priceBatchUpdateJobProductCardStatus;
+        priceBatchUpdateJobProductCard.priceBatchUpdateJobProductCardUpdateDate = new Date();
 
-        await this.inventoryBatchLoadJobProductCardRepository.save(inventoryBatchLoadJobProductCard);
-
-        return true;
-    }
-
-    async updateInventoryBatchLoadJobProductCardCount(inventoryBatchLoadJobProductCardId: string, inventoryBatchLoadJobProductCardCount: number) {
-        let inventoryBatchLoadJobProductCard = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
-
-        if(inventoryBatchLoadJobProductCard == undefined) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return false; //RETURN AN ERROR;
-        }
-
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardCount = inventoryBatchLoadJobProductCardCount;
-        inventoryBatchLoadJobProductCard.inventoryBatchLoadJobProductCardUpdateDate = new Date();
-
-        await this.inventoryBatchLoadJobProductCardRepository.save(inventoryBatchLoadJobProductCard);
+        await this.priceBatchUpdateJobProductCardRepository.save(priceBatchUpdateJobProductCard);
 
         return true;
     }
 
-    async approveInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCardDTO = await this.getInventoryBatchLoadJobProductCardById(inventoryBatchLoadJobProductCardId);
-
-        if(inventoryBatchLoadJobProductCardDTO == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return false; //RETURN AN ERROR;
-        }
-
-        if(inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardStatus != INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_READY_FOR_REVIEW) {
-            //TO DO: HANDLE ERROR FOR INVALID STATUS TO APPROVE IMPORT JOB;
-            return false; //RETURN AN ERROR;
-        }
-
-        await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_ADDING_TO_INVENTORY);
-
-        await this.inventoryBatchLoadProductCardService.approveInventoryBatchLoadProductCardsByJobId(inventoryBatchLoadJobProductCardDTO.inventoryBatchLoadJobProductCardId);
-
-        return true;
-    }
-    */
+    
     
     /* EVENT LISTENERS */
-    /*
-    @OnEvent('inventory.batch.load.job.product.card.update.status')
-    async handleInventoryBatchLoadJobProductCardStatusEvent(payload: any) {
-        console.log('Received Event: inventory.batch.load.job.product.card.update.status');
-        let inventoryBatchLoadJobProductCardId = payload.inventoryBatchLoadJobProductCardId;
-        let inventoryBatchLoadJobProductCardStatus = payload.inventoryBatchLoadJobProductCardStatus;
-
-        if(inventoryBatchLoadJobProductCardStatus == INVENTORY_BATCH_LOAD_JOB_PRODUCT_CARD_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE) {
-            let inventoryBatchLoadJobProductCardCount = payload.inventoryBatchLoadJobProductCardCount;
-            await this.updateInventoryBatchLoadJobProductCardCount(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardCount);
-
-            //TO DO: UPDATE PRICING;
-            this.updateInventoryBatchLoadJobProductCardPricing(inventoryBatchLoadJobProductCardId);
-        }
-
-
-        await this.updateInventoryBatchLoadJobProductCardStatus(inventoryBatchLoadJobProductCardId, inventoryBatchLoadJobProductCardStatus);
-
+    @OnEvent('price.batch.update.job.product.card.update.status')
+    async handlePriceBatchUpdateJobProductCardStatusEvent(payload: any) {
+        console.log('Received Event: price.batch.update.job.product.card.update.status');
+        let priceBatchUpdateJobProductCardId = payload.priceBatchUpdateJobProductCardId;
+        let priceBatchUpdateJobProductCardStatus = payload.priceBatchUpdateJobProductCardStatus;
+        
+        await this.updatePriceBatchUpdateJobProductCardStatus(priceBatchUpdateJobProductCardId, priceBatchUpdateJobProductCardStatus);
     }
-    */
+    
 
 }

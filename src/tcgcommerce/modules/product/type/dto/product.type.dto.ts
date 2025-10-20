@@ -5,6 +5,7 @@ export class ProductTypeDTO {
     productVendorId: string;
     productLineId: string;
     productTypeName: string;
+    productTypeCode: string;
     productTypeIsActive: boolean;
     productTypeCreateDate: Date;
     productTypeUpdateDate: Date;
@@ -19,6 +20,8 @@ export class CreateProductTypeDTO {
     productLineId: string;
     @IsString()
     productTypeName: string;
+    @IsString()
+    productTypeCode: string;
    
     
 }
@@ -28,6 +31,8 @@ export class UpdateProductTypeDTO {
     productTypeId: string;
     @IsString()
     productTypeName: string;
+    @IsString()
+    productTypeCode: string;
     @IsBoolean()
     productTypeIsActive: boolean;
     

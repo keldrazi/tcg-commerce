@@ -1,18 +1,16 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { HttpModule } from '@nestjs/axios';
+import { ConfigModule } from '@nestjs/config';
 import { TCGdbMTGPriceChangeDailyController } from './tcgdb.mtg.price.change.daily.controller';
 import { TCGdbMTGPriceChangeDailyService } from './tcgdb.mtg.price.change.daily.service';
-import { TCGdbMTGPriceCurrentModule } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.module';
-import { TCGdbMTGPricePreviousDailyModule } from 'src/tcgdb/modules/tcgdb/api/mtg/price/previous/daily/tcgdb.mtg.price.previous.daily.module';
-import { TCGdbMTGSetModule} from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.module';
-import { TCGdbMTGPriceChangeDaily } from "src/typeorm/entities/tcgdb/modules/tcgdb/api/mtg/price/change/daily/tcgdb.mtg.price.change.daily.entity";
+import { TCGdbAPIUtilModule } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.util.module';
+
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([TCGdbMTGPriceChangeDaily]),
-        TCGdbMTGPriceCurrentModule,
-        TCGdbMTGPricePreviousDailyModule,
-        TCGdbMTGSetModule,
+        TCGdbAPIUtilModule,
+        HttpModule,
+        ConfigModule,
     ], 
     controllers: [TCGdbMTGPriceChangeDailyController],
     providers: [TCGdbMTGPriceChangeDailyService],

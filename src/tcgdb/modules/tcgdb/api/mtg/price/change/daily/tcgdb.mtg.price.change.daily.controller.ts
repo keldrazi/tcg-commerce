@@ -14,10 +14,23 @@ export class TCGdbMTGPriceChangeDailyController {
         return await this.tcgdbMTGPriceChangeDailyService.getTCGdbMTGPriceChangeDailyBySet(setCode);
     }
 
-    @Get('/create')
-    async createTCGdbMTGPriceChangeDailyBySet() {
-        return await this.tcgdbMTGPriceChangeDailyService.createTCGdbMTGPriceChangeDailyBySet();
+    @Get('/set/:setCode/changes/low')
+    async getTCGdbMTGPriceChangeDailyChangesLowBySet(@Param('setCode') setCode: string) {
+        return await this.tcgdbMTGPriceChangeDailyService.getTCGdbMTGPriceChangeDailyChangesLowBySet(setCode);
     }
 
+    @Get('/set/:setCode/changes/market')
+    async getTCGdbMTGPriceChangeDailyChangesMarketBySet(@Param('setCode') setCode: string) {
+        return await this.tcgdbMTGPriceChangeDailyService.getTCGdbMTGPriceChangeDailyChangesMarketBySet(setCode);
+    }
 
+    @Get('/set/:setCode/increase')
+    async getTCGdbMTGPriceChangeDailyIncreaseBySet(@Param('setCode') setCode: string) {
+        return await this.tcgdbMTGPriceChangeDailyService.getTCGdbMTGPriceChangeDailyIncreaseBySet(setCode);
+    }
+
+    @Get('/set/:setCode/decrease')
+    async getTCGdbMTGPriceChangeDailyDecreaseBySet(@Param('setCode') setCode: string) {
+        return await this.tcgdbMTGPriceChangeDailyService.getTCGdbMTGPriceChangeDailyDecreaseBySet(setCode);
+    }
 }

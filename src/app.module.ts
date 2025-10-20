@@ -78,9 +78,9 @@ import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rari
 //import { ProductCardPriceModule } from './tcgcommerce/modules/product/card/price/product.card.price.module';
 //Product Card Price Modules;
 import { PriceRuleProductCardBaseModule } from './tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.module';
-import { PriceProductCardTypeModule } from './tcgcommerce/modules/price/product/card/type/price.product.card.type.module';
-import { PriceProductCardRuleTypeModule } from './tcgcommerce/modules/price/product/card/rule/type/price.product.card.rule.type.module';
-import { PriceProductCardRuleSetModule } from './tcgcommerce/modules/price/product/card/rule/set/price.product.card.rule.set.module'; 
+//import { PriceProductCardTypeModule } from './tcgcommerce/modules/price/product/card/type/price.product.card.type.module';
+//import { PriceProductCardRuleTypeModule } from './tcgcommerce/modules/price/product/card/rule/type/price.product.card.rule.type.module';
+//import { PriceProductCardRuleSetModule } from './tcgcommerce/modules/price/product/card/rule/set/price.product.card.rule.set.module'; 
 //Product Card Inventory Modules;
 import { InventoryProductCardModule } from './tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 //Product Card Load Inventory Modules;
@@ -139,7 +139,7 @@ const NODE_ENV = process.env.NODE_ENV;
     TCGdbMTGSetModule,
     //TCGdbMTGPriceCurrentModule,
     //TCGdbMTGPriceHistoryModule,
-    //TCGdbMTGPriceChangeDailyModule,
+    TCGdbMTGPriceChangeDailyModule,
     TCGdbMTGConditionModule,
     TCGdbMTGLanguageModule,
     TCGdbMTGPrintingModule,
@@ -171,9 +171,9 @@ const NODE_ENV = process.env.NODE_ENV;
     //ProductCardPriceModule,
     //Product Card Price Modules;
     PriceRuleProductCardBaseModule,
-    PriceProductCardTypeModule,
-    PriceProductCardRuleTypeModule,
-    PriceProductCardRuleSetModule,
+    //PriceProductCardTypeModule,
+    //PriceProductCardRuleTypeModule,
+    //PriceProductCardRuleSetModule,
     //Inventory Product Card Modules;
     InventoryProductCardModule,
     //Inventory Load Product Card Modules;

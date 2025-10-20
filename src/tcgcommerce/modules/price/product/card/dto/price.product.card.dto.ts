@@ -4,7 +4,7 @@ import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product
 
 
 
-export class InventoryProductCardDTO {
+export class PriceProductCardDTO {
     inventoryProductCardId: string;
     productCardId: string;
     productCardTCGdbId: string;

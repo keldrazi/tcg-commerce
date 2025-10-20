@@ -13,6 +13,8 @@ export class PriceBatchUpdateJobProductCardDTO {
     productLanguageCode: string;
     productSetId: string;
     productSetCode: string;
+    priceRuleProductCardBaseId: string;
+    priceRuleProductCardBaseOption: string;
     priceBatchUpdateJobProductCardDate: Date;
     priceBatchUpdateJobProductCardCode: string;
     priceBatchUpdateJobProductCardCountIncrease: number;
@@ -22,38 +24,9 @@ export class PriceBatchUpdateJobProductCardDTO {
     priceBatchUpdateJobProductCardUpdateDate: Date;
 }
 
-export class CreatePriceBatchUpdateJobsProductCardDTO {
-    @IsString()
-    commerceAccountId: string;
-    @IsString()
-    productVendorId: string;
-    @IsString()
-    productVendorCode: string;
-    @IsString()
-    productLineId: string;
-    @IsString()
-    productLineCode: string;
-    @IsString()
-    productTypeId: string;
-    @IsString()
-    productTypeCode: string;
-    @IsString()
-    productLanguageId: string;
-    @IsString()
-    productLanguageCode: string;
-}
-
 export class CreatePriceBatchUpdateJobProductCardDTO {
     @IsString()
     commerceAccountId: string;
-    @IsString()
-    commerceLocationId: string;
-    @IsString()
-    commerceLocationName: string;
-    @IsString()
-    commerceUserId: string;
-    @IsString()
-    commerceUserName: string;
     @IsString()
     productVendorId: string;
     @IsString()
@@ -74,4 +47,8 @@ export class CreatePriceBatchUpdateJobProductCardDTO {
     productSetId: string;
     @IsString()
     productSetCode: string;
+    @IsString()
+    priceRuleProductCardBaseId: string;
+    @IsString()
+    priceRuleProductCardBaseOption: string;
 }

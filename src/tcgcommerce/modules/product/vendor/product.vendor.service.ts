@@ -115,6 +115,7 @@ export class ProductVendorService {
         }
 
         existingProductVendor.productVendorName = updateProductVendorDTO.productVendorName;
+        existingProductVendor.productVendorCode = updateProductVendorDTO.productVendorCode;
         existingProductVendor.productVendorIsActive = updateProductVendorDTO.productVendorIsActive;
         existingProductVendor.productVendorUpdateDate = new Date();
         

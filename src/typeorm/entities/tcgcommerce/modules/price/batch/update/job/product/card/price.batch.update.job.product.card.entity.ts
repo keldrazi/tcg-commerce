@@ -37,9 +37,9 @@ export class PriceBatchUpdateJobProductCard {
     @Column()
     priceBatchUpdateJobProductCardStatus: string;
     @Column({ default: 0 })
-    priceBatchUpdateJobProductCardIncreaseCount: number;
+    priceBatchUpdateJobProductCardCountIncrease: number;
     @Column({ default: 0 })
-    priceBatchUpdateJobProductCardDecreaseCount: number;
+    priceBatchUpdateJobProductCardCountDecrease: number;
     @CreateDateColumn()
     priceBatchUpdateJobProductCardCreateDate: Date;
     @UpdateDateColumn()

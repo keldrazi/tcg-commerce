@@ -140,6 +140,7 @@ export class ProductTypeService {
         }
 
         existingProductType.productTypeName = updateProductTypeDTO.productTypeName;
+        existingProductType.productTypeCode = updateProductTypeDTO.productTypeCode;
         existingProductType.productTypeIsActive = updateProductTypeDTO.productTypeIsActive;
         existingProductType.productTypeUpdateDate = new Date();
         
