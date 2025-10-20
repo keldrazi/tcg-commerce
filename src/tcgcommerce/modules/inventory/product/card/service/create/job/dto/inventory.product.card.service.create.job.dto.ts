@@ -1,8 +1,8 @@
 import { IsString } from "class-validator";
-import { InventoryProductCardDTO } from "src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto";
 
-export class InventoryBatchLoadJobProductCardDTO {
-    inventoryBatchLoadJobProductCardId: string;
+
+export class InventoryProductCardServiceCreateJobDTO {
+    inventoryProductCardServiceCreateJobId: string;
     commerceAccountId: string;
     commerceLocationId: string;
     commerceLocationName: string;
@@ -18,12 +18,12 @@ export class InventoryBatchLoadJobProductCardDTO {
     productLanguageCode: string;
     productSetId: string;
     productSetCode: string;
-    inventoryBatchLoadJobProductCardDate: Date;
-    inventoryBatchLoadJobProductCardCode: string;
-    inventoryBatchLoadJobProductCardCount: number;
-    inventoryBatchLoadJobProductCardStatus: string;
-    inventoryBatchLoadJobProductCardCreateDate: Date;
-    inventoryBatchLoadJobProductCardUpdateDate: Date;
+    inventoryProductCardServiceCreateJobDate: Date;
+    inventoryProductCardServiceCreateJobCode: string;
+    inventoryProductCardServiceCreateJobCount: number;
+    inventoryProductCardServiceCreateJobStatus: string;
+    inventoryProductCardServiceCreateJobCreateDate: Date;
+    inventoryProductCardServiceCreateJobUpdateDate: Date;
 }
 
 export class CreateInventoryBatchLoadJobsProductCardDTO {

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { InventoryBatchLoadJobProductCardService } from './inventory.product.card.services.create.job.service';
+import { InventoryBatchLoadJobProductCardService } from './inventory.product.card.service.create.job.service';
 import { InventoryBatchLoadJobProductCardDTO } from "src/tcgcommerce/modules/inventory/batch/load/job/product/card/dto/inventory.batch.load.job.product.card.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 
