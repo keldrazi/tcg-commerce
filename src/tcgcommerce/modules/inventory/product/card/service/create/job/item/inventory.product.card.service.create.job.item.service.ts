@@ -438,7 +438,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
 
     //PRICE UPDATES
-    async updateBatchInventoryLoadJobProductPricesByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
             
         //GET THE INVENTORY PRODUCT CARDS FOR THE SET;
         let inventoryProductCardServiceCreateJobItemDTOs = await this.getInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);

@@ -10,52 +10,66 @@ export class InventoryProductCardServiceCreateJobController {
         private inventoryProductCardServiceCreateJobService: InventoryProductCardServiceCreateJobService,
     ) { }
     
-    /*
+    
     @Post('create/all')
-    async createInventoryBatchLoadJobsProductCard(@Body() body: any)
+    async createInventoryProductCardServiceJobs(@Body() body: any)
     {
-        let inventoryBatchLoadJobProductCardDTO = await this.InventoryProductCardServiceCreateJobService.createInventoryBatchLoadJobProductCardAll(body.createInventoryBatchLoadJobsProductCardDTO);
+        let inventoryProductCardServiceCreateJobDTOs = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobs(body.createInventoryProductCardServiceCreateJobsDTO);
 
-        return inventoryBatchLoadJobProductCardDTO;
+        return inventoryProductCardServiceCreateJobDTOs;
     }
-    /*
+    
     @Post('create/set')
-    async createInventoryBatchLoadJobProductCard(@Body() body: any)
+    async createInventoryProductCardServiceCreateJobSet(@Body() body: any)
     {
-        let inventoryBatchLoadJobProductCardDTO = await this.InventoryProductCardServiceCreateJobService.createInventoryBatchLoadJobProductCardSet(body.createInventoryBatchLoadJobProductCardDTO);
-        
-        return inventoryBatchLoadJobProductCardDTO;
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobSet(body.createInventoryProductCardServiceCreateJobDTO);
+
+        return inventoryProductCardServiceCreateJobDTO;
     }
 
-    /*
+    
     @Get('all/:commerceAccountId')
-    async getInventoryBatchLoadJobProductCards(@Param('commerceAccountId') commerceAccountId: string) {
-        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId);
-        
-        return inventoryBatchLoadJobProductCardDTO;
+    async getInventoryProductCardServiceCreateJobsByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId);
+
+        return inventoryProductCardServiceCreateJobDTO;
     }
 
-    @Get('location/:commerceLocationId')
-    async getInventoryBatchLoadJobProductCardsByLocation(@Param('commerceLocationId') commerceLocationId: string) {
-        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceLocationId(commerceLocationId);
-        
-        return inventoryBatchLoadJobProductCardDTO;
+    @Get('all/:commerceAccountId/:productLineCode')
+    async getInventoryProductCardServiceCreateJobsByCommerceAccountIdAndProductLineCode(@Param('commerceAccountId') commerceAccountId: string, @Param('productLineCode') productLineCode: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobsByCommerceAccountIdAndProductLineCode(commerceAccountId, productLineCode);
+
+        return inventoryProductCardServiceCreateJobDTO;
     }
 
-    @Get('review/:inventoryBatchLoadJobProductCardId')
-    async getInventoryBatchLoadJobProductCardDetailsById(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId);
+    @Get('all/location/:commerceLocationId')
+    async getInventoryProductCardServiceCreateJobsByCommerceLocationId(@Param('commerceLocationId') commerceLocationId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobsByCommerceLocationId(commerceLocationId);
         
-        return inventoryBatchLoadJobProductCardDTO;
+        return inventoryProductCardServiceCreateJobDTO;
     }
 
-    @Get('approve/:inventoryBatchLoadJobProductCardId')
-    async approveInventoryBatchLoadJobProductCardDetailsById(@Param('inventoryBatchLoadJobProductCardId') inventoryBatchLoadJobProductCardId: string) {
-        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.approveInventoryBatchLoadJobProductCardDetailsById(inventoryBatchLoadJobProductCardId);
+    @Get('all/location/:commerceLocationId/:productLineCode')
+    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCode(@Param('commerceLocationId') commerceLocationId: string, @Param('productLineCode') productLineCode: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCode(commerceLocationId, productLineCode);
         
-        return inventoryBatchLoadJobProductCardDTO;
+        return inventoryProductCardServiceCreateJobDTO;
     }
-        */
+
+    @Get('review/:inventoryProductCardServiceCreateJobId')
+    async getInventoryProductCardServiceCreateJobDetailsById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId);
+
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+
+    @Get('approve/:inventoryProductCardServiceCreateJobId')
+    async approveInventoryProductCardServiceCreateJobDetailsById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.approveInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId);
+        
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+        
 
 
 }

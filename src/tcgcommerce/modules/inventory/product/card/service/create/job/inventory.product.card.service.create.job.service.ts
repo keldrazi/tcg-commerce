@@ -19,7 +19,7 @@ export class InventoryProductCardServiceCreateJobService {
     ) { }
 
 
-    async getInventoryProductCardServiceCreateJobByCommerceAccountId(commerceAccountId: string) {
+    async getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId: string) {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
             where: {
@@ -67,12 +67,37 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceAccountIdAndLineId(commerceAccountId: string, productLineId: string) {
+    async getInventoryProductCardServiceCreateJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string) {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
             where: {
                 commerceAccountId: commerceAccountId,
-                productLineId: productLineId
+                productLineCode: productLineCode
+            }
+        });
+
+        if(inventoryProductCardServiceCreateJobs == null) {
+            return [];
+        }
+
+        let inventoryProductCardServiceCreateJobDTOs: InventoryProductCardServiceCreateJobDTO[] = [];
+        for(let i = 0; i < inventoryProductCardServiceCreateJobs.length; i++) {
+            let inventoryProductCardServiceCreateJob = inventoryProductCardServiceCreateJobs[i];
+            //MAP TO DTO;
+            let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+
+            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+        }
+
+        return inventoryProductCardServiceCreateJobDTOs;
+    }
+
+    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCode(commerceLocationId: string, productLineCode: string) {
+
+        let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
+            where: {
+                commerceLocationId: commerceLocationId,
+                productLineCode: productLineCode
             }
         });
 
@@ -167,7 +192,7 @@ export class InventoryProductCardServiceCreateJobService {
     
 
     /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
-    async createInventoryProductCardServiceCreateJobAll(createInventoryProductCardServiceCreateJobsDTO: CreateInventoryProductCardServiceCreateJobsDTO) {
+    async createInventoryProductCardServiceCreateJobs(createInventoryProductCardServiceCreateJobsDTO: CreateInventoryProductCardServiceCreateJobsDTO) {
 
         //GET THE SETS OF THE PRODUCT LINE;
         let productVendorId = createInventoryProductCardServiceCreateJobsDTO.productVendorId;

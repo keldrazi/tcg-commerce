@@ -84,8 +84,8 @@ import { PriceRuleProductCardBaseModule } from './tcgcommerce/modules/price/rule
 //Product Card Inventory Modules;
 import { InventoryProductCardModule } from './tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 //Product Card Load Inventory Modules;
-import { InventoryBatchLoadJobProductCardModule } from './tcgcommerce/modules/inventory/batch/load/job/product/card/inventory.batch.load.job.product.card.module';
-import { InventoryBatchLoadProductCardModule } from './tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.module';
+import { InventoryProductCardServiceCreateJobModule } from './tcgcommerce/modules/inventory/product/card/service/create/job/inventory.product.card.service.create.job.module';
+import { InventoryProductCardServiceCreateJobItemModule } from './tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.module';
 //System Modules;
 import { UtilScheduleTaskPriceModule } from './system/modules/util/schedule/task/price/util.schedule.task.price.module';
 
@@ -177,8 +177,8 @@ const NODE_ENV = process.env.NODE_ENV;
     //Inventory Product Card Modules;
     InventoryProductCardModule,
     //Inventory Load Product Card Modules;
-    InventoryBatchLoadJobProductCardModule,
-    InventoryBatchLoadProductCardModule,
+    InventoryProductCardServiceCreateJobModule,
+    InventoryProductCardServiceCreateJobItemModule,
     //System Modules;
     UtilScheduleTaskPriceModule,
   ],
