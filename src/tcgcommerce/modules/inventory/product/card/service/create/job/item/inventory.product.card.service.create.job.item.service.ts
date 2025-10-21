@@ -17,6 +17,9 @@ import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card
 import { CommerceLocationService } from 'src/tcgcommerce/modules/commerce/location/commerce.location.service';
 import { InventoryProductCardService } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.service';
+import { TCGdbMTGPriceCurrentDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/dto/tcgdb.mtg.price.current.dto';
+import { PriceRuleProductCardBaseService } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.service';
 
 @Injectable()
 export class InventoryProductCardServiceCreateJobItemService {
@@ -33,6 +36,8 @@ export class InventoryProductCardServiceCreateJobItemService {
         private commerceLocationService: CommerceLocationService,
         private inventoryProductCardService: InventoryProductCardService,
         private eventEmitter: EventEmitter2,
+        private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
+        private priceRuleProductCardBaseService: PriceRuleProductCardBaseService,
     ) { }
 
     async getInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
@@ -352,7 +357,7 @@ export class InventoryProductCardServiceCreateJobItemService {
     async approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
         
         this.eventEmitter.emit(
-            'inventory.batch.load.job.product.card.update.status',
+            'inventory.product.card.service.create.job.update.status',
             {
                 inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
                 inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
@@ -366,7 +371,7 @@ export class InventoryProductCardServiceCreateJobItemService {
         }
 
         this.eventEmitter.emit(
-            'inventory.batch.load.job.product.card.update.status',
+            'inventory.product.card.service.create.job.update.status',
             {
                 inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
                 inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE,
@@ -429,6 +434,108 @@ export class InventoryProductCardServiceCreateJobItemService {
             return productCardTCGPlayerSKU.skuId;
         }
 
+    }
+
+
+    //PRICE UPDATES
+    async updateBatchInventoryLoadJobProductPricesByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+            
+        //GET THE INVENTORY PRODUCT CARDS FOR THE SET;
+        let inventoryProductCardServiceCreateJobItemDTOs = await this.getInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
+        //GET THE CURRENT PRICES FOR THE SET;
+        let tcgdbMTGPriceCurrentDTOs = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(inventoryProductCardServiceCreateJobDTO.productSetCode);
+
+        //GET THE BASE PRICE RULES;
+        let priceRuleProductCardBaseDTO = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(inventoryProductCardServiceCreateJobDTO.commerceAccountId, inventoryProductCardServiceCreateJobDTO.productVendorId, inventoryProductCardServiceCreateJobDTO.productLineId, inventoryProductCardServiceCreateJobDTO.productTypeId);
+
+        if(priceRuleProductCardBaseDTO == null) {
+            //TO DO: USE THE DEFAULTS;
+            return;
+        }
+        //LOOP OVER THE PRICES AND FIND THE CORRESPONDING PRODUCT CARD;
+        for(let i = 0; i < tcgdbMTGPriceCurrentDTOs.length; i++) {
+            let tcgdbMTGPriceCurrentDTO = tcgdbMTGPriceCurrentDTOs[i];
+            let productCardPrintingName = tcgdbMTGPriceCurrentDTO.tcgdbMTGPriceCurrentSubTypeName;
+            let productCardTCGdbId = tcgdbMTGPriceCurrentDTO.tcgdbMTGCardId;
+
+            let tcgdbPriceCurrent = await this.getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO, priceRuleProductCardBaseDTO);
+
+
+            let inventoryProductCardServiceCreateJobItemDTO = inventoryProductCardServiceCreateJobItemDTOs.find(item => 
+                item.productCardTCGdbId === productCardTCGdbId &&
+                item.productCardPrintingName === productCardPrintingName
+            );
+
+            if(inventoryProductCardServiceCreateJobItemDTO != undefined) {
+
+                if(inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemIsVerified == true) {
+                    console.log('Skipping Verified Inventory Product Card Service Create Job Item: ' + inventoryProductCardServiceCreateJobItemDTO.productCardPrintingName + ' - ' + inventoryProductCardServiceCreateJobItemDTO.productCardTCGdbId);
+                    continue;
+                }
+
+                let inventoryProductCardServiceCreateJobItemDetails: InventoryProductCardServiceCreateJobItemDetail[] = inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails;
+                for(let j = 0; j < inventoryProductCardServiceCreateJobItemDetails.length; j++) {
+                    let inventoryProductCardServiceCreateJobItemDetail = inventoryProductCardServiceCreateJobItemDetails[j];
+
+                    switch(inventoryProductCardServiceCreateJobItemDetail.productCardConditionCode) {
+                        case 'NM':
+                            let price = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseNMPercentage / 100);
+                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(price.toFixed(2));
+                            break;
+                        case 'LP':
+                            let priceLP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseLPPercentage / 100);
+                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
+                            break;
+                        case 'MP':
+                            let priceMP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseMPPercentage / 100);
+                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
+                            break;
+                        case 'HP':
+                            let priceHP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseHPPercentage / 100);
+                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
+                            break;
+                        case 'DM':
+                            let priceDM = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseDMPercentage / 100);
+                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
+                            break;
+                    }
+
+                    inventoryProductCardServiceCreateJobItemDetails[j] = inventoryProductCardServiceCreateJobItemDetail;
+                    
+                }
+                inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails = inventoryProductCardServiceCreateJobItemDetails;
+                console.log('Update Inventory Product Card Service Create Job Item Price for: ' + inventoryProductCardServiceCreateJobItemDTO.productCardPrintingName + ' - ' + inventoryProductCardServiceCreateJobItemDTO.productCardTCGdbId);
+                await this.updateInventoryProductCardServiceCreateJobItem(inventoryProductCardServiceCreateJobItemDTO);
+            }
+
+        }
+        
+        //EMIT THE EVENT TO UPDATE THE JOB STATUS;
+        this.eventEmitter.emit('inventory.product.card.service.create.job.update.status', {
+            inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
+            inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES_COMPLETE,
+        });
+
+        //EMIT THE EVENT TO UPDATE THE JOB STATUS;
+        this.eventEmitter.emit('inventory.product.card.service.create.job.update.status', {
+            inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
+            inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
+        });
+    }
+
+    async getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO, priceProductCardBaseDTO: any) {
+        let tcgdbCurrentPrice = 0;
+
+        switch(priceProductCardBaseDTO.priceProductCardBaseOption) {
+            case 'TCGPlayer Low':
+                tcgdbCurrentPrice = tcgdbMTGPriceCurrentDTO.tcgdbMTGPriceCurrentLowPrice;
+                break;
+            case 'TCGPlayer Market':
+                tcgdbCurrentPrice = tcgdbMTGPriceCurrentDTO.tcgdbMTGPriceCurrentMarketPrice;
+                break;
+        }
+
+        return tcgdbCurrentPrice;
     }
     
     
