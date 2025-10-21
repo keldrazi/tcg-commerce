@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { InventoryProductCardDTO, CreateInventoryProductCardsDTO, CreateInventoryProductCardDTO, UpdateInventoryProductCardsDTO, UpdateInventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
-import { InventoryBatchLoadProductCardDTO } from 'src/tcgcommerce/modules/inventory/batch/load/product/card/dto/inventory.batch.load.product.card.dto';
+import { InventoryProductCardServiceCreateJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/dto/inventory.product.card.service.create.job.item.dto';
 
 @Injectable()
 export class InventoryProductCardService {
@@ -80,23 +80,23 @@ export class InventoryProductCardService {
         
     }
 
-    async createInventoryProductCardFromBatchLoad(inventoryBatchLoadProductCardDTO: InventoryBatchLoadProductCardDTO) {
+    async createInventoryProductCardFromCreateJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobItemDTO) {
         let inventoryProductCard = this.inventoryProductCardRepository.create({
-            productCardId: inventoryBatchLoadProductCardDTO.productCardId,
-            productCardTCGdbId: inventoryBatchLoadProductCardDTO.productCardTCGdbId,
-            productCardTCGPlayerId: inventoryBatchLoadProductCardDTO.productCardTCGPlayerId,
-            commerceAccountId: inventoryBatchLoadProductCardDTO.commerceAccountId,
-            commerceLocationId: inventoryBatchLoadProductCardDTO.commerceLocationId,
-            productVendorId: inventoryBatchLoadProductCardDTO.productVendorId,
-            productLineId: inventoryBatchLoadProductCardDTO.productLineId,
-            productTypeId: inventoryBatchLoadProductCardDTO.productTypeId,
-            productLanguageId: inventoryBatchLoadProductCardDTO.productLanguageId,
-            productLanguageCode: inventoryBatchLoadProductCardDTO.productLanguageCode,
-            productSetId: inventoryBatchLoadProductCardDTO.productSetId,
-            productSetCode: inventoryBatchLoadProductCardDTO.productSetCode,
-            productCardPrintingId: inventoryBatchLoadProductCardDTO.productCardPrintingId,
-            productCardPrintingName: inventoryBatchLoadProductCardDTO.productCardPrintingName,
-            inventoryProductCardItems: JSON.stringify(inventoryBatchLoadProductCardDTO.inventoryBatchLoadProductCardItems),
+            productCardId: inventoryProductCardServiceCreateJobDTO.productCardId,
+            productCardTCGdbId: inventoryProductCardServiceCreateJobDTO.productCardTCGdbId,
+            productCardTCGPlayerId: inventoryProductCardServiceCreateJobDTO.productCardTCGPlayerId,
+            commerceAccountId: inventoryProductCardServiceCreateJobDTO.commerceAccountId,
+            commerceLocationId: inventoryProductCardServiceCreateJobDTO.commerceLocationId,
+            productVendorId: inventoryProductCardServiceCreateJobDTO.productVendorId,
+            productLineId: inventoryProductCardServiceCreateJobDTO.productLineId,
+            productTypeId: inventoryProductCardServiceCreateJobDTO.productTypeId,
+            productLanguageId: inventoryProductCardServiceCreateJobDTO.productLanguageId,
+            productLanguageCode: inventoryProductCardServiceCreateJobDTO.productLanguageCode,
+            productSetId: inventoryProductCardServiceCreateJobDTO.productSetId,
+            productSetCode: inventoryProductCardServiceCreateJobDTO.productSetCode,
+            productCardPrintingId: inventoryProductCardServiceCreateJobDTO.productCardPrintingId,
+            productCardPrintingName: inventoryProductCardServiceCreateJobDTO.productCardPrintingName,
+            inventoryProductCardItems: JSON.stringify(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobItemDetails),
             inventoryProductCardIsVerified: true,
             inventoryProductCardIsActive: true
         });

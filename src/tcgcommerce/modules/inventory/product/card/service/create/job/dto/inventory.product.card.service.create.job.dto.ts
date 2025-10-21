@@ -26,7 +26,7 @@ export class InventoryProductCardServiceCreateJobDTO {
     inventoryProductCardServiceCreateJobUpdateDate: Date;
 }
 
-export class CreateInventoryBatchLoadJobsProductCardDTO {
+export class CreateInventoryProductCardServiceCreateJobsDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
@@ -55,7 +55,7 @@ export class CreateInventoryBatchLoadJobsProductCardDTO {
     productLanguageCode: string;
 }
 
-export class CreateInventoryBatchLoadJobProductCardDTO {
+export class CreateInventoryProductCardServiceCreateJobDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()

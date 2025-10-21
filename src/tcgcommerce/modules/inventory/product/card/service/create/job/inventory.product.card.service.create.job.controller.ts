@@ -1,32 +1,33 @@
 import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { InventoryBatchLoadJobProductCardService } from './inventory.product.card.service.create.job.service';
-import { InventoryBatchLoadJobProductCardDTO } from "src/tcgcommerce/modules/inventory/batch/load/job/product/card/dto/inventory.batch.load.job.product.card.dto";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { InventoryProductCardServiceCreateJobService } from './inventory.product.card.service.create.job.service';
+import { InventoryProductCardServiceCreateJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/dto/inventory.product.card.service.create.job.dto';
 
 
 @Controller('inventory/product/card/service/create/job')
 export class InventoryProductCardServiceCreateJobController {
 
     constructor(
-        private inventoryLoadJobCardService: InventoryBatchLoadJobProductCardService,
+        private inventoryProductCardServiceCreateJobService: InventoryProductCardServiceCreateJobService,
     ) { }
     
+    /*
     @Post('create/all')
     async createInventoryBatchLoadJobsProductCard(@Body() body: any)
     {
-        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardAll(body.createInventoryBatchLoadJobsProductCardDTO);
+        let inventoryBatchLoadJobProductCardDTO = await this.InventoryProductCardServiceCreateJobService.createInventoryBatchLoadJobProductCardAll(body.createInventoryBatchLoadJobsProductCardDTO);
 
         return inventoryBatchLoadJobProductCardDTO;
     }
-
+    /*
     @Post('create/set')
     async createInventoryBatchLoadJobProductCard(@Body() body: any)
     {
-        let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.createInventoryBatchLoadJobProductCardSet(body.createInventoryBatchLoadJobProductCardDTO);
+        let inventoryBatchLoadJobProductCardDTO = await this.InventoryProductCardServiceCreateJobService.createInventoryBatchLoadJobProductCardSet(body.createInventoryBatchLoadJobProductCardDTO);
         
         return inventoryBatchLoadJobProductCardDTO;
     }
 
+    /*
     @Get('all/:commerceAccountId')
     async getInventoryBatchLoadJobProductCards(@Param('commerceAccountId') commerceAccountId: string) {
         let inventoryBatchLoadJobProductCardDTO = await this.inventoryLoadJobCardService.getInventoryBatchLoadJobProductCardsByCommerceAccountId(commerceAccountId);
@@ -54,6 +55,7 @@ export class InventoryProductCardServiceCreateJobController {
         
         return inventoryBatchLoadJobProductCardDTO;
     }
+        */
 
 
 }

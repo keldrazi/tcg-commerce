@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryBatchLoadProductCardService } from './inventory.product.card.service.create.job.item.service';
-import { InventoryBatchLoadProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/batch/load/product/card/inventory.batch.load.product.card.entity';
+import { InventoryProductCardServiceCreateJobItemService } from './inventory.product.card.service.create.job.item.service';
+import { InventoryProductCardServiceCreateJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.entity';
 import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
@@ -15,7 +15,7 @@ import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/locatio
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryBatchLoadProductCard]),
+        TypeOrmModule.forFeature([InventoryProductCardServiceCreateJobItem]),
         ProductCardModule,
         ProductVendorModule,
         ProductLineModule,
@@ -27,7 +27,7 @@ import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/locatio
         InventoryProductCardModule,
     ],
     controllers: [],
-    providers: [InventoryBatchLoadProductCardService],
-    exports: [InventoryBatchLoadProductCardService]
+    providers: [InventoryProductCardServiceCreateJobItemService],
+    exports: [InventoryProductCardServiceCreateJobItemService]
 })
-export class InventoryBatchLoadProductCardModule {}
+export class InventoryProductCardServiceCreateJobItemModule {}
