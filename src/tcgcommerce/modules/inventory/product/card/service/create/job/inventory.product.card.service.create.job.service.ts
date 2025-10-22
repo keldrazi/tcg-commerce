@@ -269,9 +269,7 @@ export class InventoryProductCardServiceCreateJobService {
             //TO DO: HANDLE ERROR FOR FAILED CREATION OF IMPORT JOB;
             return null; //RETURN AN ERROR;
         }
-        
-        
-        //this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
+    
         
         return inventoryProductCardServiceCreateJobDTO;
         
