@@ -11,7 +11,7 @@ export class InventoryProductCardServiceCreateJobController {
     ) { }
     
     
-    @Post('create/all')
+    @Post('all')
     async createInventoryProductCardServiceJobs(@Body() body: any)
     {
         let inventoryProductCardServiceCreateJobDTOs = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobs(body.createInventoryProductCardServiceCreateJobsDTO);
@@ -19,7 +19,7 @@ export class InventoryProductCardServiceCreateJobController {
         return inventoryProductCardServiceCreateJobDTOs;
     }
     
-    @Post('create/set')
+    @Post('set')
     async createInventoryProductCardServiceCreateJobSet(@Body() body: any)
     {
         let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobSet(body.createInventoryProductCardServiceCreateJobDTO);

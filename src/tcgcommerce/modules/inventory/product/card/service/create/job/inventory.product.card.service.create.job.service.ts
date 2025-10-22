@@ -209,7 +209,7 @@ export class InventoryProductCardServiceCreateJobService {
 
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
-            console.log('Creating Inventory Batch Load Job for Product Set: ' + productSet.productSetCode);
+            
             let createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO = {
                 commerceAccountId: createInventoryProductCardServiceCreateJobsDTO.commerceAccountId,
                 commerceLocationId: createInventoryProductCardServiceCreateJobsDTO.commerceLocationId,
@@ -253,7 +253,6 @@ export class InventoryProductCardServiceCreateJobService {
                 existingInventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus != INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_FAILED ||
                 existingInventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus != INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE) {
                 
-                console.log('Inventory Batch Load Job Product Card already exists or is in progress for Set: ' + createInventoryProductCardServiceCreateJobDTO.productSetCode);
                 //TO DO THROW AN ERROR;
                 return null;
             }
@@ -276,9 +275,6 @@ export class InventoryProductCardServiceCreateJobService {
             return null; //RETURN AN ERROR;
         }
         
-        console.log('Created Inventory Batch Load Job Product Card: ' + inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
-        console.log('Set: ' + inventoryProductCardServiceCreateJobDTO.productSetCode);
-
         //START THE PROCESS OF CREATING THE INVENTORY FOR THE SET;
         this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
         
@@ -297,7 +293,7 @@ export class InventoryProductCardServiceCreateJobService {
 
         await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
 
-        //this.inventoryProductCardServiceCreateJobItemService.updateBatchInventoryLoadJobProductPricesByJob(inventoryProductCardServiceCreateJobDTO);
+        this.inventoryProductCardServiceCreateJobItemService.updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO);
 
         return true;
         
@@ -372,7 +368,7 @@ export class InventoryProductCardServiceCreateJobService {
     /* EVENT LISTENERS */
     @OnEvent('inventory.product.card.service.create.job.update.status')
     async handleInventoryProductCardServiceCreateJobStatusEvent(payload: any) {
-        console.log('Received Event: inventory.product.card.service.create.job.update.status');
+        
         let inventoryProductCardServiceCreateJobId = payload.inventoryProductCardServiceCreateJobId;
         let inventoryProductCardServiceCreateJobStatus = payload.inventoryProductCardServiceCreateJobStatus;
 
@@ -381,12 +377,18 @@ export class InventoryProductCardServiceCreateJobService {
             await this.updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId, inventoryProductCardServiceCreateJobCount);
 
             //TO DO: UPDATE PRICING;
-            this.updateInventoryProductCardServiceCreateJobPricing(inventoryProductCardServiceCreateJobId);
+            let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+
+            if(inventoryProductCardServiceCreateJobDTO == null) {
+                //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+                return null; //RETURN AN ERROR;
+            }
+            await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
+            this.inventoryProductCardServiceCreateJobItemService.updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO);
         }
-
-
-        await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, inventoryProductCardServiceCreateJobStatus);
-
+        else {
+            await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, inventoryProductCardServiceCreateJobStatus);
+        }
     }
 
 
