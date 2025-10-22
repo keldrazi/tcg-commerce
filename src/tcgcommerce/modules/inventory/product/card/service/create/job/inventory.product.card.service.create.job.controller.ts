@@ -10,24 +10,6 @@ export class InventoryProductCardServiceCreateJobController {
         private inventoryProductCardServiceCreateJobService: InventoryProductCardServiceCreateJobService,
     ) { }
     
-    
-    @Post('all')
-    async createInventoryProductCardServiceJobs(@Body() body: any)
-    {
-        let inventoryProductCardServiceCreateJobDTOs = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobs(body.createInventoryProductCardServiceCreateJobsDTO);
-
-        return inventoryProductCardServiceCreateJobDTOs;
-    }
-    
-    @Post('set')
-    async createInventoryProductCardServiceCreateJobSet(@Body() body: any)
-    {
-        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobSet(body.createInventoryProductCardServiceCreateJobDTO);
-
-        return inventoryProductCardServiceCreateJobDTO;
-    }
-
-    
     @Get('all/:commerceAccountId')
     async getInventoryProductCardServiceCreateJobsByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId);
@@ -56,16 +38,55 @@ export class InventoryProductCardServiceCreateJobController {
         return inventoryProductCardServiceCreateJobDTO;
     }
 
+    @Post('all')
+    async createInventoryProductCardServiceJobs(@Body() body: any)
+    {
+        let inventoryProductCardServiceCreateJobDTOs = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobs(body.createInventoryProductCardServiceCreateJobsDTO);
+
+        return inventoryProductCardServiceCreateJobDTOs;
+    }
+    
+    @Post('set')
+    async createInventoryProductCardServiceCreateJobSet(@Body() body: any)
+    {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.createInventoryProductCardServiceCreateJobSet(body.createInventoryProductCardServiceCreateJobDTO);
+
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+
+    /*@Get('process/all/:commerceLocationId/:productLineCode')
+    async processInventoryProductCardServiceCreateJobs(@Param('commerceLocationId') commerceLocationId: string, @Param('productLineCode') productLineCode: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.processInventoryProductCardServiceCreateJobs(commerceLocationId, productLineCode);
+        
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+    */
+
+    @Get('process/:inventoryProductCardServiceCreateJobId')
+    async processInventoryProductCardServiceCreateJobById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+        
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+    
+
     @Get('review/:inventoryProductCardServiceCreateJobId')
-    async getInventoryProductCardServiceCreateJobDetailsById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
+    async reviewInventoryProductCardServiceCreateJobById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId);
 
         return inventoryProductCardServiceCreateJobDTO;
     }
 
     @Get('approve/:inventoryProductCardServiceCreateJobId')
-    async approveInventoryProductCardServiceCreateJobDetailsById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.approveInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId);
+    async approveInventoryProductCardServiceCreateJobById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+        
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+
+    @Get('delete/:inventoryProductCardServiceCreateJobId')
+    async deleteInventoryProductCardServiceCreateJobById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.deleteInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
         
         return inventoryProductCardServiceCreateJobDTO;
     }

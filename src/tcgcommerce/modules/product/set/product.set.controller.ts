@@ -13,7 +13,7 @@ export class ProductSetController {
     
     
     @Get(':productVendorCode/:productLineCode')
-    async getProductSetsByProductVendorNameAndProductLineNameAndProductTypeName(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string) {
+    async getProductSetsByProductVendorCodeAndProductLineCode(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string) {
         return await this.productSetService.getProductSetsByProductVendorCodeAndProductLineCode(productVendorCode.toUpperCase(), productLineCode.toUpperCase());
     }
 
@@ -22,17 +22,6 @@ export class ProductSetController {
         return await this.productSetService.createProductSetsByProductLineName(productLineName);
     }
 
-    @Post()
-    @UsePipes(new ValidationPipe())
-    async createProductSet(@Body() createProductSetDTO: CreateProductSetDTO) {
-        return await this.productSetService.createProductSet(createProductSetDTO);
-    }
-
-    @Put()
-    @UsePipes(new ValidationPipe())
-    async updateProductSet(@Body() updateProductSetDTO: UpdateProductSetDTO) {
-        return await this.productSetService.updateProductSet(updateProductSetDTO);
-    }
     
 
 }

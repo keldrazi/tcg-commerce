@@ -1,20 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, LessThanOrEqual, Not, Repository } from 'typeorm';
 import { ProductSetDTO, CreateProductSetDTO, UpdateProductSetDTO } from './dto/product.set.dto';
 import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set/product.set.entity';
 import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { IsEmpty } from 'class-validator';
 
 @Injectable()
 export class ProductSetService {
-
-    //SET DATA;
-    private MTG_SET_VENDOR_ID = "67d0735c-da47-480d-b3e2-651b9fc5a2d8"; //WoTC;
-    private MTG_SET_LINE_ID = "1258359b-bb37-4323-8749-cd4fa40037f9"; //Magic: The Gathering;
     
-
     constructor(
         @InjectRepository(ProductSet) private productSetRepository: Repository<ProductSet>,
         private tcgdbMTGSetService: TCGdbMTGSetService,
@@ -40,45 +36,49 @@ export class ProductSetService {
 
     }
 
+    async getProductSetByTCGdbId(productSetTCGdbId: string) {
+        let productSet = await this.productSetRepository.findOne({
+            where: { 
+                productSetTCGdbId: productSetTCGdbId 
+            } 
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productSet == null) {
+            return null;
+        }
+
+        let productSetDTO: ProductSetDTO = ({ ...productSet });
+
+        return productSetDTO;
+
+    }
+
     async getProductSetsByProductVendorCodeAndProductLineCode(productVendorCode: string, productLineCode: string) {
         
         let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
         
+
         if(productVendor == null || productLine == null) {
             //TO DO: CREATE AN ERROR TO RETURN;
             return null;
         }
 
-        let productSets = await this.productSetRepository.find({
-            where: {
-                productVendorId: productVendor.productVendorId,
-                productLineId: productLine.productLineId,
-            }
-        });
-        
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(productSets == null) {
-            return null;
-        }
-        
-        let productSetDTOs: ProductSetDTO[] = [];
+        let productSetsDTOs = await this.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
 
-        for(let i = 0; i < productSets.length; i++) {
-            let productSet = productSets[i];
-            let productSetDTO: ProductSetDTO = ({ ...productSet });
-            
-            productSetDTOs.push(productSetDTO);
-        }
-
-        return productSetDTOs;
+        return productSetsDTOs;
     }
 
     async getProductSetsByProductVendorIdAndProductLineId(productVendorId: string, productLineId: string) {
+        let today = new Date();
+
         let productSets = await this.productSetRepository.find({
             where: {
                 productVendorId: productVendorId,
                 productLineId: productLineId,
+                productSetCode: Not(''),
+                productSetReleaseDate: LessThanOrEqual(today)
             }
         });
         
@@ -100,9 +100,13 @@ export class ProductSetService {
     }
 
     async getProductSetsByProductLineId(productLineId: string) {
+        let today = new Date();
+        
         let productSets = await this.productSetRepository.find({
             where: {
                 productLineId: productLineId,
+                productSetCode: Not(''),
+                productSetReleaseDate: LessThanOrEqual(today)
             }
         });
         
@@ -122,32 +126,16 @@ export class ProductSetService {
 
         return productSetDTOs;
     }
-    
-    async getProductSetByName(productVendorId: string, productLineId: string, productSetName: string) {
-        let productSet = await this.productSetRepository.findOne({
-            where: {
-                productVendorId: productVendorId,
-                productLineId: productLineId,
-                productSetName: productSetName
-            }
-        });
-        
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(productSet == null) {
-            return null;
-        }
-        
-        let productSetDTO: ProductSetDTO = ({ ...productSet });
-            
-        return productSetDTO;
-    }
 
     async getProductSetByCode(productVendorId: string, productLineId: string, productSetCode: string) {
+        let today = new Date();
+        
         let productSet = await this.productSetRepository.findOne({
             where: {
                 productVendorId: productVendorId,
                 productLineId: productLineId,
-                productSetCode: productSetCode
+                productSetCode: productSetCode,
+                productSetReleaseDate: LessThanOrEqual(today)
             }
         });
         
@@ -160,25 +148,6 @@ export class ProductSetService {
             
         return productSetDTO;
     }
-    
-    async createProductSet(createProductSetDTO: CreateProductSetDTO) {
-    
-        //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let productSet = await this.getProductSetByName(createProductSetDTO.productVendorId, createProductSetDTO.productLineId, createProductSetDTO.productSetName);
-        
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (productSet != null) {
-            return null;
-        }
-        
-        let newProductSet = this.productSetRepository.create({ ...createProductSetDTO });
-        newProductSet = await this.productSetRepository.save(newProductSet);
-
-        let productSetDTO = this.getProductSet(newProductSet.productSetId);
-
-        return productSetDTO;
-        
-    }  
     
     async updateProductSet(updateProductSetDTO: UpdateProductSetDTO) {
                             
@@ -235,7 +204,7 @@ export class ProductSetService {
             let tcgdbMTGSet = tcgdbMTGSets[i];
 
             //CHECK TO SEE IF THE SET EXISTS;
-            let productSet = await this.getProductSetByName(this.MTG_SET_VENDOR_ID, this.MTG_SET_LINE_ID, tcgdbMTGSet.tcgdbMTGSetName);
+            let productSet = await this.getProductSetByTCGdbId(tcgdbMTGSet.tcgdbMTGSetId);
             
             //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
             if (productSet != null) {

@@ -86,6 +86,24 @@ export class TCGdbMTGPriceCurrentService {
 
         return data;
 
+    }
+        async getTCGdbMTGPricesCurrentBySetId(tcgdbSetId: string) {
+        
+        //GET ALL TCGDB PRICES BY SET ID;
+        const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/price/current/set/id/' + tcgdbSetId;
+        const headers = { 'Authorization': 'Bearer ' + accessToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
+
+        let data = await lastValueFrom(response);
+
+        return data;
+ 
     } 
     /*
     async createTCGdbMTGPricesCurrent() {

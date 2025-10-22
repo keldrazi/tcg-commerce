@@ -249,14 +249,9 @@ export class InventoryProductCardServiceCreateJobService {
         let existingInventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO);
 
         if(existingInventoryProductCardServiceCreateJobDTO != null) {
-            if(existingInventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus != INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_CANCELLED ||
-                existingInventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus != INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_FAILED ||
-                existingInventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus != INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE) {
-                
-                //TO DO THROW AN ERROR;
-                return null;
-            }
+            return null;
         }
+        
 
         let inventoryProductCardServiceCreateJobCode = await this.createInventoryProductCardServiceCreateJobCode(createInventoryProductCardServiceCreateJobDTO.productLineCode, createInventoryProductCardServiceCreateJobDTO.productSetCode, createInventoryProductCardServiceCreateJobDTO.commerceLocationName);
 
@@ -264,7 +259,7 @@ export class InventoryProductCardServiceCreateJobService {
 
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobCode = inventoryProductCardServiceCreateJobCode;
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobDate = new Date();
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobStatus = INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING;
+        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobStatus = INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY
         inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.save(inventoryProductCardServiceCreateJob);
         
         
@@ -275,31 +270,65 @@ export class InventoryProductCardServiceCreateJobService {
             return null; //RETURN AN ERROR;
         }
         
-        //START THE PROCESS OF CREATING THE INVENTORY FOR THE SET;
-        this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
+        
+        //this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
         
         return inventoryProductCardServiceCreateJobDTO;
         
     }
 
-    /* UPDATE PRODUCT CARD INVENTORY BATCH LOAD JOBS WITH PRICING */
-    async updateInventoryProductCardServiceCreateJobPricing(inventoryProductCardServiceCreateJobId: string) {
+    async processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+        if(inventoryProductCardServiceCreateJobDTO == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return null; //RETURN AN ERROR;
+        }
+
+        this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
+    
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+
+    async approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
-        if(inventoryProductCardServiceCreateJobDTO == undefined) {
+        if(inventoryProductCardServiceCreateJobDTO == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
+        await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
 
-        this.inventoryProductCardServiceCreateJobItemService.updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO);
+        await this.inventoryProductCardServiceCreateJobItemService.approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
 
-        return true;
-        
+        return inventoryProductCardServiceCreateJobDTO;
+    }
+
+    async deleteInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
+        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+
+        if(inventoryProductCardServiceCreateJobDTO == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return false; //RETURN AN ERROR;
+        }
+
+        if(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE) {
+            //TO DO: HANDLE ERROR FOR ONLY ALLOWING DELETION OF NON COMPLETED JOBS;
+            return false; //RETURN AN ERROR;
+        }
+
+        await this.inventoryProductCardServiceCreateJobItemService.deleteInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
+
+        await this.inventoryProductCardServiceCreateJobRepository.delete({ 
+                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId 
+            });
+
+        return inventoryProductCardServiceCreateJobDTO;
     }
 
 
+
+    //HELPER FUNCTIONS (REFACTOR TO UTIL SERVICE LATER);
     
     async createInventoryProductCardServiceCreateJobCode(productLineCode: string, productSetCode: string, commerceLocationName:string) {
 
@@ -315,7 +344,7 @@ export class InventoryProductCardServiceCreateJobService {
     async updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobStatus: string) {
         let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
-        if(inventoryProductCardServiceCreateJob == undefined) {
+        if(inventoryProductCardServiceCreateJob == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
@@ -331,7 +360,7 @@ export class InventoryProductCardServiceCreateJobService {
     async updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobCount: number) {
         let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
-        if(inventoryProductCardServiceCreateJob == undefined) {
+        if(inventoryProductCardServiceCreateJob == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
@@ -344,25 +373,7 @@ export class InventoryProductCardServiceCreateJobService {
         return true;
     }
 
-    async approveInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
-
-        if(inventoryProductCardServiceCreateJobDTO == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return false; //RETURN AN ERROR;
-        }
-
-        if(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus != INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW) {
-            //TO DO: HANDLE ERROR FOR INVALID STATUS TO APPROVE IMPORT JOB;
-            return false; //RETURN AN ERROR;
-        }
-
-        await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
-
-        await this.inventoryProductCardServiceCreateJobItemService.approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
-
-        return true;
-    }
+    
     
     
     /* EVENT LISTENERS */

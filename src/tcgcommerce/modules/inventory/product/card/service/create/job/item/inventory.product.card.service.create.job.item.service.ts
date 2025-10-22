@@ -216,6 +216,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/COMMERCE LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
+    //TO DO: REFACTOR THIS METHOD TO BE MORE MODULAR;
     async createInventoryProductCardServiceCreateJobItemsBySet(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
 
         //GET THE COMMERCE LOCATION;
@@ -353,89 +354,6 @@ export class InventoryProductCardServiceCreateJobItemService {
         
     }
 
-    async approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
-        
-        this.eventEmitter.emit(
-            'inventory.product.card.service.create.job.update.status',
-            {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
-                inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
-            }
-        )   
-
-        let inventoryProductCardServiceCreateJobItemDTOs = await this.getInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId);
-        for(let i = 0; i < inventoryProductCardServiceCreateJobItemDTOs.length; i++) {
-            let inventoryProductCardServiceCreateJobItemDTO = inventoryProductCardServiceCreateJobItemDTOs[i];
-            await this.inventoryProductCardService.createInventoryProductCardFromCreateJob(inventoryProductCardServiceCreateJobItemDTO);
-        }
-
-        this.eventEmitter.emit(
-            'inventory.product.card.service.create.job.update.status',
-            {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
-                inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE,
-            }
-        )
-        
-        return true;
-
-    }
-
-    async updateInventoryProductCardServiceCreateJobItem(inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO) {
-        let inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.findOne({
-            where: {
-                inventoryProductCardServiceCreateJobItemId: inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemId
-            }
-        });
-
-        if(inventoryProductCardServiceCreateJobItem == null) {
-            //TO DO: CREATE AN ERROR TO RETURN;
-            return null;
-        }
-
-        inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemDetails = JSON.stringify(inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails);
-        inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemUpdateDate = new Date();
-        inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.save(inventoryProductCardServiceCreateJobItem);
-
-    }
-
-    //GET TCPLAYER SKU BY PRINTING/LANGUAGE;
-    async getProductCardTCGPlayerSKUByPrinting(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number) {
-        const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
-        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
-            item.languageId === productCardLanguageId &&
-            item.printingId === productCardPrintingId
-        );
-
-        if(productCardTCGPlayerSKU == undefined) {
-            return null;
-        }
-        else {
-            return productCardTCGPlayerSKU;
-        }
-
-        
-    }
-
-    //GET TCPLAYER SKU BY CONDITION/PRINTING/LANGUAGE;
-    async getProductCardTCGPlayerSKUByCondition(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
-        const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
-        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
-            item.languageId === productCardLanguageId &&
-            item.printingId === productCardPrintingId &&
-            item.conditionId === productCardConditionId
-        );
-
-        if(productCardTCGPlayerSKU == undefined) {
-            return null;
-        }
-        else {
-            return productCardTCGPlayerSKU.skuId;
-        }
-
-    }
-
-
     //PRICE UPDATES
     async updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
         
@@ -506,12 +424,6 @@ export class InventoryProductCardServiceCreateJobItemService {
             }
 
         }
-        
-        //EMIT THE EVENT TO UPDATE THE JOB STATUS;
-        this.eventEmitter.emit('inventory.product.card.service.create.job.update.status', {
-            inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
-            inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES_COMPLETE,
-        });
 
         //EMIT THE EVENT TO UPDATE THE JOB STATUS;
         this.eventEmitter.emit('inventory.product.card.service.create.job.update.status', {
@@ -519,6 +431,102 @@ export class InventoryProductCardServiceCreateJobItemService {
             inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
         });
     }
+
+    async approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+        
+        this.eventEmitter.emit(
+            'inventory.product.card.service.create.job.update.status',
+            {
+                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
+                inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
+            }
+        )   
+
+        let inventoryProductCardServiceCreateJobItemDTOs = await this.getInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId);
+        for(let i = 0; i < inventoryProductCardServiceCreateJobItemDTOs.length; i++) {
+            let inventoryProductCardServiceCreateJobItemDTO = inventoryProductCardServiceCreateJobItemDTOs[i];
+            await this.inventoryProductCardService.createInventoryProductCardFromCreateJob(inventoryProductCardServiceCreateJobItemDTO);
+        }
+
+        this.eventEmitter.emit(
+            'inventory.product.card.service.create.job.update.status',
+            {
+                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
+                inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE,
+            }
+        )
+        
+        return true;
+
+    }
+
+    async deleteInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+        
+        await this.inventoryProductCardServiceCreateJobItemRepository.delete({
+            inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
+        });
+        
+        return true;
+
+    }
+
+    //UPDATE INVENTORY PRODUCT CARD SERVICE CREATE JOB ITEM WITH PRICES;
+    async updateInventoryProductCardServiceCreateJobItem(inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO) {
+        let inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.findOne({
+            where: {
+                inventoryProductCardServiceCreateJobItemId: inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemId
+            }
+        });
+
+        if(inventoryProductCardServiceCreateJobItem == null) {
+            //TO DO: CREATE AN ERROR TO RETURN;
+            return null;
+        }
+
+        inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemDetails = JSON.stringify(inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails);
+        inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemUpdateDate = new Date();
+        inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.save(inventoryProductCardServiceCreateJobItem);
+
+    }
+
+    //GET TCPLAYER SKU BY PRINTING/LANGUAGE;
+    async getProductCardTCGPlayerSKUByPrinting(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number) {
+        const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
+        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
+            item.languageId === productCardLanguageId &&
+            item.printingId === productCardPrintingId
+        );
+
+        if(productCardTCGPlayerSKU == undefined) {
+            return null;
+        }
+        else {
+            return productCardTCGPlayerSKU;
+        }
+
+        
+    }
+
+    //GET TCPLAYER SKU BY CONDITION/PRINTING/LANGUAGE;
+    async getProductCardTCGPlayerSKUByCondition(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
+        const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
+        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
+            item.languageId === productCardLanguageId &&
+            item.printingId === productCardPrintingId &&
+            item.conditionId === productCardConditionId
+        );
+
+        if(productCardTCGPlayerSKU == undefined) {
+            return null;
+        }
+        else {
+            return productCardTCGPlayerSKU.skuId;
+        }
+
+    }
+
+
+    
 
     async getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO, priceRuleProductCardBaseDTO: any) {
         let tcgdbCurrentPrice = 0;
