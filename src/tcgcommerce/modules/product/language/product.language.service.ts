@@ -105,10 +105,10 @@ export class ProductLanguageService {
         
     }
 
-    async getProductLanguageByCodeAndProductLineId(abbrecviation: string, productLineId: string) {
+    async getProductLanguageByCodeAndProductLineId(productLanguageCode: string, productLineId: string) {
         let productLanguage = await this.productLanguageRepository.findOne({ 
             where: { 
-                productLanguageCode: abbrecviation,
+                productLanguageCode: productLanguageCode,
                 productLineId: productLineId 
             } 
         });

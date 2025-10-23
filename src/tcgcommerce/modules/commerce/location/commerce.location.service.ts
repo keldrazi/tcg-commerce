@@ -28,6 +28,31 @@ export class CommerceLocationService {
         
     }
 
+    async getActiveCommerceLocations(commerceAccountId: string) {
+        let commerceLocations = await this.commerceLocationRepository.find({ 
+            where: { 
+                commerceAccountId : commerceAccountId,
+                commerceLocationIsActive: true
+            } 
+        });
+        
+        if (commerceLocations == null) {
+            return [];
+        }
+
+        let commerceLocationDTOs: CommerceLocationDTO[] = [];
+
+        for(let i = 0; i < commerceLocations.length; i++) {
+            let commerceLocation = commerceLocations[i];
+            let commerceLocationDTO: CommerceLocationDTO = ({ ...commerceLocation });
+
+            commerceLocationDTOs.push(commerceLocationDTO);
+        }
+        
+        return commerceLocationDTOs;
+        
+    }
+
     async getCommerceLocations(commerceAccountId: string) {
         let commerceLocations = await this.commerceLocationRepository.find({ 
             where: { 

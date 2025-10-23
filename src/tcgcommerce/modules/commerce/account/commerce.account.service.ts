@@ -11,6 +11,18 @@ export class CommerceAccountService {
         @InjectRepository(CommerceAccount) private commerceAccountRepository: Repository<CommerceAccount>,
     ) { }
 
+    async getActiveCommerceAccounts() {
+        let commerceAccounts = await this.commerceAccountRepository.find({
+            where: {
+                commerceAccountIsActive: true
+            }
+        });
+
+        let commerceAccountDTOs: CommerceAccountDTO[] = commerceAccounts.map(commerceAccount => ({ ...commerceAccount }));
+        
+        return commerceAccountDTOs;
+    }
+
     async getCommerceAccount(commerceAccountId: string) {
         let commerceAccount = await this.commerceAccountRepository.findOne({ where: { commerceAccountId } });
         

@@ -1,13 +1,9 @@
-import { IsString } from "class-validator";
-
+import { CommerceLocationDTO } from "src/tcgcommerce/modules/commerce/location/dto/commerce.location.dto";
 
 export class InventoryProductCardServiceUpdatePriceJobDTO {
     inventoryProductCardServiceUpdatePriceJobId: string;
     commerceAccountId: string;
-    commerceLocationId: string;
-    commerceLocationName: string;
-    commerceUserId: string;
-    commerceUserName: string;
+    commerceLocations: any;
     productVendorId: string;
     productVendorCode: string;
     productLineId: string;
@@ -26,64 +22,4 @@ export class InventoryProductCardServiceUpdatePriceJobDTO {
     inventoryProductCardServiceUpdatePriceJobUpdateDate: Date;
 }
 
-export class CreateInventoryProductCardServiceUpdatePriceJobsDTO {
-    @IsString()
-    commerceAccountId: string;
-    @IsString()
-    commerceLocationId: string;
-    @IsString()
-    commerceLocationName: string;
-    @IsString()
-    commerceUserId: string;
-    @IsString()
-    commerceUserName: string;
-    @IsString()
-    productVendorId: string;
-    @IsString()
-    productVendorCode: string;
-    @IsString()
-    productLineId: string;
-    @IsString()
-    productLineCode: string;
-    @IsString()
-    productTypeId: string;
-    @IsString()
-    productTypeCode: string;
-    @IsString()
-    productLanguageId: string;
-    @IsString()
-    productLanguageCode: string;
-}
 
-export class CreateInventoryProductCardServiceUpdatePriceJobDTO {
-    @IsString()
-    commerceAccountId: string;
-    @IsString()
-    commerceLocationId: string;
-    @IsString()
-    commerceLocationName: string;
-    @IsString()
-    commerceUserId: string;
-    @IsString()
-    commerceUserName: string;
-    @IsString()
-    productVendorId: string;
-    @IsString()
-    productVendorCode: string;
-    @IsString()
-    productLineId: string;
-    @IsString()
-    productLineCode: string;
-    @IsString()
-    productTypeId: string;
-    @IsString()
-    productTypeCode: string;
-    @IsString()
-    productLanguageId: string;
-    @IsString()
-    productLanguageCode: string;
-    @IsString()
-    productSetId: string;
-    @IsString()
-    productSetCode: string;
-}

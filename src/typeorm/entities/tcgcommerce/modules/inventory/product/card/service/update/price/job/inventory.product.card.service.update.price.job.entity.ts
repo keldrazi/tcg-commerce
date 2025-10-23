@@ -6,14 +6,8 @@ export class InventoryProductCardServiceUpdatePriceJob {
     inventoryProductCardServiceUpdatePriceJobId: string;
     @Column()
     commerceAccountId: string;
-    @Column()
-    commerceLocationId: string;
-    @Column()
-    commerceLocationName: string;
-    @Column()
-    commerceUserId: string;
-    @Column()
-    commerceUserName: string;
+    @Column('jsonb')
+    commerceLocations: string;
     @Column()
     productVendorId: string;
     @Column()
