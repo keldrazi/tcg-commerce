@@ -1,202 +1,202 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InventoryProductCardServiceCreateJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/inventory.product.card.service.create.job.entity';
-import { InventoryProductCardServiceCreateJobDTO, CreateInventoryProductCardServiceCreateJobsDTO, CreateInventoryProductCardServiceCreateJobDTO } from './dto/inventory.product.card.service.create.job.dto';
-import { INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/create/job/inventory.product.card.service.create.job.contants';
+import { InventoryProductCardServiceUpdatePriceJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/update/price/job/inventory.product.card.service.update.price.job.entity';
+import { InventoryProductCardServiceUpdatePriceJobDTO, CreateInventoryProductCardServiceUpdatePriceJobsDTO, CreateInventoryProductCardServiceUpdatePriceJobDTO } from './dto/inventory.product.card.service.update.price.job.dto';
+import { INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/update/price/job/inventory.product.card.service.update.price.job.contants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
-import { InventoryProductCardServiceCreateJobItemService } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.service';
+import { InventoryProductCardServiceUpdatePriceJobItemService } from 'src/tcgcommerce/modules/inventory/product/card/service/update/price/job/item/inventory.product.card.service.update.price.job.item.service';
 
 
 @Injectable()
-export class InventoryProductCardServiceCreateJobService {
+export class InventoryProductCardServiceUpdatePriceJobService {
 
     constructor(
-        @InjectRepository(InventoryProductCardServiceCreateJob) private inventoryProductCardServiceCreateJobRepository: Repository<InventoryProductCardServiceCreateJob>,
+        @InjectRepository(InventoryProductCardServiceUpdatePriceJob) private inventoryProductCardServiceUpdatePriceJobRepository: Repository<InventoryProductCardServiceUpdatePriceJob>,
         private productSetService: ProductSetService,
-        private inventoryProductCardServiceCreateJobItemService: InventoryProductCardServiceCreateJobItemService,
+        private inventoryProductCardServiceUpdatePriceJobItemService: InventoryProductCardServiceUpdatePriceJobItemService,
     ) { }
 
 
-    async getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobsByCommerceAccountId(commerceAccountId: string) {
 
-        let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
+        let inventoryProductCardServiceUpdatePriceJobs = await this.inventoryProductCardServiceUpdatePriceJobRepository.find({
             where: {
                 commerceAccountId: commerceAccountId
             }
         });
 
-        if(inventoryProductCardServiceCreateJobs == null) {
+        if(inventoryProductCardServiceUpdatePriceJobs == null) {
             return [];
         }
 
-        let inventoryProductCardServiceCreateJobDTOs: InventoryProductCardServiceCreateJobDTO[] = [];
-        for(let i = 0; i < inventoryProductCardServiceCreateJobs.length; i++) {
-            let inventoryProductCardServiceCreateJob = inventoryProductCardServiceCreateJobs[i];
+        let inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[] = [];
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobs.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJob = inventoryProductCardServiceUpdatePriceJobs[i];
             //MAP TO DTO;
-            let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+            let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
-            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+            inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
         }
 
-        return inventoryProductCardServiceCreateJobDTOs;
+        return inventoryProductCardServiceUpdatePriceJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceLocationId(commerceLocationId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobsByCommerceLocationId(commerceLocationId: string) {
 
-        let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
+        let inventoryProductCardServiceUpdatePriceJobs = await this.inventoryProductCardServiceUpdatePriceJobRepository.find({
             where: {
                 commerceLocationId: commerceLocationId
             }
         });
 
-        if(inventoryProductCardServiceCreateJobs == null) {
+        if(inventoryProductCardServiceUpdatePriceJobs == null) {
             return [];
         }
 
-        let inventoryProductCardServiceCreateJobDTOs: InventoryProductCardServiceCreateJobDTO[] = [];
-        for(let i = 0; i < inventoryProductCardServiceCreateJobs.length; i++) {
-            let inventoryProductCardServiceCreateJob = inventoryProductCardServiceCreateJobs[i];
+        let inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[] = [];
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobs.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJob = inventoryProductCardServiceUpdatePriceJobs[i];
             //MAP TO DTO;
-            let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+            let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
-            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+            inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
         }
 
-        return inventoryProductCardServiceCreateJobDTOs;
+        return inventoryProductCardServiceUpdatePriceJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string) {
+    async getInventoryProductCardServiceUpdatePriceJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string) {
 
-        let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
+        let inventoryProductCardServiceUpdatePriceJobs = await this.inventoryProductCardServiceUpdatePriceJobRepository.find({
             where: {
                 commerceAccountId: commerceAccountId,
                 productLineCode: productLineCode
             }
         });
 
-        if(inventoryProductCardServiceCreateJobs == null) {
+        if(inventoryProductCardServiceUpdatePriceJobs == null) {
             return [];
         }
 
-        let inventoryProductCardServiceCreateJobDTOs: InventoryProductCardServiceCreateJobDTO[] = [];
-        for(let i = 0; i < inventoryProductCardServiceCreateJobs.length; i++) {
-            let inventoryProductCardServiceCreateJob = inventoryProductCardServiceCreateJobs[i];
+        let inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[] = [];
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobs.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJob = inventoryProductCardServiceUpdatePriceJobs[i];
             //MAP TO DTO;
-            let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+            let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
-            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+            inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
         }
 
-        return inventoryProductCardServiceCreateJobDTOs;
+        return inventoryProductCardServiceUpdatePriceJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCode(commerceLocationId: string, productLineCode: string) {
+    async getInventoryProductCardServiceUpdatePriceJobsByCommerceLocationIdAndProductLineCode(commerceLocationId: string, productLineCode: string) {
 
-        let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
+        let inventoryProductCardServiceUpdatePriceJobs = await this.inventoryProductCardServiceUpdatePriceJobRepository.find({
             where: {
                 commerceLocationId: commerceLocationId,
                 productLineCode: productLineCode
             }
         });
 
-        if(inventoryProductCardServiceCreateJobs == null) {
+        if(inventoryProductCardServiceUpdatePriceJobs == null) {
             return [];
         }
 
-        let inventoryProductCardServiceCreateJobDTOs: InventoryProductCardServiceCreateJobDTO[] = [];
-        for(let i = 0; i < inventoryProductCardServiceCreateJobs.length; i++) {
-            let inventoryProductCardServiceCreateJob = inventoryProductCardServiceCreateJobs[i];
+        let inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[] = [];
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobs.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJob = inventoryProductCardServiceUpdatePriceJobs[i];
             //MAP TO DTO;
-            let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+            let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
-            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+            inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
         }
 
-        return inventoryProductCardServiceCreateJobDTOs;
+        return inventoryProductCardServiceUpdatePriceJobDTOs;
     }
     
 
-    async getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOne({
+    async getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId: string) {
+        let inventoryProductCardServiceUpdatePriceJob = await this.inventoryProductCardServiceUpdatePriceJobRepository.findOne({
             where: {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId
             }
         });
 
-        if(inventoryProductCardServiceCreateJob == null) {
+        if(inventoryProductCardServiceUpdatePriceJob == null) {
             return null;
         }
 
         //MAP TO DTO;
-        let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+        let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceUpdatePriceJobDTO;
 
     }
 
-    async getInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOne({
+    async getInventoryProductCardServiceUpdatePriceJobDetailsById(inventoryProductCardServiceUpdatePriceJobId: string) {
+        let inventoryProductCardServiceUpdatePriceJob = await this.inventoryProductCardServiceUpdatePriceJobRepository.findOne({
             where: {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId
             }
         });
 
-        if(inventoryProductCardServiceCreateJob == null) {
+        if(inventoryProductCardServiceUpdatePriceJob == null) {
             //TO DOL: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return null;
         }
 
         //MAP TO DTO;
-        let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
-        let inventoryProductCardServiceCreateJobItems = await this.inventoryProductCardServiceCreateJobItemService.getInventoryProductCardServiceCreateJobItemDetailsByJob(inventoryProductCardServiceCreateJobDTO);
+        let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
+        let inventoryProductCardServiceUpdatePriceJobItems = await this.inventoryProductCardServiceUpdatePriceJobItemService.getInventoryProductCardServiceUpdatePriceJobItemDetailsByJob(inventoryProductCardServiceUpdatePriceJobDTO);
 
-        if(inventoryProductCardServiceCreateJobItems == null) {
+        if(inventoryProductCardServiceUpdatePriceJobItems == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB DETAILS;
             return null;
         }
 
-        let inventoryProductCardServiceCreateJobDetails = {
-            inventoryProductCardServiceCreateJobDTO,
-            inventoryProductCardServiceCreateJobItems
+        let inventoryProductCardServiceUpdatePriceJobDetails = {
+            inventoryProductCardServiceUpdatePriceJobDTO,
+            inventoryProductCardServiceUpdatePriceJobItems
         };
 
-        return inventoryProductCardServiceCreateJobDetails;
+        return inventoryProductCardServiceUpdatePriceJobDetails;
 
     }
 
-    async getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO) {
-        let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOne({
+    async getInventoryProductCardServiceUpdatePriceJobByDTO(createInventoryProductCardServiceUpdatePriceJobDTO: CreateInventoryProductCardServiceUpdatePriceJobDTO) {
+        let inventoryProductCardServiceUpdatePriceJob = await this.inventoryProductCardServiceUpdatePriceJobRepository.findOne({
             where: {
-                commerceAccountId: createInventoryProductCardServiceCreateJobDTO.commerceAccountId,
-                commerceLocationId: createInventoryProductCardServiceCreateJobDTO.commerceLocationId,
-                productVendorId: createInventoryProductCardServiceCreateJobDTO.productVendorId,
-                productLineId: createInventoryProductCardServiceCreateJobDTO.productLineId,
-                productTypeId: createInventoryProductCardServiceCreateJobDTO.productTypeId,
-                productSetId: createInventoryProductCardServiceCreateJobDTO.productSetId,
-                productLanguageId: createInventoryProductCardServiceCreateJobDTO.productLanguageId,
+                commerceAccountId: createInventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId,
+                commerceLocationId: createInventoryProductCardServiceUpdatePriceJobDTO.commerceLocationId,
+                productVendorId: createInventoryProductCardServiceUpdatePriceJobDTO.productVendorId,
+                productLineId: createInventoryProductCardServiceUpdatePriceJobDTO.productLineId,
+                productTypeId: createInventoryProductCardServiceUpdatePriceJobDTO.productTypeId,
+                productSetId: createInventoryProductCardServiceUpdatePriceJobDTO.productSetId,
+                productLanguageId: createInventoryProductCardServiceUpdatePriceJobDTO.productLanguageId,
             }
         });
 
-        if(inventoryProductCardServiceCreateJob == null) {
+        if(inventoryProductCardServiceUpdatePriceJob == null) {
             return null;
         }
 
         //MAP TO DTO;
-        let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+        let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceUpdatePriceJobDTO;
     }
 
     
 
     /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
-    async createInventoryProductCardServiceCreateJobs(createInventoryProductCardServiceCreateJobsDTO: CreateInventoryProductCardServiceCreateJobsDTO) {
+    async createInventoryProductCardServiceUpdatePriceJobs(createInventoryProductCardServiceUpdatePriceJobsDTO: CreateInventoryProductCardServiceUpdatePriceJobsDTO) {
 
         //GET THE SETS OF THE PRODUCT LINE;
-        let productVendorId = createInventoryProductCardServiceCreateJobsDTO.productVendorId;
-        let productLineId = createInventoryProductCardServiceCreateJobsDTO.productLineId;
+        let productVendorId = createInventoryProductCardServiceUpdatePriceJobsDTO.productVendorId;
+        let productLineId = createInventoryProductCardServiceUpdatePriceJobsDTO.productLineId;
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendorId, productLineId);
 
         if(productSets == null) {
@@ -205,168 +205,168 @@ export class InventoryProductCardServiceCreateJobService {
         }
 
 
-        let inventoryProductCardServiceCreateJobDTOs: InventoryProductCardServiceCreateJobDTO[] = [];
+        let inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[] = [];
 
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
             
-            let createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO = {
-                commerceAccountId: createInventoryProductCardServiceCreateJobsDTO.commerceAccountId,
-                commerceLocationId: createInventoryProductCardServiceCreateJobsDTO.commerceLocationId,
-                commerceLocationName: createInventoryProductCardServiceCreateJobsDTO.commerceLocationName,
-                commerceUserId: createInventoryProductCardServiceCreateJobsDTO.commerceUserId,
-                commerceUserName: createInventoryProductCardServiceCreateJobsDTO.commerceUserName,
-                productVendorId: createInventoryProductCardServiceCreateJobsDTO.productVendorId,
-                productVendorCode: createInventoryProductCardServiceCreateJobsDTO.productVendorCode,
-                productLineId: createInventoryProductCardServiceCreateJobsDTO.productLineId,
-                productLineCode: createInventoryProductCardServiceCreateJobsDTO.productLineCode,
-                productTypeId: createInventoryProductCardServiceCreateJobsDTO.productTypeId,
-                productTypeCode: createInventoryProductCardServiceCreateJobsDTO.productTypeCode,
-                productLanguageId: createInventoryProductCardServiceCreateJobsDTO.productLanguageId,
-                productLanguageCode: createInventoryProductCardServiceCreateJobsDTO.productLanguageCode,
+            let createInventoryProductCardServiceUpdatePriceJobDTO: CreateInventoryProductCardServiceUpdatePriceJobDTO = {
+                commerceAccountId: createInventoryProductCardServiceUpdatePriceJobsDTO.commerceAccountId,
+                commerceLocationId: createInventoryProductCardServiceUpdatePriceJobsDTO.commerceLocationId,
+                commerceLocationName: createInventoryProductCardServiceUpdatePriceJobsDTO.commerceLocationName,
+                commerceUserId: createInventoryProductCardServiceUpdatePriceJobsDTO.commerceUserId,
+                commerceUserName: createInventoryProductCardServiceUpdatePriceJobsDTO.commerceUserName,
+                productVendorId: createInventoryProductCardServiceUpdatePriceJobsDTO.productVendorId,
+                productVendorCode: createInventoryProductCardServiceUpdatePriceJobsDTO.productVendorCode,
+                productLineId: createInventoryProductCardServiceUpdatePriceJobsDTO.productLineId,
+                productLineCode: createInventoryProductCardServiceUpdatePriceJobsDTO.productLineCode,
+                productTypeId: createInventoryProductCardServiceUpdatePriceJobsDTO.productTypeId,
+                productTypeCode: createInventoryProductCardServiceUpdatePriceJobsDTO.productTypeCode,
+                productLanguageId: createInventoryProductCardServiceUpdatePriceJobsDTO.productLanguageId,
+                productLanguageCode: createInventoryProductCardServiceUpdatePriceJobsDTO.productLanguageCode,
                 productSetId: productSet.productSetId,
                 productSetCode: productSet.productSetCode
             }
             
-            let inventoryProductCardServiceCreateJobDTO = await this.createInventoryProductCardServiceCreateJobSet(createInventoryProductCardServiceCreateJobDTO);
+            let inventoryProductCardServiceUpdatePriceJobDTO = await this.createInventoryProductCardServiceUpdatePriceJobSet(createInventoryProductCardServiceUpdatePriceJobDTO);
 
-            if(inventoryProductCardServiceCreateJobDTO == null) {
+            if(inventoryProductCardServiceUpdatePriceJobDTO == null) {
                 continue;
             }
 
-            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+            inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
 
         }
             
-        return inventoryProductCardServiceCreateJobDTOs;
+        return inventoryProductCardServiceUpdatePriceJobDTOs;
 
     }
     
 
-    async createInventoryProductCardServiceCreateJobSet(createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO) {
+    async createInventoryProductCardServiceUpdatePriceJobSet(createInventoryProductCardServiceUpdatePriceJobDTO: CreateInventoryProductCardServiceUpdatePriceJobDTO) {
 
         //CHECK IF THE JOB ALREADY EXISTS;
-        let existingInventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO);
+        let existingInventoryProductCardServiceUpdatePriceJobDTO = await this.getInventoryProductCardServiceUpdatePriceJobByDTO(createInventoryProductCardServiceUpdatePriceJobDTO);
 
-        if(existingInventoryProductCardServiceCreateJobDTO != null) {
+        if(existingInventoryProductCardServiceUpdatePriceJobDTO != null) {
             return null;
         }
         
 
-        let inventoryProductCardServiceCreateJobCode = await this.createInventoryProductCardServiceCreateJobCode(createInventoryProductCardServiceCreateJobDTO.productLineCode, createInventoryProductCardServiceCreateJobDTO.productSetCode, createInventoryProductCardServiceCreateJobDTO.commerceLocationName);
+        let inventoryProductCardServiceUpdatePriceJobCode = await this.createInventoryProductCardServiceUpdatePriceJobCode(createInventoryProductCardServiceUpdatePriceJobDTO.productLineCode, createInventoryProductCardServiceUpdatePriceJobDTO.productSetCode, createInventoryProductCardServiceUpdatePriceJobDTO.commerceLocationName);
 
-        let inventoryProductCardServiceCreateJob = this.inventoryProductCardServiceCreateJobRepository.create({ ...createInventoryProductCardServiceCreateJobDTO });
+        let inventoryProductCardServiceUpdatePriceJob = this.inventoryProductCardServiceUpdatePriceJobRepository.create({ ...createInventoryProductCardServiceUpdatePriceJobDTO });
 
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobCode = inventoryProductCardServiceCreateJobCode;
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobDate = new Date();
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobStatus = INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY
-        inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.save(inventoryProductCardServiceCreateJob);
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobCode = inventoryProductCardServiceUpdatePriceJobCode;
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobDate = new Date();
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobStatus = INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_READY
+        inventoryProductCardServiceUpdatePriceJob = await this.inventoryProductCardServiceUpdatePriceJobRepository.save(inventoryProductCardServiceUpdatePriceJob);
         
         
-        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobId);
+        let inventoryProductCardServiceUpdatePriceJobDTO = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobId);
         
-        if(inventoryProductCardServiceCreateJobDTO == null) {
+        if(inventoryProductCardServiceUpdatePriceJobDTO == null) {
             //TO DO: HANDLE ERROR FOR FAILED CREATION OF IMPORT JOB;
             return null; //RETURN AN ERROR;
         }
     
         
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceUpdatePriceJobDTO;
         
     }
 
-    async processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
-        if(inventoryProductCardServiceCreateJobDTO == null) {
+    async processsInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId: string) {
+        let inventoryProductCardServiceUpdatePriceJobDTO = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
+        if(inventoryProductCardServiceUpdatePriceJobDTO == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return null; //RETURN AN ERROR;
         }
 
-        this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
+        this.inventoryProductCardServiceUpdatePriceJobItemService.createInventoryProductCardServiceUpdatePriceJobItemsBySetId(inventoryProductCardServiceUpdatePriceJobDTO);
     
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceUpdatePriceJobDTO;
     }
 
-    async approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+    async approveInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId: string) {
+        let inventoryProductCardServiceUpdatePriceJobDTO = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
-        if(inventoryProductCardServiceCreateJobDTO == null) {
+        if(inventoryProductCardServiceUpdatePriceJobDTO == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
+        await this.updateInventoryProductCardServiceUpdatePriceJobStatus(inventoryProductCardServiceUpdatePriceJobId, INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
 
-        await this.inventoryProductCardServiceCreateJobItemService.approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
+        await this.inventoryProductCardServiceUpdatePriceJobItemService.approveInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId);
 
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceUpdatePriceJobDTO;
     }
 
-    async deleteInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+    async deleteInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId: string) {
+        let inventoryProductCardServiceUpdatePriceJobDTO = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
-        if(inventoryProductCardServiceCreateJobDTO == null) {
+        if(inventoryProductCardServiceUpdatePriceJobDTO == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        if(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE) {
+        if(inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_COMPLETE) {
             //TO DO: HANDLE ERROR FOR ONLY ALLOWING DELETION OF NON COMPLETED JOBS;
             return false; //RETURN AN ERROR;
         }
 
-        await this.inventoryProductCardServiceCreateJobItemService.deleteInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
+        await this.inventoryProductCardServiceUpdatePriceJobItemService.deleteInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId);
 
-        await this.inventoryProductCardServiceCreateJobRepository.delete({ 
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId 
+        await this.inventoryProductCardServiceUpdatePriceJobRepository.delete({ 
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId 
             });
 
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceUpdatePriceJobDTO;
     }
 
 
 
     //HELPER FUNCTIONS (REFACTOR TO UTIL SERVICE LATER);
     
-    async createInventoryProductCardServiceCreateJobCode(productLineCode: string, productSetCode: string, commerceLocationName:string) {
+    async createInventoryProductCardServiceUpdatePriceJobCode(productLineCode: string, productSetCode: string, commerceLocationName:string) {
 
         let now = new Date();
         let dateCode = now.getFullYear().toString() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + '-' + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
 
-        let inventoryProductCardServiceCreateJobCode = productLineCode.toUpperCase() + '-' + productSetCode.replace(/ /g, '-').toUpperCase() + '-' + commerceLocationName.replace(/ /g, '-').toUpperCase() + '-' + dateCode;
+        let inventoryProductCardServiceUpdatePriceJobCode = productLineCode.toUpperCase() + '-' + productSetCode.replace(/ /g, '-').toUpperCase() + '-' + commerceLocationName.replace(/ /g, '-').toUpperCase() + '-' + dateCode;
 
-        return inventoryProductCardServiceCreateJobCode;
+        return inventoryProductCardServiceUpdatePriceJobCode;
     }
 
 
-    async updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobStatus: string) {
-        let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+    async updateInventoryProductCardServiceUpdatePriceJobStatus(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobStatus: string) {
+        let inventoryProductCardServiceUpdatePriceJob = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
-        if(inventoryProductCardServiceCreateJob == null) {
+        if(inventoryProductCardServiceUpdatePriceJob == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobStatus = inventoryProductCardServiceCreateJobStatus;
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobUpdateDate = new Date();
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobStatus = inventoryProductCardServiceUpdatePriceJobStatus;
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobUpdateDate = new Date();
 
-        await this.inventoryProductCardServiceCreateJobRepository.save(inventoryProductCardServiceCreateJob);
+        await this.inventoryProductCardServiceUpdatePriceJobRepository.save(inventoryProductCardServiceUpdatePriceJob);
 
         return true;
     }
 
-    async updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobCount: number) {
-        let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+    async updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobCount: number) {
+        let inventoryProductCardServiceUpdatePriceJob = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
-        if(inventoryProductCardServiceCreateJob == null) {
+        if(inventoryProductCardServiceUpdatePriceJob == null) {
             //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
             return false; //RETURN AN ERROR;
         }
 
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobCount = inventoryProductCardServiceCreateJobCount;
-        inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobUpdateDate = new Date();
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobCount = inventoryProductCardServiceUpdatePriceJobCount;
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobUpdateDate = new Date();
 
-        await this.inventoryProductCardServiceCreateJobRepository.save(inventoryProductCardServiceCreateJob);
+        await this.inventoryProductCardServiceUpdatePriceJobRepository.save(inventoryProductCardServiceUpdatePriceJob);
 
         return true;
     }
@@ -375,28 +375,28 @@ export class InventoryProductCardServiceCreateJobService {
     
     
     /* EVENT LISTENERS */
-    @OnEvent('inventory.product.card.service.create.job.update.status')
-    async handleInventoryProductCardServiceCreateJobStatusEvent(payload: any) {
+    @OnEvent('inventory.product.card.service.update.price.job.update.status')
+    async handleInventoryProductCardServiceUpdatePriceJobStatusEvent(payload: any) {
         
-        let inventoryProductCardServiceCreateJobId = payload.inventoryProductCardServiceCreateJobId;
-        let inventoryProductCardServiceCreateJobStatus = payload.inventoryProductCardServiceCreateJobStatus;
+        let inventoryProductCardServiceUpdatePriceJobId = payload.inventoryProductCardServiceUpdatePriceJobId;
+        let inventoryProductCardServiceUpdatePriceJobStatus = payload.inventoryProductCardServiceUpdatePriceJobStatus;
 
-        if(inventoryProductCardServiceCreateJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE) {
-            let inventoryProductCardServiceCreateJobCount = payload.inventoryProductCardServiceCreateJobCount;
-            await this.updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId, inventoryProductCardServiceCreateJobCount);
+        if(inventoryProductCardServiceUpdatePriceJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE) {
+            let inventoryProductCardServiceUpdatePriceJobCount = payload.inventoryProductCardServiceUpdatePriceJobCount;
+            await this.updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId, inventoryProductCardServiceUpdatePriceJobCount);
 
             //TO DO: UPDATE PRICING;
-            let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
+            let inventoryProductCardServiceUpdatePriceJobDTO = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
-            if(inventoryProductCardServiceCreateJobDTO == null) {
+            if(inventoryProductCardServiceUpdatePriceJobDTO == null) {
                 //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
                 return null; //RETURN AN ERROR;
             }
-            await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
-            this.inventoryProductCardServiceCreateJobItemService.updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO);
+            await this.updateInventoryProductCardServiceUpdatePriceJobStatus(inventoryProductCardServiceUpdatePriceJobId, INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
+            this.inventoryProductCardServiceUpdatePriceJobItemService.updateInventoryProductCardUpdatePriceJobItemPricesByJob(inventoryProductCardServiceUpdatePriceJobDTO);
         }
         else {
-            await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, inventoryProductCardServiceCreateJobStatus);
+            await this.updateInventoryProductCardServiceUpdatePriceJobStatus(inventoryProductCardServiceUpdatePriceJobId, inventoryProductCardServiceUpdatePriceJobStatus);
         }
     }
 

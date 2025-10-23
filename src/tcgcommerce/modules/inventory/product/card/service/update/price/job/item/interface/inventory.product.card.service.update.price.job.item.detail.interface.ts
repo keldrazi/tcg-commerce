@@ -1,4 +1,4 @@
-export interface InventoryProductCardServiceCreateJobItemDetail {
+export interface InventoryProductCardServiceUpdatePriceJobItemDetail {
     productCardConditionCode: string;
     inventoryProductCardItemTCGPlayerSKU: number;
     inventoryProductCardItemSKU: string;

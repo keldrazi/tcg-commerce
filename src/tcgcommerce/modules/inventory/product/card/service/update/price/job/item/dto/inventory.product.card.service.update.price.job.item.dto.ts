@@ -1,10 +1,8 @@
-import { InventoryProductCardServiceCreateJobItemDetail } from '../interface/inventory.product.card.service.create.job.item.detail.interface';
+import { InventoryProductCardServiceUpdatePriceJobItemDetail } from '../interface/inventory.product.card.service.update.price.job.item.detail.interface';
 
-
-
-export class InventoryProductCardServiceCreateJobItemDTO {
-    inventoryProductCardServiceCreateJobItemId: string;
-    inventoryProductCardServiceCreateJobId: string;
+export class InventoryProductCardServiceUpdatePriceJobItemDTO {
+    inventoryProductCardServiceUpdatePriceJobItemId: string;
+    inventoryProductCardServiceUpdatePriceJobId: string;
     productCardId: string;
     productCardTCGdbId: string;
     productCardTCGPlayerId: number;
@@ -19,11 +17,11 @@ export class InventoryProductCardServiceCreateJobItemDTO {
     productSetCode: string;
     productCardPrintingId: string;
     productCardPrintingName: string;
-    inventoryProductCardServiceCreateJobItemDetails: InventoryProductCardServiceCreateJobItemDetail[];
-    inventoryProductCardServiceCreateJobItemIsVerified: boolean;
-    inventoryProductCardServiceCreateJobItemIsActive: boolean;
-    inventoryProductCardServiceCreateJobItemCreateDate: Date;
-    inventoryProductCardServiceCreateJobItemUpdateDate: Date; 
+    inventoryProductCardServiceUpdatePriceJobItemDetails: InventoryProductCardServiceUpdatePriceJobItemDetail[];
+    inventoryProductCardServiceUpdatePriceJobItemIsVerified: boolean;
+    inventoryProductCardServiceUpdatePriceJobItemIsActive: boolean;
+    inventoryProductCardServiceUpdatePriceJobItemCreateDate: Date;
+    inventoryProductCardServiceUpdatePriceJobItemUpdateDate: Date; 
 }
 
 

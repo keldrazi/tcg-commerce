@@ -1,11 +1,11 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('inventoryProductCardServiceCreateJobItem')
-export class InventoryProductCardServiceCreateJobItem {
+@Entity('inventoryProductCardServiceUpdatePriceJobItem')
+export class InventoryProductCardServiceUpdatePriceJobItem {
     @PrimaryGeneratedColumn('uuid')
-    inventoryProductCardServiceCreateJobItemId: string;
+    inventoryProductCardServiceUpdatePriceJobItemId: string;
     @Column()
-    inventoryProductCardServiceCreateJobId: string;
+    inventoryProductCardServiceUpdatePriceJobId: string;
     @Column()
     productCardId: string;
     @Column()
@@ -35,13 +35,13 @@ export class InventoryProductCardServiceCreateJobItem {
     @Column()
     productCardPrintingName: string;
     @Column('jsonb')
-    inventoryProductCardServiceCreateJobItemDetails: string;
+    inventoryProductCardServiceUpdatePriceJobItemDetails: string;
     @Column({ default: false })
-    inventoryProductCardServiceCreateJobItemIsVerified: boolean;
+    inventoryProductCardServiceUpdatePriceJobItemIsVerified: boolean;
     @Column({ default: true })
-    inventoryProductCardServiceCreateJobItemIsActive: boolean;
+    inventoryProductCardServiceUpdatePriceJobItemIsActive: boolean;
     @CreateDateColumn()
-    inventoryProductCardServiceCreateJobItemCreateDate: Date;
+    inventoryProductCardServiceUpdatePriceJobItemCreateDate: Date;
     @UpdateDateColumn()
-    inventoryProductCardServiceCreateJobItemUpdateDate: Date; 
+    inventoryProductCardServiceUpdatePriceJobItemUpdateDate: Date; 
 }

@@ -1,9 +1,9 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('inventoryProductCardServiceCreateJob')
-export class InventoryProductCardServiceCreateJob {
+@Entity('inventoryProductCardServiceUpdatePriceJob')
+export class InventoryProductCardServiceUpdatePriceJob {
     @PrimaryGeneratedColumn('uuid')
-    inventoryProductCardServiceCreateJobId: string;
+    inventoryProductCardServiceUpdatePriceJobId: string;
     @Column()
     commerceAccountId: string;
     @Column()
@@ -35,15 +35,15 @@ export class InventoryProductCardServiceCreateJob {
     @Column()
     productSetCode: string;
     @Column()
-    inventoryProductCardServiceCreateJobDate: Date;
+    inventoryProductCardServiceUpdatePriceJobDate: Date;
     @Column()
-    inventoryProductCardServiceCreateJobCode: string;
+    inventoryProductCardServiceUpdatePriceJobCode: string;
     @Column()
-    inventoryProductCardServiceCreateJobStatus: string;
+    inventoryProductCardServiceUpdatePriceJobStatus: string;
     @Column({ default: 0 })
-    inventoryProductCardServiceCreateJobCount: number;
+    inventoryProductCardServiceUpdatePriceJobCount: number;
     @CreateDateColumn()
-    inventoryProductCardServiceCreateJobCreateDate: Date;
+    inventoryProductCardServiceUpdatePriceJobCreateDate: Date;
     @UpdateDateColumn()
-    inventoryProductCardServiceCreateJobUpdateDate: Date;
+    inventoryProductCardServiceUpdatePriceJobUpdateDate: Date;
 }

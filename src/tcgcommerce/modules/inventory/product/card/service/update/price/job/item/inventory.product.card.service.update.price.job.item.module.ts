@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryProductCardServiceCreateJobItemService } from './inventory.product.card.service.create.job.item.service';
-import { InventoryProductCardServiceCreateJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.entity';
+import { InventoryProductCardServiceUpdatePriceJobItemService } from './inventory.product.card.service.update.price.job.item.service';
+import { InventoryProductCardServiceUpdatePriceJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/update/price/job/item/inventory.product.card.service.update.price.job.item.entity';
 import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
@@ -17,7 +17,7 @@ import { PriceRuleProductCardBaseModule } from 'src/tcgcommerce/modules/price/ru
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryProductCardServiceCreateJobItem]),
+        TypeOrmModule.forFeature([InventoryProductCardServiceUpdatePriceJobItem]),
         ProductCardModule,
         ProductVendorModule,
         ProductLineModule,
@@ -31,7 +31,7 @@ import { PriceRuleProductCardBaseModule } from 'src/tcgcommerce/modules/price/ru
         PriceRuleProductCardBaseModule,
     ],
     controllers: [],
-    providers: [InventoryProductCardServiceCreateJobItemService],
-    exports: [InventoryProductCardServiceCreateJobItemService]
+    providers: [InventoryProductCardServiceUpdatePriceJobItemService],
+    exports: [InventoryProductCardServiceUpdatePriceJobItemService]
 })
-export class InventoryProductCardServiceCreateJobItemModule {}
+export class InventoryProductCardServiceUpdatePriceJobItemModule {}

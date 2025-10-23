@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryProductCardServiceCreateJobController } from './inventory.product.card.service.create.job.controller';
-import { InventoryProductCardServiceCreateJobService } from './inventory.product.card.service.create.job.service';
-import { InventoryProductCardServiceCreateJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/inventory.product.card.service.create.job.entity';
+import { InventoryProductCardServiceUpdatePriceJobController } from './inventory.product.card.service.update.price.job.controller';
+import { InventoryProductCardServiceUpdatePriceJobService } from './inventory.product.card.service.update.price.job.service';
+import { InventoryProductCardServiceUpdatePriceJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/update/price/job/inventory.product.card.service.update.price.job.entity';
 import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
-import { InventoryProductCardServiceCreateJobItemModule } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.module';
+import { InventoryProductCardServiceUpdatePriceJobItemModule } from 'src/tcgcommerce/modules/inventory/product/card/service/update/price/job/item/inventory.product.card.service.update.price.job.item.module';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryProductCardServiceCreateJob]),
+        TypeOrmModule.forFeature([InventoryProductCardServiceUpdatePriceJob]),
         ProductSetModule,
-        InventoryProductCardServiceCreateJobItemModule,
+        InventoryProductCardServiceUpdatePriceJobItemModule,
     ],
-    controllers: [InventoryProductCardServiceCreateJobController],
-    providers: [InventoryProductCardServiceCreateJobService],
-    exports: [InventoryProductCardServiceCreateJobService]
+    controllers: [InventoryProductCardServiceUpdatePriceJobController],
+    providers: [InventoryProductCardServiceUpdatePriceJobService],
+    exports: [InventoryProductCardServiceUpdatePriceJobService]
 })
-export class InventoryProductCardServiceCreateJobModule {}
+export class InventoryProductCardServiceUpdatePriceJobModule {}

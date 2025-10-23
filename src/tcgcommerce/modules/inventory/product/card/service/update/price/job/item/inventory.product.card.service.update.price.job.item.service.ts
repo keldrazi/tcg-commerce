@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/create/job/inventory.product.card.service.create.job.contants';
+import { INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/update/price/job/inventory.product.card.service.update.price.job.contants';
 import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product.card.dto';
-import { InventoryProductCardServiceCreateJobDTO, CreateInventoryProductCardServiceCreateJobsDTO, CreateInventoryProductCardServiceCreateJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/dto/inventory.product.card.service.create.job.dto';
-import { InventoryProductCardServiceCreateJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/dto/inventory.product.card.service.create.job.item.dto';
-import { InventoryProductCardServiceCreateJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.entity';
-import { InventoryProductCardServiceCreateJobItemDetail } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/interface/inventory.product.card.service.create.job.item.detail.interface';
+import { InventoryProductCardServiceUpdatePriceJobDTO, CreateInventoryProductCardServiceUpdatePriceJobsDTO, CreateInventoryProductCardServiceUpdatePriceJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/update/price/job/dto/inventory.product.card.service.update.price.job.dto';
+import { InventoryProductCardServiceUpdatePriceJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/update/price/job/item/dto/inventory.product.card.service.update.price.job.item.dto';
+import { InventoryProductCardServiceUpdatePriceJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/update/price/job/item/inventory.product.card.service.update.price.job.item.entity';
+import { InventoryProductCardServiceUpdatePriceJobItemDetail } from 'src/tcgcommerce/modules/inventory/product/card/service/update/price/job/item/interface/inventory.product.card.service.update.price.job.item.detail.interface';
 import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
@@ -22,10 +22,10 @@ import { TCGdbMTGPriceCurrentDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/price/c
 import { PriceRuleProductCardBaseService } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.service';
 
 @Injectable()
-export class InventoryProductCardServiceCreateJobItemService {
+export class InventoryProductCardServiceUpdatePriceJobItemService {
 
     constructor(
-        @InjectRepository(InventoryProductCardServiceCreateJobItem) private inventoryProductCardServiceCreateJobItemRepository: Repository<InventoryProductCardServiceCreateJobItem>,
+        @InjectRepository(InventoryProductCardServiceUpdatePriceJobItem) private inventoryProductCardServiceUpdatePriceJobItemRepository: Repository<InventoryProductCardServiceUpdatePriceJobItem>,
         private productCardService: ProductCardService,
         private productVendorService: ProductVendorService,
         private productLineService: ProductLineService,
@@ -40,140 +40,140 @@ export class InventoryProductCardServiceCreateJobItemService {
         private priceRuleProductCardBaseService: PriceRuleProductCardBaseService,
     ) { }
 
-    async getInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobId: string) {
 
-        let inventoryProductCardServiceCreateJobItemDTOs: InventoryProductCardServiceCreateJobItemDTO[] = [];
+        let inventoryProductCardServiceUpdatePriceJobItemDTOs: InventoryProductCardServiceUpdatePriceJobItemDTO[] = [];
 
-        let inventoryProductCardServiceCreateJobItems = await this.inventoryProductCardServiceCreateJobItemRepository.find({
+        let inventoryProductCardServiceUpdatePriceJobItems = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.find({
             where: {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId,
             }
         });
 
-        for(let i = 0; i < inventoryProductCardServiceCreateJobItems.length; i++) {
-            let inventoryProductCardServiceCreateJobItem = inventoryProductCardServiceCreateJobItems[i];
-            let inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO = await this.createInventoryProductCardServiceCreateJobItemDTO(inventoryProductCardServiceCreateJobItem);
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobItems.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJobItem = inventoryProductCardServiceUpdatePriceJobItems[i];
+            let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = await this.createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem);
             
-            inventoryProductCardServiceCreateJobItemDTOs.push(inventoryProductCardServiceCreateJobItemDTO);
+            inventoryProductCardServiceUpdatePriceJobItemDTOs.push(inventoryProductCardServiceUpdatePriceJobItemDTO);
         }
 
-        return inventoryProductCardServiceCreateJobItemDTOs;
+        return inventoryProductCardServiceUpdatePriceJobItemDTOs;
 
     }
 
-    async getInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async getInventoryProductCardServiceUpdatePriceJobItemsBySetId(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
 
-        let inventoryProductCardServiceCreateJobItemDTOs: InventoryProductCardServiceCreateJobItemDTO[] = [];
+        let inventoryProductCardServiceUpdatePriceJobItemDTOs: InventoryProductCardServiceUpdatePriceJobItemDTO[] = [];
 
-        let inventoryProductCardServiceCreateJobItems = await this.inventoryProductCardServiceCreateJobItemRepository.find({
+        let inventoryProductCardServiceUpdatePriceJobItems = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.find({
             where: {
-                commerceAccountId: inventoryProductCardServiceCreateJobDTO.commerceAccountId,
-                commerceLocationId: inventoryProductCardServiceCreateJobDTO.commerceLocationId,
-                productSetId: inventoryProductCardServiceCreateJobDTO.productSetId,
-                productVendorId: inventoryProductCardServiceCreateJobDTO.productVendorId,
-                productLineId: inventoryProductCardServiceCreateJobDTO.productLineId,
-                productTypeId: inventoryProductCardServiceCreateJobDTO.productTypeId,
-                productLanguageId: inventoryProductCardServiceCreateJobDTO.productLanguageId,
+                commerceAccountId: inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId,
+                commerceLocationId: inventoryProductCardServiceUpdatePriceJobDTO.commerceLocationId,
+                productSetId: inventoryProductCardServiceUpdatePriceJobDTO.productSetId,
+                productVendorId: inventoryProductCardServiceUpdatePriceJobDTO.productVendorId,
+                productLineId: inventoryProductCardServiceUpdatePriceJobDTO.productLineId,
+                productTypeId: inventoryProductCardServiceUpdatePriceJobDTO.productTypeId,
+                productLanguageId: inventoryProductCardServiceUpdatePriceJobDTO.productLanguageId,
             }
         });
 
-        for(let i = 0; i < inventoryProductCardServiceCreateJobItems.length; i++) {
-            let inventoryProductCardServiceCreateJobItem = inventoryProductCardServiceCreateJobItems[i];
-            let inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO = await this.createInventoryProductCardServiceCreateJobItemDTO(inventoryProductCardServiceCreateJobItem);
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobItems.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJobItem = inventoryProductCardServiceUpdatePriceJobItems[i];
+            let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = await this.createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem);
             
-            inventoryProductCardServiceCreateJobItemDTOs.push(inventoryProductCardServiceCreateJobItemDTO);
+            inventoryProductCardServiceUpdatePriceJobItemDTOs.push(inventoryProductCardServiceUpdatePriceJobItemDTO);
         }
 
-        return inventoryProductCardServiceCreateJobItemDTOs;
+        return inventoryProductCardServiceUpdatePriceJobItemDTOs;
 
     }
 
-    async getInventoryProductCardServiceCreateJobItemByProductCardId(inventoryProductCardServiceCreateJobId: string, productCardId: string) {
-        let inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.findOne({
+    async getInventoryProductCardServiceUpdatePriceJobItemByProductCardId(inventoryProductCardServiceUpdatePriceJobId: string, productCardId: string) {
+        let inventoryProductCardServiceUpdatePriceJobItem = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.findOne({
             where: {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId,
                 productCardId: productCardId
             }
         });
 
-        if(inventoryProductCardServiceCreateJobItem == null) {
+        if(inventoryProductCardServiceUpdatePriceJobItem == null) {
             //TO DO: THROW AN ERROR;
             return null;
         }
 
-        let inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO = await this.createInventoryProductCardServiceCreateJobItemDTO(inventoryProductCardServiceCreateJobItem);
+        let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = await this.createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem);
 
-        return inventoryProductCardServiceCreateJobItemDTO;
+        return inventoryProductCardServiceUpdatePriceJobItemDTO;
     }
 
-    async getInventoryProductCardServiceCreateJobItemDetailsByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async getInventoryProductCardServiceUpdatePriceJobItemDetailsByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
         //GET THE PRODUCT CARDS FOR THE SET;
-        let productCards = await this.productCardService.getProductCardsByProductSetId(inventoryProductCardServiceCreateJobDTO.productSetId);
+        let productCards = await this.productCardService.getProductCardsByProductSetId(inventoryProductCardServiceUpdatePriceJobDTO.productSetId);
 
         if(productCards == null) {
             //TO DO HANDLE ERROR FOR NON EXISTENT SET;
             return null;
         }
 
-        let inventoryProductCardServiceCreateJobItemDetails: any[] = [];
+        let inventoryProductCardServiceUpdatePriceJobItemDetails: any[] = [];
 
         for(let i = 0; i < productCards.length; i++) {
             let productCard = productCards[i];
             let productCardDTO: ProductCardDTO = { ...productCard };
 
             //GET THE INVENTORY FOR THE THE PRODUCT CARD;
-            let inventoryProductCardServiceCreateJobItemDTO = await this.getInventoryProductCardServiceCreateJobItemByProductCardId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId, productCard.productCardId);
+            let inventoryProductCardServiceUpdatePriceJobItemDTO = await this.getInventoryProductCardServiceUpdatePriceJobItemByProductCardId(inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId, productCard.productCardId);
 
-            if(inventoryProductCardServiceCreateJobItemDTO != null) {
-                let inventoryProductCardServiceCreateJobItemDetail = {
+            if(inventoryProductCardServiceUpdatePriceJobItemDTO != null) {
+                let inventoryProductCardServiceUpdatePriceJobItemDetail = {
                     productCardNumber: productCardDTO.productCardNumber,
                     productCardName: productCardDTO.productCardName,
                     productCardImage: productCardDTO.productCardImage,
-                    inventoryProductCardServiceCreateJobItemDTO: inventoryProductCardServiceCreateJobItemDTO
+                    inventoryProductCardServiceUpdatePriceJobItemDTO: inventoryProductCardServiceUpdatePriceJobItemDTO
                 };
 
-                inventoryProductCardServiceCreateJobItemDetails.push(inventoryProductCardServiceCreateJobItemDetail);
+                inventoryProductCardServiceUpdatePriceJobItemDetails.push(inventoryProductCardServiceUpdatePriceJobItemDetail);
             }
         }
 
-        return inventoryProductCardServiceCreateJobItemDetails;
+        return inventoryProductCardServiceUpdatePriceJobItemDetails;
  
     
 
     }
 
-    async createInventoryProductCardServiceCreateJobItemDTO(inventoryProductCardServiceCreateJobItem: InventoryProductCardServiceCreateJobItem) {
+    async createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem: InventoryProductCardServiceUpdatePriceJobItem) {
 
-        let inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO = new InventoryProductCardServiceCreateJobItemDTO();
-        inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemId = inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemId;
-        inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobId = inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobId;
-        inventoryProductCardServiceCreateJobItemDTO.productCardId = inventoryProductCardServiceCreateJobItem.productCardId;
-        inventoryProductCardServiceCreateJobItemDTO.productCardTCGdbId = inventoryProductCardServiceCreateJobItem.productCardTCGdbId;
-        inventoryProductCardServiceCreateJobItemDTO.productCardTCGPlayerId = inventoryProductCardServiceCreateJobItem.productCardTCGPlayerId;
-        inventoryProductCardServiceCreateJobItemDTO.commerceAccountId = inventoryProductCardServiceCreateJobItem.commerceAccountId;
-        inventoryProductCardServiceCreateJobItemDTO.commerceLocationId = inventoryProductCardServiceCreateJobItem.commerceLocationId;
-        inventoryProductCardServiceCreateJobItemDTO.productVendorId = inventoryProductCardServiceCreateJobItem.productVendorId;
-        inventoryProductCardServiceCreateJobItemDTO.productLineId = inventoryProductCardServiceCreateJobItem.productLineId;
-        inventoryProductCardServiceCreateJobItemDTO.productTypeId = inventoryProductCardServiceCreateJobItem.productTypeId;
-        inventoryProductCardServiceCreateJobItemDTO.productLanguageId = inventoryProductCardServiceCreateJobItem.productLanguageId;
-        inventoryProductCardServiceCreateJobItemDTO.productLanguageCode = inventoryProductCardServiceCreateJobItem.productLanguageCode;
-        inventoryProductCardServiceCreateJobItemDTO.productSetId = inventoryProductCardServiceCreateJobItem.productSetId;
-        inventoryProductCardServiceCreateJobItemDTO.productSetCode = inventoryProductCardServiceCreateJobItem.productSetCode;
-        inventoryProductCardServiceCreateJobItemDTO.productCardPrintingId = inventoryProductCardServiceCreateJobItem.productCardPrintingId;
-        inventoryProductCardServiceCreateJobItemDTO.productCardPrintingName = inventoryProductCardServiceCreateJobItem.productCardPrintingName;
-        inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails = JSON.parse(inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemDetails) as InventoryProductCardServiceCreateJobItemDetail[];
-        inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemIsVerified = inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemIsVerified;
-        inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemIsActive = inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemIsActive;
-        inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemCreateDate = inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemCreateDate;
-        inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemUpdateDate = inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemUpdateDate;
+        let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = new InventoryProductCardServiceUpdatePriceJobItemDTO();
+        inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemId = inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobId = inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productCardId = inventoryProductCardServiceUpdatePriceJobItem.productCardId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productCardTCGdbId = inventoryProductCardServiceUpdatePriceJobItem.productCardTCGdbId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productCardTCGPlayerId = inventoryProductCardServiceUpdatePriceJobItem.productCardTCGPlayerId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.commerceAccountId = inventoryProductCardServiceUpdatePriceJobItem.commerceAccountId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.commerceLocationId = inventoryProductCardServiceUpdatePriceJobItem.commerceLocationId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productVendorId = inventoryProductCardServiceUpdatePriceJobItem.productVendorId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productLineId = inventoryProductCardServiceUpdatePriceJobItem.productLineId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productTypeId = inventoryProductCardServiceUpdatePriceJobItem.productTypeId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productLanguageId = inventoryProductCardServiceUpdatePriceJobItem.productLanguageId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productLanguageCode = inventoryProductCardServiceUpdatePriceJobItem.productLanguageCode;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productSetId = inventoryProductCardServiceUpdatePriceJobItem.productSetId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productSetCode = inventoryProductCardServiceUpdatePriceJobItem.productSetCode;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productCardPrintingId = inventoryProductCardServiceUpdatePriceJobItem.productCardPrintingId;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.productCardPrintingName = inventoryProductCardServiceUpdatePriceJobItem.productCardPrintingName;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails = JSON.parse(inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemDetails) as InventoryProductCardServiceUpdatePriceJobItemDetail[];
+        inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemIsVerified = inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemIsVerified;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemIsActive = inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemIsActive;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemCreateDate = inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemCreateDate;
+        inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemUpdateDate = inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemUpdateDate;
 
-        return inventoryProductCardServiceCreateJobItemDTO;
+        return inventoryProductCardServiceUpdatePriceJobItemDTO;
 
     }
 
-    async createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async createInventoryProductCardServiceUpdatePriceJobItemsBySetId(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
         //GET THE PRODUCT SET BY CODE;
-        let productSet = await this.productSetService.getProductSet(inventoryProductCardServiceCreateJobDTO.productSetId);
+        let productSet = await this.productSetService.getProductSet(inventoryProductCardServiceUpdatePriceJobDTO.productSetId);
         
         //TO DO: CREATE AN ERROR TO RETURN;
         if (productSet == null) {
@@ -181,33 +181,33 @@ export class InventoryProductCardServiceCreateJobItemService {
         }
 
         this.eventEmitter.emit(
-            'inventory.product.card.service.create.job.update.status',
+            'inventory.product.card.service.update.price.job.update.status',
             {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
-                inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARDS
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId,
+                inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_INVENTORY_CARDS
             }
         )
 
 
         //CREATE THE BATCH INVENTORY PRODUCT CARDS BY SET;
-        let inventoryProductCardServiceCreateJobItemDTOs = await this.createInventoryProductCardServiceCreateJobItemsBySet(inventoryProductCardServiceCreateJobDTO);
+        let inventoryProductCardServiceUpdatePriceJobItemDTOs = await this.createInventoryProductCardServiceUpdatePriceJobItemsBySet(inventoryProductCardServiceUpdatePriceJobDTO);
         
-        if(inventoryProductCardServiceCreateJobItemDTOs == null) {
+        if(inventoryProductCardServiceUpdatePriceJobItemDTOs == null) {
             this.eventEmitter.emit(
-                'inventory.product.card.service.create.job.update.status',
+                'inventory.product.card.service.update.price.job.update.status',
                 {
-                    inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
-                    inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_FAILED,
+                    inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId,
+                    inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_FAILED,
                 }
             )            
         }
         else {
             this.eventEmitter.emit(
-                'inventory.product.card.service.create.job.update.status',
+                'inventory.product.card.service.update.price.job.update.status',
                 {
-                    inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
-                    inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE,
-                    inventoryProductCardServiceCreateJobCount: inventoryProductCardServiceCreateJobItemDTOs.length
+                    inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId,
+                    inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_INVENTORY_CARDS_COMPLETE,
+                    inventoryProductCardServiceUpdatePriceJobCount: inventoryProductCardServiceUpdatePriceJobItemDTOs.length
                 }
             )            
         }
@@ -217,12 +217,12 @@ export class InventoryProductCardServiceCreateJobItemService {
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/COMMERCE LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
     //TO DO: REFACTOR THIS METHOD TO BE MORE MODULAR;
-    async createInventoryProductCardServiceCreateJobItemsBySet(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async createInventoryProductCardServiceUpdatePriceJobItemsBySet(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
 
         //GET THE COMMERCE LOCATION;
-        let commerceLocation = await this.commerceLocationService.getCommerceLocation(inventoryProductCardServiceCreateJobDTO.commerceLocationId);
-        let productVendor = await this.productVendorService.getProductVendor(inventoryProductCardServiceCreateJobDTO.productVendorId);
-        let productLine = await this.productLineService.getProductLine(inventoryProductCardServiceCreateJobDTO.productLineId);
+        let commerceLocation = await this.commerceLocationService.getCommerceLocation(inventoryProductCardServiceUpdatePriceJobDTO.commerceLocationId);
+        let productVendor = await this.productVendorService.getProductVendor(inventoryProductCardServiceUpdatePriceJobDTO.productVendorId);
+        let productLine = await this.productLineService.getProductLine(inventoryProductCardServiceUpdatePriceJobDTO.productLineId);
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if (commerceLocation == null || productVendor == null || productLine == null) {
@@ -230,16 +230,16 @@ export class InventoryProductCardServiceCreateJobItemService {
         }
 
 
-        let productCardConditions = await this.productCardConditionService.getProductCardConditionsByProductLineId(inventoryProductCardServiceCreateJobDTO.productLineId);
-        let productLanguage = await this.productLanguageService.getProductLanguage(inventoryProductCardServiceCreateJobDTO.productLanguageId);
-        let productCardPrintings = await this.productCardPrintingService.getProductCardPrintingsByProductLineId(inventoryProductCardServiceCreateJobDTO.productLineId);
+        let productCardConditions = await this.productCardConditionService.getProductCardConditionsByProductLineId(inventoryProductCardServiceUpdatePriceJobDTO.productLineId);
+        let productLanguage = await this.productLanguageService.getProductLanguage(inventoryProductCardServiceUpdatePriceJobDTO.productLanguageId);
+        let productCardPrintings = await this.productCardPrintingService.getProductCardPrintingsByProductLineId(inventoryProductCardServiceUpdatePriceJobDTO.productLineId);
 
          //TO DO: CREATE AN ERROR TO RETURN;
         if (productCardConditions == null || productLanguage == null || productCardPrintings == null) {
             return null;
         }
 
-        let productSet = await this.productSetService.getProductSet(inventoryProductCardServiceCreateJobDTO.productSetId);
+        let productSet = await this.productSetService.getProductSet(inventoryProductCardServiceUpdatePriceJobDTO.productSetId);
         if(productSet == null) {
             return null;
         }
@@ -253,13 +253,13 @@ export class InventoryProductCardServiceCreateJobItemService {
         }
 
         //CREATE THE ARRAY TO HOLD THE INVENTORY PRODUCT CARDS FOR THE SET;
-        let inventoryProductCardServiceCreateJobItemDTOs: InventoryProductCardServiceCreateJobItemDTO[] = [];
+        let inventoryProductCardServiceUpdatePriceJobItemDTOs: InventoryProductCardServiceUpdatePriceJobItemDTO[] = [];
         
         //LOOP OVER EACH PRODUCT CARD AND CREATE THE INVENTORY PRODUCT CARD;
         for (let i = 0; i < productCards.length; i++) {
             
             //TO DO: CHECK TO SEE IF THE INVENTORY PRODUCT CARD ALREADY EXISTS FOR THE COMMERCE ACCOUNT/COMMERCE LOCATION/PRODUCT CARD/PRODUCT CARD LANGUAGE;
-            let existingInventoryProductCard = await this.inventoryProductCardService.getInventoryProductCardByCardId(productCards[i].productCardId, inventoryProductCardServiceCreateJobDTO.commerceAccountId, inventoryProductCardServiceCreateJobDTO.commerceLocationId, productLanguage.productLanguageId);
+            let existingInventoryProductCard = await this.inventoryProductCardService.getInventoryProductCardByCardId(productCards[i].productCardId, inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId, inventoryProductCardServiceUpdatePriceJobDTO.commerceLocationId, productLanguage.productLanguageId);
 
             if(existingInventoryProductCard != null) {
                 continue;
@@ -267,22 +267,22 @@ export class InventoryProductCardServiceCreateJobItemService {
 
             let productCard: ProductCardDTO = productCards[i];
             
-            let inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO = new InventoryProductCardServiceCreateJobItemDTO();
-            inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobId = inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId;
-            inventoryProductCardServiceCreateJobItemDTO.productCardId = productCard.productCardId;
-            inventoryProductCardServiceCreateJobItemDTO.productCardTCGdbId = productCard.productCardTCGdbId;
-            inventoryProductCardServiceCreateJobItemDTO.productCardTCGPlayerId = productCard.productCardTCGPlayerId;
-            inventoryProductCardServiceCreateJobItemDTO.commerceAccountId = inventoryProductCardServiceCreateJobDTO.commerceAccountId;
-            inventoryProductCardServiceCreateJobItemDTO.commerceLocationId = inventoryProductCardServiceCreateJobDTO.commerceLocationId;
-            inventoryProductCardServiceCreateJobItemDTO.productVendorId = inventoryProductCardServiceCreateJobDTO.productVendorId;
-            inventoryProductCardServiceCreateJobItemDTO.productLineId = inventoryProductCardServiceCreateJobDTO.productLineId;
-            inventoryProductCardServiceCreateJobItemDTO.productTypeId = inventoryProductCardServiceCreateJobDTO.productTypeId;
-            inventoryProductCardServiceCreateJobItemDTO.productLanguageId = productLanguage.productLanguageId;
-            inventoryProductCardServiceCreateJobItemDTO.productLanguageCode = productLanguage.productLanguageCode;
-            inventoryProductCardServiceCreateJobItemDTO.productSetId = productSet.productSetId;
-            inventoryProductCardServiceCreateJobItemDTO.productSetCode = productSet.productSetCode;
-            inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemIsVerified = false;
-            inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemIsActive = true;
+            let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = new InventoryProductCardServiceUpdatePriceJobItemDTO();
+            inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobId = inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productCardId = productCard.productCardId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productCardTCGdbId = productCard.productCardTCGdbId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productCardTCGPlayerId = productCard.productCardTCGPlayerId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.commerceAccountId = inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.commerceLocationId = inventoryProductCardServiceUpdatePriceJobDTO.commerceLocationId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productVendorId = inventoryProductCardServiceUpdatePriceJobDTO.productVendorId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productLineId = inventoryProductCardServiceUpdatePriceJobDTO.productLineId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productTypeId = inventoryProductCardServiceUpdatePriceJobDTO.productTypeId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productLanguageId = productLanguage.productLanguageId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productLanguageCode = productLanguage.productLanguageCode;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productSetId = productSet.productSetId;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.productSetCode = productSet.productSetCode;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemIsVerified = false;
+            inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemIsActive = true;
 
             for(let j = 0; j < productCardPrintings.length; j++) {
                 let productCardPrinting = productCardPrintings[j];
@@ -292,10 +292,10 @@ export class InventoryProductCardServiceCreateJobItemService {
                 if (productCardSKUByPrinting == null) {
                     continue;
                 }
-                inventoryProductCardServiceCreateJobItemDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
-                inventoryProductCardServiceCreateJobItemDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
+                inventoryProductCardServiceUpdatePriceJobItemDTO.productCardPrintingId = productCardPrinting.productCardPrintingId;
+                inventoryProductCardServiceUpdatePriceJobItemDTO.productCardPrintingName = productCardPrinting.productCardPrintingName;
 
-                let inventoryProductCardServiceCreateJobItemDetails: InventoryProductCardServiceCreateJobItemDetail[] = [];
+                let inventoryProductCardServiceUpdatePriceJobItemDetails: InventoryProductCardServiceUpdatePriceJobItemDetail[] = [];
                 for(let k = 0; k < productCardConditions.length; k++) {
                     
                     let productCardCondition = productCardConditions[k];
@@ -304,7 +304,7 @@ export class InventoryProductCardServiceCreateJobItemService {
                         continue;
                     }
 
-                    let inventoryProductCardServiceCreateJobItemDetail: InventoryProductCardServiceCreateJobItemDetail = {
+                    let inventoryProductCardServiceUpdatePriceJobItemDetail: InventoryProductCardServiceUpdatePriceJobItemDetail = {
                         productCardConditionCode: productCardCondition.productCardConditionCode,
                         inventoryProductCardItemTCGPlayerSKU: inventoryProductCardItemTCGPlayerSKU,
                         inventoryProductCardItemSKU: '',
@@ -317,53 +317,53 @@ export class InventoryProductCardServiceCreateJobItemService {
                         inventoryProductCardItemOverridePrice: 0,
                     };
 
-                    inventoryProductCardServiceCreateJobItemDetails.push(inventoryProductCardServiceCreateJobItemDetail);
+                    inventoryProductCardServiceUpdatePriceJobItemDetails.push(inventoryProductCardServiceUpdatePriceJobItemDetail);
                 }
 
-                let newInventoryProductCardServiceCreateJobItem = this.inventoryProductCardServiceCreateJobItemRepository.create({
-                    inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
+                let newInventoryProductCardServiceUpdatePriceJobItem = this.inventoryProductCardServiceUpdatePriceJobItemRepository.create({
+                    inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId,
                     productCardId: productCard.productCardId,
                     productCardTCGdbId: productCard.productCardTCGdbId,
                     productCardTCGPlayerId: productCard.productCardTCGPlayerId,
-                    commerceAccountId: inventoryProductCardServiceCreateJobDTO.commerceAccountId,
-                    commerceLocationId: inventoryProductCardServiceCreateJobDTO.commerceLocationId,
-                    productVendorId: inventoryProductCardServiceCreateJobDTO.productVendorId,
-                    productLineId: inventoryProductCardServiceCreateJobDTO.productLineId,
-                    productTypeId: inventoryProductCardServiceCreateJobDTO.productTypeId,
-                    productLanguageId: inventoryProductCardServiceCreateJobDTO.productLanguageId,
+                    commerceAccountId: inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId,
+                    commerceLocationId: inventoryProductCardServiceUpdatePriceJobDTO.commerceLocationId,
+                    productVendorId: inventoryProductCardServiceUpdatePriceJobDTO.productVendorId,
+                    productLineId: inventoryProductCardServiceUpdatePriceJobDTO.productLineId,
+                    productTypeId: inventoryProductCardServiceUpdatePriceJobDTO.productTypeId,
+                    productLanguageId: inventoryProductCardServiceUpdatePriceJobDTO.productLanguageId,
                     productLanguageCode: productLanguage.productLanguageCode,
                     productSetId: productSet.productSetId,
                     productSetCode: productSet.productSetCode,
                     productCardPrintingId: productCardPrinting.productCardPrintingId,
                     productCardPrintingName: productCardPrinting.productCardPrintingName,
-                    inventoryProductCardServiceCreateJobItemDetails: JSON.stringify(inventoryProductCardServiceCreateJobItemDetails),
-                    inventoryProductCardServiceCreateJobItemIsVerified: false,
-                    inventoryProductCardServiceCreateJobItemIsActive: true,
+                    inventoryProductCardServiceUpdatePriceJobItemDetails: JSON.stringify(inventoryProductCardServiceUpdatePriceJobItemDetails),
+                    inventoryProductCardServiceUpdatePriceJobItemIsVerified: false,
+                    inventoryProductCardServiceUpdatePriceJobItemIsActive: true,
                 });
 
-                await this.inventoryProductCardServiceCreateJobItemRepository.save(newInventoryProductCardServiceCreateJobItem);
-                inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemId = newInventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemId;
-                inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails = inventoryProductCardServiceCreateJobItemDetails;
+                await this.inventoryProductCardServiceUpdatePriceJobItemRepository.save(newInventoryProductCardServiceUpdatePriceJobItem);
+                inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemId = newInventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemId;
+                inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails = inventoryProductCardServiceUpdatePriceJobItemDetails;
 
-                inventoryProductCardServiceCreateJobItemDTOs.push(inventoryProductCardServiceCreateJobItemDTO);
+                inventoryProductCardServiceUpdatePriceJobItemDTOs.push(inventoryProductCardServiceUpdatePriceJobItemDTO);
             
             }
         }
 
-        return inventoryProductCardServiceCreateJobItemDTOs;
+        return inventoryProductCardServiceUpdatePriceJobItemDTOs;
         
     }
 
     //PRICE UPDATES
-    async updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async updateInventoryProductCardUpdatePriceJobItemPricesByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
         
         //GET THE INVENTORY PRODUCT CARDS FOR THE SET;
-        let inventoryProductCardServiceCreateJobItemDTOs = await this.getInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
+        let inventoryProductCardServiceUpdatePriceJobItemDTOs = await this.getInventoryProductCardServiceUpdatePriceJobItemsBySetId(inventoryProductCardServiceUpdatePriceJobDTO);
          //GET THE CURRENT PRICES FOR THE SET;
-        let tcgdbMTGPriceCurrentDTOs = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(inventoryProductCardServiceCreateJobDTO.productSetCode);
+        let tcgdbMTGPriceCurrentDTOs = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(inventoryProductCardServiceUpdatePriceJobDTO.productSetCode);
 
         //GET THE BASE PRICE RULES;
-        let priceRuleProductCardBaseDTO = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(inventoryProductCardServiceCreateJobDTO.commerceAccountId, inventoryProductCardServiceCreateJobDTO.productVendorId, inventoryProductCardServiceCreateJobDTO.productLineId, inventoryProductCardServiceCreateJobDTO.productTypeId);
+        let priceRuleProductCardBaseDTO = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId, inventoryProductCardServiceUpdatePriceJobDTO.productVendorId, inventoryProductCardServiceUpdatePriceJobDTO.productLineId, inventoryProductCardServiceUpdatePriceJobDTO.productTypeId);
         
         if(priceRuleProductCardBaseDTO == null) {
             //TO DO: USE THE DEFAULTS;
@@ -378,81 +378,81 @@ export class InventoryProductCardServiceCreateJobItemService {
 
             let tcgdbPriceCurrent = await this.getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO, priceRuleProductCardBaseDTO);
             
-            let inventoryProductCardServiceCreateJobItemDTO = inventoryProductCardServiceCreateJobItemDTOs.find(item => 
+            let inventoryProductCardServiceUpdatePriceJobItemDTO = inventoryProductCardServiceUpdatePriceJobItemDTOs.find(item => 
                 item.productCardTCGdbId === productCardTCGdbId &&
                 item.productCardPrintingName === productCardPrintingName
             );
 
-            if(inventoryProductCardServiceCreateJobItemDTO != undefined) {
+            if(inventoryProductCardServiceUpdatePriceJobItemDTO != undefined) {
 
-                if(inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemIsVerified == true) {
+                if(inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemIsVerified == true) {
                     continue;
                 }
 
-                let inventoryProductCardServiceCreateJobItemDetails: InventoryProductCardServiceCreateJobItemDetail[] = inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails;
-                for(let j = 0; j < inventoryProductCardServiceCreateJobItemDetails.length; j++) {
-                    let inventoryProductCardServiceCreateJobItemDetail = inventoryProductCardServiceCreateJobItemDetails[j];
+                let inventoryProductCardServiceUpdatePriceJobItemDetails: InventoryProductCardServiceUpdatePriceJobItemDetail[] = inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails;
+                for(let j = 0; j < inventoryProductCardServiceUpdatePriceJobItemDetails.length; j++) {
+                    let inventoryProductCardServiceUpdatePriceJobItemDetail = inventoryProductCardServiceUpdatePriceJobItemDetails[j];
 
-                    switch(inventoryProductCardServiceCreateJobItemDetail.productCardConditionCode) {
+                    switch(inventoryProductCardServiceUpdatePriceJobItemDetail.productCardConditionCode) {
                         case 'NM':
                             let price = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseNMPercentage / 100);
-                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(price.toFixed(2));
+                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(price.toFixed(2));
                             break;
                         case 'LP':
                             let priceLP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseLPPercentage / 100);
-                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
+                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
                             break;
                         case 'MP':
                             let priceMP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseMPPercentage / 100);
-                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
+                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
                             break;
                         case 'HP':
                             let priceHP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseHPPercentage / 100);
-                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
+                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
                             break;
                         case 'DM':
                             let priceDM = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseDMPercentage / 100);
-                            inventoryProductCardServiceCreateJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
+                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
                             break;
                     }
 
-                    inventoryProductCardServiceCreateJobItemDetails[j] = inventoryProductCardServiceCreateJobItemDetail;
+                    inventoryProductCardServiceUpdatePriceJobItemDetails[j] = inventoryProductCardServiceUpdatePriceJobItemDetail;
                     
                 }
-                inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails = inventoryProductCardServiceCreateJobItemDetails;
-                await this.updateInventoryProductCardServiceCreateJobItem(inventoryProductCardServiceCreateJobItemDTO);
+                inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails = inventoryProductCardServiceUpdatePriceJobItemDetails;
+                await this.updateInventoryProductCardServiceUpdatePriceJobItem(inventoryProductCardServiceUpdatePriceJobItemDTO);
             }
 
         }
 
         //EMIT THE EVENT TO UPDATE THE JOB STATUS;
-        this.eventEmitter.emit('inventory.product.card.service.create.job.update.status', {
-            inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId,
-            inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
+        this.eventEmitter.emit('inventory.product.card.service.update.price.job.update.status', {
+            inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId,
+            inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
         });
     }
 
-    async approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+    async approveInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobId: string) {
         
         this.eventEmitter.emit(
-            'inventory.product.card.service.create.job.update.status',
+            'inventory.product.card.service.update.price.job.update.status',
             {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
-                inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId,
+                inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
             }
         )   
 
-        let inventoryProductCardServiceCreateJobItemDTOs = await this.getInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId);
-        for(let i = 0; i < inventoryProductCardServiceCreateJobItemDTOs.length; i++) {
-            let inventoryProductCardServiceCreateJobItemDTO = inventoryProductCardServiceCreateJobItemDTOs[i];
-            await this.inventoryProductCardService.createInventoryProductCardFromCreateJob(inventoryProductCardServiceCreateJobItemDTO);
+        let inventoryProductCardServiceUpdatePriceJobItemDTOs = await this.getInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobId);
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobItemDTOs.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJobItemDTO = inventoryProductCardServiceUpdatePriceJobItemDTOs[i];
+            //await this.inventoryProductCardService.createInventoryProductCardFromUpdatePriceJob(inventoryProductCardServiceUpdatePriceJobItemDTO);
         }
 
         this.eventEmitter.emit(
-            'inventory.product.card.service.create.job.update.status',
+            'inventory.product.card.service.update.price.job.update.status',
             {
-                inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
-                inventoryProductCardServiceCreateJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE,
+                inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId,
+                inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_COMPLETE,
             }
         )
         
@@ -460,10 +460,10 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     }
 
-    async deleteInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+    async deleteInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobId: string) {
         
-        await this.inventoryProductCardServiceCreateJobItemRepository.delete({
-            inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
+        await this.inventoryProductCardServiceUpdatePriceJobItemRepository.delete({
+            inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId
         });
         
         return true;
@@ -471,21 +471,21 @@ export class InventoryProductCardServiceCreateJobItemService {
     }
 
     //UPDATE INVENTORY PRODUCT CARD SERVICE CREATE JOB ITEM WITH PRICES;
-    async updateInventoryProductCardServiceCreateJobItem(inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO) {
-        let inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.findOne({
+    async updateInventoryProductCardServiceUpdatePriceJobItem(inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO) {
+        let inventoryProductCardServiceUpdatePriceJobItem = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.findOne({
             where: {
-                inventoryProductCardServiceCreateJobItemId: inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemId
+                inventoryProductCardServiceUpdatePriceJobItemId: inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemId
             }
         });
 
-        if(inventoryProductCardServiceCreateJobItem == null) {
+        if(inventoryProductCardServiceUpdatePriceJobItem == null) {
             //TO DO: CREATE AN ERROR TO RETURN;
             return null;
         }
 
-        inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemDetails = JSON.stringify(inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemDetails);
-        inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemUpdateDate = new Date();
-        inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.save(inventoryProductCardServiceCreateJobItem);
+        inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemDetails = JSON.stringify(inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails);
+        inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemUpdateDate = new Date();
+        inventoryProductCardServiceUpdatePriceJobItem = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.save(inventoryProductCardServiceUpdatePriceJobItem);
 
     }
 

@@ -1,8 +1,8 @@
 import { IsString } from "class-validator";
 
 
-export class InventoryProductCardServiceCreateJobDTO {
-    inventoryProductCardServiceCreateJobId: string;
+export class InventoryProductCardServiceUpdatePriceJobDTO {
+    inventoryProductCardServiceUpdatePriceJobId: string;
     commerceAccountId: string;
     commerceLocationId: string;
     commerceLocationName: string;
@@ -18,15 +18,15 @@ export class InventoryProductCardServiceCreateJobDTO {
     productLanguageCode: string;
     productSetId: string;
     productSetCode: string;
-    inventoryProductCardServiceCreateJobDate: Date;
-    inventoryProductCardServiceCreateJobCode: string;
-    inventoryProductCardServiceCreateJobCount: number;
-    inventoryProductCardServiceCreateJobStatus: string;
-    inventoryProductCardServiceCreateJobCreateDate: Date;
-    inventoryProductCardServiceCreateJobUpdateDate: Date;
+    inventoryProductCardServiceUpdatePriceJobDate: Date;
+    inventoryProductCardServiceUpdatePriceJobCode: string;
+    inventoryProductCardServiceUpdatePriceJobCount: number;
+    inventoryProductCardServiceUpdatePriceJobStatus: string;
+    inventoryProductCardServiceUpdatePriceJobCreateDate: Date;
+    inventoryProductCardServiceUpdatePriceJobUpdateDate: Date;
 }
 
-export class CreateInventoryProductCardServiceCreateJobsDTO {
+export class CreateInventoryProductCardServiceUpdatePriceJobsDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
@@ -55,7 +55,7 @@ export class CreateInventoryProductCardServiceCreateJobsDTO {
     productLanguageCode: string;
 }
 
-export class CreateInventoryProductCardServiceCreateJobDTO {
+export class CreateInventoryProductCardServiceUpdatePriceJobDTO {
     @IsString()
     commerceAccountId: string;
     @IsString()
