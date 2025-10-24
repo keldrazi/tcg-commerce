@@ -161,6 +161,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
 
                 let inventoryProductCardServiceUpdatePriceJob = this.inventoryProductCardServiceUpdatePriceJobRepository.create({ ...newInventoryProductCardServiceUpdatePriceJobDTO });
                 inventoryProductCardServiceUpdatePriceJob = await this.inventoryProductCardServiceUpdatePriceJobRepository.save(inventoryProductCardServiceUpdatePriceJob);
+                
                 let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
                 inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
