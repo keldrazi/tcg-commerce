@@ -15,8 +15,6 @@ export class InventoryProductCardServiceUpdatePriceJobItem {
     @Column()
     commerceAccountId: string;
     @Column()
-    commerceLocationId: string;
-    @Column()
     productVendorId: string;
     @Column()
     productLineId: string;
@@ -36,10 +34,6 @@ export class InventoryProductCardServiceUpdatePriceJobItem {
     productCardPrintingName: string;
     @Column('jsonb')
     inventoryProductCardServiceUpdatePriceJobItemDetails: string;
-    @Column({ default: false })
-    inventoryProductCardServiceUpdatePriceJobItemIsVerified: boolean;
-    @Column({ default: true })
-    inventoryProductCardServiceUpdatePriceJobItemIsActive: boolean;
     @CreateDateColumn()
     inventoryProductCardServiceUpdatePriceJobItemCreateDate: Date;
     @UpdateDateColumn()

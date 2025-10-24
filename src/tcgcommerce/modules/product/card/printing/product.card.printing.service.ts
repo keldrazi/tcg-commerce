@@ -32,6 +32,23 @@ export class ProductCardPrintingService {
         return productCardPrintingDTO;
     }
 
+    async getProductCardPrintingByName(productCardPrintingName: string) {
+        let productCardPrinting = await this.productCardPrintingRepository.findOne({
+            where: { 
+                productCardPrintingName: productCardPrintingName 
+            } 
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCardPrinting == null) {
+            return null;
+        }
+
+        let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
+
+        return productCardPrintingDTO;
+    }
+
     async getProductCardPrintingsByProductLineCode(productLineCode: string) {
 
         productLineCode = productLineCode.toUpperCase();

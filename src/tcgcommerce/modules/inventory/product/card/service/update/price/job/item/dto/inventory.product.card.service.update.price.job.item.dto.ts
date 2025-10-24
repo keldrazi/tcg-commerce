@@ -7,7 +7,6 @@ export class InventoryProductCardServiceUpdatePriceJobItemDTO {
     productCardTCGdbId: string;
     productCardTCGPlayerId: number;
     commerceAccountId: string;
-    commerceLocationId: string;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
@@ -17,9 +16,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemDTO {
     productSetCode: string;
     productCardPrintingId: string;
     productCardPrintingName: string;
-    inventoryProductCardServiceUpdatePriceJobItemDetails: InventoryProductCardServiceUpdatePriceJobItemDetail[];
-    inventoryProductCardServiceUpdatePriceJobItemIsVerified: boolean;
-    inventoryProductCardServiceUpdatePriceJobItemIsActive: boolean;
+    inventoryProductCardServiceUpdatePriceJobItemDetails: InventoryProductCardServiceUpdatePriceJobItemDetail;
     inventoryProductCardServiceUpdatePriceJobItemCreateDate: Date;
     inventoryProductCardServiceUpdatePriceJobItemUpdateDate: Date; 
 }

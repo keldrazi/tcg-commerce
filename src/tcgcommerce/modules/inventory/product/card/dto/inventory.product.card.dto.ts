@@ -10,7 +10,7 @@ export class InventoryProductCardDTO {
     productCardTCGdbId: string;
     productCardTCGPlayerId: number;
     commerceAccountId: string;
-    commerceLocationId: string;
+    commerceLocations: string;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
