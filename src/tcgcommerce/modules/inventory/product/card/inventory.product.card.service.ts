@@ -59,13 +59,35 @@ export class InventoryProductCardService {
         return inventoryProductCardDTOs;
     }
 
-    async getInventoryProductCardByCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
+    async getInventoryProductCardsByCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
 
         let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
             where: {
                 productCardId: productCardId,
                 commerceAccountId: commerceAccountId,
                 commerceLocationId: commerceLocationId,
+                productLanguageId: productLanguageId
+            }
+        });
+
+        if(inventoryProductCard == null) {
+            return null;
+        }
+        
+        let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
+        
+        return inventoryProductCardDTO;
+        
+    }
+
+    async getInventoryProductCardByCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productCardPrintingId: string, productLanguageId: string) {
+
+        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+            where: {
+                productCardId: productCardId,
+                commerceAccountId: commerceAccountId,
+                commerceLocationId: commerceLocationId,
+                productCardPrintingId: productCardPrintingId,
                 productLanguageId: productLanguageId
             }
         });

@@ -1,7 +1,7 @@
 export interface InventoryProductCardServiceUpdatePriceJobItemDetail {
     inventoryProductCardItemPrice: number;
-    inventoryProductCardPreviousPrice: number;
-    inventoryProductCardPreviousDifference: number;
-    inventoryProductCardPreviousPricePercentage: number;
+    inventoryProductCardItemPreviousPrice: number;
+    inventoryProductCardItemPreviousDifference: number;
+    inventoryProductCardItemPreviousPricePercentage: number;
 }
     

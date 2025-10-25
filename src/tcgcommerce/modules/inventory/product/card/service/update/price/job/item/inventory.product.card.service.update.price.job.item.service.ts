@@ -19,6 +19,9 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { TCGdbMTGPriceChangeDailyService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/daily/tcgdb.mtg.price.change.daily.service';
 import { TCGdbMTGPriceChangeDailyDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/daily/dto/tcgdb.mtg.price.change.daily.dto';
 import { PriceRuleProductCardBaseService } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.service';
+import { CommerceLocation } from 'src/typeorm/entities/tcgcommerce/modules/commerce/location/commerce.location.entity';
+import { CommerceLocationDTO } from 'src/tcgcommerce/modules/commerce/location/dto/commerce.location.dto';
+import { InventoryProductCardItem } from '../../../../../interface/inventory.product.card.item.interface';
 
 @Injectable()
 export class InventoryProductCardServiceUpdatePriceJobItemService {
@@ -184,7 +187,13 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
     async createInventoryProductCardUpdatePriceJobItemsByJobs(inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[]) {
 
         for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobDTOs.length; i++) {
-            await this.createInventoryProductCardUpdatePriceJobItemsByJob(inventoryProductCardServiceUpdatePriceJobDTOs[i]);
+            let inventoryProductCardServiceUpdatePriceJobDTO = await this.createInventoryProductCardUpdatePriceJobItemsByJob(inventoryProductCardServiceUpdatePriceJobDTOs[i]);
+            
+            if(inventoryProductCardServiceUpdatePriceJobDTO == null) {
+                continue;
+            }
+            
+            await this.updateInventoryProductCardUpdateInventoryPricesByJob(inventoryProductCardServiceUpdatePriceJobDTO);
         }
 
     }
@@ -249,9 +258,9 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
 
             let inventoryProductCardServiceUpdatePriceJobItemDetail: InventoryProductCardServiceUpdatePriceJobItemDetail = {
                 inventoryProductCardItemPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyCurrentLowPrice,
-                inventoryProductCardPreviousPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyPreviousLowPrice,
-                inventoryProductCardPreviousDifference: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPriceDifference,
-                inventoryProductCardPreviousPricePercentage: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPricePercentage
+                inventoryProductCardItemPreviousPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyPreviousLowPrice,
+                inventoryProductCardItemPreviousDifference: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPriceDifference,
+                inventoryProductCardItemPreviousPricePercentage: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPricePercentage
             };
 
             inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemDetails = JSON.stringify([inventoryProductCardServiceUpdatePriceJobItemDetail]);
@@ -269,142 +278,85 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
             inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING,
             inventoryProductCardServiceUpdatePriceJobCount: inventoryProductCardServiceUpdatePriceJobItemRecordcount
         });
+
+        return inventoryProductCardServiceUpdatePriceJobDTO;
+
+
     }  
 
+    //INVENTORY PRICE UPDATES BASED ON PRICE RULES;
+    async updateInventoryProductCardUpdateInventoryPricesByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
 
-    /*
-    //PRICE UPDATES
-    async createInventoryProductCardUpdatePriceJobItemPricesByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
-        
-        //GET THE INVENTORY PRODUCT CARDS FOR THE SET;
-        let inventoryProductCardServiceUpdatePriceJobItemDTOs = await this.getInventoryProductCardServiceUpdatePriceJobItemsBySetId(inventoryProductCardServiceUpdatePriceJobDTO);
-         //GET THE CURRENT PRICES FOR THE SET;
-        let tcgdbMTGPriceCurrentDTOs = await this.tcgdbMTGPriceCurrentService.getTCGdbMTGPricesCurrentBySetCode(inventoryProductCardServiceUpdatePriceJobDTO.productSetCode);
-
-        //GET THE BASE PRICE RULES;
+        let commerceAccountId = inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId;
+        let commerceLocationDTOs = JSON.parse(inventoryProductCardServiceUpdatePriceJobDTO.commerceLocations) as CommerceLocationDTO[];
+        let productCardConditionDTOs = await this.productCardConditionService.getProductCardConditionsByProductLineId(inventoryProductCardServiceUpdatePriceJobDTO.productLineId);
         let priceRuleProductCardBaseDTO = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId, inventoryProductCardServiceUpdatePriceJobDTO.productVendorId, inventoryProductCardServiceUpdatePriceJobDTO.productLineId, inventoryProductCardServiceUpdatePriceJobDTO.productTypeId);
         
-        if(priceRuleProductCardBaseDTO == null) {
-            //TO DO: USE THE DEFAULTS;
+        if(priceRuleProductCardBaseDTO == null || productCardConditionDTOs == null) {
             return;
         }
-        
-        //LOOP OVER THE PRICES AND FIND THE CORRESPONDING PRODUCT CARD;
-        for(let i = 0; i < tcgdbMTGPriceCurrentDTOs.length; i++) {
-            let tcgdbMTGPriceCurrentDTO = tcgdbMTGPriceCurrentDTOs[i];
-            let productCardPrintingName = tcgdbMTGPriceCurrentDTO.tcgdbMTGPriceCurrentSubTypeName;
-            let productCardTCGdbId = tcgdbMTGPriceCurrentDTO.tcgdbMTGCardId;
 
-            let tcgdbPriceCurrent = await this.getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO, priceRuleProductCardBaseDTO);
-            
-            let inventoryProductCardServiceUpdatePriceJobItemDTO = inventoryProductCardServiceUpdatePriceJobItemDTOs.find(item => 
-                item.productCardTCGdbId === productCardTCGdbId &&
-                item.productCardPrintingName === productCardPrintingName
-            );
+        let inventoryProductCardServiceUpdatePriceJobItemDTOs = await this.getInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId);
 
-            if(inventoryProductCardServiceUpdatePriceJobItemDTO != undefined) {
+        for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobItemDTOs.length; i++) {
+            let inventoryProductCardServiceUpdatePriceJobItemDTO = inventoryProductCardServiceUpdatePriceJobItemDTOs[i];
+            let inventoryProductCardServiceUpdatePriceJobItemDetails = inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails;
 
-                if(inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemIsVerified == true) {
+            //UPDATE THE INVENTORY PRODUCT CARD PRICES FOR EACH LOCATION;
+            for(let j = 0; j < commerceLocationDTOs.length; j++) {
+                let commerceLocationDTO = commerceLocationDTOs[j];
+                let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByCardId(commerceAccountId, commerceLocationDTO.commerceLocationId, inventoryProductCardServiceUpdatePriceJobItemDTO.productCardId, inventoryProductCardServiceUpdatePriceJobItemDTO.productCardPrintingId,inventoryProductCardServiceUpdatePriceJobItemDTO.productLanguageId);
+                
+                if(inventoryProductCardDTO == null) {
                     continue;
                 }
 
-                let inventoryProductCardServiceUpdatePriceJobItemDetails: InventoryProductCardServiceUpdatePriceJobItemDetail[] = inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails;
-                for(let j = 0; j < inventoryProductCardServiceUpdatePriceJobItemDetails.length; j++) {
-                    let inventoryProductCardServiceUpdatePriceJobItemDetail = inventoryProductCardServiceUpdatePriceJobItemDetails[j];
+                for(let k = 0; k < inventoryProductCardDTO.inventoryProductCardItems.length; k++) {
+                    let inventoryProductCardItem = inventoryProductCardDTO.inventoryProductCardItems[k];
 
-                    switch(inventoryProductCardServiceUpdatePriceJobItemDetail.productCardConditionCode) {
-                        case 'NM':
-                            let price = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseNMPercentage / 100);
-                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(price.toFixed(2));
-                            break;
-                        case 'LP':
-                            let priceLP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseLPPercentage / 100);
-                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
-                            break;
-                        case 'MP':
-                            let priceMP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseMPPercentage / 100);
-                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
-                            break;
-                        case 'HP':
-                            let priceHP = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseHPPercentage / 100);
-                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
-                            break;
-                        case 'DM':
-                            let priceDM = tcgdbPriceCurrent * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseDMPercentage / 100);
-                            inventoryProductCardServiceUpdatePriceJobItemDetail.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
-                            break;
+                    if(inventoryProductCardItem == null) {
+                        continue;
                     }
-
-                    inventoryProductCardServiceUpdatePriceJobItemDetails[j] = inventoryProductCardServiceUpdatePriceJobItemDetail;
-                    
+                    if(!inventoryProductCardItem.inventoryProductCardItemOverridePriceEnabled) {
+                        switch(inventoryProductCardItem.productCardConditionCode) {
+                            case 'NM':
+                                let priceNM = inventoryProductCardServiceUpdatePriceJobItemDetails.inventoryProductCardItemPrice * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseNMPercentage / 100);
+                                inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceNM.toFixed(2));
+                                break;
+                            case 'LP':
+                                let priceLP = inventoryProductCardServiceUpdatePriceJobItemDetails.inventoryProductCardItemPrice * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseLPPercentage / 100);
+                                inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceLP.toFixed(2));
+                                break;
+                            case 'MP':
+                                let priceMP = inventoryProductCardServiceUpdatePriceJobItemDetails.inventoryProductCardItemPrice * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseMPPercentage / 100);
+                                inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceMP.toFixed(2));
+                                break;
+                            case 'HP':
+                                let priceHP = inventoryProductCardServiceUpdatePriceJobItemDetails.inventoryProductCardItemPrice * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseHPPercentage / 100);
+                                inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceHP.toFixed(2));
+                                break;
+                            case 'DM':
+                                let priceDM = inventoryProductCardServiceUpdatePriceJobItemDetails.inventoryProductCardItemPrice * (priceRuleProductCardBaseDTO.priceRuleProductCardBaseDMPercentage / 100);
+                                inventoryProductCardItem.inventoryProductCardItemPrice = parseFloat(priceDM.toFixed(2));
+                                break;
+                        }
+                        
+                        inventoryProductCardDTO.inventoryProductCardItems[k] = inventoryProductCardItem;
+                    }
                 }
-                inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails = inventoryProductCardServiceUpdatePriceJobItemDetails;
-                await this.updateInventoryProductCardServiceUpdatePriceJobItem(inventoryProductCardServiceUpdatePriceJobItemDTO);
-            }
 
+                await this.inventoryProductCardService.updateInventoryProductCard(inventoryProductCardDTO);
+
+            }
         }
 
         //EMIT THE EVENT TO UPDATE THE JOB STATUS;
         this.eventEmitter.emit('inventory.product.card.service.update.price.job.update.status', {
             inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId,
-            inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
-        });
-    }
-    */        
-
-    //UPDATE INVENTORY PRODUCT CARD SERVICE CREATE JOB ITEM WITH PRICES;
-    async updateInventoryProductCardServiceUpdatePriceJobItem(inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO) {
-        let inventoryProductCardServiceUpdatePriceJobItem = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.findOne({
-            where: {
-                inventoryProductCardServiceUpdatePriceJobItemId: inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemId
-            }
+            inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_COMPLETE,
         });
 
-        if(inventoryProductCardServiceUpdatePriceJobItem == null) {
-            //TO DO: CREATE AN ERROR TO RETURN;
-            return null;
-        }
-
-        inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemDetails = JSON.stringify(inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemDetails);
-        inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemUpdateDate = new Date();
-        inventoryProductCardServiceUpdatePriceJobItem = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.save(inventoryProductCardServiceUpdatePriceJobItem);
-
+        return inventoryProductCardServiceUpdatePriceJobDTO;
     }
-
-    //GET TCPLAYER SKU BY PRINTING/LANGUAGE;
-    async getProductCardTCGPlayerSKUByPrinting(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number) {
-        const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
-        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
-            item.languageId === productCardLanguageId &&
-            item.printingId === productCardPrintingId
-        );
-
-        if(productCardTCGPlayerSKU == undefined) {
-            return null;
-        }
-        else {
-            return productCardTCGPlayerSKU;
-        }
-
         
-    }
-
-    //GET TCPLAYER SKU BY CONDITION/PRINTING/LANGUAGE;
-    async getProductCardTCGPlayerSKUByCondition(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
-        const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
-        const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
-            item.languageId === productCardLanguageId &&
-            item.printingId === productCardPrintingId &&
-            item.conditionId === productCardConditionId
-        );
-
-        if(productCardTCGPlayerSKU == undefined) {
-            return null;
-        }
-        else {
-            return productCardTCGPlayerSKU.skuId;
-        }
-
-    }
-    
 }
