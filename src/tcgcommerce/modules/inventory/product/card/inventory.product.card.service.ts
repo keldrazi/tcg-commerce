@@ -80,6 +80,27 @@ export class InventoryProductCardService {
         
     }
 
+    async getInventoryProductCardByCardProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
+
+        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+            where: {
+                productCardId: productCardId,
+                commerceAccountId: commerceAccountId,
+                commerceLocationId: commerceLocationId,
+                productLanguageId: productLanguageId
+            }
+        });
+
+        if(inventoryProductCard == null) {
+            return null;
+        }
+        
+        let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
+        
+        return inventoryProductCardDTO;
+        
+    }
+
     async getInventoryProductCardByCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productCardPrintingId: string, productLanguageId: string) {
 
         let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
@@ -159,5 +180,23 @@ export class InventoryProductCardService {
 
     }
 
-            
+    async updateInventoryProductCard(inventoryProductCardDTO: InventoryProductCardDTO) {
+        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+            where: {
+                inventoryProductCardId: inventoryProductCardDTO.inventoryProductCardId
+            }
+        });
+
+        if(inventoryProductCard == null) {
+            return null;
+        }
+
+        inventoryProductCard.inventoryProductCardItems = JSON.stringify(inventoryProductCardDTO.inventoryProductCardItems);
+        inventoryProductCard.inventoryProductCardUpdateDate = new Date();
+
+        await this.inventoryProductCardRepository.save(inventoryProductCard);
+
+        return await this.createInventoryProductCardDTO(inventoryProductCard);
+
+    }
 }
