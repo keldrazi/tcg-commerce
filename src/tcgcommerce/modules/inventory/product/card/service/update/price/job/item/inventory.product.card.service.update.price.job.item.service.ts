@@ -21,7 +21,7 @@ import { TCGdbMTGPriceChangeDailyDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/pri
 import { PriceRuleProductCardBaseService } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.service';
 import { CommerceLocation } from 'src/typeorm/entities/tcgcommerce/modules/commerce/location/commerce.location.entity';
 import { CommerceLocationDTO } from 'src/tcgcommerce/modules/commerce/location/dto/commerce.location.dto';
-import { InventoryProductCardItem } from '../../../../../interface/inventory.product.card.item.interface';
+import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
 
 @Injectable()
 export class InventoryProductCardServiceUpdatePriceJobItemService {
@@ -29,9 +29,6 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
     constructor(
         @InjectRepository(InventoryProductCardServiceUpdatePriceJobItem) private inventoryProductCardServiceUpdatePriceJobItemRepository: Repository<InventoryProductCardServiceUpdatePriceJobItem>,
         private productCardService: ProductCardService,
-        private productVendorService: ProductVendorService,
-        private productLineService: ProductLineService,
-        private productSetService: ProductSetService,
         private productCardConditionService: ProductCardConditionService,
         private productLanguageService: ProductLanguageService,
         private productCardPrintingService: ProductCardPrintingService,

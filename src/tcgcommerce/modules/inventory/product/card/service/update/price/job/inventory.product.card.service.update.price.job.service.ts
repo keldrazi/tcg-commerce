@@ -166,7 +166,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
 
                 inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
                 
-                this.inventoryProductCardServiceUpdatePriceJobItemService.createInventoryProductCardUpdatePriceJobItemsByJobs(inventoryProductCardServiceUpdatePriceJobDTOs);
+                //this.inventoryProductCardServiceUpdatePriceJobItemService.createInventoryProductCardUpdatePriceJobItemsByJobs(inventoryProductCardServiceUpdatePriceJobDTOs);
 
                 
             }
