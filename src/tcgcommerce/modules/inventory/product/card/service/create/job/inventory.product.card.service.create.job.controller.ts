@@ -54,13 +54,13 @@ export class InventoryProductCardServiceCreateJobController {
         return inventoryProductCardServiceCreateJobDTO;
     }
 
-    /*@Get('process/all/:commerceLocationId/:productLineCode')
+    @Get('process/all/:commerceLocationId/:productLineCode')
     async processInventoryProductCardServiceCreateJobs(@Param('commerceLocationId') commerceLocationId: string, @Param('productLineCode') productLineCode: string) {
-        let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.processInventoryProductCardServiceCreateJobs(commerceLocationId, productLineCode);
+        let inventoryProductCardServiceCreateJobDTOCount = await this.inventoryProductCardServiceCreateJobService.processsInventoryProductCardServiceCreateJobs(commerceLocationId, productLineCode);
         
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceCreateJobDTOCount;
     }
-    */
+    
 
     @Get('process/:inventoryProductCardServiceCreateJobId')
     async processInventoryProductCardServiceCreateJobById(@Param('inventoryProductCardServiceCreateJobId') inventoryProductCardServiceCreateJobId: string) {
@@ -75,6 +75,13 @@ export class InventoryProductCardServiceCreateJobController {
         let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId);
 
         return inventoryProductCardServiceCreateJobDTO;
+    }
+
+    @Get('approve/all/:commerceLocationId/:productLineCode')
+    async approveInventoryProductCardServiceCreateJobs(@Param('commerceLocationId') commerceLocationId: string, @Param('productLineCode') productLineCode: string) {
+        let inventoryProductCardServiceCreateJobDTOCount = await this.inventoryProductCardServiceCreateJobService.approveInventoryProductCardServiceCreateJobs(commerceLocationId, productLineCode);
+
+        return inventoryProductCardServiceCreateJobDTOCount;
     }
 
     @Get('approve/:inventoryProductCardServiceCreateJobId')

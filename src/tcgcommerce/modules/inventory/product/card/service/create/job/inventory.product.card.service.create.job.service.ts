@@ -116,6 +116,32 @@ export class InventoryProductCardServiceCreateJobService {
 
         return inventoryProductCardServiceCreateJobDTOs;
     }
+
+    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId: string, productLineCode: string, inventoryProductCardServiceCreateJobStatus: string) {
+
+        let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
+            where: {
+                commerceLocationId: commerceLocationId,
+                productLineCode: productLineCode,
+                inventoryProductCardServiceCreateJobStatus: inventoryProductCardServiceCreateJobStatus
+            }
+        });
+
+        if(inventoryProductCardServiceCreateJobs == null) {
+            return [];
+        }
+
+        let inventoryProductCardServiceCreateJobDTOs: InventoryProductCardServiceCreateJobDTO[] = [];
+        for(let i = 0; i < inventoryProductCardServiceCreateJobs.length; i++) {
+            let inventoryProductCardServiceCreateJob = inventoryProductCardServiceCreateJobs[i];
+            //MAP TO DTO;
+            let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
+
+            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+        }
+
+        return inventoryProductCardServiceCreateJobDTOs;
+    }
     
 
     async getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
@@ -275,6 +301,30 @@ export class InventoryProductCardServiceCreateJobService {
         
     }
 
+    async processsInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string) {
+        let inventoryProductCardServiceCreateJobsDTO = await this.getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId, productLineCode, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY);
+        if(inventoryProductCardServiceCreateJobsDTO == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return null; //RETURN AN ERROR;
+        }
+
+        this.processsInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO);
+
+        return inventoryProductCardServiceCreateJobsDTO.length;
+
+        
+    }
+
+    async processsInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO: InventoryProductCardServiceCreateJobDTO[]) {
+        
+        for(let i = 0; i < inventoryProductCardServiceCreateJobsDTO.length; i++) {
+            let inventoryProductCardServiceCreateJobDTO = inventoryProductCardServiceCreateJobsDTO[i];
+            await this.processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
+        }
+
+        
+    }
+
     async processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
         if(inventoryProductCardServiceCreateJobDTO == null) {
@@ -282,9 +332,31 @@ export class InventoryProductCardServiceCreateJobService {
             return null; //RETURN AN ERROR;
         }
 
-        this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
+        await this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
     
         return inventoryProductCardServiceCreateJobDTO;
+    }
+
+    async approveInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string) {
+        let inventoryProductCardServiceCreateJobsDTO = await this.getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId, productLineCode, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW);
+        if(inventoryProductCardServiceCreateJobsDTO == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return null; //RETURN AN ERROR;
+        }
+
+        this.approveInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO);
+
+        return inventoryProductCardServiceCreateJobsDTO.length;
+
+    }
+
+    async approveInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO: InventoryProductCardServiceCreateJobDTO[]) {
+
+        for(let i = 0; i < inventoryProductCardServiceCreateJobsDTO.length; i++) {
+            let inventoryProductCardServiceCreateJobDTO = inventoryProductCardServiceCreateJobsDTO[i];
+            await this.approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
+        }
+
     }
 
     async approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
