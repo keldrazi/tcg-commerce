@@ -12,7 +12,7 @@ export class InventoryProductCardServiceUpdatePriceJobController {
     
 
     @Get('create')
-    async getInventoryProductCardServiceUpdatePriceJobsByCommerceAccountIdAndProductLineCode(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string, @Param('productTypeCode') productTypeCode: string, @Param('productLanguageCode') productLanguageCode: string) {
+    async createInventoryProductCardServiceUpdatePriceJobsByCommerceAccountIdsAndProductLineCode(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string, @Param('productTypeCode') productTypeCode: string, @Param('productLanguageCode') productLanguageCode: string) {
         let inventoryProductCardServiceUpdatePriceJobDTOs = await this.inventoryProductCardServiceUpdatePriceJobService.createInventoryProductCardServiceUpdatePriceJobs(productVendorCode, productLineCode, productTypeCode, productLanguageCode);
         
         return inventoryProductCardServiceUpdatePriceJobDTOs;

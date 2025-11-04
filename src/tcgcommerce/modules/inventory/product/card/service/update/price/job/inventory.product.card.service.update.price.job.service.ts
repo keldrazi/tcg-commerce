@@ -13,7 +13,7 @@ import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/pro
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductTypeService } from 'src/tcgcommerce/modules/product/type/product.type.service';
 import { ProductLanguageService } from 'src/tcgcommerce/modules/product/language/product.language.service';
-import { CommerceAccountDTO } from 'src/tcgcommerce/modules/commerce/account/dto/commerce.account.dto';
+import { PriceRuleProductCardUpdateDailyService } from 'src/tcgcommerce/modules/price/rule/product/card/update/daily/price.rule.product.card.update.daily.service';
 
 @Injectable()
 export class InventoryProductCardServiceUpdatePriceJobService {
@@ -28,6 +28,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         private productLineService: ProductLineService,
         private productTypeService: ProductTypeService,
         private productLanguageService: ProductLanguageService,
+        private priceRuleProductCardUpdateDailyService: PriceRuleProductCardUpdateDailyService,
     ) { }
 
 
@@ -129,10 +130,11 @@ export class InventoryProductCardServiceUpdatePriceJobService {
 
         for(let i = 0; i < commerceAccounts.length; i++) {
             let commerceAccount = commerceAccounts[i];
-            let commerceLocations = await this.commerceLocationService.getActiveCommerceLocations(commerceAccount.commerceAccountId);
+            
+            let priceRuleProductCardUpdateDailyDTO = await this.priceRuleProductCardUpdateDailyService.getPriceRuleProductCardUpdateDailyByCommerceAccountIdAndVendorId(commerceAccount.commerceAccountId, productVendor.productVendorId, productLine.productLineId, productType.productTypeId);
 
-            if(commerceLocations == null) {
-                continue;
+            if(priceRuleProductCardUpdateDailyDTO == null) {
+                continue; //SKIP TO NEXT COMMERCE ACCOUNT IF NO PRICE RULE EXISTS;
             }
 
             let inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[] = [];
@@ -142,7 +144,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
 
                 let newInventoryProductCardServiceUpdatePriceJobDTO = {
                     commerceAccountId: commerceAccount.commerceAccountId,
-                    commerceLocations: JSON.stringify(commerceLocations),
+                    commerceLocations: JSON.stringify(priceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyCommerceLocationIds),
                     productVendorId: productVendor.productVendorId,
                     productVendorCode: productVendor.productVendorCode,
                     productLineId: productLine.productLineId,
@@ -156,7 +158,9 @@ export class InventoryProductCardServiceUpdatePriceJobService {
                     inventoryProductCardServiceUpdatePriceJobDate: new Date(),
                     inventoryProductCardServiceUpdatePriceJobCode: await this.createInventoryProductCardServiceUpdatePriceJobCode(productLine.productLineCode, productSet.productSetCode),
                     inventoryProductCardServiceUpdatePriceJobCount: 0,
-                    inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING,
+                    inventoryProductCardServiceUpdatePriceJobIncreaseCount: 0,
+                    inventoryProductCardServiceUpdatePriceJobDecreaseCount: 0,
+                    inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING_READY,
                 };
 
                 let inventoryProductCardServiceUpdatePriceJob = this.inventoryProductCardServiceUpdatePriceJobRepository.create({ ...newInventoryProductCardServiceUpdatePriceJobDTO });
@@ -165,13 +169,9 @@ export class InventoryProductCardServiceUpdatePriceJobService {
                 let inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO = ({ ...inventoryProductCardServiceUpdatePriceJob});
 
                 inventoryProductCardServiceUpdatePriceJobDTOs.push(inventoryProductCardServiceUpdatePriceJobDTO);
-                
-                //this.inventoryProductCardServiceUpdatePriceJobItemService.createInventoryProductCardUpdatePriceJobItemsByJobs(inventoryProductCardServiceUpdatePriceJobDTOs);
-
-                
             }
 
-            return true;
+            return inventoryProductCardServiceUpdatePriceJobDTOs.length;
             
         }
             
@@ -208,7 +208,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         return true;
     }
 
-    async updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobCount: number) {
+    async updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobCount: number, inventoryProductCardServiceUpdatePriceJobIncreaseCount: number, inventoryProductCardServiceUpdatePriceJobDecreaseCount: number) {
         let inventoryProductCardServiceUpdatePriceJob = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
         if(inventoryProductCardServiceUpdatePriceJob == null) {
@@ -217,6 +217,8 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         }
 
         inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobCount = inventoryProductCardServiceUpdatePriceJobCount;
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobIncreaseCount = inventoryProductCardServiceUpdatePriceJobIncreaseCount;
+        inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobDecreaseCount = inventoryProductCardServiceUpdatePriceJobDecreaseCount;
         inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobUpdateDate = new Date();
 
         await this.inventoryProductCardServiceUpdatePriceJobRepository.save(inventoryProductCardServiceUpdatePriceJob);
@@ -232,7 +234,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         let inventoryProductCardServiceUpdatePriceJobStatus = payload.inventoryProductCardServiceUpdatePriceJobStatus;
 
         if(payload.inventoryProductCardServiceUpdatePriceJobCount != null) {
-            await this.updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId, payload.inventoryProductCardServiceUpdatePriceJobCount);
+            await this.updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId, payload.inventoryProductCardServiceUpdatePriceJobCount, payload.inventoryProductCardServiceUpdatePriceJobIncreaseCount, payload.inventoryProductCardServiceUpdatePriceJobDecreaseCount);
 
         }
 

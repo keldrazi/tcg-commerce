@@ -11,6 +11,7 @@ import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/prod
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { ProductTypeModule } from 'src/tcgcommerce/modules/product/type/product.type.module';
 import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/product.language.module';
+import { PriceRuleProductCardUpdateDailyModule } from 'src/tcgcommerce/modules/price/rule/product/card/update/daily/price.rule.product.card.update.daily.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/
         ProductLineModule,
         ProductTypeModule,
         ProductLanguageModule,
+        PriceRuleProductCardUpdateDailyModule
     ],
     controllers: [InventoryProductCardServiceUpdatePriceJobController],
     providers: [InventoryProductCardServiceUpdatePriceJobService],

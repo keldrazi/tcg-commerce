@@ -222,6 +222,8 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         }
 
         let inventoryProductCardServiceUpdatePriceJobItemRecordcount = 0;
+        let inventoryProductCardServiceUpdatePriceJobItemIncreaseCount = 0;
+        let inventoryProductCardServiceUpdatePriceJobItemDecreaseCount = 0;
 
         //LOOP OVER THE PRICES AND FIND THE CORRESPONDING PRODUCT CARD;
         for(let i = 0; i < tcgdbPriceChangeDailyDTOs.length; i++) {
@@ -253,12 +255,43 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
                 inventoryProductCardServiceUpdatePriceJobItemDetails: '',
             }
 
-            let inventoryProductCardServiceUpdatePriceJobItemDetail: InventoryProductCardServiceUpdatePriceJobItemDetail = {
-                inventoryProductCardItemPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyCurrentLowPrice,
-                inventoryProductCardItemPreviousPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyPreviousLowPrice,
-                inventoryProductCardItemPreviousDifference: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPriceDifference,
-                inventoryProductCardItemPreviousPricePercentage: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPricePercentage
-            };
+            let inventoryProductCardServiceUpdatePriceJobItemDetail: InventoryProductCardServiceUpdatePriceJobItemDetail = {} as InventoryProductCardServiceUpdatePriceJobItemDetail;
+            switch(priceRuleProductCardBaseDTO.priceRuleProductCardBaseOption) {
+                case 'TCGPlayer Low':
+                    inventoryProductCardServiceUpdatePriceJobItemDetail = {
+                        inventoryProductCardItemPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyCurrentLowPrice,
+                        inventoryProductCardItemPreviousPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyPreviousLowPrice,
+                        inventoryProductCardItemPreviousDifference: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPriceDifference,
+                        inventoryProductCardItemPreviousPricePercentage: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPricePercentage
+                    };
+
+                    if(tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyLowPriceDifference > 0) {
+                        inventoryProductCardServiceUpdatePriceJobItemIncreaseCount++;
+                    }
+                    else {
+                        inventoryProductCardServiceUpdatePriceJobItemDecreaseCount++;
+                    }
+
+                    break;
+                case 'TCGPlayer Market':
+                    inventoryProductCardServiceUpdatePriceJobItemDetail = {
+                        inventoryProductCardItemPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyCurrentMarketPrice,
+                        inventoryProductCardItemPreviousPrice: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyPreviousMarketPrice,
+                        inventoryProductCardItemPreviousDifference: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyMarketPriceDifference,
+                        inventoryProductCardItemPreviousPricePercentage: tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyMarketPricePercentage
+                    };
+
+                    if(tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailyMarketPriceDifference > 0) {
+                        inventoryProductCardServiceUpdatePriceJobItemIncreaseCount++;
+                    }
+                    else {
+                        inventoryProductCardServiceUpdatePriceJobItemDecreaseCount++;
+                    }
+                    break;
+            }
+            
+            
+            
 
             inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemDetails = JSON.stringify([inventoryProductCardServiceUpdatePriceJobItemDetail]);
 
@@ -273,7 +306,9 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         this.eventEmitter.emit('inventory.product.card.service.update.price.job.update.status', {
             inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId,
             inventoryProductCardServiceUpdatePriceJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_STATUS.PROCESSING,
-            inventoryProductCardServiceUpdatePriceJobCount: inventoryProductCardServiceUpdatePriceJobItemRecordcount
+            inventoryProductCardServiceUpdatePriceJobCount: inventoryProductCardServiceUpdatePriceJobItemRecordcount,
+            inventoryProductCardServiceUpdatePriceJobIncreaseCount: inventoryProductCardServiceUpdatePriceJobItemIncreaseCount,
+            inventoryProductCardServiceUpdatePriceJobDecreaseCount: inventoryProductCardServiceUpdatePriceJobItemDecreaseCount,
         });
 
         return inventoryProductCardServiceUpdatePriceJobDTO;

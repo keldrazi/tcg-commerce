@@ -36,6 +36,10 @@ export class InventoryProductCardServiceUpdatePriceJob {
     inventoryProductCardServiceUpdatePriceJobStatus: string;
     @Column({ default: 0 })
     inventoryProductCardServiceUpdatePriceJobCount: number;
+    @Column({ default: 0 })
+    inventoryProductCardServiceUpdatePriceJobIncreaseCount: number;
+    @Column({ default: 0 })
+    inventoryProductCardServiceUpdatePriceJobDecreaseCount: number;
     @CreateDateColumn()
     inventoryProductCardServiceUpdatePriceJobCreateDate: Date;
     @UpdateDateColumn()

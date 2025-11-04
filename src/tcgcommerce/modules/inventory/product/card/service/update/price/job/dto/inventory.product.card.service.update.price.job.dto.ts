@@ -17,6 +17,8 @@ export class InventoryProductCardServiceUpdatePriceJobDTO {
     inventoryProductCardServiceUpdatePriceJobDate: Date;
     inventoryProductCardServiceUpdatePriceJobCode: string;
     inventoryProductCardServiceUpdatePriceJobCount: number;
+    inventoryProductCardServiceUpdatePriceJobIncreaseCount: number;
+    inventoryProductCardServiceUpdatePriceJobDecreaseCount: number;
     inventoryProductCardServiceUpdatePriceJobStatus: string;
     inventoryProductCardServiceUpdatePriceJobCreateDate: Date;
     inventoryProductCardServiceUpdatePriceJobUpdateDate: Date;
