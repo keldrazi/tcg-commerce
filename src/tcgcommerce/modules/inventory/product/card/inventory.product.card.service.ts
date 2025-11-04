@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InventoryProductCardDTO, CreateInventoryProductCardsDTO, CreateInventoryProductCardDTO, UpdateInventoryProductCardsDTO, UpdateInventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
+import { InventoryProductCardDTO, UpdateInventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
 import { InventoryProductCardServiceCreateJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/dto/inventory.product.card.service.create.job.item.dto';
@@ -34,7 +34,7 @@ export class InventoryProductCardService {
     }
 
 
-    async getInventoryProductCardsBySetId(commerceAccountId: string, commerceLocationId: string, productSetId: string, productVendorId: string, productLineId: string, productTypeId: string, productLanguageId: string) {
+    async getInventoryProductCardsByProductSetId(commerceAccountId: string, commerceLocationId: string, productSetId: string, productLanguageId: string) {
 
         let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
         let inventoryProductCards = await this.inventoryProductCardRepository.find({
@@ -42,13 +42,11 @@ export class InventoryProductCardService {
                 commerceAccountId: commerceAccountId,
                 commerceLocationId: commerceLocationId,
                 productSetId: productSetId,
-                productVendorId: productVendorId,
-                productLineId: productLineId,
-                productTypeId: productTypeId,
                 productLanguageId: productLanguageId
             }
         });
 
+        
         for (let i=0; i < inventoryProductCards.length; i++) {
             let inventoryProductCard = inventoryProductCards[i];
             let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
@@ -59,7 +57,8 @@ export class InventoryProductCardService {
         return inventoryProductCardDTOs;
     }
 
-    async getInventoryProductCardsByCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
+
+    async getInventoryProductCardByProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
 
         let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
             where: {
@@ -80,28 +79,7 @@ export class InventoryProductCardService {
         
     }
 
-    async getInventoryProductCardByCardProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
-
-        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
-            where: {
-                productCardId: productCardId,
-                commerceAccountId: commerceAccountId,
-                commerceLocationId: commerceLocationId,
-                productLanguageId: productLanguageId
-            }
-        });
-
-        if(inventoryProductCard == null) {
-            return null;
-        }
-        
-        let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
-        
-        return inventoryProductCardDTO;
-        
-    }
-
-    async getInventoryProductCardByCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productCardPrintingId: string, productLanguageId: string) {
+    async getInventoryProductCardByProductCardPrintingId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productCardPrintingId: string, productLanguageId: string) {
 
         let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
             where: {
@@ -177,6 +155,23 @@ export class InventoryProductCardService {
         inventoryProductCardDTO.inventoryProductCardUpdateDate = inventoryProductCard.inventoryProductCardUpdateDate;
 
         return inventoryProductCardDTO;
+
+    }
+
+    async updateInventoryProductCards(inventoryProductCardDTOs: InventoryProductCardDTO[]) {
+        
+        let inventoryProductCardUpdateRecordCount = 0;
+        for(let i = 0; i < inventoryProductCardDTOs.length; i++) {
+            let inventoryProductCardDTO = inventoryProductCardDTOs[i];
+            let updateInventoryProductCardDTO = await this.updateInventoryProductCard(inventoryProductCardDTO);
+
+            if(updateInventoryProductCardDTO != null) {
+                inventoryProductCardUpdateRecordCount++;
+            }
+
+        }
+
+        return inventoryProductCardUpdateRecordCount;
 
     }
 

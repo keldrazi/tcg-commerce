@@ -17,17 +17,13 @@ export class InventoryProductCardController {
         return await this.inventoryProductCardService.getInventoryProductCardsByCommerceAccountId(commerceAccountId);
     }
 
-    /*@Post()
-    @UsePipes(new ValidationPipe())
-    async createCommerceAccount(@Body() createCommerceAcountDTO: CreateCommerceAccountDTO) {
-        return await this.commerceAccountService.createCommerceAccount(createCommerceAcountDTO);
-    }
+    
+    @Put()
+    async updateInventoryProductCards(@Body() inventoryProductCards: InventoryProductCardDTO[]) {
+        let inventoryProductCardUpdateRecordCount = await this.inventoryProductCardService.updateInventoryProductCards(inventoryProductCards);
 
-    /*
-    @Put(':id')
-    async updateUser(@Param('tcgDatabaseUserId') tcgDatabaseUserId: string, @Body() tcgDatabaseUserUpdateDTO: TCGDatabaseUserUpdateDTO) {
-        await this.tcgDatabaseUserService.updateTCGDatabaseUser(tcgDatabaseUserId, tcgDatabaseUserUpdateDTO);
+        return inventoryProductCardUpdateRecordCount;
     }
-    */
+   
 
 }

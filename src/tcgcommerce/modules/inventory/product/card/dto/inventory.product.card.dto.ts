@@ -28,42 +28,6 @@ export class InventoryProductCardDTO {
     
 }
 
-
-export class CreateInventoryProductCardsDTO {
-    commerceAccountId: string;
-    productCardDTO: ProductCardDTO;
-    productCardLanguageCode: string;
-    createInventoryProductCardDTOs: CreateInventoryProductCardDTO[];
-}
-
-export class CreateInventoryProductCardDTO {
-    @IsString()
-    productCardId: string;
-    @IsString()
-    commerceAccountId: string;
-    @IsString()
-    commerceLocationId: string;
-    @IsString()
-    productVendorId: string;
-    @IsString()
-    productLineId: string;
-    @IsString()
-    productSetId: string;
-    @IsString()
-    productSetCode: string;
-    @IsString()
-    productLanguageCode: string;
-    @IsString()
-    productCardPrintingName: string;
-    @IsString()
-    inventoryProductCardItems: InventoryProductCardItem[];
-    @IsBoolean()
-    inventoryProductCardIsVerified: boolean;
-    @IsBoolean()
-    inventoryProductCardIsActive: boolean;
-   
-}
-
 export class UpdateInventoryProductCardsDTO {
     commerceAccountId: string;
     productCardDTO: ProductCardDTO;

@@ -337,7 +337,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
             //UPDATE THE INVENTORY PRODUCT CARD PRICES FOR EACH LOCATION;
             for(let j = 0; j < commerceLocationDTOs.length; j++) {
                 let commerceLocationDTO = commerceLocationDTOs[j];
-                let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByCardId(commerceAccountId, commerceLocationDTO.commerceLocationId, inventoryProductCardServiceUpdatePriceJobItemDTO.productCardId, inventoryProductCardServiceUpdatePriceJobItemDTO.productCardPrintingId,inventoryProductCardServiceUpdatePriceJobItemDTO.productLanguageId);
+                let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByProductCardPrintingId(commerceAccountId, commerceLocationDTO.commerceLocationId, inventoryProductCardServiceUpdatePriceJobItemDTO.productCardId, inventoryProductCardServiceUpdatePriceJobItemDTO.productCardPrintingId,inventoryProductCardServiceUpdatePriceJobItemDTO.productLanguageId);
                 
                 if(inventoryProductCardDTO == null) {
                     continue;
