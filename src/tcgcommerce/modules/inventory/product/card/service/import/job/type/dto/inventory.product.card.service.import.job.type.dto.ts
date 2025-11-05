@@ -4,6 +4,7 @@ export class InventoryProductCardServiceImportJobTypeDTO {
     inventoryProductCardServiceImportJobTypeId: string;
     inventoryProductCardServiceImportJobTypeName: string;
     inventoryProductCardServiceImportJobTypeDescription: string;
+    inventoryProductCardServiceImportJobTypeFileExtension: string;
     inventoryProductCardServiceImportJobTypeIsActive: boolean;
     inventoryProductCardServiceImportJobTypeCreateDate: Date;
     inventoryProductCardServiceImportJobTypeUpdateDate: Date;  
@@ -14,6 +15,8 @@ export class CreateInventoryProductCardServiceImportJobTypeDTO {
     inventoryProductCardServiceImportJobTypeName: string;
     @IsString()
     inventoryProductCardServiceImportJobTypeDescription: string;
+    @IsString()
+    inventoryProductCardServiceImportJobTypeFileExtension: string
 }
 
 export class UpdateInventoryProductCardServiceImportJobTypeDTO {
@@ -23,6 +26,8 @@ export class UpdateInventoryProductCardServiceImportJobTypeDTO {
     inventoryProductCardServiceImportJobTypeName: string;
     @IsString()
     inventoryProductCardServiceImportJobTypeDescription: string;
+    @IsString()
+    inventoryProductCardServiceImportJobTypeFileExtension: string;
     @IsBoolean()
     inventoryProductCardServiceImportJobTypeIsActive: boolean;
 }

@@ -26,11 +26,12 @@ export class InventoryProductCardServiceImportJobTypeService {
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeId = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeId;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription;
+        inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeCreateDate = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeCreateDate;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeUpdateDate = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeUpdateDate;
 
-        return inventoryProductCardServiceImportJobTypeDTO;
+        return inventoryProductCardServiceImportJobTypeDTO; 
 
     }
 
@@ -50,6 +51,7 @@ export class InventoryProductCardServiceImportJobTypeService {
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeId = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeId;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription;
+            inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeCreateDate = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeCreateDate;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeUpdateDate = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeUpdateDate;
@@ -75,6 +77,7 @@ export class InventoryProductCardServiceImportJobTypeService {
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeId = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeId;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription;
+        inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeCreateDate = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeCreateDate;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeUpdateDate = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeUpdateDate;
@@ -113,11 +116,12 @@ export class InventoryProductCardServiceImportJobTypeService {
 
         //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!updateInventoryProductCardServiceImportJobType) {
-            return null;
+            return null; 
         }
 
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName;
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription;
+        updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension;
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive;
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeUpdateDate = new Date();
 

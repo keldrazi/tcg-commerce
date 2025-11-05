@@ -3,13 +3,13 @@ import { InventoryProductCardServiceCreateJobService } from './inventory.product
 import { InventoryProductCardServiceCreateJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/dto/inventory.product.card.service.create.job.dto';
 
 
-@Controller('inventory/product/card/service/create/job')
+@Controller('inventory/product/card/service/import/job')
 export class InventoryProductCardServiceCreateJobController {
 
     constructor(
         private inventoryProductCardServiceCreateJobService: InventoryProductCardServiceCreateJobService,
     ) { }
-    
+    /*
     @Get('all/:commerceAccountId')
     async getInventoryProductCardServiceCreateJobsByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.inventoryProductCardServiceCreateJobService.getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId);
@@ -97,7 +97,7 @@ export class InventoryProductCardServiceCreateJobController {
         
         return inventoryProductCardServiceCreateJobDTO;
     }
-        
+    */  
 
 
 }

@@ -259,7 +259,7 @@ export class InventoryProductCardServiceCreateJobItemService {
         for (let i = 0; i < productCards.length; i++) {
             
             //TO DO: CHECK TO SEE IF THE INVENTORY PRODUCT CARD ALREADY EXISTS FOR THE COMMERCE ACCOUNT/COMMERCE LOCATION/PRODUCT CARD/PRODUCT CARD LANGUAGE;
-            let existingInventoryProductCard = await this.inventoryProductCardService.getInventoryProductCardByCardProductCardId(productCards[i].productCardId, inventoryProductCardServiceCreateJobDTO.commerceAccountId, inventoryProductCardServiceCreateJobDTO.commerceLocationId, productLanguage.productLanguageId);
+            let existingInventoryProductCard = await this.inventoryProductCardService.getInventoryProductCardByProductCardId(productCards[i].productCardId, inventoryProductCardServiceCreateJobDTO.commerceAccountId, inventoryProductCardServiceCreateJobDTO.commerceLocationId, productLanguage.productLanguageId);
 
             if(existingInventoryProductCard != null) {
                 continue;

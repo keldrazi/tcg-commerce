@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InventoryProductCardServiceCreateJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/inventory.product.card.service.create.job.entity';
-import { InventoryProductCardServiceCreateJobDTO, CreateInventoryProductCardServiceCreateJobsDTO, CreateInventoryProductCardServiceCreateJobDTO } from './dto/inventory.product.card.service.import.job.dto';
+import { CreateInventoryProductCardServiceImportJobDTO, InventoryProductCardServiceImportJobDTO } from './dto/inventory.product.card.service.import.job.dto';
 import { INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/create/job/inventory.product.card.service.create.job.contants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
@@ -18,7 +18,7 @@ export class InventoryProductCardServiceCreateJobService {
         private inventoryProductCardServiceCreateJobItemService: InventoryProductCardServiceCreateJobItemService,
     ) { }
 
-
+    /*
     async getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId: string) {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
@@ -215,9 +215,10 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTO;
     }
 
-    
+    */
 
     /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
+    /*
     async createInventoryProductCardServiceCreateJobs(createInventoryProductCardServiceCreateJobsDTO: CreateInventoryProductCardServiceCreateJobsDTO) {
 
         //GET THE SETS OF THE PRODUCT LINE;
@@ -444,9 +445,10 @@ export class InventoryProductCardServiceCreateJobService {
     }
 
     
-    
+    */
     
     /* EVENT LISTENERS */
+    /*
     @OnEvent('inventory.product.card.service.create.job.update.status')
     async handleInventoryProductCardServiceCreateJobStatusEvent(payload: any) {
         
@@ -471,6 +473,6 @@ export class InventoryProductCardServiceCreateJobService {
             await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, inventoryProductCardServiceCreateJobStatus);
         }
     }
-
+    */
 
 }

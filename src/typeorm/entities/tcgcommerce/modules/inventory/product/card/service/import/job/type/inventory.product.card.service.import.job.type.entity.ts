@@ -8,6 +8,8 @@ export class InventoryProductCardServiceImportJobType {
     inventoryProductCardServiceImportJobTypeName: string;
     @Column()
     inventoryProductCardServiceImportJobTypeDescription: string;
+    @Column()
+    inventoryProductCardServiceImportJobTypeFileExtension: string;
     @Column({type: 'boolean', default: false})
     inventoryProductCardServiceImportJobTypeIsActive: boolean;
     @CreateDateColumn()

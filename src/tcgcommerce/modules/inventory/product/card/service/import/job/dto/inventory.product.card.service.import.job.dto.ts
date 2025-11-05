@@ -10,7 +10,7 @@ export class InventoryProductCardServiceImportJobDTO {
     commerceUserId: string;
     commerceUserName: string;
     productVendorId: string;
-    productVendorCode: string;
+    productVendorCode: string; 
     productLineId: string;
     productLineCode: string;
     productTypeId: string;

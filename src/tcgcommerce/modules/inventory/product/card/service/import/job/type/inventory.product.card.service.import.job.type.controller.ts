@@ -4,7 +4,7 @@ import { InventoryProductCardServiceImportJobTypeService } from './inventory.pro
 
 
 
-@Controller('inventory/product/card/service/import/job/type/sort')
+@Controller('inventory/product/card/service/import/job/type')
 export class InventoryProductCardServiceImportJobTypeController {
 
     constructor(
@@ -28,10 +28,10 @@ export class InventoryProductCardServiceImportJobTypeController {
         return await this.inventoryProductCardServiceImportJobTypeService.createInventoryProductCardServiceImportJobType(createInventoryProductCardServiceImportJobTypeDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateInventoryProductCardServiceImportJobType(@Body() updateInventoryProductCardServiceImportJobTypeDTO: UpdateInventoryProductCardServiceImportJobTypeDTO) {
         return await this.inventoryProductCardServiceImportJobTypeService.updateInventoryProductCardServiceImportJobType(updateInventoryProductCardServiceImportJobTypeDTO);
     }
 
-}
+} 
