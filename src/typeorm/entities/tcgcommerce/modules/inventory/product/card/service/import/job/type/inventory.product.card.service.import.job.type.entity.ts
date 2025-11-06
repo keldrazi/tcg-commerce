@@ -6,6 +6,8 @@ export class InventoryProductCardServiceImportJobType {
     inventoryProductCardServiceImportJobTypeId: string;
     @Column({unique: true})
     inventoryProductCardServiceImportJobTypeName: string;
+    @Column({unique: true})
+    inventoryProductCardServiceImportJobTypeCode: string;
     @Column()
     inventoryProductCardServiceImportJobTypeDescription: string;
     @Column()

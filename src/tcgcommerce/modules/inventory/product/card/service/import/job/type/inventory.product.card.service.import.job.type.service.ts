@@ -25,6 +25,7 @@ export class InventoryProductCardServiceImportJobTypeService {
         let inventoryProductCardServiceImportJobTypeDTO = new InventoryProductCardServiceImportJobTypeDTO();
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeId = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeId;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName;
+        inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeCode = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeCode;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive;
@@ -50,6 +51,7 @@ export class InventoryProductCardServiceImportJobTypeService {
             let inventoryProductCardServiceImportJobTypeDTO = new InventoryProductCardServiceImportJobTypeDTO();
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeId = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeId;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName;
+            inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeCode = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeCode;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension;
             inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive;
@@ -76,6 +78,7 @@ export class InventoryProductCardServiceImportJobTypeService {
         let inventoryProductCardServiceImportJobTypeDTO = new InventoryProductCardServiceImportJobTypeDTO();
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeId = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeId;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName;
+        inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeCode = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeCode;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension;
         inventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive = inventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive;
@@ -120,6 +123,7 @@ export class InventoryProductCardServiceImportJobTypeService {
         }
 
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeName = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeName;
+        updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeCode = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeCode;
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeDescription = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeDescription;
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeFileExtension = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeFileExtension;
         updateInventoryProductCardServiceImportJobType.inventoryProductCardServiceImportJobTypeIsActive = updateInventoryProductCardServiceImportJobTypeDTO.inventoryProductCardServiceImportJobTypeIsActive;
