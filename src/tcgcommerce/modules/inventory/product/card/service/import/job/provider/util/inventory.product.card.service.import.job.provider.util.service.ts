@@ -2,7 +2,7 @@ import { Injectable,  } from '@nestjs/common';
 import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_PRINTING } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/inventory.product.card.service.import.job.contants';
 
 @Injectable()
-export class InventoryProductCardServiceImportJobTypeUtilService {
+export class InventoryProductCardServiceImportJobProviderUtilService {
 
     constructor(
         

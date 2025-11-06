@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { InventoryProductCardServiceImportJobTypeUtilService } from './inventory.product.card.service.import.job.provider.util.service';
+import { InventoryProductCardServiceImportJobProviderUtilService } from './inventory.product.card.service.import.job.provider.util.service';
 
 
 @Module({
   imports: [
     
   ], 
-  providers: [InventoryProductCardServiceImportJobTypeUtilService],
-  exports: [InventoryProductCardServiceImportJobTypeUtilService],
+  providers: [InventoryProductCardServiceImportJobProviderUtilService],
+  exports: [InventoryProductCardServiceImportJobProviderUtilService],
 })
-export class InventoryProductCardServiceImportJobTypeUtilModule {}
+export class InventoryProductCardServiceImportJobProviderUtilModule {}
