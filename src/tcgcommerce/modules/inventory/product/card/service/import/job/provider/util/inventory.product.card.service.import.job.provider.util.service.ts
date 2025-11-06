@@ -1,5 +1,5 @@
 import { Injectable,  } from '@nestjs/common';
-import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_TYPE_CARD_CONDITION } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/inventory.product.card.service.import.job.contants';
+import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_PRINTING } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/inventory.product.card.service.import.job.contants';
 
 @Injectable()
 export class InventoryProductCardServiceImportJobTypeUtilService {
@@ -15,23 +15,23 @@ export class InventoryProductCardServiceImportJobTypeUtilService {
         let cardCondition = "";
 
         if(inventoryProductCardServiceImportJobTypeCardCondition.indexOf('Near Mint') != -1) {
-            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_TYPE_CARD_CONDITION.NEAR_MINT;
+            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION.NEAR_MINT;
             return cardCondition;
         }
         if(inventoryProductCardServiceImportJobTypeCardCondition.indexOf('Lightly Played') != -1) {
-            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_TYPE_CARD_CONDITION.LIGHTLY_PLAYED;
+            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION.LIGHTLY_PLAYED;
             return cardCondition;
         }
         if(inventoryProductCardServiceImportJobTypeCardCondition.indexOf('Moderately Played') != -1) {
-            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_TYPE_CARD_CONDITION.MODERATELY_PLAYED;
+            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION.MODERATELY_PLAYED;
             return cardCondition;
         }
         if(inventoryProductCardServiceImportJobTypeCardCondition.indexOf('Heavily Played') != -1) {
-            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_TYPE_CARD_CONDITION.HEAVILY_PLAYED;
+            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION.HEAVILY_PLAYED;
             return cardCondition;
         }
         if(inventoryProductCardServiceImportJobTypeCardCondition.indexOf('Damaged') != -1) {
-            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_TYPE_CARD_CONDITION.DAMAGED;
+            cardCondition = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION.DAMAGED;
             return cardCondition;
         }
 
@@ -44,10 +44,10 @@ export class InventoryProductCardServiceImportJobTypeUtilService {
         let cardPrintingType = "";
 
         if(inventoryProductCardServiceImportJobTypeCardPrinting.indexOf('Foil') != -1) {
-            cardPrintingType = 'Foil';
+            cardPrintingType = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_PRINTING.FOIL;
         }
         else {
-            cardPrintingType = 'Normal';
+            cardPrintingType = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_PRINTING.NORMAL;
         }
 
         return cardPrintingType;

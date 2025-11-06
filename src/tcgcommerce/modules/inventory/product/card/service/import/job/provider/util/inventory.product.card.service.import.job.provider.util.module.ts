@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { InventoryProductCardServiceImportJobTypeUtilService } from './inventory.product.card.service.import.job.type.util.service';
+import { InventoryProductCardServiceImportJobTypeUtilService } from './inventory.product.card.service.import.job.provider.util.service';
 
 
 @Module({
