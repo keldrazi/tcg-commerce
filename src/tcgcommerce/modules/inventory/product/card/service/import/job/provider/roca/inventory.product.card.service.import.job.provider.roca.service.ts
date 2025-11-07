@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UtilCSVService } from 'src/system/modules/util/csv/util.csv.service';
-import { InventoryProductCardServiceImportJobTypeRocaDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/roca/dto/inventory.product.card.service.import.job.provider.roca.dto';
-import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/inventory.product.card.service.import.job.contants';
-import { InventoryProductCardServiceImportJobUtilService } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/util/inventory.product.card.service.import.job.provider.util.service';
+import { InventoryProductCardServiceImportJobProviderRocaDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/roca/dto/inventory.product.card.service.import.job.provider.roca.dto';
+import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
+import { InventoryProductCardServiceImportJobProviderUtilService } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/util/inventory.product.card.service.import.job.provider.util.service';
 
 @Injectable()
 export class InventoryProductCardServiceImportJobProviderRocaService {
  
     constructor(
         private utilCSVService: UtilCSVService,
-        private inventoryProductCardServiceImportJobUtilService: InventoryProductCardServiceImportJobUtilService,
+        private inventoryProductCardServiceImportJobProviderUtilService: InventoryProductCardServiceImportJobProviderUtilService,
     ) {}
     
     
@@ -18,7 +18,7 @@ export class InventoryProductCardServiceImportJobProviderRocaService {
         let inventoryProductCardServiceImportJobCSVData = await this.utilCSVService.parseCSV(inventoryProductCardServiceImportJobFile);
         let inventoryProductCardServiceImportJobData = await this.processInventoryProductCardServiceImportJobCSVData(inventoryProductCardServiceImportJobCSVData);
 
-        let inventoryProductCardServiceImportJobTypeRocaDTOs: InventoryProductCardServiceImportJobTypeRocaDTO[] = [];
+        let inventoryProductCardServiceImportJobProviderRocaDTOs: InventoryProductCardServiceImportJobProviderRocaDTO[] = [];
 
         for(let i = 0; i < inventoryProductCardServiceImportJobData.inventoryProductCardServiceImportJobCardData.length; i++) {
 
@@ -26,17 +26,17 @@ export class InventoryProductCardServiceImportJobProviderRocaService {
 
             if(inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_TCG_PLAYER_ID] != '') {
 
-                let inventoryProductCardServiceImportJobTypeRocaDTO = new InventoryProductCardServiceImportJobTypeRocaDTO();
-                inventoryProductCardServiceImportJobTypeRocaDTO.inventoryProductCardServiceImportJobTypeRocaTCGPlayerId = inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_TCG_PLAYER_ID];
-                inventoryProductCardServiceImportJobTypeRocaDTO.inventoryProductCardServiceImportJobTypeRocaCondition = await this.inventoryProductCardServiceImportJobUtilService.getInventoryProductCardServiceImportJobTypeCardCondition(inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_CONDITION]);
-                inventoryProductCardServiceImportJobTypeRocaDTO.inventoryProductCardServiceImportJobTypeRocaPrinting = await this.inventoryProductCardServiceImportJobUtilService.getInventoryProductCardServiceImportJobTypeCardPrinting(inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_CONDITION]);
-                inventoryProductCardServiceImportJobTypeRocaDTO.inventoryProductCardServiceImportJobTypeRocaQty = parseInt(inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_QTY]);
+                let inventoryProductCardServiceImportJobProviderRocaDTO = new InventoryProductCardServiceImportJobProviderRocaDTO();
+                inventoryProductCardServiceImportJobProviderRocaDTO.inventoryProductCardServiceImportJobProviderRocaTCGPlayerId = inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_TCG_PLAYER_ID];
+                inventoryProductCardServiceImportJobProviderRocaDTO.inventoryProductCardServiceImportJobProviderRocaCondition = await this.inventoryProductCardServiceImportJobProviderUtilService.getInventoryProductCardServiceImportJobTypeCardCondition(inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_CONDITION]);
+                inventoryProductCardServiceImportJobProviderRocaDTO.inventoryProductCardServiceImportJobProviderRocaPrinting = await this.inventoryProductCardServiceImportJobProviderUtilService.getInventoryProductCardServiceImportJobTypeCardPrinting(inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_CONDITION]);
+                inventoryProductCardServiceImportJobProviderRocaDTO.inventoryProductCardServiceImportJobProviderRocaQty = parseInt(inventoryProductCardServiceImportJobCardData[INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS.CARD_QTY]);
 
-                inventoryProductCardServiceImportJobTypeRocaDTOs.push(inventoryProductCardServiceImportJobTypeRocaDTO);
+                inventoryProductCardServiceImportJobProviderRocaDTOs.push(inventoryProductCardServiceImportJobProviderRocaDTO);
             }  
         }
 
-        return inventoryProductCardServiceImportJobTypeRocaDTOs;
+        return inventoryProductCardServiceImportJobProviderRocaDTOs;
 
     }
 
