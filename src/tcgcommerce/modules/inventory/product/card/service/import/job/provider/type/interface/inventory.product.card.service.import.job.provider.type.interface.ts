@@ -1,0 +1,6 @@
+export interface InventoryProductCardServiceImportJobProviderTypeDataKey {
+    inventoryProductCardServiceImportJobProviderTypeDataKeyTCGPlayerId: string;
+    inventoryProductCardServiceImportJobProviderTypeDataKeyCondition: string;
+    inventoryProductCardServiceImportJobProviderTypeDataKeyPrinting: string;
+    inventoryProductCardServiceImportJobProviderTypeDataKeyQty: string;
+}

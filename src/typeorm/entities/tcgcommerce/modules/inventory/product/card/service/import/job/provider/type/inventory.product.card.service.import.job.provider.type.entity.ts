@@ -12,6 +12,10 @@ export class InventoryProductCardServiceImportJobProviderType {
     inventoryProductCardServiceImportJobProviderTypeDescription: string;
     @Column()
     inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
+    @Column()
+    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    @Column('jsonb')
+    inventoryProductCardServiceImportJobProviderTypeFileDataKey: string;
     @Column({type: 'boolean', default: false})
     inventoryProductCardServiceImportJobProviderTypeIsActive: boolean;
     @CreateDateColumn()

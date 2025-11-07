@@ -91,7 +91,7 @@ import { InventoryProductCardServiceCreateJobItemModule } from './tcgcommerce/mo
 import { InventoryProductCardServiceUpdatePriceJobModule } from './tcgcommerce/modules/inventory/product/card/service/update/price/job/inventory.product.card.service.update.price.job.module';
 import { InventoryProductCardServiceUpdatePriceJobItemModule } from './tcgcommerce/modules/inventory/product/card/service/update/price/job/item/inventory.product.card.service.update.price.job.item.module';
 //Inventory Product Card Import Service Job Modules;
-import { InventoryProductCardServiceImportJobTypeModule } from './tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.module';
+import { InventoryProductCardServiceImportJobProviderTypeModule } from './tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.module';
 //System Modules;
 import { UtilScheduleTaskPriceModule } from './system/modules/util/schedule/task/price/util.schedule.task.price.module';
 
@@ -190,7 +190,7 @@ const NODE_ENV = process.env.NODE_ENV;
     InventoryProductCardServiceUpdatePriceJobModule,
     InventoryProductCardServiceUpdatePriceJobItemModule,
     //Inventory Product Card Import Service Job Modules;
-    InventoryProductCardServiceImportJobTypeModule,
+    InventoryProductCardServiceImportJobProviderTypeModule,
     //System Modules;
     UtilScheduleTaskPriceModule,
   ],

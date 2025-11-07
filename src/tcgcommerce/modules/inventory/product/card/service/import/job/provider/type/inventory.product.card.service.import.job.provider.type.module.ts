@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryProductCardServiceImportJobTypeService } from './inventory.product.card.service.import.job.provider.type.service';
-import { InventoryProductCardServiceImportJobTypeController } from './inventory.product.card.service.import.job.provider.type.controller';
-import { InventoryProductCardServiceImportJobType } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.entity';
+import { InventoryProductCardServiceImportJobProviderTypeService } from './inventory.product.card.service.import.job.provider.type.service';
+import { InventoryProductCardServiceImportJobProviderTypeController } from './inventory.product.card.service.import.job.provider.type.controller';
+import { InventoryProductCardServiceImportJobProviderType } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.entity';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryProductCardServiceImportJobType])
+        TypeOrmModule.forFeature([InventoryProductCardServiceImportJobProviderType])
     ],
-    controllers: [InventoryProductCardServiceImportJobTypeController],
-    providers: [InventoryProductCardServiceImportJobTypeService],
-    exports: [InventoryProductCardServiceImportJobTypeService]
+    controllers: [InventoryProductCardServiceImportJobProviderTypeController],
+    providers: [InventoryProductCardServiceImportJobProviderTypeService],
+    exports: [InventoryProductCardServiceImportJobProviderTypeService]
 })
-export class InventoryProductCardServiceImportJobTypeModule {}
+export class InventoryProductCardServiceImportJobProviderTypeModule {}

@@ -1,4 +1,5 @@
 import { IsString, IsBoolean } from "class-validator";
+import { InventoryProductCardServiceImportJobProviderTypeDataKey } from '../interface/inventory.product.card.service.import.job.provider.type.interface';
 
 export class InventoryProductCardServiceImportJobProviderTypeDTO {
     inventoryProductCardServiceImportJobProviderTypeId: string;
@@ -6,6 +7,8 @@ export class InventoryProductCardServiceImportJobProviderTypeDTO {
     inventoryProductCardServiceImportJobProviderTypeCode: string;
     inventoryProductCardServiceImportJobProviderTypeDescription: string;
     inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
+    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    inventoryProductCardServiceImportJobProviderTypeFileDataKey: InventoryProductCardServiceImportJobProviderTypeDataKey;
     inventoryProductCardServiceImportJobProviderTypeIsActive: boolean;
     inventoryProductCardServiceImportJobProviderTypeCreateDate: Date;
     inventoryProductCardServiceImportJobProviderTypeUpdateDate: Date;  
@@ -20,6 +23,10 @@ export class CreateInventoryProductCardServiceImportJobProviderTypeDTO {
     inventoryProductCardServiceImportJobProviderTypeDescription: string;
     @IsString()
     inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
+    @IsString()
+    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    @IsString()
+    inventoryProductCardServiceImportJobProviderTypeFileDataKey: string;
 }
 
 export class UpdateInventoryProductCardServiceImportJobProviderTypeDTO {
@@ -33,6 +40,10 @@ export class UpdateInventoryProductCardServiceImportJobProviderTypeDTO {
     inventoryProductCardServiceImportJobProviderTypeDescription: string;
     @IsString()
     inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
+    @IsString()
+    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    @IsString()
+    inventoryProductCardServiceImportJobProviderTypeFileDataKey: string;
     @IsBoolean()
     inventoryProductCardServiceImportJobProviderTypeIsActive: boolean;
 }
