@@ -26,12 +26,6 @@ export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH =
   PHYZBATCH: '/import/job/card/phyzbatch/upload/',
 };
 
-export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PDF_FILE_BUCKET_PATH = {
-  ROCA: '/import/job/card/roca/pdf/',
-  TCG_PLAYER: '/import/job/card/tcgplayer/pdf/',
-  PHYZBATCH: '/import/job/card/phyzbatch/pdf/',
-};
-
 export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION = {
   NEAR_MINT: 'NM',
   LIGHTLY_PLAYED: 'LP',
@@ -42,12 +36,8 @@ export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_CONDITION =
 
 export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS = {
   CARD_TCG_PLAYER_ID: 'TCGplayer Id',
-  CARD_SET_NAME: 'Set Name',
-  CARD_NAME: 'Product Name',
-  CARD_NUMBER: 'Number',
   CARD_CONDITION: 'Condition',
-  CARD_TCG_PLAYER_MARKET_PRICE: 'TCG Market Price',
-  CARD_TCG_PLAYER_LOW_PRICE: 'TCG Low Price',
+  CARD_PRINTING: 'Condition',
   CARD_QTY: 'Add to Quantity',
 };
 

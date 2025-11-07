@@ -96,6 +96,34 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
     }
 
+    async getInventoryProductCardServiceImportJobProviderTypeByCode(code: string) {
+        let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
+            where: {
+                inventoryProductCardServiceImportJobProviderTypeCode: code
+            }
+        });
+
+        if (inventoryProductCardServiceImportJobProviderType == null) {
+            return null;
+        }
+
+        let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeId;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeName;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCode = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCode;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeDescription = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeDescription;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileExtension = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileExtension;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileUploadPath = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileUploadPath;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey = JSON.parse(inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileDataKey);
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeIsActive = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeIsActive;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCreateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCreateDate;
+        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeUpdateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeUpdateDate;
+
+
+        return inventoryProductCardServiceImportJobProviderTypeDTO;
+
+    }
+
     async createInventoryProductCardServiceImportJobProviderType(createInventoryProductCardServiceImportJobProviderTypeDTO: CreateInventoryProductCardServiceImportJobProviderTypeDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
