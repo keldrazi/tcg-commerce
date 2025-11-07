@@ -17,15 +17,15 @@ export class InventoryProductCardServiceImportJobDTO {
     productTypeCode: string;
     productLanguageId: string;
     productLanguageCode: string;
-    inventoryProductCardServiceImportTypeId: string;
-    inventoryProductCardServiceImportTypeName: string;
+    inventoryProductCardServiceImportJobProviderTypeId: string;
+    inventoryProductCardServiceImportJobProviderTypeName: string;
     inventoryProductCardServiceImportJobFileURL: string;
     inventoryProductCardServiceImportJobFileOriginalName: string;
     inventoryProductCardServiceImportJobDate: Date;
     inventoryProductCardServiceImportJobCode: string;
     inventoryProductCardServiceImportJobCount: number;
     inventoryProductCardServiceImportJobStatus: string;
-    inventoryProductCardServiceImportJobImportDate: Date;
+    inventoryProductCardServiceImportJobCreateDate: Date;
     inventoryProductCardServiceImportJobUpdateDate: Date;
 }
 
@@ -57,9 +57,9 @@ export class CreateInventoryProductCardServiceImportJobDTO {
     @IsString()
     productLanguageCode: string;
     @IsString()
-    inventoryProductCardServiceImportTypeId: string;
+    inventoryProductCardServiceImportJobProviderTypeId: string;
     @IsString()
-    inventoryProductCardServiceImportTypeName: string;
+    inventoryProductCardServiceImportJobProviderTypeName: string;
 
 }
 

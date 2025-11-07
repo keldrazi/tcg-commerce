@@ -4,12 +4,13 @@ import { InventoryProductCardServiceImportJobController } from './inventory.prod
 import { InventoryProductCardServiceImportJobService } from './inventory.product.card.service.import.job.service';
 import { InventoryProductCardServiceImportJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/inventory.product.card.service.import.job.entity';
 import { InventoryProductCardServiceImportJobItemModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.module';
-
+import { AwsS3Module } from 'src/system/modules/aws/s3/aws.s3.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([InventoryProductCardServiceImportJob]),
         InventoryProductCardServiceImportJobItemModule,
+        AwsS3Module,
     ],
     controllers: [InventoryProductCardServiceImportJobController],
     providers: [InventoryProductCardServiceImportJobService],

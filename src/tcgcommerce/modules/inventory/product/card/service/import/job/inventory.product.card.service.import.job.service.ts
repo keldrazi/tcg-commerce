@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InventoryProductCardServiceImportJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/inventory.product.card.service.import.job.entity';
 import { CreateInventoryProductCardServiceImportJobDTO, InventoryProductCardServiceImportJobDTO } from './dto/inventory.product.card.service.import.job.dto';
-import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
+import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NAME, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH  } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { InventoryProductCardServiceImportJobItemService } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.service';
-
+import { AwsS3Service } from 'src/system/modules/aws/s3/aws.s3.service';
+import { IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH } from 'src/system/constants/tcgcommerce/import/job/card/tcgcommerce.import.job.card.constants';
 
 @Injectable()
 export class InventoryProductCardServiceImportJobService {
@@ -16,8 +17,108 @@ export class InventoryProductCardServiceImportJobService {
         @InjectRepository(InventoryProductCardServiceImportJob) private inventoryProductCardServiceImportJobRepository: Repository<InventoryProductCardServiceImportJob>,
         private productSetService: ProductSetService,
         private inventoryProductCardServiceImportJobItemService: InventoryProductCardServiceImportJobItemService,
+        private awsS3Service: AwsS3Service,
     ) { }
 
+    async getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId: string) {
+            let inventoryProductCardServiceImportJob = await this.inventoryProductCardServiceImportJobRepository.findOne({
+                where: {
+                    inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId
+                }
+            });
     
+            
+            if(inventoryProductCardServiceImportJob == null) {
+                return null;
+            }
+    
+            //MAP TO DTO;
+            let inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO = ({ ...inventoryProductCardServiceImportJob });
+
+            return inventoryProductCardServiceImportJobDTO;
+
+        }
+
+    async getInventoryProductCardServiceImportJobByOriginalFileName(commerceAccountId: string, commerceLocationId: string, inventoryProductCardServiceImportJobFileOriginalName: string) {
+        return await this.inventoryProductCardServiceImportJobRepository.findOne({
+            where: { 
+                commerceAccountId: commerceAccountId,
+                commerceLocationId: commerceLocationId,
+                inventoryProductCardServiceImportJobFileOriginalName: inventoryProductCardServiceImportJobFileOriginalName }
+        });
+    }
+
+    async createInventoryProductCardServiceImportJob(inventoryProductCardServiceImportJobFile: Express.Multer.File, createInventoryProductCardServiceImportJobDTO: CreateInventoryProductCardServiceImportJobDTO) {
+
+        //CHECK TO SEE IF A FILE WITH THE SAME NAME EXISTS;
+        let existingImportJobCard = await this.getInventoryProductCardServiceImportJobByOriginalFileName(createInventoryProductCardServiceImportJobDTO.commerceAccountId, createInventoryProductCardServiceImportJobDTO.commerceLocationId, inventoryProductCardServiceImportJobFile.originalname);
+
+        if(existingImportJobCard != null) {
+            //HANDLE EXISTING FILE WITH THE SAME NAME;
+            return null; //TO DO: RETURN AN ERROR;
+        }
+
+        let inventoryProductCardServiceImportJobCode = await this.createInventoryProductCardServiceImportJobCode(createInventoryProductCardServiceImportJobDTO.productLineCode, createInventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeName, createInventoryProductCardServiceImportJobDTO.commerceLocationName);
+
+        //UPLOAD THE FILE TO S3
+        let inventoryProductCardServiceImportJobFileURL = await this.uploadInventoryProductCardServiceImportJobFile(createInventoryProductCardServiceImportJobDTO.commerceAccountId, inventoryProductCardServiceImportJobFile, inventoryProductCardServiceImportJobCode, createInventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeName);
+
+        let inventoryProductCardServiceImportJob = this.inventoryProductCardServiceImportJobRepository.create({ ...createInventoryProductCardServiceImportJobDTO });
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobCode = inventoryProductCardServiceImportJobCode;
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobStatus = INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING;
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobFileURL = inventoryProductCardServiceImportJobFileURL;
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobFileOriginalName = inventoryProductCardServiceImportJobFile.originalname;
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobDate = new Date();
+
+        inventoryProductCardServiceImportJob = await this.inventoryProductCardServiceImportJobRepository.save(inventoryProductCardServiceImportJob);
+
+        let inventoryProductCardServiceImportJobDTO = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobId);
+
+        if(inventoryProductCardServiceImportJobDTO == undefined) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return null; //RETURN AN ERROR;
+        }
+
+        //this.importProcessCardService.processImportCards(inventoryProductCardServiceImportJobDTO, inventoryProductCardServiceImportJobFile)
+
+        return inventoryProductCardServiceImportJobCode;
+
+    }
+
+    async createInventoryProductCardServiceImportJobCode(productLineCode: string, inventoryProductCardServiceImportJobProviderTypeName: string, commerceLocationName:string) {
+
+        let now = new Date();
+        let dateCode = now.getFullYear().toString() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + '-' + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
+
+        let inventoryProductCardServiceImportJobCode = productLineCode.toUpperCase() + '-' + inventoryProductCardServiceImportJobProviderTypeName.replace(/ /g, '-').toUpperCase() + '-' + commerceLocationName.replace(/ /g, '-').toUpperCase() + '-' + dateCode;
+
+        return inventoryProductCardServiceImportJobCode;
+    
+    }
+
+    async uploadInventoryProductCardServiceImportJobFile(commerceAccountId: string, inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobCode: string, inventoryProductCardServiceImportJobProviderTypeName: string) {
+
+            let inventoryProductCardImportJobFileBuffer = inventoryProductCardServiceImportJobFile.buffer;
+            let inventoryProductCardImportJobBucketPath = '';
+            let inventoryProductCardImportJobFileURL = '';
+
+            switch(inventoryProductCardServiceImportJobProviderTypeName) {
+                case INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NAME.TCG_PLAYER:
+                    inventoryProductCardImportJobBucketPath = commerceAccountId + '/' + INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH.TCG_PLAYER;
+                    inventoryProductCardImportJobFileURL = await this.awsS3Service.uploadPDF(inventoryProductCardImportJobFileBuffer, inventoryProductCardImportJobBucketPath, inventoryProductCardServiceImportJobCode);
+                    break;
+                case INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NAME.ROCA:
+                    inventoryProductCardImportJobBucketPath = commerceAccountId + '/' + INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH.ROCA;
+                    inventoryProductCardImportJobFileURL = await this.awsS3Service.uploadCSV(inventoryProductCardImportJobFileBuffer, inventoryProductCardImportJobBucketPath, inventoryProductCardServiceImportJobCode);
+                    break;
+                case INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NAME.PHYZBATCH:
+                    inventoryProductCardImportJobBucketPath = commerceAccountId + '/' + INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH.PHYZBATCH;
+                    inventoryProductCardImportJobFileURL = await this.awsS3Service.uploadCSV(inventoryProductCardImportJobFileBuffer, inventoryProductCardImportJobBucketPath, inventoryProductCardServiceImportJobCode);
+                    break;
+            }
+
+            return inventoryProductCardImportJobFileURL;
+
+        }
 
 }

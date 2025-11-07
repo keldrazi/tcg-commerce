@@ -14,19 +14,19 @@ export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS = {
 
 }
 
-export const IMPORT_SORT_CARD_TYPE_NAME = {
-  ROCA: 'Roca',
+export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NAME = {
+  ROCA: 'Roca Sorter',
   TCG_PLAYER: 'TCG Player',
   PHYZBATCH: 'PhyzBatch',
 };
 
-export const IMPORT_JOB_CARD_UPLOAD_FILE_BUCKET_PATH = {
+export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_UPLOAD_FILE_BUCKET_PATH = {
   ROCA: '/import/job/card/roca/upload/',
   TCG_PLAYER: '/import/job/card/tcgplayer/upload/',
   PHYZBATCH: '/import/job/card/phyzbatch/upload/',
 };
 
-export const IMPORT_JOB_CARD_PDF_FILE_BUCKET_PATH = {
+export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PDF_FILE_BUCKET_PATH = {
   ROCA: '/import/job/card/roca/pdf/',
   TCG_PLAYER: '/import/job/card/tcgplayer/pdf/',
   PHYZBATCH: '/import/job/card/phyzbatch/pdf/',
@@ -51,7 +51,7 @@ export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_ROCA_DATA_KEYS =
   CARD_QTY: 'Add to Quantity',
 };
 
-export const IMPORT_SORT_PHYZBATCH_CARD_DATA_KEYS = {
+export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_PHYZBATCH_CARD_DATA_KEYS = {
   CARD_TCG_PLAYER_ID: 'TCGplayer Id',
   CARD_SET_NAME: 'Set Name',
   CARD_NAME: 'Product Name',
@@ -62,7 +62,7 @@ export const IMPORT_SORT_PHYZBATCH_CARD_DATA_KEYS = {
   CARD_QTY: 'Add to Quantity',
 };
 
-export const IMPORT_SORT_TCGPLAYER_CARD_DATA_KEYS = {
+export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TCGPLAYER_CARD_DATA_KEYS = {
   CARD_TCG_PLAYER_ID: 'TCGplayer Id',
   CARD_SET_NAME: 'Set Name',
   CARD_NAME: 'Product Name',
@@ -78,7 +78,4 @@ export const INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_CARD_PRINTING = 
   NORMAL: 'Normal',
 };
 
-export const IMPORT_JOB_CARD_PRODUCT_LINE = {
-  MTG: 'MTG',
-  PKE: 'PKE',
-};
+
