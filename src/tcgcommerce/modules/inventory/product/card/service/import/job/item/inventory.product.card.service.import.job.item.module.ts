@@ -13,6 +13,7 @@ import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/
 import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/location/commerce.location.module';
 import { TCGdbMTGPriceCurrentModule } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.module';
 import { PriceRuleProductCardBaseModule } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.module';
+import { InventoryProductCardServiceImportJobProviderModule } from '../provider/inventory.product.card.service.import.job.provider.module';
 
 
 @Module({
@@ -29,9 +30,13 @@ import { PriceRuleProductCardBaseModule } from 'src/tcgcommerce/modules/price/ru
         InventoryProductCardModule,
         TCGdbMTGPriceCurrentModule,
         PriceRuleProductCardBaseModule,
+        InventoryProductCardServiceImportJobProviderModule,
     ],
     controllers: [],
     providers: [InventoryProductCardServiceImportJobItemService],
     exports: [InventoryProductCardServiceImportJobItemService]
 })
-export class InventoryProductCardServiceImportJobItemModule {}
+export class InventoryProductCardServiceImportJobItemModule {
+
+
+}

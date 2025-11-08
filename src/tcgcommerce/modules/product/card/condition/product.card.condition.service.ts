@@ -139,6 +139,24 @@ export class ProductCardConditionService {
         
     }
 
+    async getProductCardConditionByCodeAndProductLineId(code: string, productLineId: string) {
+        let productCardCondition = await this.productCardConditionRepository.findOne({ 
+            where: { 
+                productCardConditionCode: code,
+                productLineId: productLineId 
+            } 
+        });
+        
+        if (productCardCondition == null) {
+            return null;
+        }
+
+        let productCardConditionDTO:ProductCardConditionDTO = ({ ...productCardCondition });
+
+        return productCardConditionDTO;
+        
+    }
+
     async createProductCardCondition(createProductCardConditionDTO: CreateProductCardConditionDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;

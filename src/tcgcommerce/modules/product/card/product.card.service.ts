@@ -56,6 +56,23 @@ export class ProductCardService {
         return productCardDTO;
     }
 
+    async getProductCardByTCGPlayerId(tcgPlayerId: number) {
+        let productCard = await this.productCardRepository.findOne({ 
+            where: {
+                productCardTCGPlayerId: tcgPlayerId, 
+            }
+        });
+
+        //TO DO: CREATE AN ERROR TO RETURN;
+        if(productCard == null) {
+            return null;
+        }
+
+        let productCardDTO: ProductCardDTO = ({ ...productCard})
+
+        return productCardDTO;
+    }
+
     async getProductCardsByProductLineId(productLineId: string) {
         //TO DO: ADD LIMITS AND OFFSETS;
         

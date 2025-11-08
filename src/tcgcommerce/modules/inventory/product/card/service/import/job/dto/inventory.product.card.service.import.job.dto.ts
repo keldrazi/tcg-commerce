@@ -18,6 +18,7 @@ export class InventoryProductCardServiceImportJobDTO {
     productLanguageId: string;
     productLanguageCode: string;
     inventoryProductCardServiceImportJobProviderTypeId: string;
+    inventoryProductCardServiceImportJobProviderTypeCode: string;
     inventoryProductCardServiceImportJobProviderTypeName: string;
     inventoryProductCardServiceImportJobFileURL: string;
     inventoryProductCardServiceImportJobFileOriginalName: string;
@@ -58,6 +59,8 @@ export class CreateInventoryProductCardServiceImportJobDTO {
     productLanguageCode: string;
     @IsString()
     inventoryProductCardServiceImportJobProviderTypeId: string;
+    @IsString()
+    inventoryProductCardServiceImportJobProviderTypeCode: string;
     @IsString()
     inventoryProductCardServiceImportJobProviderTypeName: string;
 

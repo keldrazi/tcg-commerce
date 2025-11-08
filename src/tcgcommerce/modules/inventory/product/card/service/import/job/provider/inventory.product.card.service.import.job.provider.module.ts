@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { InventoryProductCardServiceImportJobProviderRocaService } from "./inventory.product.card.service.import.job.provider.roca.service";
+import { InventoryProductCardServiceImportJobProviderService } from "./inventory.product.card.service.import.job.provider.service";
 import { UtilCSVModule } from 'src/system/modules/util/csv/util.csv.module';
 import { InventoryProductCardServiceImportJobProviderUtilModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/util/inventory.product.card.service.import.job.provider.util.module';
 import { InventoryProductCardServiceImportJobProviderTypeModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.module';
@@ -11,7 +11,7 @@ import { InventoryProductCardServiceImportJobProviderTypeModule } from 'src/tcgc
     InventoryProductCardServiceImportJobProviderUtilModule,
     InventoryProductCardServiceImportJobProviderTypeModule,
   ], 
-  providers: [InventoryProductCardServiceImportJobProviderRocaService],
-  exports: [InventoryProductCardServiceImportJobProviderRocaService],
+  providers: [InventoryProductCardServiceImportJobProviderService],
+  exports: [InventoryProductCardServiceImportJobProviderService],
 })
-export class InventoryProductCardServiceImportJobProviderRocaModule {}
+export class InventoryProductCardServiceImportJobProviderModule {}

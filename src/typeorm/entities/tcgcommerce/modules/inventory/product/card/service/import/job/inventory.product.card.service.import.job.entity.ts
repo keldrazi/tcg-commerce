@@ -33,6 +33,8 @@ export class InventoryProductCardServiceImportJob {
     @Column()
     inventoryProductCardServiceImportJobProviderTypeId: string;
     @Column()
+    inventoryProductCardServiceImportJobProviderTypeCode: string;
+    @Column()
     inventoryProductCardServiceImportJobProviderTypeName: string;
     @Column()
     inventoryProductCardServiceImportJobFileURL: string;

@@ -19,6 +19,7 @@ export class InventoryProductCardServiceImportJobItemDTO {
     productCardConditionId: string;
     productCardConditionName: string
     inventoryProductCardServiceImportJobItemQuantity: number;
+    inventoryProductCardServiceImportJobItemCSVData: any;
     inventoryProductCardServiceImportJobItemImportDate: Date;
     inventoryProductCardServiceImportJobItemUpdateDate: Date; 
 }

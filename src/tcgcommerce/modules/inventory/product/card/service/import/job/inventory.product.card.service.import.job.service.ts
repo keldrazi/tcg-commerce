@@ -47,7 +47,8 @@ export class InventoryProductCardServiceImportJobService {
             where: { 
                 commerceAccountId: commerceAccountId,
                 commerceLocationId: commerceLocationId,
-                inventoryProductCardServiceImportJobFileOriginalName: inventoryProductCardServiceImportJobFileOriginalName }
+                inventoryProductCardServiceImportJobFileOriginalName: inventoryProductCardServiceImportJobFileOriginalName 
+            }
         });
     }
 
@@ -89,7 +90,7 @@ export class InventoryProductCardServiceImportJobService {
             return null; //RETURN AN ERROR;
         }
 
-        //this.importProcessCardService.processImportCards(inventoryProductCardServiceImportJobDTO, inventoryProductCardServiceImportJobFile)
+        
 
         return inventoryProductCardServiceImportJobCode;
 
@@ -116,6 +117,64 @@ export class InventoryProductCardServiceImportJobService {
 
         return inventoryProductCardImportJobFileURL;
 
+    }
+
+    async updateInventoryProductCardServiceImportJobStatus(inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobStatus: string) {
+        let inventoryProductCardServiceImportJob = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
+
+        if(inventoryProductCardServiceImportJob == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return false; //RETURN AN ERROR;
+        }
+
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobStatus = inventoryProductCardServiceImportJobStatus;
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobUpdateDate = new Date();
+
+        await this.inventoryProductCardServiceImportJobRepository.save(inventoryProductCardServiceImportJob);
+
+        return true;
+    }
+
+    async updateInventoryProductCardServiceImportJobCount(inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobCount: number) {
+        let inventoryProductCardServiceImportJob = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
+
+        if(inventoryProductCardServiceImportJob == null) {
+            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+            return false; //RETURN AN ERROR;
+        }
+
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobCount = inventoryProductCardServiceImportJobCount;
+        inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobUpdateDate = new Date();
+
+        await this.inventoryProductCardServiceImportJobRepository.save(inventoryProductCardServiceImportJob);
+
+        return true;
+    }
+
+    /* EVENT LISTENERS */
+    @OnEvent('inventory.product.card.service.import.job.update.status')
+    async handleInventoryProductCardServiceImportJobStatusEvent(payload: any) {
+
+        let inventoryProductCardServiceImportJobId = payload.inventoryProductCardServiceImportJobId;
+        let inventoryProductCardServiceImportJobStatus = payload.inventoryProductCardServiceImportJobStatus;
+
+        if(inventoryProductCardServiceImportJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_UPDATE_JOB_COUNT) {
+            let inventoryProductCardServiceImportJobCount = payload.inventoryProductCardServiceImportJobCount;
+            await this.updateInventoryProductCardServiceImportJobCount(inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobCount);
+
+            //TO DO: UPDATE PRICING;
+            let inventoryProductCardServiceImportJobDTO = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
+
+            if(inventoryProductCardServiceImportJobDTO == null) {
+                //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
+                return null; //RETURN AN ERROR;
+            }
+            await this.updateInventoryProductCardServiceImportJobStatus(inventoryProductCardServiceImportJobId, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_FILE_COMPLETE);
+            //this.inventoryProductCardServiceImportJobItemService.updateInventoryProductCardImportJobItemPricesByJob(inventoryProductCardServiceImportJobDTO);
+        }
+        else {
+            await this.updateInventoryProductCardServiceImportJobStatus(inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobStatus);
+        }
     }
 
 }
