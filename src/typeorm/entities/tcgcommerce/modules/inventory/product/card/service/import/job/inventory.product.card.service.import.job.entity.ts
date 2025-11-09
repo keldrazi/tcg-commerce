@@ -48,6 +48,8 @@ export class InventoryProductCardServiceImportJob {
     inventoryProductCardServiceImportJobStatus: string;
     @Column({ default: 0 })
     inventoryProductCardServiceImportJobCount: number;
+    @Column({ default: 0 })
+    inventoryProductCardServiceImportJobQtyCount: number;
     @CreateDateColumn()
     inventoryProductCardServiceImportJobCreateDate: Date;
     @UpdateDateColumn()

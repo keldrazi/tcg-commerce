@@ -37,9 +37,11 @@ export class InventoryProductCardServiceImportJobItem {
     @Column()
     productCardConditionId: string;
     @Column()
+    productCardConditionCode: string;
+    @Column()
     productCardConditionName: string;
     @Column()
-    inventoryProductCardServiceImportJobItemQuantity: number;
+    inventoryProductCardServiceImportJobItemQty: number;
     @Column('jsonb')
     inventoryProductCardServiceImportJobItemCSVData: string;
     @CreateDateColumn()

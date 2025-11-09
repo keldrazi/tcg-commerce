@@ -30,7 +30,30 @@ export class InventoryProductCardServiceImportJobController {
 
         return inventoryProductCardServiceImportJobCode;
     }
+    
+    @Get('review/:inventoryProductCardServiceImportJobId')
+    async reviewInventoryProductCardServiceImportJobById(@Param('inventoryProductCardServiceImportJobId') inventoryProductCardServiceImportJobId: string) {
+        let inventoryProductCardServiceImportJobDTO = await this.inventoryProductCardServiceImportJobService.getInventoryProductCardServiceImportJobDetailsById(inventoryProductCardServiceImportJobId);
+
+        return inventoryProductCardServiceImportJobDTO;
+    }
+
+    @Get('approve/:inventoryProductCardServiceImportJobId')
+    async approveInventoryProductCardServiceImportJobById(@Param('inventoryProductCardServiceImportJobId') inventoryProductCardServiceImportJobId: string) {
+        let inventoryProductCardServiceImportJobDTO = await this.inventoryProductCardServiceImportJobService.approveInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
         
+        return inventoryProductCardServiceImportJobDTO;
+    }
+
+    @Get('delete/:inventoryProductCardServiceImportJobId')
+    async deleteInventoryProductCardServiceImportJobById(@Param('inventoryProductCardServiceImportJobId') inventoryProductCardServiceImportJobId: string) {
+        let inventoryProductCardServiceImportJobDTO = await this.inventoryProductCardServiceImportJobService.deleteInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
+        
+        return inventoryProductCardServiceImportJobDTO;
+    }
+
+
+
 
     //GET ALL IMPORT JOBS FOR A COMMERCE ACCOUNT;
     //REVIEW IMPORT JOB

@@ -1,26 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-//import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
-import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product.card.dto';
-import { InventoryProductCardServiceImportJobDTO, CreateInventoryProductCardServiceImportJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/dto/inventory.product.card.service.import.job.dto';
+import { InventoryProductCardServiceImportJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/dto/inventory.product.card.service.import.job.dto';
 import { InventoryProductCardServiceImportJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/item/dto/inventory.product.card.service.import.job.item.dto';
 import { InventoryProductCardServiceImportJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.entity';
 import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
-import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
-import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
-import { ProductLanguageService } from 'src/tcgcommerce/modules/product/language/product.language.service';
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
-import { CommerceLocationService } from 'src/tcgcommerce/modules/commerce/location/commerce.location.service';
 import { InventoryProductCardService } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { TCGdbMTGPriceCurrentService } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.service';
-import { TCGdbMTGPriceCurrentDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/price/current/dto/tcgdb.mtg.price.current.dto';
-import { PriceRuleProductCardBaseService } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.service';
 import { InventoryProductCardServiceImportJobProviderService } from '../provider/inventory.product.card.service.import.job.provider.service';
-import { InventoryProductCardServiceImportJobProviderDTO } from '../provider/dto/inventory.product.card.service.import.job.provider.dto';
+import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
+
 
 @Injectable()
 export class InventoryProductCardServiceImportJobItemService {
@@ -28,19 +20,35 @@ export class InventoryProductCardServiceImportJobItemService {
     constructor(
         @InjectRepository(InventoryProductCardServiceImportJobItem) private inventoryProductCardServiceImportJobItemRepository: Repository<InventoryProductCardServiceImportJobItem>,
         private productCardService: ProductCardService,
-        private productVendorService: ProductVendorService,
-        private productLineService: ProductLineService,
         private productSetService: ProductSetService,
         private productCardConditionService: ProductCardConditionService,
-        private productLanguageService: ProductLanguageService,
         private productCardPrintingService: ProductCardPrintingService,
-        private commerceLocationService: CommerceLocationService,
         private inventoryProductCardService: InventoryProductCardService,
         private eventEmitter: EventEmitter2,
-        private tcgdbMTGPriceCurrentService: TCGdbMTGPriceCurrentService,
-        private priceRuleProductCardBaseService: PriceRuleProductCardBaseService,
         private inventoryProductCardServiceImportJobProviderRocaService: InventoryProductCardServiceImportJobProviderService,
     ) { }
+
+    async getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+    
+            let inventoryProductCardServiceImportJobItemDTOs: InventoryProductCardServiceImportJobItemDTO[] = [];
+    
+            let inventoryProductCardServiceImportJobItems = await this.inventoryProductCardServiceImportJobItemRepository.find({
+                where: {
+                    inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
+                }
+            });
+    
+            for(let i = 0; i < inventoryProductCardServiceImportJobItems.length; i++) {
+                let inventoryProductCardServiceImportJobItem = inventoryProductCardServiceImportJobItems[i];
+                let inventoryProductCardServiceImportJobItemDTO: InventoryProductCardServiceImportJobItemDTO = ({ ...inventoryProductCardServiceImportJobItem});
+                inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemCSVData = JSON.parse(inventoryProductCardServiceImportJobItem.inventoryProductCardServiceImportJobItemCSVData);
+                
+                inventoryProductCardServiceImportJobItemDTOs.push(inventoryProductCardServiceImportJobItemDTO);
+            }
+    
+            return inventoryProductCardServiceImportJobItemDTOs;
+    
+        }
 
     async createInventoryProductCardServiceImportJobItems(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
 
@@ -84,19 +92,106 @@ export class InventoryProductCardServiceImportJobItemService {
                 productSetId: productSet.productSetId,
                 productSetCode: productSet.productSetCode,
                 productCardConditionId: productCardCondition.productCardConditionId,
+                productCardConditionCode: productCardCondition.productCardConditionCode,
                 productCardConditionName: productCardCondition.productCardConditionName,
                 productCardPrintingId: productCardPrinting.productCardPrintingId,
                 productCardPrintingName: productCardPrinting.productCardPrintingName,
-                inventoryProductCardServiceImportJobItemQuantity: inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderQty,
+                inventoryProductCardServiceImportJobItemQty: inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderQty,
                 inventoryProductCardServiceImportJobItemCSVData: JSON.stringify(inventoryProductCardServiceImportJobProviderDTO)
             });
 
-            await this.inventoryProductCardServiceImportJobItemRepository.save(inventoryProductCardServiceImportJobItem);
+            await this.inventoryProductCardServiceImportJobItemRepository.save(inventoryProductCardServiceImportJobItem); 
 
         }
 
+        this.eventEmitter.emit(
+            'inventory.product.card.service.import.job.update.status',
+            {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
+                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
 
+            }
+        )
 
+        return true;
+    }
+
+    async getInventoryProductCardServiceImportJobItemDetailsByJob(inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
+
+        let inventoryProductCardServiceImportJobItems = await this.inventoryProductCardServiceImportJobItemRepository.find({
+            where: {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
+            }
+        });
+
+        let inventoryProductCardServiceImportJobItemDTOs: InventoryProductCardServiceImportJobItemDTO[] = [];
+
+        if(inventoryProductCardServiceImportJobItems == null || inventoryProductCardServiceImportJobItems.length == 0) {
+            return inventoryProductCardServiceImportJobItemDTOs;
+        }
+
+        for(let i = 0; i < inventoryProductCardServiceImportJobItems.length; i++) {
+            let inventoryProductCardServiceImportJobItem = inventoryProductCardServiceImportJobItems[i];
+            let inventoryProductCardServiceImportJobItemDTO: InventoryProductCardServiceImportJobItemDTO = ({ ...inventoryProductCardServiceImportJobItem});
+            inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemCSVData = JSON.parse(inventoryProductCardServiceImportJobItem.inventoryProductCardServiceImportJobItemCSVData);
+            inventoryProductCardServiceImportJobItemDTOs.push(inventoryProductCardServiceImportJobItemDTO);
+        }
+
+        return inventoryProductCardServiceImportJobItemDTOs;
+
+    }
+
+    async approveInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+            
+        this.eventEmitter.emit(
+            'inventory.product.card.service.import.job.update.status',
+            {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
+                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
+            }
+        )   
+
+        let inventoryProductCardServiceImportJobItemDTOs = await this.getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId);
+        for(let i = 0; i < inventoryProductCardServiceImportJobItemDTOs.length; i++) {
+            let inventoryProductCardServiceImportJobItemDTO = inventoryProductCardServiceImportJobItemDTOs[i];
+            let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByProductCardPrintingId(inventoryProductCardServiceImportJobItemDTO.commerceAccountId, inventoryProductCardServiceImportJobItemDTO.commerceLocationId, inventoryProductCardServiceImportJobItemDTO.productCardId, inventoryProductCardServiceImportJobItemDTO.productCardPrintingId, inventoryProductCardServiceImportJobItemDTO.productLanguageId);
+            
+            if(inventoryProductCardDTO == null) {
+                //NEED TO CREATE AN ERROR FOR THIS;
+                continue;
+            }
+
+            let inventoryProductCardItem = inventoryProductCardDTO.inventoryProductCardItems.find(item => item.productCardConditionCode === inventoryProductCardServiceImportJobItemDTO.productCardConditionCode);
+            
+            if(inventoryProductCardItem == undefined) {
+                //NEED TO CREATE AN ERROR FOR THIS;
+                continue;
+            }
+
+            inventoryProductCardItem.inventoryProductCardItemQty = inventoryProductCardItem.inventoryProductCardItemQty + inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemQty;
+            
+            await this.inventoryProductCardService.updateInventoryProductCard(inventoryProductCardDTO);
+    }
+
+        this.eventEmitter.emit(
+            'inventory.product.card.service.create.job.update.status',
+            {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
+                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_COMPLETE,
+            }
+        )
+        
+        return true;
+
+    }
+
+    async deleteInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+        
+        await this.inventoryProductCardServiceImportJobItemRepository.delete({
+            inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId
+        });
+        
+        return true;
 
     }
 

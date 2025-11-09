@@ -17,10 +17,11 @@ export class InventoryProductCardServiceImportJobItemDTO {
     productCardPrintingId: string;
     productCardPrintingName: string;
     productCardConditionId: string;
+    productCardConditionCode: string;
     productCardConditionName: string
-    inventoryProductCardServiceImportJobItemQuantity: number;
+    inventoryProductCardServiceImportJobItemQty: number;
     inventoryProductCardServiceImportJobItemCSVData: any;
-    inventoryProductCardServiceImportJobItemImportDate: Date;
+    inventoryProductCardServiceImportJobItemCreateDate: Date;
     inventoryProductCardServiceImportJobItemUpdateDate: Date; 
 }
 

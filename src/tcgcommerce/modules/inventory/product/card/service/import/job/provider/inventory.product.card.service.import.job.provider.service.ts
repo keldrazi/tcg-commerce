@@ -44,7 +44,8 @@ export class InventoryProductCardServiceImportJobProviderService {
             'inventory.product.card.service.import.job.update.status',
             {
                 inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
-                inventoryProductCardServiceImportJobCount: inventoryProductCardServiceImportJobData.totalinventoryProductCardServiceImportJobCardQty,
+                inventoryProductCardServiceImportJobCount: inventoryProductCardServiceImportJobData.inventoryProductCardServiceImportJobCardData.length,
+                inventoryProductCardServiceImportJobQtyCount: inventoryProductCardServiceImportJobData.totalinventoryProductCardServiceImportJobCardQty,
                 inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_UPDATE_JOB_COUNT,
 
             }

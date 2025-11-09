@@ -58,9 +58,10 @@ export class InventoryProductCardService {
     }
 
 
-    async getInventoryProductCardByProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
+    async getInventoryProductCardsByProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
 
-        let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
+        
+        let inventoryProductCards = await this.inventoryProductCardRepository.find({
             where: {
                 productCardId: productCardId,
                 commerceAccountId: commerceAccountId,
@@ -69,13 +70,19 @@ export class InventoryProductCardService {
             }
         });
 
-        if(inventoryProductCard == null) {
+        if(inventoryProductCards == null) {
             return null;
         }
         
-        let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
-        
-        return inventoryProductCardDTO;
+        let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
+
+        for (let i=0; i < inventoryProductCards.length; i++) {
+            let inventoryProductCard = inventoryProductCards[i];
+            let inventoryProductCardDTO: InventoryProductCardDTO = await this.createInventoryProductCardDTO(inventoryProductCard);
+            inventoryProductCardDTOs.push(inventoryProductCardDTO);
+        }
+
+        return inventoryProductCardDTOs;
         
     }
 

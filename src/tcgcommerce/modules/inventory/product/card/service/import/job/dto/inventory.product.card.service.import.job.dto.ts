@@ -25,6 +25,7 @@ export class InventoryProductCardServiceImportJobDTO {
     inventoryProductCardServiceImportJobDate: Date;
     inventoryProductCardServiceImportJobCode: string;
     inventoryProductCardServiceImportJobCount: number;
+    inventoryProductCardServiceImportJobQtyCount: number;
     inventoryProductCardServiceImportJobStatus: string;
     inventoryProductCardServiceImportJobCreateDate: Date;
     inventoryProductCardServiceImportJobUpdateDate: Date;
