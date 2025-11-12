@@ -41,11 +41,9 @@ import { PokemonTCGAPISetModule } from './tcgdb/modules/pokemontcg/api/set/pokem
 //Pokemon TCG Modules;
 import { PokemonTCGPokemonCardModule } from './tcgdb/modules/pokemontcg/pokemon/card/pokemontcg.pokemon.card.module';
 import { PokemonTCGPokemonSetModule } from './tcgdb/modules/pokemontcg/pokemon/set/pokemontcg.pokemon.set.module';
-//TCDdb MTG Modules;
+//TCG db MTG Modules;
 import { TCGdbMTGCardModule } from './tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.module';
 import { TCGdbMTGSetModule } from './tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.module';
-import { TCGdbMTGPriceCurrentModule } from './tcgdb/modules/tcgdb/api/mtg/price/current/tcgdb.mtg.price.current.module';
-import { TCGdbMTGPriceHistoryModule } from './tcgdb/modules/tcgdb/api/mtg/price/history/tcgdb.mtg.price.history.module';
 import { TCGdbMTGPriceChangeDailyModule } from './tcgdb/modules/tcgdb/api/mtg/price/change/daily/tcgdb.mtg.price.change.daily.module';
 import { TCGdbMTGConditionModule } from './tcgdb/modules/tcgdb/api/mtg/condition/tcgdb.mtg.condition.module';
 import { TCGdbMTGLanguageModule } from './tcgdb/modules/tcgdb/api/mtg/language/tcgdb.mtg.language.module';
@@ -75,13 +73,9 @@ import { ProductCardConditionModule } from './tcgcommerce/modules/product/card/c
 import { ProductLanguageModule } from './tcgcommerce/modules/product/language/product.language.module';
 import { ProductCardPrintingModule } from './tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
-//import { ProductCardPriceModule } from './tcgcommerce/modules/product/card/price/product.card.price.module';
 //Product Card Price Modules;
 import { PriceRuleProductCardBaseModule } from './tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.module';
 import { PriceRuleProductCardUpdateDailyModule } from './tcgcommerce/modules/price/rule/product/card/update/daily/price.rule.product.card.update.daily.module';
-//import { PriceProductCardTypeModule } from './tcgcommerce/modules/price/product/card/type/price.product.card.type.module';
-//import { PriceProductCardRuleTypeModule } from './tcgcommerce/modules/price/product/card/rule/type/price.product.card.rule.type.module';
-//import { PriceProductCardRuleSetModule } from './tcgcommerce/modules/price/product/card/rule/set/price.product.card.rule.set.module'; 
 //Product Card Inventory Modules;
 import { InventoryProductCardModule } from './tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 //Product Card Load Inventory Modules;
@@ -174,13 +168,9 @@ const NODE_ENV = process.env.NODE_ENV;
     ProductLanguageModule,
     ProductCardPrintingModule,
     ProductCardRarityModule,
-    //ProductCardPriceModule,
     //Product Card Price Modules;
     PriceRuleProductCardBaseModule,
     PriceRuleProductCardUpdateDailyModule,
-    //PriceProductCardTypeModule,
-    //PriceProductCardRuleTypeModule,
-    //PriceProductCardRuleSetModule,
     //Inventory Product Card Modules;
     InventoryProductCardModule,
     //Inventory Load Product Card Modules;
