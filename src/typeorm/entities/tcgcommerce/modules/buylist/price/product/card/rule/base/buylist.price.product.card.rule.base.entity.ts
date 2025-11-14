@@ -7,6 +7,8 @@ export class BuylistPriceProductCardRuleBase {
     @Column()
     commerceAccountId: string;
     @Column()
+    buylistLocationId: string;
+    @Column()
     productVendorId: string;
     @Column()
     productLineId: string;
