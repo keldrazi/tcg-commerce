@@ -1,109 +1,92 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO, BuylistTypeDTO } from './dto/buylist.type.dto';
-import { BuylistType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/type/buylist.type.entity';
+import { CreateBuylistProductCardItemDTO, UpdateBuylistProductCardItemDTO, BuylistProductCardItemDTO } from './dto/buylist.product.card.item.dto';
+import { BuylistProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/item/buylist.product.card.item.entity';
 
 @Injectable()
-export class BuylistTypeService {
+export class BuylistProductCardItemService {
 
     constructor(
-        @InjectRepository(BuylistType) private buylistTypeRepository: Repository<BuylistType>,
+        @InjectRepository(BuylistProductCardItem) private buylistProductCardItemRepository: Repository<BuylistProductCardItem>,
     ) { }
 
-    async getBuylistTypeById(buylistTypeId: string) {
-        let buylistType = await this.buylistTypeRepository.findOne({ 
+    async getBuylistProductCardItemById(buylistProductCardItemId: string) {
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
             where: { 
-                buylistTypeId: buylistTypeId 
+                buylistProductCardItemId: buylistProductCardItemId 
             } 
         });
         
-        if (buylistType == null) {
+        if (buylistProductCardItem == null) {
             return null;
         }
 
-        let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
+        let buylistProductCardItemDTO: BuylistProductCardItemDTO = ({ ...buylistProductCardItem });
 
-        return buylistTypeDTO;
+        return buylistProductCardItemDTO;
         
     }
 
-    async getBuylistTypes() {
-        let buylistTypes = await this.buylistTypeRepository.find();
+    async getBuylistProductCardItemsByCommerceAccountId(commerceAccountId: string) {
+        let buylistProductCardItems = await this.buylistProductCardItemRepository.find({
+            where: {
+                commerceAccountId: commerceAccountId
+            }
+        });
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(buylistTypes == null) {
+        if(buylistProductCardItems == null) {
             return null;
         }
         
-        let buylistTypeDTOs: BuylistTypeDTO[] = [];
+        let buylistProductCardItemDTOs: BuylistProductCardItemDTO[] = [];
 
-        for(let i = 0; i < buylistTypes.length; i++) {
-            let buylistType = buylistTypes[i];
-            let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
+        for(let i = 0; i < buylistProductCardItems.length; i++) {
+            let buylistProductCardItem = buylistProductCardItems[i];
+            let buylistProductCardItemDTO: BuylistProductCardItemDTO = ({ ...buylistProductCardItem });
 
-            buylistTypeDTOs.push(buylistTypeDTO);
+            buylistProductCardItemDTOs.push(buylistProductCardItemDTO);
         }
 
-        return buylistTypeDTOs;
+        return buylistProductCardItemDTOs;
     }
     
-    async getBuylistTypeByName(name: string) {
-        let buylistType = await this.buylistTypeRepository.findOne({ 
-            where: { 
-                buylistTypeName: name 
-            } 
-        });
-        
-        if (buylistType == null) {
-            return null;
-        }
+    async createBuylistProductCardItem(createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO) {
 
-        let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
+        //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
+        
+        let newBuylistProductCardItem = this.buylistProductCardItemRepository.create({ ...createBuylistProductCardItemDTO });
+        newBuylistProductCardItem = await this.buylistProductCardItemRepository.save(newBuylistProductCardItem);
 
-        return buylistTypeDTO;
+        let buylistProductCardItemDTO = this.getBuylistProductCardItemById(newBuylistProductCardItem.buylistProductCardItemId);
         
-    }
-    
-    async createBuylistType(createBuylistTypeDTO: CreateBuylistTypeDTO) {
-    
-        //CHECK TO SEE IF THE BUYLIST TYPE ALREADY EXISTS;
-        let buylistType = await this.getBuylistTypeByName(createBuylistTypeDTO.buylistTypeName);
-        
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (buylistType != null) {
-            return null;
-        }
-        
-        let newBuylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });
-        newBuylistType = await this.buylistTypeRepository.save(newBuylistType);
-
-        let buylistTypeDTO = this.getBuylistTypeById(newBuylistType.buylistTypeId);
-        
-        return buylistTypeDTO;
+        return buylistProductCardItemDTO;
         
     }
 
-    async updateBuylistType(updateBuylistTypeDTO: UpdateBuylistTypeDTO) {
+    async updateBuylistProductCardItem(updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO) {
                     
-        let existingBuylistType = await this.getBuylistTypeById(updateBuylistTypeDTO.buylistTypeId);
+        let existingBuylistProductCardItem = await this.getBuylistProductCardItemById(updateBuylistProductCardItemDTO.buylistProductCardItemId);
             
         //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
-        if (!existingBuylistType) {
+        if (!existingBuylistProductCardItem) {
             return null; 
         }
 
-        existingBuylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;
-        existingBuylistType.buylistTypeCode = updateBuylistTypeDTO.buylistTypeCode;
-        existingBuylistType.buylistTypeIsActive = updateBuylistTypeDTO.buylistTypeIsActive;
-        existingBuylistType.buylistTypeUpdateDate = new Date();
+        existingBuylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;
+        existingBuylistProductCardItem.productCardPrintingName = updateBuylistProductCardItemDTO.productCardPrintingName;
+        existingBuylistProductCardItem.productCardConditionId = updateBuylistProductCardItemDTO.productCardConditionId;
+        existingBuylistProductCardItem.productCardConditionCode = updateBuylistProductCardItemDTO.productCardConditionCode;
+        existingBuylistProductCardItem.productCardConditionName = updateBuylistProductCardItemDTO.productCardConditionName;
+        existingBuylistProductCardItem.buylistProductCardItemQty = updateBuylistProductCardItemDTO.buylistProductCardItemQty;
         
-        await this.buylistTypeRepository.save(existingBuylistType);
+        await this.buylistProductCardItemRepository.save(existingBuylistProductCardItem);
 
-        let buylistTypeDTO = this.getBuylistTypeById(existingBuylistType.buylistTypeId);
+        let buylistProductCardItemDTO = this.getBuylistProductCardItemById(existingBuylistProductCardItem.buylistProductCardItemId);
 
-        return buylistTypeDTO;
+        return buylistProductCardItemDTO;
     
     }
-    
+ 
 }

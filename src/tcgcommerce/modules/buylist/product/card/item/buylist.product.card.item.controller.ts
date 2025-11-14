@@ -1,37 +1,37 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO, BuylistTypeDTO } from './dto/buylist.type.dto';
-import { BuylistTypeService } from './buylist.type.service';
+import { CreateBuylistProductCardItemDTO, UpdateBuylistProductCardItemDTO, BuylistProductCardItemDTO } from './dto/buylist.product.card.item.dto';
+import { BuylistProductCardItemService } from './buylist.product.card.item.service';
 
 
 
-@Controller('buylist/type')
-export class BuylistTypeController {
+@Controller('buylist/product/card/item')
+export class BuylistProductCardItemController {
 
     constructor(
-        private buylistTypeService: BuylistTypeService,
+        private buylistProductCardItemService: BuylistProductCardItemService,
     ) { }
     
     
-    @Get('/id/:buylistTypeId')
-    async getBuylistTypeById(@Param('buylistTypeId') buylistTypeId: string) {
-        return await this.buylistTypeService.getBuylistTypeById(buylistTypeId);
+    @Get('/id/:buylistProductCardItemId')
+    async getBuylistProductCardItemById(@Param('buylistProductCardItemId') buylistProductCardItemId: string) {
+        return await this.buylistProductCardItemService.getBuylistProductCardItemById(buylistProductCardItemId);
     }
 
-    @Get('/all')
-    async getBuylistTypes() {
-        return await this.buylistTypeService.getBuylistTypes();
+    @Get('/all/:commerceAccountId')
+    async getBuylistProductCardItems(@Param('commerceAccountId') commerceAccountId: string) {
+        return await this.buylistProductCardItemService.getBuylistProductCardItemsByCommerceAccountId(commerceAccountId);
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
-    async createBuylistType(@Body() createBuylistTypeDTO: CreateBuylistTypeDTO) {
-        return await this.buylistTypeService.createBuylistType(createBuylistTypeDTO);
+    async createBuylistProductCardItem(@Body() createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO) {
+        return await this.buylistProductCardItemService.createBuylistProductCardItem(createBuylistProductCardItemDTO);
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
-    async updateBuylistType(@Body() updateBuylistTypeDTO: UpdateBuylistTypeDTO) {
-        return await this.buylistTypeService.updateBuylistType(updateBuylistTypeDTO);
+    async updateBuylistProductCardItem(@Body() updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO) {
+        return await this.buylistProductCardItemService.updateBuylistProductCardItem(updateBuylistProductCardItemDTO);
     }
 
 }

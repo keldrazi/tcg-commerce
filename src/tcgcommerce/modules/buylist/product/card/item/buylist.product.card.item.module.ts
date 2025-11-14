@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { BuylistTypeService } from './buylist.type.service';
-import { BuylistTypeController } from './buylist.type.controller';
-import { BuylistType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/type/buylist.type.entity';
+import { BuylistProductCardItemService } from './buylist.product.card.item.service';
+import { BuylistProductCardItemController } from './buylist.product.card.item.controller';
+import { BuylistProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/item/buylist.product.card.item.entity';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([BuylistType])
+        TypeOrmModule.forFeature([BuylistProductCardItem])
     ],
-    controllers: [BuylistTypeController],
-    providers: [BuylistTypeService],
-    exports: [BuylistTypeService]
+    controllers: [BuylistProductCardItemController],
+    providers: [BuylistProductCardItemService],
+    exports: [BuylistProductCardItemService]
 })
-export class BuylistTypeModule {}
+export class BuylistProductCardItemModule {}

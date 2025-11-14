@@ -1,109 +1,91 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO, BuylistTypeDTO } from './dto/buylist.type.dto';
-import { BuylistType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/type/buylist.type.entity';
+import { CreateBuylistProductCardDTO, UpdateBuylistProductCardDTO, BuylistProductCardDTO } from './dto/buylist.product.card.dto';
+import { BuylistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/buylist.product.card.entity';
 
 @Injectable()
-export class BuylistTypeService {
+export class BuylistProductCardService {
 
     constructor(
-        @InjectRepository(BuylistType) private buylistTypeRepository: Repository<BuylistType>,
+        @InjectRepository(BuylistProductCard) private buylistProductCardRepository: Repository<BuylistProductCard>,
     ) { }
 
-    async getBuylistTypeById(buylistTypeId: string) {
-        let buylistType = await this.buylistTypeRepository.findOne({ 
+    async getBuylistProductCardById(buylistProductCardId: string) {
+        let buylistProductCard = await this.buylistProductCardRepository.findOne({ 
             where: { 
-                buylistTypeId: buylistTypeId 
+                buylistProductCardId: buylistProductCardId 
             } 
         });
         
-        if (buylistType == null) {
+        if (buylistProductCard == null) {
             return null;
         }
 
-        let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
+        let buylistProductCardDTO: BuylistProductCardDTO = ({ ...buylistProductCard });
 
-        return buylistTypeDTO;
+        return buylistProductCardDTO;
         
     }
 
-    async getBuylistTypes() {
-        let buylistTypes = await this.buylistTypeRepository.find();
+    async getBuylistProductCardsByCommerceAccountId(commerceAccountId: string) {
+        let buylistProductCards = await this.buylistProductCardRepository.find({
+            where: {
+                commerceAccountId: commerceAccountId
+            }
+        });
         
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(buylistTypes == null) {
+        if(buylistProductCards == null) {
             return null;
         }
         
-        let buylistTypeDTOs: BuylistTypeDTO[] = [];
+        let buylistProductCardDTOs: BuylistProductCardDTO[] = [];
 
-        for(let i = 0; i < buylistTypes.length; i++) {
-            let buylistType = buylistTypes[i];
-            let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
+        for(let i = 0; i < buylistProductCards.length; i++) {
+            let buylistProductCard = buylistProductCards[i];
+            let buylistProductCardDTO: BuylistProductCardDTO = ({ ...buylistProductCard });
 
-            buylistTypeDTOs.push(buylistTypeDTO);
+            buylistProductCardDTOs.push(buylistProductCardDTO);
         }
 
-        return buylistTypeDTOs;
+        return buylistProductCardDTOs;
     }
     
-    async getBuylistTypeByName(name: string) {
-        let buylistType = await this.buylistTypeRepository.findOne({ 
-            where: { 
-                buylistTypeName: name 
-            } 
-        });
-        
-        if (buylistType == null) {
-            return null;
-        }
+    async createBuylistProductCard(createBuylistProductCardDTO: CreateBuylistProductCardDTO) {
 
-        let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
+        //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
+        
+        let newBuylistProductCard = this.buylistProductCardRepository.create({ ...createBuylistProductCardDTO });
+        newBuylistProductCard = await this.buylistProductCardRepository.save(newBuylistProductCard);
 
-        return buylistTypeDTO;
+        let buylistProductCardDTO = this.getBuylistProductCardById(newBuylistProductCard.buylistProductCardId);
         
-    }
-    
-    async createBuylistType(createBuylistTypeDTO: CreateBuylistTypeDTO) {
-    
-        //CHECK TO SEE IF THE BUYLIST TYPE ALREADY EXISTS;
-        let buylistType = await this.getBuylistTypeByName(createBuylistTypeDTO.buylistTypeName);
-        
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (buylistType != null) {
-            return null;
-        }
-        
-        let newBuylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });
-        newBuylistType = await this.buylistTypeRepository.save(newBuylistType);
-
-        let buylistTypeDTO = this.getBuylistTypeById(newBuylistType.buylistTypeId);
-        
-        return buylistTypeDTO;
+        return buylistProductCardDTO;
         
     }
 
-    async updateBuylistType(updateBuylistTypeDTO: UpdateBuylistTypeDTO) {
+    async updateBuylistProductCard(updateBuylistProductCardDTO: UpdateBuylistProductCardDTO) {
                     
-        let existingBuylistType = await this.getBuylistTypeById(updateBuylistTypeDTO.buylistTypeId);
+        let existingBuylistProductCard = await this.getBuylistProductCardById(updateBuylistProductCardDTO.buylistProductCardId);
             
         //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
-        if (!existingBuylistType) {
+        if (!existingBuylistProductCard) {
             return null; 
         }
 
-        existingBuylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;
-        existingBuylistType.buylistTypeCode = updateBuylistTypeDTO.buylistTypeCode;
-        existingBuylistType.buylistTypeIsActive = updateBuylistTypeDTO.buylistTypeIsActive;
-        existingBuylistType.buylistTypeUpdateDate = new Date();
+        existingBuylistProductCard.commerceUserId = updateBuylistProductCardDTO.commerceUserId;
+        existingBuylistProductCard.buylistLocationId = updateBuylistProductCardDTO.buylistLocationId;
+        existingBuylistProductCard.buylistTypeId = updateBuylistProductCardDTO.buylistTypeId;
+        existingBuylistProductCard.buylistPaymentTypeId = updateBuylistProductCardDTO.buylistPaymentTypeId;
+        existingBuylistProductCard.buylistPaymentServiceId = updateBuylistProductCardDTO.buylistPaymentServiceId;
         
-        await this.buylistTypeRepository.save(existingBuylistType);
+        await this.buylistProductCardRepository.save(existingBuylistProductCard);
 
-        let buylistTypeDTO = this.getBuylistTypeById(existingBuylistType.buylistTypeId);
+        let buylistProductCardDTO = this.getBuylistProductCardById(existingBuylistProductCard.buylistProductCardId);
 
-        return buylistTypeDTO;
+        return buylistProductCardDTO;
     
     }
-    
+ 
 }

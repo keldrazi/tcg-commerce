@@ -1,36 +1,74 @@
-import { IsString, IsBoolean } from "class-validator";
+import { IsString, IsBoolean, IsNumber } from "class-validator";
 
-export class BuylistTypeDTO {
-    buylistTypeId: string;
-    buylistTypeName: string;
-    buylistTypeCode: string;
-    buylistTypeIsActive: boolean;
-    buylistTypeCreateDate: Date;
-    buylistTypeUpdateDate: Date;
-
-    
+export class BuylistProductCardItemDTO {
+    buylistProductCardItemId: string;
+    buylistProductCardId: string;
+    commerceAccountId: string;
+    productVendorId: string;
+    productLineId: string;
+    productTypeId: string;
+    productCardId: string;
+    productCardTCGdbId: string;
+    productCardTCGPlayerId: number
+    productCardName: string;
+    productSetId: string;
+    productSetCode: string;
+    productLanguageId: string;
+    productLanguageCode: string;
+    productCardPrintingId: string;
+    productCardPrintingName: string;
+    productCardConditionId: string;
+    productCardConditionCode: string;
+    productCardConditionName: string;
+    buylistProductCardItemQty: number;
+    buylistProductCardItemPrice: number;
+    buylistProductCardItemCreateDate: Date;
+    buylistProductCardItemUpdateDate: Date;
 }
 
-export class CreateBuylistTypeDTO {
+export class CreateBuylistProductCardItemDTO {
     @IsString()
-    buylistTypeName: string;
+    buylistProductCardId: string;
     @IsString()
-    buylistTypeCode: string;
-    @IsBoolean()
-    buylistTypeIsActive: boolean;
+    productCardId: string;
+    @IsString()
+    productSetId: string;
+    @IsString()
+    productSetName: string;
+    @IsString()
+    productLanguageId: string
+    @IsString()
+    productLanguageCode: string;
+    @IsString()
+    productCardPrintingId: string
+    @IsString()
+    productCardPrintinName: string
+    @IsString()
+    productCardConditionId: string
+    @IsString()
+    productCardConditionCode: string
+    @IsString()
+    productCardConditionName: string
+    @IsNumber()
+    buylistProductCardItemQty: number
    
     
 }
 
-export class UpdateBuylistTypeDTO {
+export class UpdateBuylistProductCardItemDTO {
     @IsString()
-    buylistTypeId: string;
+    buylistProductCardItemId: string;
     @IsString()
-    buylistTypeName: string;
+    productCardPrintingId: string
     @IsString()
-    buylistTypeCode: string;
-    @IsBoolean()
-    buylistTypeIsActive: boolean;
+    productCardPrintingName: string
+    @IsString()
+    productCardConditionId: string
+    @IsString()
+    productCardConditionCode: string
+    @IsString()
+    productCardConditionName: string
+    @IsNumber()
+    buylistProductCardItemQty: number
     
 }
-

@@ -17,8 +17,6 @@ export class BuylistProductCardDTO {
     buylistProductCardStatus: string;   
     buylistProductCardCode: string;
     buylistProductCardDateTime: Date;
-    buylistProductCardNotes: string;
-    buylistProductCardDetails: string;
     buylistProductCardTotalCardCount: number;
     buylistProductCardTotalCardPrice: number;   
     buylistProductCardCreateDate: Date;
@@ -50,44 +48,20 @@ export class CreateBuylistProductCardDTO {
     productTypeId: string;
     @IsString()
     productLanguageId: string;
-    @IsString()
-    buylistProductCardNotes: string;
     
 }
 
 export class UpdateBuylistProductCardDTO {
     @IsString()
-    buyListProductCardId: string;
+    buylistProductCardId: string;
     @IsString()
     commerceUserId: string;
     @IsString()
     buylistLocationId: string;
     @IsString()
+    buylistTypeId: string;
+    @IsString()
     buylistPaymentTypeId: string;
     @IsString()
     buylistPaymentServiceId: string;
-    @IsString()
-    buylistProductCardNotes: string;
-    @IsString()
-    buylistProductCardDetails: string;
-    
 }
-
-
-
-    @Column()
-    buylistProductCardCode: string;
-    @Column()
-    buylistProductCardDateTime: Date;
-    @Column()
-    buylistProductCardNotes: string;
-    @Column('jsonb')
-    buylistProductCardDetails: string;
-    @Column()
-    buylistProductCardTotalCardCount: number;
-    @Column()
-    buylistProductCardTotalCardPrice: number
-    @CreateDateColumn()
-    buylistProductCardCreateDate: Date;
-    @UpdateDateColumn()
-    buylistProductCardUpdateDate: Date; 

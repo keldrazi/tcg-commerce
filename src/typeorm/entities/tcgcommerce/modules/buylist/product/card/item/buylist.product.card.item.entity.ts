@@ -7,12 +7,6 @@ export class BuylistProductCardItem {
     @Column()
     buylistProductCardId: string;
     @Column()
-    productCardId: string;
-    @Column()
-    productCardTCGdbId: string;
-    @Column()
-    productCardTCGPlayerId: number;
-    @Column()
     commerceAccountId: string;
     @Column()
     productVendorId: string;
@@ -20,6 +14,14 @@ export class BuylistProductCardItem {
     productLineId: string;
     @Column()
     productTypeId: string;
+    @Column()
+    productCardId: string;
+    @Column()
+    productCardTCGdbId: string;
+    @Column()
+    productCardTCGPlayerId: number;
+    @Column()
+    productCardName: string;
     @Column()
     productSetId: string;
     @Column()
