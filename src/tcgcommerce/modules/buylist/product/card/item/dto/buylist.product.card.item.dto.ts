@@ -11,6 +11,9 @@ export class BuylistProductCardItemDTO {
     productCardTCGdbId: string;
     productCardTCGPlayerId: number
     productCardName: string;
+    productCardNumber: string;
+    productCardRarityId: string
+    productCardRarityCode: string;
     productSetId: string;
     productSetCode: string;
     productLanguageId: string;
@@ -34,21 +37,13 @@ export class CreateBuylistProductCardItemDTO {
     @IsString()
     productSetId: string;
     @IsString()
-    productSetName: string;
-    @IsString()
     productLanguageId: string
     @IsString()
     productLanguageCode: string;
     @IsString()
     productCardPrintingId: string
     @IsString()
-    productCardPrintinName: string
-    @IsString()
     productCardConditionId: string
-    @IsString()
-    productCardConditionCode: string
-    @IsString()
-    productCardConditionName: string
     @IsNumber()
     buylistProductCardItemQty: number
    
@@ -61,13 +56,7 @@ export class UpdateBuylistProductCardItemDTO {
     @IsString()
     productCardPrintingId: string
     @IsString()
-    productCardPrintingName: string
-    @IsString()
     productCardConditionId: string
-    @IsString()
-    productCardConditionCode: string
-    @IsString()
-    productCardConditionName: string
     @IsNumber()
     buylistProductCardItemQty: number
     

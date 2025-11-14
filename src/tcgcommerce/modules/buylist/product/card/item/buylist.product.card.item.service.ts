@@ -75,10 +75,7 @@ export class BuylistProductCardItemService {
         }
 
         existingBuylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;
-        existingBuylistProductCardItem.productCardPrintingName = updateBuylistProductCardItemDTO.productCardPrintingName;
         existingBuylistProductCardItem.productCardConditionId = updateBuylistProductCardItemDTO.productCardConditionId;
-        existingBuylistProductCardItem.productCardConditionCode = updateBuylistProductCardItemDTO.productCardConditionCode;
-        existingBuylistProductCardItem.productCardConditionName = updateBuylistProductCardItemDTO.productCardConditionName;
         existingBuylistProductCardItem.buylistProductCardItemQty = updateBuylistProductCardItemDTO.buylistProductCardItemQty;
         
         await this.buylistProductCardItemRepository.save(existingBuylistProductCardItem);

@@ -7,19 +7,31 @@ export class BuylistHotlistProductCardItem {
     @Column()
     buylistHotlistProductCardId: string;
     @Column()
-    productCardId: string;
-    @Column()
-    productCardTCGdbId: string;
-    @Column()
-    productCardTCGPlayerId: number;
-    @Column()
     commerceAccountId: string;
+    @Column()
+    commerceUserId: string;
+    @Column()
+    commerceUserName: string;
     @Column()
     productVendorId: string;
     @Column()
     productLineId: string;
     @Column()
     productTypeId: string;
+    @Column()
+    productCardId: string;
+    @Column()
+    productCardTCGdbId: string;
+    @Column()
+    productCardTCGPlayerId: number;
+    @Column()
+    productCardName: string;
+    @Column()
+    productCardNumber: string;
+    @Column()
+    productCardRarityId: string
+    @Column()
+    productCardRarityCode: string;
     @Column()
     productSetId: string;
     @Column()

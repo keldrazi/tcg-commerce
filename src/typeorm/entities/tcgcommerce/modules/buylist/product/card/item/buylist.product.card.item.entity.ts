@@ -23,6 +23,12 @@ export class BuylistProductCardItem {
     @Column()
     productCardName: string;
     @Column()
+    productCardNumber: string;
+    @Column()
+    productCardRarityId: string;
+    @Column()
+    productCardRarityCode: string;
+    @Column()
     productSetId: string;
     @Column()
     productSetCode: string;
