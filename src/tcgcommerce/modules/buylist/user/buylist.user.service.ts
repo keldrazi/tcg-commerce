@@ -33,7 +33,6 @@ export class BuylistUserService {
             } 
         });
 
-        //TO DO: CREATE AN ERROR TO RETURN IF BUYLIST USER IS NULL;
         if (buylistUsers == null) {
             return [];
         }
