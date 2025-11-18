@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistLocationDTO, UpdateBuylistLocationDTO, BuylistLocationDTO } from './dto/buylist.location.dto';
 import { BuylistLocation } from 'src/typeorm/entities/tcgcommerce/modules/buylist/location/buylist.location.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistLocationService {
 
     constructor(
         @InjectRepository(BuylistLocation) private buylistLocationRepository: Repository<BuylistLocation>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistLocationById(buylistLocationId: string) {
@@ -19,7 +21,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found for buylistLocationId: ' + buylistLocationId);
         }
 
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
@@ -35,13 +37,12 @@ export class BuylistLocationService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(buylistLocations == null) {
-            return null;
-        }
-        
         let buylistLocationDTOs: BuylistLocationDTO[] = [];
 
+        if(buylistLocations == null) {
+            return buylistLocationDTOs;
+        }
+        
         for(let i = 0; i < buylistLocations.length; i++) {
             let buylistLocation = buylistLocations[i];
             let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
@@ -60,7 +61,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found for name: ' + name);
         }
 
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
@@ -72,11 +73,14 @@ export class BuylistLocationService {
     async createBuylistLocation(createBuylistLocationDTO: CreateBuylistLocationDTO) {
     
         //CHECK TO SEE IF THE BUYLIST LOCATION ALREADY EXISTS;
-        let buylistLocation = await this.getBuylistLocationByName(createBuylistLocationDTO.buylistLocationName);
+        let buylistLocation = await this.buylistLocationRepository.findOne({ 
+            where: { 
+                buylistLocationName: createBuylistLocationDTO.buylistLocationName 
+            } 
+        });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE BUYLIST LOCATION;
         if (buylistLocation != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_EXISTS', 'Buylist location with name already exists: ' + createBuylistLocationDTO.buylistLocationName);
         }
         
         let newBuylistLocation = this.buylistLocationRepository.create({ ...createBuylistLocationDTO });
@@ -90,11 +94,14 @@ export class BuylistLocationService {
 
     async updateBuylistLocation(updateBuylistLocationDTO: UpdateBuylistLocationDTO) {
                     
-        let existingBuylistLocation = await this.getBuylistLocationById(updateBuylistLocationDTO.buylistLocationId);
-            
-        //TO DO: RETURN AN ERROR IF BUYLIST LOCATION NOT FOUND;
+        let existingBuylistLocation = await this.buylistLocationRepository.findOne({ 
+            where: { 
+                buylistLocationId: updateBuylistLocationDTO.buylistLocationId 
+            } 
+        });    
+        
         if (!existingBuylistLocation) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found for buylistLocationId: ' + updateBuylistLocationDTO.buylistLocationId); 
         }
 
         existingBuylistLocation.buylistLocationName = updateBuylistLocationDTO.buylistLocationName;

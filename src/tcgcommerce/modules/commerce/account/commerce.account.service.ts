@@ -41,7 +41,6 @@ export class CommerceAccountService {
             commerceAccountDTOs.push(commerceAccountDTO);
         }
         
-            
         return commerceAccountDTOs;
     }
 

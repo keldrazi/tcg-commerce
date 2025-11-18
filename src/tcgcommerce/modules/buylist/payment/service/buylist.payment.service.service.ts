@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistPaymentServiceDTO, UpdateBuylistPaymentServiceDTO, BuylistPaymentServiceDTO } from './dto/buylist.payment.service.dto';
 import { BuylistPaymentService } from 'src/typeorm/entities/tcgcommerce/modules/buylist/payment/service/buylist.payment.service.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistPaymentServiceService {
 
     constructor(
         @InjectRepository(BuylistPaymentService) private buylistPaymentServiceRepository: Repository<BuylistPaymentService>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistPaymentServiceById(buylistPaymentServiceId: string) {
@@ -19,7 +21,7 @@ export class BuylistPaymentServiceService {
         });
         
         if (buylistPaymentService == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found for buylistPaymentServiceId: ' + buylistPaymentServiceId);
         }
 
         let buylistPaymentServiceDTO: BuylistPaymentServiceDTO = ({ ...buylistPaymentService });
@@ -31,13 +33,12 @@ export class BuylistPaymentServiceService {
     async getBuylistPaymentServices() {
         let buylistPaymentServices = await this.buylistPaymentServiceRepository.find();
         
-        //TO DO: CREATE AN ERROR TO RETURN;
+        let buylistPaymentServiceDTOs: BuylistPaymentServiceDTO[] = [];
+       
         if(buylistPaymentServices == null) {
-            return null;
+            buylistPaymentServiceDTOs;
         }
         
-        let buylistPaymentServiceDTOs: BuylistPaymentServiceDTO[] = [];
-
         for(let i = 0; i < buylistPaymentServices.length; i++) {
             let buylistPaymentService = buylistPaymentServices[i];
             let buylistPaymentServiceDTO: BuylistPaymentServiceDTO = ({ ...buylistPaymentService });
@@ -56,7 +57,7 @@ export class BuylistPaymentServiceService {
         });
         
         if (buylistPaymentService == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found for name: ' + name);
         }
 
         let buylistPaymentServiceDTO: BuylistPaymentServiceDTO = ({ ...buylistPaymentService });
@@ -68,11 +69,14 @@ export class BuylistPaymentServiceService {
     async createBuylistPaymentService(createBuylistPaymentServiceDTO: CreateBuylistPaymentServiceDTO) {
     
         //CHECK TO SEE IF THE BUYLIST TYPE ALREADY EXISTS;
-        let buylistPaymentService = await this.getBuylistPaymentServiceByName(createBuylistPaymentServiceDTO.buylistPaymentServiceName);
+        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOne({ 
+            where: { 
+                buylistPaymentServiceName: createBuylistPaymentServiceDTO.buylistPaymentServiceName 
+            } 
+        });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (buylistPaymentService != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_EXISTS', 'Buylist payment service with name already exists: ' + createBuylistPaymentServiceDTO.buylistPaymentServiceName);
         }
         
         let newBuylistPaymentService = this.buylistPaymentServiceRepository.create({ ...createBuylistPaymentServiceDTO });
@@ -86,11 +90,14 @@ export class BuylistPaymentServiceService {
 
     async updateBuylistPaymentService(updateBuylistPaymentServiceDTO: UpdateBuylistPaymentServiceDTO) {
                     
-        let existingBuylistPaymentService = await this.getBuylistPaymentServiceById(updateBuylistPaymentServiceDTO.buylistPaymentServiceId);
+        let existingBuylistPaymentService = await this.buylistPaymentServiceRepository.findOne({ 
+            where: { 
+                buylistPaymentServiceId: updateBuylistPaymentServiceDTO.buylistPaymentServiceId 
+            } 
+        });
             
-        //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
         if (!existingBuylistPaymentService) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found for buylistPaymentServiceId: ' + updateBuylistPaymentServiceDTO.buylistPaymentServiceId);
         }
 
         existingBuylistPaymentService.buylistPaymentServiceName = updateBuylistPaymentServiceDTO.buylistPaymentServiceName;

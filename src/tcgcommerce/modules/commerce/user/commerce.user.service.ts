@@ -4,13 +4,16 @@ import { Repository } from 'typeorm';
 import { CommerceUser } from 'src/typeorm/entities/tcgcommerce/modules/commerce/user/commerce.user.entity';
 import { CreateCommerceUserDTO, UpdateCommerceUserDTO, CommerceUserDTO } from './dto/commerce.user.dto';
 import * as bcrypt from 'bcrypt';
+import { CommerceUserVerificationService } from './verification/commerce.user.verification.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+
 
 @Injectable()
 export class CommerceUserService {
 
     constructor(
         @InjectRepository(CommerceUser) private commerceUserRepository: Repository<CommerceUser>,
+        private commerceUserVerificationService: CommerceUserVerificationService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -130,6 +133,20 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
+    async passwordResetCommerceUser(commerceAccountId: string, commerceUserEmail: string) {
+        let commerceUser = await this.commerceUserRepository.findOne({ where: { commerceAccountId, commerceUserEmail } });
+
+        if (commerceUser == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found for email: ' + commerceUserEmail);
+        }
+
+        await this.commerceUserVerificationService.createCommerceUserVerification(commerceAccountId, commerceUser.commerceUserId, 'COMMERCE_USER_PASSWORD_RESET');
+
+        let commerceUserDTO = await this.getCommerceUser(commerceUser.commerceUserId);
+
+        return commerceUserDTO;
+    }
+
     async updateCommerceUserPassword(commerceUserId: string, commerceUserPassword: string) {
         let updateCommerceUser = await this.commerceUserRepository.findOne({
             where: {
@@ -152,6 +169,27 @@ export class CommerceUserService {
 
         return commerceUserDTO;
     }
+
+    async verifyCommerceUserPassword(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: number, commerceUserPassword: string) {
+        let isVerified = await this.commerceUserVerificationService.verifyCommerceUserVerification(commerceAccountId, commerceUserId, commerceUserVerificationCode, 'COMMERCE_USER_PASSWORD_RESET');
+
+        if(!isVerified) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_VERIFICATION_FAILED', 'Commerce user verification failed for commerceUserId: ' + commerceUserId);
+        }
+
+        let commerceUser = await this.commerceUserRepository.findOne({ where: { commerceUserId } });
+
+        if (commerceUser == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found for commerceUserId: ' + commerceUserId);
+        }
+
+        let commerceUserDTO = await this.updateCommerceUserPassword(commerceUserId, commerceUserPassword);
+        
+        return commerceUserDTO;
+
+    }
+
+
 
     async hashPassword(commerceUserPassword: string){
         let commerceUserPasswordHash = await bcrypt.hash(commerceUserPassword, 10);

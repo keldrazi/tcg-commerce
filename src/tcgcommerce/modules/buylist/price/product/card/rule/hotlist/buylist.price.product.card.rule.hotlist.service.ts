@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BuylistPriceProductCardRuleHotlistDTO, CreateBuylistPriceProductCardRuleHotlistDTO, UpdateBuylistPriceProductCardRuleHotlistDTO} from './dto/buylist.price.product.card.rule.hotlist.dto';
 import { BuylistPriceProductCardRuleHotlist } from 'src/typeorm/entities/tcgcommerce/modules/buylist/price/product/card/rule/hotlist/buylist.price.product.card.rule.hotlist.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistPriceProductCardRuleHotlistService {
 
     constructor(
         @InjectRepository(BuylistPriceProductCardRuleHotlist) private buylistPriceProductCardRuleHotlistRepository: Repository<BuylistPriceProductCardRuleHotlist>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
 
@@ -19,9 +21,8 @@ export class BuylistPriceProductCardRuleHotlistService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(buylistPriceProductCardRuleHotlist == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found for buylistPriceProductCardRuleHotlistId: ' + buylistPriceProductCardRuleHotlistId);
         }
 
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
@@ -39,9 +40,8 @@ export class BuylistPriceProductCardRuleHotlistService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(buylistPriceProductCardRuleHotlist == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found for commerceAccountId: ' + commerceAccountId + ', productVendorId: ' + productVendorId + ', productLineId: ' + productLineId + ', productTypeId: ' + productTypeId);
         }
 
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
@@ -54,12 +54,17 @@ export class BuylistPriceProductCardRuleHotlistService {
     async createBuylistPriceProductCardRuleHotlist(createBuylistPriceProductCardRuleHotlistDTO: CreateBuylistPriceProductCardRuleHotlistDTO) {
         
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
-        let buylistPriceProductCardRuleHotlist = await this.getBuylistPriceProductCardRuleHotlistByCommerceAccountId(createBuylistPriceProductCardRuleHotlistDTO.commerceAccountId, createBuylistPriceProductCardRuleHotlistDTO.productVendorId, createBuylistPriceProductCardRuleHotlistDTO.productLineId, createBuylistPriceProductCardRuleHotlistDTO.productTypeId);
+        let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
+            where: {
+                commerceAccountId: createBuylistPriceProductCardRuleHotlistDTO.commerceAccountId,
+                productVendorId: createBuylistPriceProductCardRuleHotlistDTO.productVendorId,
+                productLineId: createBuylistPriceProductCardRuleHotlistDTO.productLineId,
+                productTypeId: createBuylistPriceProductCardRuleHotlistDTO.productTypeId
+            }
+        });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
         if (buylistPriceProductCardRuleHotlist != null) {
-            console.log('Price Rule Product Card Hotlist already exists for the Commerce Account / Vendor / Line / Type combination.');
-            return null;
+           return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_ALREADY_EXISTS', 'Buylist price product card rule hotlist already exists for commerceAccountId: ' + createBuylistPriceProductCardRuleHotlistDTO.commerceAccountId + ', productVendorId: ' + createBuylistPriceProductCardRuleHotlistDTO.productVendorId + ', productLineId: ' + createBuylistPriceProductCardRuleHotlistDTO.productLineId + ', productTypeId: ' + createBuylistPriceProductCardRuleHotlistDTO.productTypeId);
         }
 
         let newBuylistPriceProductCardRuleHotlist = this.buylistPriceProductCardRuleHotlistRepository.create({ ...createBuylistPriceProductCardRuleHotlistDTO });
@@ -79,9 +84,8 @@ export class BuylistPriceProductCardRuleHotlistService {
             }
         });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
         if (buylistPriceProductCardRuleHotlist == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found for buylistPriceProductCardRuleHotlistId: ' + updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistId);
         }
 
         buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistId = updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistId;

@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistPaymentTypeDTO, UpdateBuylistPaymentTypeDTO, BuylistPaymentTypeDTO } from './dto/buylist.payment.type.dto';
 import { BuylistPaymentType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/payment/type/buylist.payment.type.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistPaymentTypeService {
 
     constructor(
         @InjectRepository(BuylistPaymentType) private buylistPaymentTypeRepository: Repository<BuylistPaymentType>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistPaymentTypeById(buylistPaymentTypeId: string) {
@@ -19,7 +21,7 @@ export class BuylistPaymentTypeService {
         });
         
         if (buylistPaymentType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found for buylistPaymentTypeId: ' + buylistPaymentTypeId);
         }
 
         let buylistPaymentTypeDTO: BuylistPaymentTypeDTO = ({ ...buylistPaymentType });
@@ -31,13 +33,12 @@ export class BuylistPaymentTypeService {
     async getBuylistPaymentTypes() {
         let buylistPaymentTypes = await this.buylistPaymentTypeRepository.find();
         
-        //TO DO: CREATE AN ERROR TO RETURN;
+        let buylistPaymentTypeDTOs: BuylistPaymentTypeDTO[] = [];
+        
         if(buylistPaymentTypes == null) {
-            return null;
+            return buylistPaymentTypeDTOs;
         }
         
-        let buylistPaymentTypeDTOs: BuylistPaymentTypeDTO[] = [];
-
         for(let i = 0; i < buylistPaymentTypes.length; i++) {
             let buylistPaymentType = buylistPaymentTypes[i];
             let buylistPaymentTypeDTO: BuylistPaymentTypeDTO = ({ ...buylistPaymentType });
@@ -56,7 +57,7 @@ export class BuylistPaymentTypeService {
         });
         
         if (buylistPaymentType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found for name: ' + name);
         }
 
         let buylistPaymentTypeDTO: BuylistPaymentTypeDTO = ({ ...buylistPaymentType });
@@ -68,11 +69,14 @@ export class BuylistPaymentTypeService {
     async createBuylistPaymentType(createBuylistPaymentTypeDTO: CreateBuylistPaymentTypeDTO) {
     
         //CHECK TO SEE IF THE BUYLIST TYPE ALREADY EXISTS;
-        let buylistPaymentType = await this.getBuylistPaymentTypeByName(createBuylistPaymentTypeDTO.buylistPaymentTypeName);
+        let buylistPaymentType = await this.buylistPaymentTypeRepository.findOne({ 
+            where: { 
+                buylistPaymentTypeName: createBuylistPaymentTypeDTO.buylistPaymentTypeName 
+            } 
+        });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (buylistPaymentType != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_EXISTS', 'Buylist payment type with name already exists: ' + createBuylistPaymentTypeDTO.buylistPaymentTypeName);
         }
         
         let newBuylistPaymentType = this.buylistPaymentTypeRepository.create({ ...createBuylistPaymentTypeDTO });
@@ -86,11 +90,14 @@ export class BuylistPaymentTypeService {
 
     async updateBuylistPaymentType(updateBuylistPaymentTypeDTO: UpdateBuylistPaymentTypeDTO) {
                     
-        let existingBuylistPaymentType = await this.getBuylistPaymentTypeById(updateBuylistPaymentTypeDTO.buylistPaymentTypeId);
-            
-        //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
+        let existingBuylistPaymentType = await this.buylistPaymentTypeRepository.findOne({ 
+            where: { 
+                buylistPaymentTypeId: updateBuylistPaymentTypeDTO.buylistPaymentTypeId 
+            } 
+        });
+        
         if (!existingBuylistPaymentType) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found for buylistPaymentTypeId: ' + updateBuylistPaymentTypeDTO.buylistPaymentTypeId); 
         }
 
         existingBuylistPaymentType.buylistPaymentTypeName = updateBuylistPaymentTypeDTO.buylistPaymentTypeName;
