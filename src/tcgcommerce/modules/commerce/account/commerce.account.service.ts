@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccount } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/commerce.account.entity';
 import { CreateCommerceAccountDTO, UpdateCommerceAccountDTO, CommerceAccountDTO } from './dto/commerce.account.dto';
+import { CommerceAccountApplicationModule } from './interface/commerce.account.interface';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
@@ -20,8 +21,27 @@ export class CommerceAccountService {
             }
         });
 
-        let commerceAccountDTOs: CommerceAccountDTO[] = commerceAccounts.map(commerceAccount => ({ ...commerceAccount }));
+        let commerceAccountDTOs: CommerceAccountDTO[] = [];
+
+        for(let i = 0; i < commerceAccounts.length; i++) {
+            let commerceAccount = commerceAccounts[i];
+            let commerceAccountDTO: CommerceAccountDTO = {
+                commerceAccountId: commerceAccount.commerceAccountId,
+                commerceAccountName: commerceAccount.commerceAccountName,
+                commerceAccountContactName: commerceAccount.commerceAccountContactName,
+                commerceAccountContactEmail: commerceAccount.commerceAccountContactEmail,
+                commerceAccountContactPhone: commerceAccount.commerceAccountContactPhone,
+                commerceAccountHandle: commerceAccount.commerceAccountHandle,
+                commerceAccountApplicationModules: JSON.parse(commerceAccount.commerceAccountApplicationModules) as CommerceAccountApplicationModule[],
+                commerceAccountIsActive: commerceAccount.commerceAccountIsActive,
+                commerceAccountCreateDate: commerceAccount.commerceAccountCreateDate,
+                commerceAccountUpdateDate: commerceAccount.commerceAccountUpdateDate,
+            }
+
+            commerceAccountDTOs.push(commerceAccountDTO);
+        }
         
+            
         return commerceAccountDTOs;
     }
 
@@ -32,7 +52,18 @@ export class CommerceAccountService {
             return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_NOT_FOUND', 'Commerce account was not found for commerceAccountId: ' + commerceAccountId);
         }
 
-        let commerceAccountDTO: CommerceAccountDTO = ({ ...commerceAccount});
+         let commerceAccountDTO: CommerceAccountDTO = {
+            commerceAccountId: commerceAccount.commerceAccountId,
+            commerceAccountName: commerceAccount.commerceAccountName,
+            commerceAccountContactName: commerceAccount.commerceAccountContactName,
+            commerceAccountContactEmail: commerceAccount.commerceAccountContactEmail,
+            commerceAccountContactPhone: commerceAccount.commerceAccountContactPhone,
+            commerceAccountHandle: commerceAccount.commerceAccountHandle,
+            commerceAccountApplicationModules: JSON.parse(commerceAccount.commerceAccountApplicationModules) as CommerceAccountApplicationModule[],
+            commerceAccountIsActive: commerceAccount.commerceAccountIsActive,
+            commerceAccountCreateDate: commerceAccount.commerceAccountCreateDate,
+            commerceAccountUpdateDate: commerceAccount.commerceAccountUpdateDate,
+         };
         
         return commerceAccountDTO;
         
@@ -69,6 +100,7 @@ export class CommerceAccountService {
         updateCommerceAccount.commerceAccountContactName = updateCommerceAccountDTO.commerceAccountContactName;
         updateCommerceAccount.commerceAccountContactEmail = updateCommerceAccountDTO.commerceAccountContactEmail;
         updateCommerceAccount.commerceAccountContactPhone = updateCommerceAccountDTO.commerceAccountContactPhone;
+        updateCommerceAccount.commerceAccountApplicationModules = updateCommerceAccountDTO.commerceAccountApplicationModules;
         updateCommerceAccount.commerceAccountIsActive = updateCommerceAccountDTO.commerceAccountIsActive;
         updateCommerceAccount.commerceAccountUpdateDate = new Date();
 

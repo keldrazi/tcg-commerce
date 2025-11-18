@@ -1,4 +1,5 @@
-import { IsBoolean, IsEmail, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { CommerceAccountApplicationModule } from '../interface/commerce.account.interface';
 
 export class CommerceAccountDTO {
     commerceAccountId: string;
@@ -7,6 +8,7 @@ export class CommerceAccountDTO {
     commerceAccountContactEmail: string;
     commerceAccountContactPhone: string;
     commerceAccountHandle: string;
+    commerceAccountApplicationModules: CommerceAccountApplicationModule[];
     commerceAccountIsActive: boolean;
     commerceAccountCreateDate: Date;
     commerceAccountUpdateDate: Date; 
@@ -23,6 +25,8 @@ export class CreateCommerceAccountDTO {
     commerceAccountContactPhone: string;
     @IsString()
     commerceAccountHandle: string;
+    @IsString()
+    commerceAccountApplicationModules: string;
     @IsBoolean()
     commerceAccountIsActive: boolean;
 }
@@ -38,6 +42,8 @@ export class UpdateCommerceAccountDTO {
     commerceAccountContactEmail: string;
     @IsString()
     commerceAccountContactPhone: string;
+    @IsString()
+    commerceAccountApplicationModules: string;
     @IsBoolean()
     commerceAccountIsActive: boolean;
 }

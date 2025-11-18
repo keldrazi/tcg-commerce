@@ -16,6 +16,8 @@ export class CommerceAccount {
     commerceAccountContactPhone: string;
     @Column({unique: true})
     commerceAccountHandle: string;
+    @Column({type: 'jsonb', nullable: true})
+    commerceAccountApplicationModules: string;
     @Column({type: 'boolean', default: true})
     commerceAccountIsActive: boolean;
     @CreateDateColumn()

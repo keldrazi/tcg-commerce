@@ -27,7 +27,7 @@ export class ApplicationModuleController {
         return this.applicationModuleService.createApplicationModule(createApplicationModuleDTO);
     }
 
-    @Post('/update')
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateApplicationModule(@Body() updateApplicationModuleDTO: UpdateApplicationModuleDTO) {
         return this.applicationModuleService.updateApplicationModule(updateApplicationModuleDTO);

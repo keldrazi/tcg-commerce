@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApplicationModule } from 'src/typeorm/entities/tcgcommerce/modules/application/module/application.module.entity';
 import { CreateApplicationModuleDTO, UpdateApplicationModuleDTO, ApplicationModuleDTO } from './dto/application.module.dto';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ApplicationModuleService {
 
     constructor(
         @InjectRepository(ApplicationModule) private applicationModuleRepository: Repository<ApplicationModule>,
+        private errorMessageService: ErrorMessageService
     ) { }
 
     async getApplicationModule(applicationModuleId: string) {
@@ -18,8 +20,8 @@ export class ApplicationModuleService {
             } 
         });
         
-        if (!applicationModule) {
-            return null;
+        if (applicationModule == null) {
+            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found for applicationModuleId: ' + applicationModuleId);
         }
 
         let applicationModuleDTO = new ApplicationModuleDTO();
@@ -84,8 +86,8 @@ export class ApplicationModuleService {
         });
 
         //TO DO: THROW AN ERROR IF APPLICATION MODULE NOT FOUND;
-        if (!existingApplicationModule) {
-            return null; 
+        if (existingApplicationModule == null) {
+            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found for applicationModuleId: ' + updateApplicationModuleDTO.applicationModuleId);
         }
 
         existingApplicationModule.applicationModuleDescription = updateApplicationModuleDTO.applicationModuleDescription;
