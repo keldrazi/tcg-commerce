@@ -28,7 +28,7 @@ export class ProductVendorController {
         return await this.productVendorService.createProductVendor(createProductVendorDTO);
     }
 
-    @Post('/update')
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductVendor(@Body() updateProductVendorDTO: UpdateProductVendorDTO) {
         return await this.productVendorService.updateProductVendor(updateProductVendorDTO);

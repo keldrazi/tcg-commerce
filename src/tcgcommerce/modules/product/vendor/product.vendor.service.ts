@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductVendorDTO, UpdateProductVendorDTO, ProductVendorDTO } from './dto/product.vendor.dto';
 import { ProductVendor } from 'src/typeorm/entities/tcgcommerce/modules/product/vendor/product.vendor.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductVendorService {
 
     constructor(
         @InjectRepository(ProductVendor) private productVendorRepository: Repository<ProductVendor>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getProductVendor(productVendorId: string) {
@@ -19,7 +21,7 @@ export class ProductVendorService {
         });
         
         if (productVendor == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorId: ' + productVendorId);
         }
 
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });        
@@ -31,13 +33,12 @@ export class ProductVendorService {
     async getProductVendors() {
         let productVendors = await this.productVendorRepository.find();
         
-        //TO DO: CREATE AN ERROR TO RETURN;
+        let productVendorDTOs: ProductVendorDTO[] = [];
+        
         if(productVendors == null) {
-            return null;
+            return productVendorDTOs;
         }
         
-        let productVendorDTOs: ProductVendorDTO[] = [];
-
         for(let i = 0; i < productVendors.length; i++) {
             let productVendor = productVendors[i];
             let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
@@ -56,7 +57,7 @@ export class ProductVendorService {
         });
         
         if (productVendor == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorName: ' + name);
         }
 
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
@@ -73,7 +74,7 @@ export class ProductVendorService {
         });
         
         if (productVendor == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorCode: ' + code);
         }
 
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
@@ -85,11 +86,14 @@ export class ProductVendorService {
     async createProductVendor(createProductVendorDTO: CreateProductVendorDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let productVendor = await this.getProductVendorByName(createProductVendorDTO.productVendorName);
+        let productVendor = await this.productVendorRepository.findOne({ 
+            where: { 
+                productVendorName: createProductVendorDTO.productVendorName 
+            } 
+        });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productVendor != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'Product vendor already exists with name: ' + createProductVendorDTO.productVendorName);
         }
         
         let newProductVendor = this.productVendorRepository.create({ ...createProductVendorDTO });
@@ -109,9 +113,8 @@ export class ProductVendorService {
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!existingProductVendor) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorId: ' + updateProductVendorDTO.productVendorId); 
         }
 
         existingProductVendor.productVendorName = updateProductVendorDTO.productVendorName;

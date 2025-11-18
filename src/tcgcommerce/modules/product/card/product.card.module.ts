@@ -8,6 +8,7 @@ import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductTypeModule } from 'src/tcgcommerce/modules/product/type/product.type.module';
 import { TCGdbMTGCardModule } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.module';
+import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
 @Module({
@@ -18,6 +19,7 @@ import { TCGdbMTGCardModule } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.m
         ProductVendorModule,
         ProductTypeModule,
         TCGdbMTGCardModule,
+        ErrorMessageModule
     ],
     controllers: [ProductCardController],
     providers: [ProductCardService],

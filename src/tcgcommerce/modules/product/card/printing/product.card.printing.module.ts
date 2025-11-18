@@ -5,13 +5,15 @@ import { ProductCardPrintingController } from './product.card.printing.controlle
 import { ProductCardPrinting } from 'src/typeorm/entities/tcgcommerce/modules/product/card/printing/product.card.printing.entity';
 import { TCGdbMTGPrintingModule } from 'src/tcgdb/modules/tcgdb/api/mtg/printing/tcgdb.mtg.printing.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
+import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([ProductCardPrinting]),
         TCGdbMTGPrintingModule,
-        ProductLineModule
+        ProductLineModule,
+        ErrorMessageModule
     ],
     controllers: [ProductCardPrintingController],
     providers: [ProductCardPrintingService],

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, LessThanOrEqual, Not, Repository } from 'typeorm';
+import { LessThanOrEqual, Not, Repository } from 'typeorm';
 import { ProductSetDTO, CreateProductSetDTO, UpdateProductSetDTO } from './dto/product.set.dto';
 import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set/product.set.entity';
 import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
-import { IsEmpty } from 'class-validator';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class ProductSetService {
@@ -16,6 +17,7 @@ export class ProductSetService {
         private tcgdbMTGSetService: TCGdbMTGSetService,
         private productVendorService: ProductVendorService,
         private productLineService: ProductLineService,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getProductSet(productSetId: string) {
@@ -25,9 +27,8 @@ export class ProductSetService {
             } 
         });
 
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(productSet == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productSetId: ' + productSetId);
         }
 
         let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -43,9 +44,8 @@ export class ProductSetService {
             } 
         });
 
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(productSet == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productSetTCGdbId: ' + productSetTCGdbId);
         }
 
         let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -60,9 +60,8 @@ export class ProductSetService {
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
         
 
-        if(productVendor == null || productLine == null) {
-            //TO DO: CREATE AN ERROR TO RETURN;
-            return null;
+        if((productVendor != null && productVendor instanceof ErrorMessageDTO) || (productLine != null && productLine instanceof ErrorMessageDTO)) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_OR_PRODUCT_LINE_NOT_FOUND', 'Product vendor or product line was not found for productVendorCode: ' + productVendorCode + ' and productLineCode: ' + productLineCode);
         }
 
         let productSetsDTOs = await this.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
@@ -82,9 +81,8 @@ export class ProductSetService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(productSets == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found for productVendorId: ' + productVendorId + ' and productLineId: ' + productLineId);
         }
         
         let productSetDTOs: ProductSetDTO[] = [];
@@ -110,9 +108,8 @@ export class ProductSetService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(productSets == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found for productLineId: ' + productLineId);
         }
         
         let productSetDTOs: ProductSetDTO[] = [];
@@ -139,9 +136,8 @@ export class ProductSetService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(productSet == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productVendorId: ' + productVendorId + ', productLineId: ' + productLineId + ', and productSetCode: ' + productSetCode);
         }
         
         let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -157,9 +153,8 @@ export class ProductSetService {
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!existingProductSet) {
-            return null; 
+        if(!existingProductSet) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productSetId: ' + updateProductSetDTO.productSetId); 
         }
 
         existingProductSet.productSetName = updateProductSetDTO.productSetName;
@@ -192,9 +187,8 @@ export class ProductSetService {
         let productVendor = await this.productVendorService.getProductVendorByCode('WoTC');
         let productLine = await this.productLineService.getProductLineByCode('MTG');
 
-        if(productVendor == null || productLine == null) {
-            //TO DO: CREATE AN ERROR TO RETURN;
-            return null;
+        if((productVendor != null && productVendor instanceof ErrorMessageDTO) || (productLine != null && productLine instanceof ErrorMessageDTO)) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_OR_PRODUCT_LINE_NOT_FOUND', 'Product vendor or product line was not found for productVendorCode: WoTC and productLineCode: MTG');
         }
 
         let tcgdbMTGSets = await this.tcgdbMTGSetService.getTCGdbMTGSets();
@@ -203,10 +197,8 @@ export class ProductSetService {
         for(let i = 0; i < tcgdbMTGSets.length; i++) {
             let tcgdbMTGSet = tcgdbMTGSets[i];
 
-            //CHECK TO SEE IF THE SET EXISTS;
             let productSet = await this.getProductSetByTCGdbId(tcgdbMTGSet.tcgdbMTGSetId);
             
-            //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
             if (productSet != null) {
                 continue;
             }

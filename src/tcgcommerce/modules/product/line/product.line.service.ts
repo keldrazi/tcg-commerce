@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductLineDTO, UpdateProductLineDTO, ProductLineDTO } from './dto/product.line.dto';
 import { ProductLine } from 'src/typeorm/entities/tcgcommerce/modules/product/line/product.line.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductLineService {
 
     constructor(
         @InjectRepository(ProductLine) private productLineRepository: Repository<ProductLine>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getProductLine(productLineId: string) {
@@ -19,7 +21,7 @@ export class ProductLineService {
         });
         
         if (productLine == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineId: ' + productLineId);
         }
 
         let productLineDTO: ProductLineDTO = ({ ...productLine });
@@ -31,13 +33,12 @@ export class ProductLineService {
     async getProductLines() {
         let productLines = await this.productLineRepository.find();
         
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(productLines == null) {
-            return null;
-        }
-        
         let productLineDTOs: ProductLineDTO[] = [];
 
+        if(productLines == null) {
+            return productLineDTOs;
+        }
+        
         for(let i = 0; i < productLines.length; i++) {
             let productLine = productLines[i];
             let productLineDTO: ProductLineDTO = ({ ...productLine });
@@ -54,12 +55,12 @@ export class ProductLineService {
                 productVendorId: productVendorId 
             } 
         });
-        
-        if (productLines == null) {
-            return null;
-        }
 
         let productLineDTOs: ProductLineDTO[] = [];
+        
+        if (productLines == null) {
+            productLineDTOs ;
+        }
 
         for(let i = 0; i < productLines.length; i++) {
             let productLine = productLines[i];
@@ -80,7 +81,7 @@ export class ProductLineService {
         });
         
         if (productLine == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineName: ' + name);
         }
 
         let productLineDTO: ProductLineDTO = ({ ...productLine });
@@ -97,7 +98,7 @@ export class ProductLineService {
         });
         
         if (productLine == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + code);
         }
 
         let productLineDTO: ProductLineDTO = ({ ...productLine });
@@ -109,11 +110,14 @@ export class ProductLineService {
     async createProductLine(createProductLineDTO: CreateProductLineDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let productLine = await this.getProductLineByName(createProductLineDTO.productLineName);
+        let productLine = await this.productLineRepository.findOne({ 
+            where: { 
+                productLineName: createProductLineDTO.productLineName 
+            } 
+        });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productLine != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_ALREADY_EXISTS', 'Product line already exists with name: ' + createProductLineDTO.productLineName);
         }
         
         let newProductLine = this.productLineRepository.create({ ...createProductLineDTO });
@@ -133,9 +137,8 @@ export class ProductLineService {
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!existingProductLine) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineId: ' + updateProductLineDTO.productLineId); 
         }
 
         existingProductLine.productLineName = updateProductLineDTO.productLineName;

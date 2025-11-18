@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductTypeDTO, UpdateProductTypeDTO, ProductTypeDTO } from './dto/product.type.dto';
 import { ProductType } from 'src/typeorm/entities/tcgcommerce/modules/product/type/product.type.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductTypeService {
 
     constructor(
         @InjectRepository(ProductType) private productTypeRepository: Repository<ProductType>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getProductType(productTypeId: string) {
@@ -19,7 +21,7 @@ export class ProductTypeService {
         });
         
         if (productType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeId: ' + productTypeId);
         }
 
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
@@ -36,11 +38,11 @@ export class ProductTypeService {
             } 
         });
         
-        if (productTypes == null) {
-            return null;
-        }
-
         let productTypeDTOs: ProductTypeDTO[] = [];
+
+        if (productTypes == null) {
+            return productTypeDTOs;
+        }
 
         for(let i = 0; i < productTypes.length; i++) {
             let productType = productTypes[i];
@@ -56,13 +58,12 @@ export class ProductTypeService {
     async getProductTypes() {
         let productTypes = await this.productTypeRepository.find();
         
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(productTypes == null) {
-            return null;
-        }
-        
         let productTypeDTOs: ProductTypeDTO[] = [];
 
+        if(productTypes == null) {
+            return productTypeDTOs;
+        }
+        
         for(let i = 0; i < productTypes.length; i++) {
             let productType = productTypes[i];
             let productTypeDTO: ProductTypeDTO = ({ ...productType });
@@ -81,7 +82,7 @@ export class ProductTypeService {
         });
         
         if (productType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeName: ' + name);
         }
 
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
@@ -98,7 +99,7 @@ export class ProductTypeService {
         });
         
         if (productType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeCode: ' + code);
         }
 
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
@@ -110,11 +111,15 @@ export class ProductTypeService {
     async createProductType(createProductTypeDTO: CreateProductTypeDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let productType = await this.getProductTypeByName(createProductTypeDTO.productTypeName);
+        let productType = await this.productTypeRepository.findOne({ 
+            where: { 
+                productTypeName: createProductTypeDTO.productTypeName 
+            } 
+        });
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productType != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_ALREADY_EXISTS', 'Product type already exists with name: ' + createProductTypeDTO.productTypeName);
         }
         
         let newProductType = this.productTypeRepository.create({ ...createProductTypeDTO });
@@ -134,9 +139,8 @@ export class ProductTypeService {
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!existingProductType) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeId: ' + updateProductTypeDTO.productTypeId); 
         }
 
         existingProductType.productTypeName = updateProductTypeDTO.productTypeName;
