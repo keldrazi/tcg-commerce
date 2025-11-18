@@ -40,6 +40,8 @@ export class BuylistUserVerificationService {
         buylistUserVerificationDTO.buylistUserVerificationCodeIsUsed = buylistUserVerification.buylistUserVerificationCodeIsUsed;
         buylistUserVerificationDTO.buylistUserVerificationCreateDate = buylistUserVerification.buylistUserVerificationCreateDate;
         buylistUserVerificationDTO.buylistUserVerificationUpdateDate = buylistUserVerification.buylistUserVerificationUpdateDate;
+
+        //TO DO: SEND EMAIL WITH VERIFICATION CODE;
         
         return buylistUserVerificationDTO;
 
