@@ -2,16 +2,13 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { CreateCommerceAccountDTO, UpdateCommerceAccountDTO } from './dto/commerce.account.dto';
 import { CommerceAccountService } from './commerce.account.service';
 
-
-
 @Controller('commerce/account')
 export class CommerceAccountController {
 
     constructor(
         private commerceAccountService: CommerceAccountService,
     ) { }
-    
-    
+     
     @Get('/:commerceAccountId')
     async getCommerceAccount(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.commerceAccountService.getCommerceAccount(commerceAccountId);
@@ -23,17 +20,10 @@ export class CommerceAccountController {
         return await this.commerceAccountService.createCommerceAccount(createCommerceAcountDTO);
     }
 
-    @Post('/update')
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateCommerceAccount(@Body() updateCommerceAcountDTO: UpdateCommerceAccountDTO) {
         return await this.commerceAccountService.updateCommerceAccount(updateCommerceAcountDTO);
     }
-
-    /*
-    @Put(':id')
-    async updateUser(@Param('tcgDatabaseUserId') tcgDatabaseUserId: string, @Body() tcgDatabaseUserUpdateDTO: TCGDatabaseUserUpdateDTO) {
-        await this.tcgDatabaseUserService.updateTCGDatabaseUser(tcgDatabaseUserId, tcgDatabaseUserUpdateDTO);
-    }
-    */
 
 }

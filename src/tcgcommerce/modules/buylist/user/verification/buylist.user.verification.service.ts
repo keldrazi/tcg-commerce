@@ -49,10 +49,17 @@ export class BuylistUserVerificationService {
 
     async verifyBuylistUserVerification(commerceAccountId: string, buylistUserId: string, buylistUserVerificationCode: number, buylistUserVerificationType: string) {
 
-        let buylistUserVerification = await this.buylistUserVerificationRepository.findOne({ where: { commerceAccountId, buylistUserId, buylistUserVerificationCode, buylistUserVerificationType } });
+        let buylistUserVerification = await this.buylistUserVerificationRepository.findOne({ 
+            where: { 
+                commerceAccountId: commerceAccountId, 
+                buylistUserId: buylistUserId, 
+                buylistUserVerificationCode: buylistUserVerificationCode, 
+                buylistUserVerificationType: buylistUserVerificationType 
+            } 
+        });
 
         let now = new Date();
-        if (buylistUserVerification == null || buylistUserVerification.buylistUserVerificationCodeIsUsed || buylistUserVerification.buylistUserVerificationCodeExpires < now || buylistUserVerification.buylistUserVerificationType !== buylistUserVerificationType) {
+        if (buylistUserVerification == null || buylistUserVerification.buylistUserVerificationCodeIsUsed || buylistUserVerification.buylistUserVerificationCodeExpires < now) {
             return false;
         }
 

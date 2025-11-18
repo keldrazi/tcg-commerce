@@ -20,7 +20,7 @@ export class CommerceUser {
     commerceUserPassword: string;
     @Column('jsonb')
     commerceUserRoles: string;
-    @Column({type: 'boolean', default: false})
+    @Column({type: 'boolean', default: true})
     commerceUserIsActive: boolean;
     @CreateDateColumn()
     commerceUserCreateDate: Date;

@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { CommerceLocationService } from './commerce.location.service';
 import { CreateCommerceLocationDTO, UpdateCommerceLocationDTO } from './dto/commerce.location.dto';
 
-
-
 @Controller('commerce/location')
 export class CommerceLocationController {
 
@@ -32,6 +30,4 @@ export class CommerceLocationController {
     async updateCommerceLocation(@Body() updateCommerceLocationDTO: UpdateCommerceLocationDTO) {
         return this.commerceLocationService.updateCommerceLocation(updateCommerceLocationDTO);
     }
-
-
 }

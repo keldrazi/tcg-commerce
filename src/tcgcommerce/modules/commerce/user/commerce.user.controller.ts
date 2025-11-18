@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { CommerceUserService } from './commerce.user.service';
 import { CreateCommerceUserDTO, UpdateCommerceUserDTO } from './dto/commerce.user.dto';
 
-
-
 @Controller('commerce/user')
 export class CommerceUserController {
 
@@ -32,6 +30,4 @@ export class CommerceUserController {
     async updateCommerceUser(@Body() updateCommerceUserDTO: UpdateCommerceUserDTO) {
         return this.commerceUserService.updateCommerceUser(updateCommerceUserDTO);
     }
-
-
 }

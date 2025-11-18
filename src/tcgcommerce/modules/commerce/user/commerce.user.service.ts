@@ -4,20 +4,21 @@ import { Repository } from 'typeorm';
 import { CommerceUser } from 'src/typeorm/entities/tcgcommerce/modules/commerce/user/commerce.user.entity';
 import { CreateCommerceUserDTO, UpdateCommerceUserDTO, CommerceUserDTO } from './dto/commerce.user.dto';
 import * as bcrypt from 'bcrypt';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CommerceUserService {
 
     constructor(
         @InjectRepository(CommerceUser) private commerceUserRepository: Repository<CommerceUser>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getCommerceUser(commerceUserId: string) {
         let commerceUser = await this.commerceUserRepository.findOne({ where: { commerceUserId } });
         
-        //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
         if (commerceUser == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found for commerceUserId: ' + commerceUserId);
         }
 
         let commerceUserDTO:CommerceUserDTO = ({ ...commerceUser });
@@ -33,7 +34,6 @@ export class CommerceUserService {
             } 
         });
 
-        //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
         if (commerceUsers == null) {
             return [];
         }
@@ -51,12 +51,22 @@ export class CommerceUserService {
 
     }
 
-    async createCommerceUser(commerceUser: CreateCommerceUserDTO) {
+    async createCommerceUser(createCommerceUserDTO: CreateCommerceUserDTO) {
+        let commerceUser = await this.commerceUserRepository.findOne({ 
+            where: { 
+                commerceAccountId: createCommerceUserDTO.commerceAccountId,
+                commerceUserEmail: createCommerceUserDTO.commerceUserEmail
+            } 
+        });
 
-        let commerceUserPasswordHash = await this.hashPassword(commerceUser.commerceUserPassword);
-        commerceUser.commerceUserPassword = commerceUserPasswordHash;
+        if (commerceUser != null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_EXISTS', 'Commerce user with email already exists: ' + createCommerceUserDTO.commerceUserEmail);
+        }
 
-        let newCommerceUser = this.commerceUserRepository.create({ ...commerceUser });
+        let commerceUserPasswordHash = await this.hashPassword(createCommerceUserDTO.commerceUserPassword);
+        createCommerceUserDTO.commerceUserPassword = commerceUserPasswordHash;
+
+        let newCommerceUser = this.commerceUserRepository.create({ ...createCommerceUserDTO });
         newCommerceUser = await this.commerceUserRepository.save(newCommerceUser);
 
         let commerceUserDTO = await this.getCommerceUser(newCommerceUser.commerceUserId);
@@ -64,22 +74,32 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
-    async updateCommerceUser(commerceUser: UpdateCommerceUserDTO) {
+    async updateCommerceUser(updateCommerceUserDTO: UpdateCommerceUserDTO) {
         let updateCommerceUser = await this.commerceUserRepository.findOne({
             where: {
-                commerceUserId: commerceUser.commerceUserId
+                commerceUserId: updateCommerceUserDTO.commerceUserId
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
         if (updateCommerceUser == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found for commerceUserId: ' + updateCommerceUserDTO.commerceUserId);
         }
 
-        updateCommerceUser.commerceUserName = commerceUser.commerceUserName;
-        updateCommerceUser.commerceUserEmail = commerceUser.commerceUserEmail;
-        updateCommerceUser.commerceUserRoles = commerceUser.commerceUserRoles;
-        updateCommerceUser.commerceUserIsActive = commerceUser.commerceUserIsActive;
+        let existingCommerceUser = await this.commerceUserRepository.findOne({
+            where: {
+                commerceAccountId: updateCommerceUserDTO.commerceAccountId,
+                commerceUserEmail: updateCommerceUserDTO.commerceUserEmail
+            }
+        });
+
+        if(existingCommerceUser != null && existingCommerceUser.commerceUserId !== updateCommerceUserDTO.commerceUserId) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_EXISTS', 'Commerce user with email already exists: ' + updateCommerceUserDTO.commerceUserEmail);
+        }
+
+        updateCommerceUser.commerceUserName = updateCommerceUserDTO.commerceUserName;
+        updateCommerceUser.commerceUserEmail = updateCommerceUserDTO.commerceUserEmail;
+        updateCommerceUser.commerceUserRoles = updateCommerceUserDTO.commerceUserRoles;
+        updateCommerceUser.commerceUserIsActive = updateCommerceUserDTO.commerceUserIsActive;
         updateCommerceUser.commerceUserUpdateDate = new Date();
 
         updateCommerceUser = await this.commerceUserRepository.save(updateCommerceUser);
@@ -90,46 +110,45 @@ export class CommerceUserService {
     }
 
     async deleteCommerceUser(commerceUserId: string) {
-        let commerceUser = await this.commerceUserRepository.findOne({
+        let deleteCommerceUser = await this.commerceUserRepository.findOne({
             where: {
                 commerceUserId: commerceUserId
             }
         });
 
-        //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
-        if (commerceUser == null) {
-            return null;
+        if (deleteCommerceUser == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found for commerceUserId: ' + commerceUserId);
         }
 
-        commerceUser.commerceUserIsActive = false;
-        commerceUser.commerceUserUpdateDate = new Date();
+        deleteCommerceUser.commerceUserIsActive = false;
+        deleteCommerceUser.commerceUserUpdateDate = new Date();
         
-        commerceUser = await this.commerceUserRepository.save(commerceUser);
+        deleteCommerceUser = await this.commerceUserRepository.save(deleteCommerceUser);
 
-        let commerceUserDTO = await this.getCommerceUser(commerceUser.commerceUserId);
-
+        let commerceUserDTO = await this.getCommerceUser(deleteCommerceUser.commerceUserId);
+        
         return commerceUserDTO;
     }
 
     async updateCommerceUserPassword(commerceUserId: string, commerceUserPassword: string) {
-        let commerceUser = await this.commerceUserRepository.findOne({
+        let updateCommerceUser = await this.commerceUserRepository.findOne({
             where: {
                 commerceUserId: commerceUserId
             }
         });
 
-        //TO DO: CREATE AN ERROR TO RETURN IF COMNERCE USER IS NULL;
-        if (commerceUser == null) {
-            return null;
+        if (updateCommerceUser == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found for commerceUserId: ' + commerceUserId);
         }
+       
 
         let commerceUserPasswordHash = await this.hashPassword(commerceUserPassword);
-        commerceUser.commerceUserPassword = commerceUserPasswordHash;
-        commerceUser.commerceUserUpdateDate = new Date();
+        updateCommerceUser.commerceUserPassword = commerceUserPasswordHash;
+        updateCommerceUser.commerceUserUpdateDate = new Date();
 
-        commerceUser = await this.commerceUserRepository.save(commerceUser);
+        updateCommerceUser = await this.commerceUserRepository.save(updateCommerceUser);
 
-        let commerceUserDTO = await this.getCommerceUser(commerceUser.commerceUserId);
+        let commerceUserDTO = await this.getCommerceUser(updateCommerceUser.commerceUserId);
 
         return commerceUserDTO;
     }
