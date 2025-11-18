@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO, BuylistTypeDTO } from './dto/buylist.type.dto';
 import { BuylistType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/type/buylist.type.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistTypeService {
 
     constructor(
         @InjectRepository(BuylistType) private buylistTypeRepository: Repository<BuylistType>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistTypeById(buylistTypeId: string) {
@@ -19,7 +21,7 @@ export class BuylistTypeService {
         });
         
         if (buylistType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found for buylistTypeId: ' + buylistTypeId);
         }
 
         let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
@@ -31,13 +33,12 @@ export class BuylistTypeService {
     async getBuylistTypes() {
         let buylistTypes = await this.buylistTypeRepository.find();
         
-        //TO DO: CREATE AN ERROR TO RETURN;
-        if(buylistTypes == null) {
-            return null;
-        }
-        
         let buylistTypeDTOs: BuylistTypeDTO[] = [];
 
+        if(buylistTypes == null) {
+            return buylistTypeDTOs;
+        }
+        
         for(let i = 0; i < buylistTypes.length; i++) {
             let buylistType = buylistTypes[i];
             let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
@@ -48,10 +49,10 @@ export class BuylistTypeService {
         return buylistTypeDTOs;
     }
     
-    async getBuylistTypeByName(name: string) {
+    async getBuylistTypeByName(buylistTypeName: string) {
         let buylistType = await this.buylistTypeRepository.findOne({ 
             where: { 
-                buylistTypeName: name 
+                buylistTypeName: buylistTypeName 
             } 
         });
         
@@ -72,7 +73,7 @@ export class BuylistTypeService {
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (buylistType != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_ALREADY_EXISTS', 'Buylist type already exists for buylistTypeName: ' + createBuylistTypeDTO.buylistTypeName);
         }
         
         let newBuylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });
@@ -86,11 +87,15 @@ export class BuylistTypeService {
 
     async updateBuylistType(updateBuylistTypeDTO: UpdateBuylistTypeDTO) {
                     
-        let existingBuylistType = await this.getBuylistTypeById(updateBuylistTypeDTO.buylistTypeId);
+        let existingBuylistType = await this.buylistTypeRepository.findOne({ 
+            where: { 
+                buylistTypeId: updateBuylistTypeDTO.buylistTypeId 
+            } 
+        });
             
         //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
         if (!existingBuylistType) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found for buylistTypeId: ' + updateBuylistTypeDTO.buylistTypeId);
         }
 
         existingBuylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;
