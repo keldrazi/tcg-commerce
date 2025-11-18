@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceModule } from 'src/typeorm/entities/tcgcommerce/modules/commerce/module/commerce.module.entity';
 import { CreateCommerceModuleDTO, UpdateCommerceModuleDTO, CommerceModuleDTO } from './dto/commerce.module.dto';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CommerceModuleService {
 
     constructor(
         @InjectRepository(CommerceModule) private commerceModuleRepository: Repository<CommerceModule>,
+        private errorMessageService: ErrorMessageService
     ) { }
 
     async getCommerceModule(commerceModuleId: string) {
@@ -19,25 +21,7 @@ export class CommerceModuleService {
         });
         
         if (commerceModule == null) {
-            return null;
-        }
-
-        let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
-
-        return commerceModuleDTO;
-        
-    }
-
-    async getCommerceModuleByCommerceAccountId(commerceAccountId: string) {
-        let commerceModule = await this.commerceModuleRepository.findOne({ 
-            where: { 
-                commerceAccountId : commerceAccountId
-            } 
-        });
-        
-        //TO DO: RETURN AN ERROR IF COMMERCE MODULE NOT FOUND;
-        if (commerceModule == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found for commerceModuleId: ' + commerceModuleId);
         }
 
         let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
@@ -68,6 +52,7 @@ export class CommerceModuleService {
     }
 
     async createCommerceModule(createCommerceModuleDTO: CreateCommerceModuleDTO) {
+        
         let newCommerceModule = this.commerceModuleRepository.create({ ...createCommerceModuleDTO });
         newCommerceModule = await this.commerceModuleRepository.save(newCommerceModule);
 
@@ -84,9 +69,8 @@ export class CommerceModuleService {
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (existingCommerceModule == null) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found for commerceModuleId: ' + updateCommerceModuleDTO.commerceModuleId);
         }
 
         existingCommerceModule.commerceModuleSettings = updateCommerceModuleDTO.commerceModuleSettings;

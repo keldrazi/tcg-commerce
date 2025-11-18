@@ -25,7 +25,7 @@ export class CommerceUserController {
         return this.commerceUserService.createCommerceUser(createCommerceUserDTO);
     }
 
-    @Post('/update')
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateCommerceUser(@Body() updateCommerceUserDTO: UpdateCommerceUserDTO) {
         return this.commerceUserService.updateCommerceUser(updateCommerceUserDTO);

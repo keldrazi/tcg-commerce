@@ -25,7 +25,7 @@ export class CommerceLocationController {
         return this.commerceLocationService.createCommerceLocation(createCommerceLocationDTO);
     }
 
-    @Post('/update')
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateCommerceLocation(@Body() updateCommerceLocationDTO: UpdateCommerceLocationDTO) {
         return this.commerceLocationService.updateCommerceLocation(updateCommerceLocationDTO);
