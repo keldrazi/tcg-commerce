@@ -4,20 +4,22 @@ import { Repository } from 'typeorm';
 import { BuylistUser } from 'src/typeorm/entities/tcgcommerce/modules/buylist/user/buylist.user.entity';
 import { CreateBuylistUserDTO, UpdateBuylistUserDTO, BuylistUserDTO } from './dto/buylist.user.dto';
 import * as bcrypt from 'bcrypt';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+
 
 @Injectable()
 export class BuylistUserService {
 
     constructor(
         @InjectRepository(BuylistUser) private buylistUserRepository: Repository<BuylistUser>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistUserById(buylistUserId: string) {
         let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
         
-        //TO DO: CREATE AN ERROR TO RETURN IF BUYLIST USER IS NULL;
         if (buylistUser == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
         }
 
         let buylistUserDTO:BuylistUserDTO = ({ ...buylistUser });
@@ -51,6 +53,11 @@ export class BuylistUserService {
     }
 
     async createBuylistUser(buylistUser: CreateBuylistUserDTO) {
+        let checkBuylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserEmail: buylistUser.buylistUserEmail } });
+
+        if(checkBuylistUser != null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_ALREADY_EXISTS', 'Buylist user already exists for email: ' + buylistUser.buylistUserEmail);
+        }
 
         let buylistUserPasswordHash = await this.hashPassword(buylistUser.buylistUserPassword);
         buylistUser.buylistUserPassword = buylistUserPasswordHash;
@@ -64,11 +71,11 @@ export class BuylistUserService {
     }
 
     async updateBuylistUser(buylistUser: UpdateBuylistUserDTO) {
-        let updateBuylistUser = await this.getBuylistUserById(buylistUser.buylistUserId);
+        let updateBuylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId: buylistUser.buylistUserId } });
         
         //TO DO: CREATE AN ERROR TO RETURN IF BUYLIST USER IS NULL;
         if (updateBuylistUser == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUser.buylistUserId);
         }
 
         updateBuylistUser.buylistUserFirstName = buylistUser.buylistUserFirstName;
@@ -90,11 +97,10 @@ export class BuylistUserService {
     }
 
     async deleteBuylistUser(buylistUserId: string) {
-        let buylistUser = await this.getBuylistUserById(buylistUserId);
+        let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
 
-        //TO DO: CREATE AN ERROR TO RETURN IF BUYLIST USER IS NULL;
         if (buylistUser == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
         }
 
         buylistUser.buylistUserIsActive = false;
@@ -108,15 +114,10 @@ export class BuylistUserService {
     }
 
     async updateBuylistUserPassword(buylistUserId: string, buylistUserPassword: string) {
-        let buylistUser = await this.buylistUserRepository.findOne({
-            where: {
-                buylistUserId: buylistUserId
-            }
-        });
+        let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
 
-        //TO DO: CREATE AN ERROR TO RETURN IF BUYLIST USER IS NULL;
         if (buylistUser == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
         }
 
         let buylistUserPasswordHash = await this.hashPassword(buylistUserPassword);
@@ -134,10 +135,5 @@ export class BuylistUserService {
         let buylistUserPasswordHash = await bcrypt.hash(buylistUserPassword, 10);
 
         return buylistUserPasswordHash;
-    }
-
-    
-
-
-    
+    }    
 }
