@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistProductCardDTO, UpdateBuylistProductCardDTO, BuylistProductCardDTO } from './dto/buylist.product.card.dto';
 import { BuylistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/buylist.product.card.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistProductCardService {
 
     constructor(
         @InjectRepository(BuylistProductCard) private buylistProductCardRepository: Repository<BuylistProductCard>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistProductCardById(buylistProductCardId: string) {
@@ -19,7 +21,7 @@ export class BuylistProductCardService {
         });
         
         if (buylistProductCard == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found for buylistProductCardId: ' + buylistProductCardId);
         }
 
         let buylistProductCardDTO: BuylistProductCardDTO = ({ ...buylistProductCard });
@@ -35,13 +37,12 @@ export class BuylistProductCardService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
+        let buylistProductCardDTOs: BuylistProductCardDTO[] = [];
+       
         if(buylistProductCards == null) {
-            return null;
+            return buylistProductCardDTOs;
         }
         
-        let buylistProductCardDTOs: BuylistProductCardDTO[] = [];
-
         for(let i = 0; i < buylistProductCards.length; i++) {
             let buylistProductCard = buylistProductCards[i];
             let buylistProductCardDTO: BuylistProductCardDTO = ({ ...buylistProductCard });
@@ -67,11 +68,15 @@ export class BuylistProductCardService {
 
     async updateBuylistProductCard(updateBuylistProductCardDTO: UpdateBuylistProductCardDTO) {
                     
-        let existingBuylistProductCard = await this.getBuylistProductCardById(updateBuylistProductCardDTO.buylistProductCardId);
+        let existingBuylistProductCard = await this.buylistProductCardRepository.findOne({ 
+            where: { 
+                buylistProductCardId: updateBuylistProductCardDTO.buylistProductCardId 
+            } 
+        });
             
         //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
         if (!existingBuylistProductCard) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found for buylistProductCardId: ' + updateBuylistProductCardDTO.buylistProductCardId); 
         }
 
         existingBuylistProductCard.commerceUserId = updateBuylistProductCardDTO.commerceUserId;
