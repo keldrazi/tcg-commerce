@@ -9,6 +9,8 @@ export class BuylistUserVerification {
     commerceAccountId: string;
     @Column()
     buylistUserId: string;
+    @Column()
+    buylistUserVerificationType: string;
     @Column({unique: true})
     @MinLength(6)
     buylistUserVerificationCode: number;

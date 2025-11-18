@@ -14,15 +14,16 @@ export class BuylistUserVerificationService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async createBuylistUserVerification(commerceAccountId: string, buylistUserId: string) {
+    async createBuylistUserVerification(commerceAccountId: string, buylistUserId: string, buylistUserVerificationType: string) {
 
         let buylistUserVerificationCode = Math.floor(100000 + Math.random() * 900000);
         let buylistUserVerificationCodeExpires = new Date();
         buylistUserVerificationCodeExpires.setMinutes(buylistUserVerificationCodeExpires.getMinutes() + 15);
 
         const buylistUserVerification = this.buylistUserVerificationRepository.create({
-            commerceAccountId,
-            buylistUserId,
+            commerceAccountId: commerceAccountId,
+            buylistUserId: buylistUserId,
+            buylistUserVerificationType: buylistUserVerificationType,
             buylistUserVerificationCode: buylistUserVerificationCode,
             buylistUserVerificationCodeExpires: buylistUserVerificationCodeExpires,
             buylistUserVerificationCodeIsUsed: false,
@@ -44,12 +45,12 @@ export class BuylistUserVerificationService {
 
     }
 
-    async verifyBuylistUserVerification(commerceAccountId: string, buylistUserId: string, buylistUserVerificationCode: number) {
+    async verifyBuylistUserVerification(commerceAccountId: string, buylistUserId: string, buylistUserVerificationCode: number, buylistUserVerificationType: string) {
 
-        let buylistUserVerification = await this.buylistUserVerificationRepository.findOne({ where: { commerceAccountId, buylistUserId, buylistUserVerificationCode } });
+        let buylistUserVerification = await this.buylistUserVerificationRepository.findOne({ where: { commerceAccountId, buylistUserId, buylistUserVerificationCode, buylistUserVerificationType } });
 
         let now = new Date();
-        if (buylistUserVerification == null || buylistUserVerification.buylistUserVerificationCodeIsUsed || buylistUserVerification.buylistUserVerificationCodeExpires < now) {
+        if (buylistUserVerification == null || buylistUserVerification.buylistUserVerificationCodeIsUsed || buylistUserVerification.buylistUserVerificationCodeExpires < now || buylistUserVerification.buylistUserVerificationType !== buylistUserVerificationType) {
             return false;
         }
 

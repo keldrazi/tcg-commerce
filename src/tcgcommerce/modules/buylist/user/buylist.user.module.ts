@@ -4,11 +4,13 @@ import { BuylistUserService } from './buylist.user.service';
 import { BuylistUserController } from './buylist.user.controller';
 import { BuylistUser } from 'src/typeorm/entities/tcgcommerce/modules/buylist/user/buylist.user.entity';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
+import { BuylistUserVerificationModule } from './verification/buylist.user.verification.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([BuylistUser]),
         ErrorMessageModule,
+        BuylistUserVerificationModule
     ],
     controllers: [BuylistUserController],
     providers: [BuylistUserService],
