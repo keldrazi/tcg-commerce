@@ -53,7 +53,7 @@ export class BuylistUserService {
     }
 
     async createBuylistUser(buylistUser: CreateBuylistUserDTO) {
-        let checkBuylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserEmail: buylistUser.buylistUserEmail } });
+        let checkBuylistUser = await this.buylistUserRepository.findOne({ where: { commerceAccountId: buylistUser.commerceAccountId, buylistUserEmail: buylistUser.buylistUserEmail } });
 
         if(checkBuylistUser != null) {
             return this.errorMessageService.createErrorMessage('BUYLIST_USER_ALREADY_EXISTS', 'Buylist user already exists for email: ' + buylistUser.buylistUserEmail);

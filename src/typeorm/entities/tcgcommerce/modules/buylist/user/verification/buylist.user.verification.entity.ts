@@ -11,9 +11,9 @@ export class BuylistUserVerification {
     buylistUserId: string;
     @Column({unique: true})
     @MinLength(6)
-    buylistUserVerificationCode: string;
+    buylistUserVerificationCode: number;
     @Column()
-    buylistUserVerificationCodeExpireDate: Date;
+    buylistUserVerificationCodeExpires: Date;
     @Column({type: 'boolean', default: false})
     buylistUserVerificationCodeIsUsed: boolean;
     @CreateDateColumn()

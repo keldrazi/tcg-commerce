@@ -14,6 +14,51 @@ export class BuylistUserVerificationService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    
-      
+    async createBuylistUserVerification(commerceAccountId: string, buylistUserId: string) {
+
+        let buylistUserVerificationCode = Math.floor(100000 + Math.random() * 900000);
+        let buylistUserVerificationCodeExpires = new Date();
+        buylistUserVerificationCodeExpires.setMinutes(buylistUserVerificationCodeExpires.getMinutes() + 15);
+
+        const buylistUserVerification = this.buylistUserVerificationRepository.create({
+            commerceAccountId,
+            buylistUserId,
+            buylistUserVerificationCode: buylistUserVerificationCode,
+            buylistUserVerificationCodeExpires: buylistUserVerificationCodeExpires,
+            buylistUserVerificationCodeIsUsed: false,
+        });
+
+        await this.buylistUserVerificationRepository.save(buylistUserVerification);
+
+        let buylistUserVerificationDTO = new BuylistUserVerificationDTO();
+        buylistUserVerificationDTO.commerceAccountId = buylistUserVerification.commerceAccountId;
+        buylistUserVerificationDTO.buylistUserId = buylistUserVerification.buylistUserId;
+        buylistUserVerificationDTO.buylistUserVerificationId = buylistUserVerification.buylistUserVerificationId;
+        buylistUserVerificationDTO.buylistUserVerificationCode = buylistUserVerification.buylistUserVerificationCode;
+        buylistUserVerificationDTO.buylistUserVerificationCodeExpires = buylistUserVerification.buylistUserVerificationCodeExpires;
+        buylistUserVerificationDTO.buylistUserVerificationCodeIsUsed = buylistUserVerification.buylistUserVerificationCodeIsUsed;
+        buylistUserVerificationDTO.buylistUserVerificationCreateDate = buylistUserVerification.buylistUserVerificationCreateDate;
+        buylistUserVerificationDTO.buylistUserVerificationUpdateDate = buylistUserVerification.buylistUserVerificationUpdateDate;
+        
+        return buylistUserVerificationDTO;
+
+    }
+
+    async verifyBuylistUserVerification(commerceAccountId: string, buylistUserId: string, buylistUserVerificationCode: number) {
+
+        let buylistUserVerification = await this.buylistUserVerificationRepository.findOne({ where: { commerceAccountId, buylistUserId, buylistUserVerificationCode } });
+
+        let now = new Date();
+        if (buylistUserVerification == null || buylistUserVerification.buylistUserVerificationCodeIsUsed || buylistUserVerification.buylistUserVerificationCodeExpires < now) {
+            return false;
+        }
+
+        buylistUserVerification.buylistUserVerificationCodeIsUsed = true;
+        buylistUserVerification.buylistUserVerificationUpdateDate = new Date();
+
+        await this.buylistUserVerificationRepository.save(buylistUserVerification);
+
+        return true;
+    }
+
 }
