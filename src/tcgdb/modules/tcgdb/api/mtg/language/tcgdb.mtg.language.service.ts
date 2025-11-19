@@ -45,53 +45,6 @@ export class TCGdbMTGLanguageService {
         return tcgdbMTGLanguageDTOs;
     }
 
-    /*
-    async getTCGdbMTGLanguageByTCGPlayerId(tcgPlayerId: number) {
-        let tcgdbMTGLanguage = await this.tcgdbMTGLanguageRepository.findOne({
-            where: {
-                tcgdbMTGLanguageTCGPlayerId: tcgPlayerId,
-            }
-        });
-
-        if(tcgdbMTGLanguage == null) {
-            return null;
-        }
-        
-        let tcgdbMTGLanguageDTO: TCGdbMTGLanguageDTO = ({ ...tcgdbMTGLanguage });
-
-        return tcgdbMTGLanguageDTO;
-    }
-
-    async createTCGdbMTGLanguages() {
-        
-        let tcgdbMTGLanguageRecordCount = 0;
-
-        let tcgPlayerMTGLanguages = await this.tcgPlayerMTGLanguageService.getTCGPlayerMTGLanguages();
-
-        for(let i=0; i < tcgPlayerMTGLanguages.length; i++) {
-            let tcgPlayerMTGLanguage = tcgPlayerMTGLanguages[i];
-
-            //CHECK TO SEE IF THE SET EXISTS;
-            let tcgdbMTGLanguage = await this.getTCGdbMTGLanguageByTCGPlayerId(tcgPlayerMTGLanguage.tcgPlayerMTGLanguageId);
-
-            //SET DOESN'T EXIST - CREATE IT;
-            if(tcgdbMTGLanguage == null) {
-                const newTCGdgMTGLanguage = this.tcgdbMTGLanguageRepository.create({
-                    tcgdbMTGLanguageTCGPlayerId: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageId,
-                    tcgdbMTGLanguageName: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageName,
-                    tcgdbMTGLanguageCode: tcgPlayerMTGLanguage.tcgPlayerMTGLanguageCode
-                });
-
-                await this.tcgdbMTGLanguageRepository.save(newTCGdgMTGLanguage);
-
-                tcgdbMTGLanguageRecordCount++;
-            }
-        }
-
-        return tcgdbMTGLanguageRecordCount;
-
-    }
-    */
 }
 
 

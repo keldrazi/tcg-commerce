@@ -14,6 +14,8 @@ import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product
 import { ProductTypeService } from 'src/tcgcommerce/modules/product/type/product.type.service';
 import { ProductLanguageService } from 'src/tcgcommerce/modules/product/language/product.language.service';
 import { PriceRuleProductCardUpdateDailyService } from 'src/tcgcommerce/modules/price/rule/product/card/update/daily/price.rule.product.card.update.daily.service';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class InventoryProductCardServiceUpdatePriceJobService {
@@ -29,6 +31,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         private productTypeService: ProductTypeService,
         private productLanguageService: ProductLanguageService,
         private priceRuleProductCardUpdateDailyService: PriceRuleProductCardUpdateDailyService,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
 
@@ -65,7 +68,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         });
 
         if(inventoryProductCardServiceUpdatePriceJob == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_NOT_FOUND', 'Inventory Product Card Service Update Price Job not found for ID: ' + inventoryProductCardServiceUpdatePriceJobId);
         }
 
         //MAP TO DTO;
@@ -83,8 +86,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         });
 
         if(inventoryProductCardServiceUpdatePriceJob == null) {
-            //TO DOL: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return null;
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_NOT_FOUND', 'Inventory Product Card Service Update Price Job not found for ID: ' + inventoryProductCardServiceUpdatePriceJobId);
         }
         
         //MAP TO DTO;
@@ -92,8 +94,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         let inventoryProductCardServiceUpdatePriceJobItems = await this.inventoryProductCardServiceUpdatePriceJobItemService.getInventoryProductCardServiceUpdatePriceJobItemDetailsByJob(inventoryProductCardServiceUpdatePriceJobDTO);
 
         if(inventoryProductCardServiceUpdatePriceJobItems == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB DETAILS;
-            return null;
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_ITEMS_NOT_FOUND', 'No Inventory Product Card Service Update Price Job Items found for Job ID: ' + inventoryProductCardServiceUpdatePriceJobId);
         }
 
         let inventoryProductCardServiceUpdatePriceJobDetails = {
@@ -111,15 +112,15 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
         let productType = await this.productTypeService.getProductTypeByCode(productTypeCode);
         
-        if(productVendor == null || productLine == null || productType == null) {
-            return null;
+        if((productVendor == null || productVendor instanceof ErrorMessageDTO) || (productLine == null || productLine instanceof ErrorMessageDTO) || (productType == null || productType instanceof ErrorMessageDTO)) {
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_DATA_INVALID', 'One or more data items are invalid for creating Inventory Product Card Service Update Price Jobs.');
         }
         
         let productLanguage = await this.productLanguageService.getProductLanguageByCodeAndProductLineId(productLanguageCode, productLine.productLineId);
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
 
-        if(productLanguage == null || productSets == null) {
-            return null;
+        if((productLanguage == null || productLanguage instanceof ErrorMessageDTO) || (productSets == null || productSets instanceof ErrorMessageDTO)) {
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_DATA_INVALID', 'One or more data items are invalid for creating Inventory Product Card Service Update Price Jobs.');
         }
 
         let commerceAccounts = await this.commerceAccountService.getActiveCommerceAccounts();
@@ -197,9 +198,8 @@ export class InventoryProductCardServiceUpdatePriceJobService {
     async updateInventoryProductCardServiceUpdatePriceJobStatus(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobStatus: string) {
         let inventoryProductCardServiceUpdatePriceJob = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
-        if(inventoryProductCardServiceUpdatePriceJob == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return false; //RETURN AN ERROR;
+        if(inventoryProductCardServiceUpdatePriceJob == null || inventoryProductCardServiceUpdatePriceJob instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_NOT_FOUND', 'Inventory Product Card Service Update Price Job not found for ID: ' + inventoryProductCardServiceUpdatePriceJobId);
         }
 
         inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobStatus = inventoryProductCardServiceUpdatePriceJobStatus;
@@ -213,9 +213,8 @@ export class InventoryProductCardServiceUpdatePriceJobService {
     async updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobCount: number, inventoryProductCardServiceUpdatePriceJobIncreaseCount: number, inventoryProductCardServiceUpdatePriceJobDecreaseCount: number) {
         let inventoryProductCardServiceUpdatePriceJob = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
-        if(inventoryProductCardServiceUpdatePriceJob == null) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return false; //RETURN AN ERROR;
+        if(inventoryProductCardServiceUpdatePriceJob == null || inventoryProductCardServiceUpdatePriceJob instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_NOT_FOUND', 'Inventory Product Card Service Update Price Job not found for ID: ' + inventoryProductCardServiceUpdatePriceJobId);
         }
 
         inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobCount = inventoryProductCardServiceUpdatePriceJobCount;

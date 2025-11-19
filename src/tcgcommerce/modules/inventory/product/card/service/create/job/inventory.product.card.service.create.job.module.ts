@@ -5,6 +5,7 @@ import { InventoryProductCardServiceCreateJobService } from './inventory.product
 import { InventoryProductCardServiceCreateJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/inventory.product.card.service.create.job.entity';
 import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
 import { InventoryProductCardServiceCreateJobItemModule } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.module';
+import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
 @Module({
@@ -12,6 +13,7 @@ import { InventoryProductCardServiceCreateJobItemModule } from 'src/tcgcommerce/
         TypeOrmModule.forFeature([InventoryProductCardServiceCreateJob]),
         ProductSetModule,
         InventoryProductCardServiceCreateJobItemModule,
+        ErrorMessageModule
     ],
     controllers: [InventoryProductCardServiceCreateJobController],
     providers: [InventoryProductCardServiceCreateJobService],

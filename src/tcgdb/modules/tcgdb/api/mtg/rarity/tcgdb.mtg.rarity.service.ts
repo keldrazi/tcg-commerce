@@ -44,54 +44,6 @@ export class TCGdbMTGRarityService {
 
         return tcgdbMTGRarityDTOs;
     }
-
-    /*
-    async getTCGdbMTGRarityByTCGPlayerId(tcgPlayerId: number) {
-        let tcgdbMTGRarity = await this.tcgdbMTGRarityRepository.findOne({
-            where: {
-                tcgdbMTGRarityTCGPlayerId: tcgPlayerId,
-            }
-        });
-
-        if(tcgdbMTGRarity == null) {
-            return null;
-        }
-
-        let tcgdbMTGRarityDTO: TCGdbMTGRarityDTO = ({ ...tcgdbMTGRarity });
-
-        return tcgdbMTGRarityDTO;
-    }
-
-    async createTCGdbMTGRarities() {
-        
-        let tcgdbMTGRarityRecordCount = 0;
-
-        let tcgPlayerMTGRaritys = await this.tcgPlayerMTGRarityService.getTCGPlayerMTGRarities();
-
-        for(let i=0; i < tcgPlayerMTGRaritys.length; i++) {
-            let tcgPlayerMTGRarity = tcgPlayerMTGRaritys[i];
-
-            //CHECK TO SEE IF THE SET EXISTS;
-            let tcgdbMTGRarity = await this.getTCGdbMTGRarityByTCGPlayerId(tcgPlayerMTGRarity.tcgPlayerMTGRarityId);
-
-            //SET DOESN'T EXIST - CREATE IT;
-            if(tcgdbMTGRarity == null) {
-                const newTCGdgMTGRarity = this.tcgdbMTGRarityRepository.create({
-                    tcgdbMTGRarityTCGPlayerId: tcgPlayerMTGRarity.tcgPlayerMTGRarityId,
-                    tcgdbMTGRarityName: tcgPlayerMTGRarity.tcgPlayerMTGRarityDisplayText,
-                    tcgdbMTGRarityCode: tcgPlayerMTGRarity.tcgPlayerMTGRarityDBValue
-                });
-
-                await this.tcgdbMTGRarityRepository.save(newTCGdgMTGRarity);
-
-                tcgdbMTGRarityRecordCount++;
-            }
-        }
-
-        return tcgdbMTGRarityRecordCount;
-
-    }
-    */
 }
 
 

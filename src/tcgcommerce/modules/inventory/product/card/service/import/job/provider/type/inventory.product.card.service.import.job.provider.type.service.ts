@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateInventoryProductCardServiceImportJobProviderTypeDTO, UpdateInventoryProductCardServiceImportJobProviderTypeDTO, InventoryProductCardServiceImportJobProviderTypeDTO } from './dto/inventory.product.card.service.import.job.provider.type.dto';
 import { InventoryProductCardServiceImportJobProviderType } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class InventoryProductCardServiceImportJobProviderTypeService {
 
     constructor(
         @InjectRepository(InventoryProductCardServiceImportJobProviderType) private inventoryProductCardServiceImportJobProviderTypeRepository: Repository<InventoryProductCardServiceImportJobProviderType>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getInventoryProductCardServiceImportJobProviderTypeById(inventoryProductCardServiceImportJobProviderTypeId: string) {
@@ -19,7 +21,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
         });
         
         if (inventoryProductCardServiceImportJobProviderType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for id: ' + inventoryProductCardServiceImportJobProviderTypeId);
         }
 
         let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
@@ -43,7 +45,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
         //TO DO: CREATE AN ERROR TO RETURN;
         if(inventoryProductCardServiceImportJobProviderTypes == null) {
-            return null;
+            return [];
         }
 
         let inventoryProductCardServiceImportJobProviderTypeDTOs: InventoryProductCardServiceImportJobProviderTypeDTO[] = [];
@@ -76,7 +78,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
         });
 
         if (inventoryProductCardServiceImportJobProviderType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for name: ' + name);
         }
 
         let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
@@ -104,7 +106,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
         });
 
         if (inventoryProductCardServiceImportJobProviderType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for code: ' + code);
         }
 
         let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
@@ -131,7 +133,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (inventoryProductCardServiceImportJobProviderType != null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_DUPLICATE', 'Inventory product card service import job provider type already exists for name: ' + createInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName);
         }
 
         let newInventoryProductCardServiceImportJobProviderType = this.inventoryProductCardServiceImportJobProviderTypeRepository.create({ ...createInventoryProductCardServiceImportJobProviderTypeDTO });
@@ -153,7 +155,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
         //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!updateInventoryProductCardServiceImportJobProviderType) {
-            return null; 
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for id: ' + updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId);
         }
 
         updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeName = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName;

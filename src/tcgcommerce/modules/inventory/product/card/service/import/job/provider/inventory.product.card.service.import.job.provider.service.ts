@@ -7,6 +7,9 @@ import { InventoryProductCardServiceImportJobProviderTypeService } from 'src/tcg
 import { InventoryProductCardServiceImportJobProviderTypeDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/dto/inventory.product.card.service.import.job.provider.type.dto';
 import { InventoryProductCardServiceImportJobProviderTypeDataKey } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/interface/inventory.product.card.service.import.job.provider.type.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+
 
 @Injectable()
 export class InventoryProductCardServiceImportJobProviderService {
@@ -16,6 +19,7 @@ export class InventoryProductCardServiceImportJobProviderService {
         private inventoryProductCardServiceImportJobProviderUtilService: InventoryProductCardServiceImportJobProviderUtilService,
         private inventoryProductCardServiceImportJobProviderTypeService: InventoryProductCardServiceImportJobProviderTypeService,
         private eventEmitter: EventEmitter2,
+        private errorMessageService: ErrorMessageService,
     ) {}
     
     
@@ -23,8 +27,8 @@ export class InventoryProductCardServiceImportJobProviderService {
 
         let inventoryProductCardServiceImportJobProviderTypeDTO = await this.inventoryProductCardServiceImportJobProviderTypeService.getInventoryProductCardServiceImportJobProviderTypeByCode(inventoryProductCardServiceImportJobProviderTypeCode);
 
-        if(inventoryProductCardServiceImportJobProviderTypeDTO == null) {
-            return null;
+        if(inventoryProductCardServiceImportJobProviderTypeDTO == null || inventoryProductCardServiceImportJobProviderTypeDTO instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for code: ' + inventoryProductCardServiceImportJobProviderTypeCode);
         }
 
         let inventoryProductCardServiceImportJobProviderTypeDataKey: InventoryProductCardServiceImportJobProviderTypeDataKey = inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey;

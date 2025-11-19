@@ -45,53 +45,6 @@ export class TCGdbMTGPrintingService {
         return tcgdbMTGPrintingDTOs;
     }
 
-    /*
-    async getTCGdbMTGPrintingByTCGPlayerId(tcgPlayerId: number) {
-        let tcgdbMTGPrinting = await this.tcgdbMTGPrintingRepository.findOne({
-            where: {
-                tcgdbMTGPrintingTCGPlayerId: tcgPlayerId,
-            }
-        });
-
-        if(tcgdbMTGPrinting == null) {
-            return null;
-        }   
-
-        let tcgdbMTGPrintingDTO: TCGdbMTGPrintingDTO = ({ ...tcgdbMTGPrinting });
-
-        return tcgdbMTGPrintingDTO;
-    }
-
-    async createTCGdbMTGPrintings() {
-        
-        let tcgdbMTGPrintingRecordCount = 0;
-
-        let tcgPlayerMTGPrintings = await this.tcgPlayerMTGPrintingService.getTCGPlayerMTGPrintings();
-
-        for(let i=0; i < tcgPlayerMTGPrintings.length; i++) {
-            let tcgPlayerMTGPrinting = tcgPlayerMTGPrintings[i];
-
-            //CHECK TO SEE IF THE SET EXISTS;
-            let tcgdbMTGPrinting = await this.getTCGdbMTGPrintingByTCGPlayerId(tcgPlayerMTGPrinting.tcgPlayerMTGPrintingId);
-
-            //SET DOESN'T EXIST - CREATE IT;
-            if(tcgdbMTGPrinting == null) {
-                const newTCGdgMTGPrinting = this.tcgdbMTGPrintingRepository.create({
-                    tcgdbMTGPrintingTCGPlayerId: tcgPlayerMTGPrinting.tcgPlayerMTGPrintingId,
-                    tcgdbMTGPrintingName: tcgPlayerMTGPrinting.tcgPlayerMTGPrintingName,
-                    tcgdbMTGPrintingDisplayOrder: tcgPlayerMTGPrinting.tcgPlayerMTGPrintingDisplayOrder
-                });
-
-                await this.tcgdbMTGPrintingRepository.save(newTCGdgMTGPrinting);
-
-                tcgdbMTGPrintingRecordCount++;
-            }
-        }
-
-        return tcgdbMTGPrintingRecordCount;
-
-    }
-    */
 }
 
 

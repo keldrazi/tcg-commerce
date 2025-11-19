@@ -5,5 +5,6 @@ import { ErrorMessageService } from './error.message.service';
   imports: [
   ],
   providers: [ErrorMessageService],
+      exports: [ErrorMessageService]
 })
 export class ErrorMessageModule {}
