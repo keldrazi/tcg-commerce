@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { BuylistProductCardService } from './buylist.product.card.service';
-import { BuylistProductCardController } from './buylist.product.card.controller';
-import { BuylistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/buylist.product.card.entity';
+import { InventoryProductCardServiceImportJobProviderTypeService } from './inventory.product.card.service.import.job.provider.type.service';
+import { InventoryProductCardServiceImportJobProviderTypeController } from './inventory.product.card.service.import.job.provider.type.controller';
+import { InventoryProductCardServiceImportJobProviderType } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.entity';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([BuylistProductCard]),
+        TypeOrmModule.forFeature([InventoryProductCardServiceImportJobProviderType]),
         ErrorMessageModule
     ],
-    controllers: [BuylistProductCardController],
-    providers: [BuylistProductCardService],
-    exports: [BuylistProductCardService]
+    controllers: [InventoryProductCardServiceImportJobProviderTypeController],
+    providers: [InventoryProductCardServiceImportJobProviderTypeService],
+    exports: [InventoryProductCardServiceImportJobProviderTypeService]
 })
-export class BuylistProductCardModule {}
+export class InventoryProductCardServiceImportJobProviderTypeModule {}

@@ -1,17 +1,36 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { BuylistProductCardService } from './buylist.product.card.service';
-import { BuylistProductCardController } from './buylist.product.card.controller';
-import { BuylistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/buylist.product.card.entity';
+import { InventoryProductCardServiceImportJobItemService } from './inventory.product.card.service.import.job.item.service';
+import { InventoryProductCardServiceImportJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.entity';
+import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
+import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
+import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
+import { ProductCardConditionModule } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.module';
+import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/product.language.module';
+import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.module';
+import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/location/commerce.location.module';
+import { InventoryProductCardServiceImportJobProviderModule } from '../provider/inventory.product.card.service.import.job.provider.module';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
+
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([BuylistProductCard]),
-        ErrorMessageModule
+        TypeOrmModule.forFeature([InventoryProductCardServiceImportJobItem]),
+        ProductCardModule,
+        ProductSetModule,
+        ProductCardConditionModule,
+        ProductLanguageModule,
+        ProductCardPrintingModule,
+        CommerceLocationModule,
+        InventoryProductCardModule,
+        InventoryProductCardServiceImportJobProviderModule,
+        ErrorMessageModule,
     ],
-    controllers: [BuylistProductCardController],
-    providers: [BuylistProductCardService],
-    exports: [BuylistProductCardService]
+    controllers: [],
+    providers: [InventoryProductCardServiceImportJobItemService],
+    exports: [InventoryProductCardServiceImportJobItemService]
 })
-export class BuylistProductCardModule {}
+export class InventoryProductCardServiceImportJobItemModule {
+
+
+}

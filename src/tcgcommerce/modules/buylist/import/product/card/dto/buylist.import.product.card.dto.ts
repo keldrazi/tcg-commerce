@@ -1,67 +1,33 @@
 import { IsString, IsBoolean } from "class-validator";
 
 export class BuylistProductCardImportDTO {
+    buylistImportProductCardId: string;
     buylistProductCardId: string;
-    commerceAccountId: string;
-    commerceUserId: string;
-    buylistUserId: string;
-    buylistLocationId: string;
-    buylistTypeId: string;
-    buylistPaymentTypeId: string;
-    buylistPaymentServiceId: string;
-    productVendorId: string;
-    productLineId: string;
-    productTypeId: string;
-    productLanguageId: string;
-    productLanguageCode: string;
-    buylistProductCardStatus: string;   
-    buylistProductCardCode: string;
-    buylistProductCardDateTime: Date;
-    buylistProductCardTotalCardCount: number;
-    buylistProductCardTotalCardPrice: number;   
-    buylistProductCardCreateDate: Date;
-    buylistProductCardUpdateDate: Date;
+    buylistImportProductCardProviderTypeId: string;
+    buylistImportProductCardProviderTypeCode: string;
+    buylistImportProductCardProviderTypeName: string;
+    buylistImportProductCardFileURL: string;
+    buylistImportProductCardFileOriginalName: string;
+    buylistImportProductCardDate: Date;
+    buylistImportProductCardCode: string;
+    buylistImportProductCardCount: number;
+    buylistImportProductCardQtyCount: number; 
+    buylistImportProductCardCreateDate: Date;
+    buylistImportProductCardUpdateDate: Date;
 
     
 }
 
 export class CreateBuylistProductCardImportDTO {
     @IsString()
-    commerceAccountId: string;
-    @IsString()
-    commerceUserId: string;
-    @IsString()
-    buylistUserId: string;
-    @IsString()
-    buylistLocationId: string;
-    @IsString()
-    buyListTypeId: string;
-    @IsString()
-    buylistPaymentTypeId: string;
-    @IsString()
-    buylistPaymentServiceId: string;
-    @IsString()
-    productVendorId: string;
-    @IsString()
-    productLineId: string;
-    @IsString()
-    productTypeId: string;
-    @IsString()
-    productLanguageId: string;
-    
-}
-
-export class UpdateBuylistProductCardImportDTO {
-    @IsString()
     buylistProductCardId: string;
     @IsString()
-    commerceUserId: string;
+    buylistImportProductCardProviderTypeId: string;
     @IsString()
-    buylistLocationId: string;
+    buylistImportProductCardProviderTypeCode: string;
     @IsString()
-    buylistTypeId: string;
-    @IsString()
-    buylistPaymentTypeId: string;
-    @IsString()
-    buylistPaymentServiceId: string;
+    buylistImportProductCardProviderTypeName: string;
 }
+
+
+ 

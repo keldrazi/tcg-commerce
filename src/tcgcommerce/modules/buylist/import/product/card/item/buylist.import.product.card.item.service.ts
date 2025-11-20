@@ -1,18 +1,200 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBuylistProductCardImportDTO, UpdateBuylistProductCardImportDTO, BuylistProductCardImportDTO } from './dto/buylist.import.product.card.item.dto';
-import { BuylistProductCardImport } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/import/buylist.product.card.import.entity';
+import { InventoryProductCardServiceImportJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/dto/inventory.product.card.service.import.job.dto';
+import { InventoryProductCardServiceImportJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/item/dto/inventory.product.card.service.import.job.item.dto';
+import { InventoryProductCardServiceImportJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.entity';
+import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
+import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
+import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
+import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
+import { InventoryProductCardService } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { InventoryProductCardServiceImportJobProviderService } from '../provider/inventory.product.card.service.import.job.provider.service';
+import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+
 
 @Injectable()
-export class BuylistProductCardImportService {
+export class InventoryProductCardServiceImportJobItemService {
 
     constructor(
-        @InjectRepository(BuylistProductCardImport) private buylistProductCardImportRepository: Repository<BuylistProductCardImport>,
+        @InjectRepository(InventoryProductCardServiceImportJobItem) private inventoryProductCardServiceImportJobItemRepository: Repository<InventoryProductCardServiceImportJobItem>,
+        private productCardService: ProductCardService,
+        private productSetService: ProductSetService,
+        private productCardConditionService: ProductCardConditionService,
+        private productCardPrintingService: ProductCardPrintingService,
+        private inventoryProductCardService: InventoryProductCardService,
+        private eventEmitter: EventEmitter2,
+        private inventoryProductCardServiceImportJobProviderRocaService: InventoryProductCardServiceImportJobProviderService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
+    async getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
     
- 
+            let inventoryProductCardServiceImportJobItemDTOs: InventoryProductCardServiceImportJobItemDTO[] = [];
+    
+            let inventoryProductCardServiceImportJobItems = await this.inventoryProductCardServiceImportJobItemRepository.find({
+                where: {
+                    inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
+                }
+            });
+    
+            for(let i = 0; i < inventoryProductCardServiceImportJobItems.length; i++) {
+                let inventoryProductCardServiceImportJobItem = inventoryProductCardServiceImportJobItems[i];
+                let inventoryProductCardServiceImportJobItemDTO: InventoryProductCardServiceImportJobItemDTO = ({ ...inventoryProductCardServiceImportJobItem});
+                inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemCSVData = JSON.parse(inventoryProductCardServiceImportJobItem.inventoryProductCardServiceImportJobItemCSVData);
+                
+                inventoryProductCardServiceImportJobItemDTOs.push(inventoryProductCardServiceImportJobItemDTO);
+            }
+    
+            return inventoryProductCardServiceImportJobItemDTOs;
+    
+        }
+
+    async createInventoryProductCardServiceImportJobItems(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
+
+        let inventoryProductCardServiceImportJobProviderDTOs = await this.inventoryProductCardServiceImportJobProviderRocaService.processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeCode);
+        
+        if(inventoryProductCardServiceImportJobProviderDTOs == null || inventoryProductCardServiceImportJobProviderDTOs instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_ITEM_DATA_INVALID', 'No valid inventory product card service import job items found in the import file.');
+        }
+
+        for(let i = 0; i < inventoryProductCardServiceImportJobProviderDTOs.length; i++) {
+            let inventoryProductCardServiceImportJobProviderDTO = inventoryProductCardServiceImportJobProviderDTOs[i];
+
+            let productCard = await this.productCardService.getProductCardByTCGPlayerId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderTCGPlayerId);
+            let productCardCondition = await this.productCardConditionService.getProductCardConditionByCodeAndProductLineId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderCondition, inventoryProductCardServiceImportJobDTO.productLineId);
+            let productCardPrinting = await this.productCardPrintingService.getProductCardPrintingByNameAndProductLineId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderPrinting, inventoryProductCardServiceImportJobDTO.productLineId);
+            
+            if((productCard == null ||productCard instanceof ErrorMessageDTO) || (productCardCondition == null || productCardCondition instanceof ErrorMessageDTO) || (productCardPrinting == null || productCardPrinting instanceof ErrorMessageDTO)) {
+                continue;
+            }
+
+            let productSet = await this.productSetService.getProductSet(productCard.productSetId);
+
+            if(productSet == null || productSet instanceof ErrorMessageDTO) {
+                continue;
+            }
+
+            let inventoryProductCardServiceImportJobItem = this.inventoryProductCardServiceImportJobItemRepository.create({
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
+                productCardId: productCard.productCardId,
+                productCardTCGdbId: productCard.productCardTCGdbId,
+                productCardTCGPlayerId: productCard.productCardTCGPlayerId,
+                commerceAccountId: inventoryProductCardServiceImportJobDTO.commerceAccountId,
+                commerceLocationId: inventoryProductCardServiceImportJobDTO.commerceLocationId,
+                productVendorId: inventoryProductCardServiceImportJobDTO.productVendorId,
+                productLineId: inventoryProductCardServiceImportJobDTO.productLineId,
+                productTypeId: inventoryProductCardServiceImportJobDTO.productTypeId,
+                productLanguageId: inventoryProductCardServiceImportJobDTO.productLanguageId,
+                productLanguageCode: inventoryProductCardServiceImportJobDTO.productLanguageCode,
+                productSetId: productSet.productSetId,
+                productSetCode: productSet.productSetCode,
+                productCardConditionId: productCardCondition.productCardConditionId,
+                productCardConditionCode: productCardCondition.productCardConditionCode,
+                productCardConditionName: productCardCondition.productCardConditionName,
+                productCardPrintingId: productCardPrinting.productCardPrintingId,
+                productCardPrintingName: productCardPrinting.productCardPrintingName,
+                inventoryProductCardServiceImportJobItemQty: inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderQty,
+                inventoryProductCardServiceImportJobItemCSVData: JSON.stringify(inventoryProductCardServiceImportJobProviderDTO)
+            });
+
+            await this.inventoryProductCardServiceImportJobItemRepository.save(inventoryProductCardServiceImportJobItem); 
+
+        }
+
+        this.eventEmitter.emit(
+            'inventory.product.card.service.import.job.update.status',
+            {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
+                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
+
+            }
+        )
+
+        return true;
+    }
+
+    async getInventoryProductCardServiceImportJobItemDetailsByJob(inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
+
+        let inventoryProductCardServiceImportJobItems = await this.inventoryProductCardServiceImportJobItemRepository.find({
+            where: {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
+            }
+        });
+
+        let inventoryProductCardServiceImportJobItemDTOs: InventoryProductCardServiceImportJobItemDTO[] = [];
+
+        if(inventoryProductCardServiceImportJobItems == null || inventoryProductCardServiceImportJobItems.length == 0) {
+            return inventoryProductCardServiceImportJobItemDTOs;
+        }
+
+        for(let i = 0; i < inventoryProductCardServiceImportJobItems.length; i++) {
+            let inventoryProductCardServiceImportJobItem = inventoryProductCardServiceImportJobItems[i];
+            let inventoryProductCardServiceImportJobItemDTO: InventoryProductCardServiceImportJobItemDTO = ({ ...inventoryProductCardServiceImportJobItem});
+            inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemCSVData = JSON.parse(inventoryProductCardServiceImportJobItem.inventoryProductCardServiceImportJobItemCSVData);
+            inventoryProductCardServiceImportJobItemDTOs.push(inventoryProductCardServiceImportJobItemDTO);
+        }
+
+        return inventoryProductCardServiceImportJobItemDTOs;
+
+    }
+
+    async approveInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+            
+        this.eventEmitter.emit(
+            'inventory.product.card.service.import.job.update.status',
+            {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
+                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
+            }
+        )   
+
+        let inventoryProductCardServiceImportJobItemDTOs = await this.getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId);
+        for(let i = 0; i < inventoryProductCardServiceImportJobItemDTOs.length; i++) {
+            let inventoryProductCardServiceImportJobItemDTO = inventoryProductCardServiceImportJobItemDTOs[i];
+            let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByProductCardPrintingId(inventoryProductCardServiceImportJobItemDTO.commerceAccountId, inventoryProductCardServiceImportJobItemDTO.commerceLocationId, inventoryProductCardServiceImportJobItemDTO.productCardId, inventoryProductCardServiceImportJobItemDTO.productCardPrintingId, inventoryProductCardServiceImportJobItemDTO.productLanguageId);
+            
+            if(inventoryProductCardDTO == null || inventoryProductCardDTO instanceof ErrorMessageDTO) {
+                continue;
+            }
+
+            let inventoryProductCardItem = inventoryProductCardDTO.inventoryProductCardItems.find(item => item.productCardConditionCode === inventoryProductCardServiceImportJobItemDTO.productCardConditionCode);
+            
+            if(inventoryProductCardItem == undefined) {
+                continue;
+            }
+
+            inventoryProductCardItem.inventoryProductCardItemQty = inventoryProductCardItem.inventoryProductCardItemQty + inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemQty;
+            
+            await this.inventoryProductCardService.updateInventoryProductCard(inventoryProductCardDTO);
+    }
+
+        this.eventEmitter.emit(
+            'inventory.product.card.service.create.job.update.status',
+            {
+                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
+                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_COMPLETE,
+            }
+        )
+        
+        return true;
+
+    }
+
+    async deleteInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+        
+        await this.inventoryProductCardServiceImportJobItemRepository.delete({
+            inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId
+        });
+        
+        return true;
+
+    }
+
+
+    
 }
+

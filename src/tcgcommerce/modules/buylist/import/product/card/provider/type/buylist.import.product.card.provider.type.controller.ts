@@ -1,37 +1,37 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistProductCardDTO, UpdateBuylistProductCardDTO, BuylistProductCardDTO } from './product/card/dto/buylist.product.card.dto';
-import { BuylistProductCardService } from './buylist.product.card.service';
+import { CreateInventoryProductCardServiceImportJobProviderTypeDTO, UpdateInventoryProductCardServiceImportJobProviderTypeDTO, InventoryProductCardServiceImportJobProviderTypeDTO } from './dto/inventory.product.card.service.import.job.provider.type.dto';
+import { InventoryProductCardServiceImportJobProviderTypeService } from './inventory.product.card.service.import.job.provider.type.service';
 
 
 
-@Controller('buylist/product/card')
-export class BuylistProductCardController {
+@Controller('inventory/product/card/service/import/job/provider/type')
+export class InventoryProductCardServiceImportJobProviderTypeController {
 
     constructor(
-        private buylistProductCardService: BuylistProductCardService,
+        private inventoryProductCardServiceImportJobProviderTypeService: InventoryProductCardServiceImportJobProviderTypeService,
     ) { }
     
-    
-    @Get('/id/:buylistProductCardId')
-    async getBuylistProductCardById(@Param('buylistProductCardId') buylistProductCardId: string) {
-        return await this.buylistProductCardService.getBuylistProductCardById(buylistProductCardId);
+
+    @Get('/id/:inventoryProductCardServiceImportJobProviderTypeId')
+    async getInventoryProductCardServiceImportJobProviderType(@Param('inventoryProductCardServiceImportJobProviderTypeId') inventoryProductCardServiceImportJobProviderTypeId: string) {
+        return await this.inventoryProductCardServiceImportJobProviderTypeService.getInventoryProductCardServiceImportJobProviderTypeById(inventoryProductCardServiceImportJobProviderTypeId);
     }
 
-    @Get('/all/:commerceAccountId')
-    async getBuylistProductCards(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.buylistProductCardService.getBuylistProductCardsByCommerceAccountId(commerceAccountId);
+    @Get('/all')
+    async getInventoryProductCardServiceImportJobProviderTypes() {
+        return await this.inventoryProductCardServiceImportJobProviderTypeService.getInventoryProductCardServiceImportJobProviderTypes();
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
-    async createBuylistProductCard(@Body() createBuylistProductCardDTO: CreateBuylistProductCardDTO) {
-        return await this.buylistProductCardService.createBuylistProductCard(createBuylistProductCardDTO);
+    async createInventoryProductCardServiceImportJobProviderType(@Body() createInventoryProductCardServiceImportJobProviderTypeDTO: CreateInventoryProductCardServiceImportJobProviderTypeDTO) {
+        return await this.inventoryProductCardServiceImportJobProviderTypeService.createInventoryProductCardServiceImportJobProviderType(createInventoryProductCardServiceImportJobProviderTypeDTO);
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
-    async updateBuylistProductCard(@Body() updateBuylistProductCardDTO: UpdateBuylistProductCardDTO) {
-        return await this.buylistProductCardService.updateBuylistProductCard(updateBuylistProductCardDTO);
+    async updateInventoryProductCardServiceImportJobProviderType(@Body() updateInventoryProductCardServiceImportJobProviderTypeDTO: UpdateInventoryProductCardServiceImportJobProviderTypeDTO) {
+        return await this.inventoryProductCardServiceImportJobProviderTypeService.updateInventoryProductCardServiceImportJobProviderType(updateInventoryProductCardServiceImportJobProviderTypeDTO);
     }
 
-}
+} 

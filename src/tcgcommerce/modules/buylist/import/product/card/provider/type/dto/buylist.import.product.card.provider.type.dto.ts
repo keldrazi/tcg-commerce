@@ -1,67 +1,49 @@
 import { IsString, IsBoolean } from "class-validator";
+import { InventoryProductCardServiceImportJobProviderTypeDataKey } from '../interface/inventory.product.card.service.import.job.provider.type.interface';
 
-export class BuylistProductCardImportDTO {
-    buylistProductCardId: string;
-    commerceAccountId: string;
-    commerceUserId: string;
-    buylistUserId: string;
-    buylistLocationId: string;
-    buylistTypeId: string;
-    buylistPaymentTypeId: string;
-    buylistPaymentServiceId: string;
-    productVendorId: string;
-    productLineId: string;
-    productTypeId: string;
-    productLanguageId: string;
-    productLanguageCode: string;
-    buylistProductCardStatus: string;   
-    buylistProductCardCode: string;
-    buylistProductCardDateTime: Date;
-    buylistProductCardTotalCardCount: number;
-    buylistProductCardTotalCardPrice: number;   
-    buylistProductCardCreateDate: Date;
-    buylistProductCardUpdateDate: Date;
-
-    
+export class InventoryProductCardServiceImportJobProviderTypeDTO {
+    inventoryProductCardServiceImportJobProviderTypeId: string;
+    inventoryProductCardServiceImportJobProviderTypeName: string;
+    inventoryProductCardServiceImportJobProviderTypeCode: string;
+    inventoryProductCardServiceImportJobProviderTypeDescription: string;
+    inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
+    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    inventoryProductCardServiceImportJobProviderTypeFileDataKey: InventoryProductCardServiceImportJobProviderTypeDataKey;
+    inventoryProductCardServiceImportJobProviderTypeIsActive: boolean;
+    inventoryProductCardServiceImportJobProviderTypeCreateDate: Date;
+    inventoryProductCardServiceImportJobProviderTypeUpdateDate: Date;  
 }
 
-export class CreateBuylistProductCardImportDTO {
+export class CreateInventoryProductCardServiceImportJobProviderTypeDTO {
     @IsString()
-    commerceAccountId: string;
+    inventoryProductCardServiceImportJobProviderTypeName: string;
     @IsString()
-    commerceUserId: string;
+    inventoryProductCardServiceImportJobProviderTypeCode: string;
     @IsString()
-    buylistUserId: string;
+    inventoryProductCardServiceImportJobProviderTypeDescription: string;
     @IsString()
-    buylistLocationId: string;
+    inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
     @IsString()
-    buyListTypeId: string;
+    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
     @IsString()
-    buylistPaymentTypeId: string;
-    @IsString()
-    buylistPaymentServiceId: string;
-    @IsString()
-    productVendorId: string;
-    @IsString()
-    productLineId: string;
-    @IsString()
-    productTypeId: string;
-    @IsString()
-    productLanguageId: string;
-    
+    inventoryProductCardServiceImportJobProviderTypeFileDataKey: string;
 }
 
-export class UpdateBuylistProductCardImportDTO {
+export class UpdateInventoryProductCardServiceImportJobProviderTypeDTO {
     @IsString()
-    buylistProductCardId: string;
+    inventoryProductCardServiceImportJobProviderTypeId: string;
     @IsString()
-    commerceUserId: string;
+    inventoryProductCardServiceImportJobProviderTypeName: string;
     @IsString()
-    buylistLocationId: string;
+    inventoryProductCardServiceImportJobProviderTypeCode: string;
     @IsString()
-    buylistTypeId: string;
+    inventoryProductCardServiceImportJobProviderTypeDescription: string;
     @IsString()
-    buylistPaymentTypeId: string;
+    inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
     @IsString()
-    buylistPaymentServiceId: string;
+    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    @IsString()
+    inventoryProductCardServiceImportJobProviderTypeFileDataKey: string;
+    @IsBoolean()
+    inventoryProductCardServiceImportJobProviderTypeIsActive: boolean;
 }
