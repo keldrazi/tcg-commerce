@@ -76,6 +76,8 @@ import { ProductCardRarityModule } from './tcgcommerce/modules/product/card/rari
 //Product Card Price Modules;
 import { PriceRuleProductCardBaseModule } from './tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.module';
 import { PriceRuleProductCardUpdateDailyModule } from './tcgcommerce/modules/price/rule/product/card/update/daily/price.rule.product.card.update.daily.module';
+//Product Card Search Modules;
+import { ProductCardSearchModule } from './tcgcommerce/modules/product/card/search/product.card.search.module';
 //Product Card Inventory Modules;
 import { InventoryProductCardModule } from './tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 //Product Card Load Inventory Modules;
@@ -172,6 +174,8 @@ const NODE_ENV = process.env.NODE_ENV;
     //Product Card Price Modules;
     PriceRuleProductCardBaseModule,
     PriceRuleProductCardUpdateDailyModule,
+    //Product Card Search Modules;
+    ProductCardSearchModule,
     //Inventory Product Card Modules;
     InventoryProductCardModule,
     //Inventory Load Product Card Modules;

@@ -1,0 +1,23 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductCard } from 'src/typeorm/entities/tcgcommerce/modules/product/card/product.card.entity';
+import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
+import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
+import { ProductCardSearchService } from './product.card.search.service';
+import { ProductCardSearchController } from './product.card.search.controller';
+import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
+
+
+
+@Module({
+    imports: [
+        TypeOrmModule.forFeature([ProductCard]),
+        ProductLineModule,
+        ProductSetModule,
+        ErrorMessageModule
+    ],
+    controllers: [ProductCardSearchController],
+    providers: [ProductCardSearchService],
+    exports: [ProductCardSearchService]
+})
+export class ProductCardSearchModule {}

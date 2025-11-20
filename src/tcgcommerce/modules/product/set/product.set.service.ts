@@ -144,6 +144,26 @@ export class ProductSetService {
             
         return productSetDTO;
     }
+
+    async getProductSetByProductSetCode(productLineId: string, productSetCode: string) {
+        let today = new Date();
+        
+        let productSet = await this.productSetRepository.findOne({
+            where: {
+                productLineId: productLineId,
+                productSetCode: productSetCode.toUpperCase(),
+                productSetReleaseDate: LessThanOrEqual(today)
+            }
+        });
+        
+        if(productSet == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productLineId: ' + productLineId + ', and productSetCode: ' + productSetCode);
+        }
+        
+        let productSetDTO: ProductSetDTO = ({ ...productSet });
+            
+        return productSetDTO;
+    }
     
     async updateProductSet(updateProductSetDTO: UpdateProductSetDTO) {
                             
