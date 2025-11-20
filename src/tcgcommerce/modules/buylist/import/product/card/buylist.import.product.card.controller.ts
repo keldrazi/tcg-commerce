@@ -1,19 +1,19 @@
 import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { InventoryProductCardServiceImportJobService } from './inventory.product.card.service.import.job.service';
-import { InventoryProductCardServiceImportJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/dto/inventory.product.card.service.import.job.dto';
+import { BuylistImportProductCardService } from './buylist.import.product.card.service';
+import { BuylistImportProductCardDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/dto/buylist.import.product.card.dto';
 import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('inventory/product/card/service/import/job')
-export class InventoryProductCardServiceImportJobController {
+export class BuylistImportProductCardController {
 
     constructor(
-        private inventoryProductCardServiceImportJobService: InventoryProductCardServiceImportJobService,
+        private buylistImportProductCardService: BuylistImportProductCardService,
     ) { }
     
     
     @Post()
     @UseInterceptors(FileInterceptor('file'))
-    async createInventoryProductCardServiceImportJob(
+    async createBuylistImportProductCard(
         @Body() body: any,
         @UploadedFile(
         new ParseFilePipe({
@@ -22,34 +22,34 @@ export class InventoryProductCardServiceImportJobController {
             ],
         }),
         )
-        inventoryProductCardServiceImportJobFile: Express.Multer.File,
+        buylistImportProductCardFile: Express.Multer.File,
         
     ) {
 
-        let inventoryProductCardServiceImportJobCode = await this.inventoryProductCardServiceImportJobService.createInventoryProductCardServiceImportJob(inventoryProductCardServiceImportJobFile, body.createInventoryProductCardServiceImportJobDTO);
+        let buylistImportProductCardCode = await this.buylistImportProductCardService.createBuylistImportProductCard(buylistImportProductCardFile, body.createBuylistImportProductCardDTO);
 
-        return inventoryProductCardServiceImportJobCode;
+        return buylistImportProductCardCode;
     }
     
-    @Get('review/:inventoryProductCardServiceImportJobId')
-    async reviewInventoryProductCardServiceImportJobById(@Param('inventoryProductCardServiceImportJobId') inventoryProductCardServiceImportJobId: string) {
-        let inventoryProductCardServiceImportJobDTO = await this.inventoryProductCardServiceImportJobService.getInventoryProductCardServiceImportJobDetailsById(inventoryProductCardServiceImportJobId);
+    @Get('review/:buylistImportProductCardId')
+    async reviewBuylistImportProductCardById(@Param('buylistImportProductCardId') buylistImportProductCardId: string) {
+        let buylistImportProductCardDTO = await this.buylistImportProductCardService.getBuylistImportProductCardDetailsById(buylistImportProductCardId);
 
-        return inventoryProductCardServiceImportJobDTO;
+        return buylistImportProductCardDTO;
     }
 
-    @Get('approve/:inventoryProductCardServiceImportJobId')
-    async approveInventoryProductCardServiceImportJobById(@Param('inventoryProductCardServiceImportJobId') inventoryProductCardServiceImportJobId: string) {
-        let inventoryProductCardServiceImportJobDTO = await this.inventoryProductCardServiceImportJobService.approveInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
+    @Get('approve/:buylistImportProductCardId')
+    async approveBuylistImportProductCardById(@Param('buylistImportProductCardId') buylistImportProductCardId: string) {
+        let buylistImportProductCardDTO = await this.buylistImportProductCardService.approveBuylistImportProductCardById(buylistImportProductCardId);
         
-        return inventoryProductCardServiceImportJobDTO;
+        return buylistImportProductCardDTO;
     }
 
-    @Get('delete/:inventoryProductCardServiceImportJobId')
-    async deleteInventoryProductCardServiceImportJobById(@Param('inventoryProductCardServiceImportJobId') inventoryProductCardServiceImportJobId: string) {
-        let inventoryProductCardServiceImportJobDTO = await this.inventoryProductCardServiceImportJobService.deleteInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
+    @Get('delete/:buylistImportProductCardId')
+    async deleteBuylistImportProductCardById(@Param('buylistImportProductCardId') buylistImportProductCardId: string) {
+        let buylistImportProductCardDTO = await this.buylistImportProductCardService.deleteBuylistImportProductCardById(buylistImportProductCardId);
         
-        return inventoryProductCardServiceImportJobDTO;
+        return buylistImportProductCardDTO;
     }
 
 

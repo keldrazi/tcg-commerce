@@ -1,72 +1,72 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InventoryProductCardServiceImportJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/dto/inventory.product.card.service.import.job.dto';
-import { InventoryProductCardServiceImportJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/item/dto/inventory.product.card.service.import.job.item.dto';
-import { InventoryProductCardServiceImportJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.entity';
+import { BuylistImportProductCardDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/dto/buylist.import.product.card.dto';
+import { BuylistImportProductCardItemDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/item/dto/buylist.import.product.card.item.dto';
+import { BuylistImportProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/import/product/card/item/buylist.import.product.card.item.entity';
 import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product.card.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
 import { InventoryProductCardService } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { InventoryProductCardServiceImportJobProviderService } from '../provider/inventory.product.card.service.import.job.provider.service';
+import { BuylistImportProductCardProviderService } from '../provider/buylist.import.product.card.provider.service';
 import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 
 @Injectable()
-export class InventoryProductCardServiceImportJobItemService {
+export class BuylistImportProductCardItemService {
 
     constructor(
-        @InjectRepository(InventoryProductCardServiceImportJobItem) private inventoryProductCardServiceImportJobItemRepository: Repository<InventoryProductCardServiceImportJobItem>,
+        @InjectRepository(BuylistImportProductCardItem) private buylistImportProductCardItemRepository: Repository<BuylistImportProductCardItem>,
         private productCardService: ProductCardService,
         private productSetService: ProductSetService,
         private productCardConditionService: ProductCardConditionService,
         private productCardPrintingService: ProductCardPrintingService,
         private inventoryProductCardService: InventoryProductCardService,
         private eventEmitter: EventEmitter2,
-        private inventoryProductCardServiceImportJobProviderRocaService: InventoryProductCardServiceImportJobProviderService,
+        private buylistImportProductCardProviderRocaService: BuylistImportProductCardProviderService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+    async getBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {
     
-            let inventoryProductCardServiceImportJobItemDTOs: InventoryProductCardServiceImportJobItemDTO[] = [];
+            let buylistImportProductCardItemDTOs: BuylistImportProductCardItemDTO[] = [];
     
-            let inventoryProductCardServiceImportJobItems = await this.inventoryProductCardServiceImportJobItemRepository.find({
+            let buylistImportProductCardItems = await this.buylistImportProductCardItemRepository.find({
                 where: {
-                    inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
+                    buylistImportProductCardId: buylistImportProductCardId,
                 }
             });
     
-            for(let i = 0; i < inventoryProductCardServiceImportJobItems.length; i++) {
-                let inventoryProductCardServiceImportJobItem = inventoryProductCardServiceImportJobItems[i];
-                let inventoryProductCardServiceImportJobItemDTO: InventoryProductCardServiceImportJobItemDTO = ({ ...inventoryProductCardServiceImportJobItem});
-                inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemCSVData = JSON.parse(inventoryProductCardServiceImportJobItem.inventoryProductCardServiceImportJobItemCSVData);
+            for(let i = 0; i < buylistImportProductCardItems.length; i++) {
+                let buylistImportProductCardItem = buylistImportProductCardItems[i];
+                let buylistImportProductCardItemDTO: BuylistImportProductCardItemDTO = ({ ...buylistImportProductCardItem});
+                buylistImportProductCardItemDTO.buylistImportProductCardItemCSVData = JSON.parse(buylistImportProductCardItem.buylistImportProductCardItemCSVData);
                 
-                inventoryProductCardServiceImportJobItemDTOs.push(inventoryProductCardServiceImportJobItemDTO);
+                buylistImportProductCardItemDTOs.push(buylistImportProductCardItemDTO);
             }
     
-            return inventoryProductCardServiceImportJobItemDTOs;
+            return buylistImportProductCardItemDTOs;
     
         }
 
-    async createInventoryProductCardServiceImportJobItems(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
+    async createBuylistImportProductCardItems(buylistImportProductCardFile: Express.Multer.File, buylistImportProductCardDTO: BuylistImportProductCardDTO) {
 
-        let inventoryProductCardServiceImportJobProviderDTOs = await this.inventoryProductCardServiceImportJobProviderRocaService.processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeCode);
+        let buylistImportProductCardProviderDTOs = await this.buylistImportProductCardProviderRocaService.processBuylistImportProductCardCards(buylistImportProductCardFile, buylistImportProductCardDTO.buylistImportProductCardId, buylistImportProductCardDTO.buylistImportProductCardProviderTypeCode);
         
-        if(inventoryProductCardServiceImportJobProviderDTOs == null || inventoryProductCardServiceImportJobProviderDTOs instanceof ErrorMessageDTO) {
+        if(buylistImportProductCardProviderDTOs == null || buylistImportProductCardProviderDTOs instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_ITEM_DATA_INVALID', 'No valid inventory product card service import job items found in the import file.');
         }
 
-        for(let i = 0; i < inventoryProductCardServiceImportJobProviderDTOs.length; i++) {
-            let inventoryProductCardServiceImportJobProviderDTO = inventoryProductCardServiceImportJobProviderDTOs[i];
+        for(let i = 0; i < buylistImportProductCardProviderDTOs.length; i++) {
+            let buylistImportProductCardProviderDTO = buylistImportProductCardProviderDTOs[i];
 
-            let productCard = await this.productCardService.getProductCardByTCGPlayerId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderTCGPlayerId);
-            let productCardCondition = await this.productCardConditionService.getProductCardConditionByCodeAndProductLineId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderCondition, inventoryProductCardServiceImportJobDTO.productLineId);
-            let productCardPrinting = await this.productCardPrintingService.getProductCardPrintingByNameAndProductLineId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderPrinting, inventoryProductCardServiceImportJobDTO.productLineId);
+            let productCard = await this.productCardService.getProductCardByTCGPlayerId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderTCGPlayerId);
+            let productCardCondition = await this.productCardConditionService.getProductCardConditionByCodeAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderCondition, buylistImportProductCardDTO.productLineId);
+            let productCardPrinting = await this.productCardPrintingService.getProductCardPrintingByNameAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderPrinting, buylistImportProductCardDTO.productLineId);
             
             if((productCard == null ||productCard instanceof ErrorMessageDTO) || (productCardCondition == null || productCardCondition instanceof ErrorMessageDTO) || (productCardPrinting == null || productCardPrinting instanceof ErrorMessageDTO)) {
                 continue;
@@ -78,18 +78,18 @@ export class InventoryProductCardServiceImportJobItemService {
                 continue;
             }
 
-            let inventoryProductCardServiceImportJobItem = this.inventoryProductCardServiceImportJobItemRepository.create({
-                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
+            let buylistImportProductCardItem = this.buylistImportProductCardItemRepository.create({
+                buylistImportProductCardId: buylistImportProductCardDTO.buylistImportProductCardId,
                 productCardId: productCard.productCardId,
                 productCardTCGdbId: productCard.productCardTCGdbId,
                 productCardTCGPlayerId: productCard.productCardTCGPlayerId,
-                commerceAccountId: inventoryProductCardServiceImportJobDTO.commerceAccountId,
-                commerceLocationId: inventoryProductCardServiceImportJobDTO.commerceLocationId,
-                productVendorId: inventoryProductCardServiceImportJobDTO.productVendorId,
-                productLineId: inventoryProductCardServiceImportJobDTO.productLineId,
-                productTypeId: inventoryProductCardServiceImportJobDTO.productTypeId,
-                productLanguageId: inventoryProductCardServiceImportJobDTO.productLanguageId,
-                productLanguageCode: inventoryProductCardServiceImportJobDTO.productLanguageCode,
+                commerceAccountId: buylistImportProductCardDTO.commerceAccountId,
+                commerceLocationId: buylistImportProductCardDTO.commerceLocationId,
+                productVendorId: buylistImportProductCardDTO.productVendorId,
+                productLineId: buylistImportProductCardDTO.productLineId,
+                productTypeId: buylistImportProductCardDTO.productTypeId,
+                productLanguageId: buylistImportProductCardDTO.productLanguageId,
+                productLanguageCode: buylistImportProductCardDTO.productLanguageCode,
                 productSetId: productSet.productSetId,
                 productSetCode: productSet.productSetCode,
                 productCardConditionId: productCardCondition.productCardConditionId,
@@ -97,19 +97,19 @@ export class InventoryProductCardServiceImportJobItemService {
                 productCardConditionName: productCardCondition.productCardConditionName,
                 productCardPrintingId: productCardPrinting.productCardPrintingId,
                 productCardPrintingName: productCardPrinting.productCardPrintingName,
-                inventoryProductCardServiceImportJobItemQty: inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderQty,
-                inventoryProductCardServiceImportJobItemCSVData: JSON.stringify(inventoryProductCardServiceImportJobProviderDTO)
+                buylistImportProductCardItemQty: buylistImportProductCardProviderDTO.buylistImportProductCardProviderQty,
+                buylistImportProductCardItemCSVData: JSON.stringify(buylistImportProductCardProviderDTO)
             });
 
-            await this.inventoryProductCardServiceImportJobItemRepository.save(inventoryProductCardServiceImportJobItem); 
+            await this.buylistImportProductCardItemRepository.save(buylistImportProductCardItem); 
 
         }
 
         this.eventEmitter.emit(
             'inventory.product.card.service.import.job.update.status',
             {
-                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
-                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
+                buylistImportProductCardId: buylistImportProductCardDTO.buylistImportProductCardId,
+                buylistImportProductCardStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
 
             }
         )
@@ -117,57 +117,57 @@ export class InventoryProductCardServiceImportJobItemService {
         return true;
     }
 
-    async getInventoryProductCardServiceImportJobItemDetailsByJob(inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
+    async getBuylistImportProductCardItemDetailsByJob(buylistImportProductCardDTO: BuylistImportProductCardDTO) {
 
-        let inventoryProductCardServiceImportJobItems = await this.inventoryProductCardServiceImportJobItemRepository.find({
+        let buylistImportProductCardItems = await this.buylistImportProductCardItemRepository.find({
             where: {
-                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId,
+                buylistImportProductCardId: buylistImportProductCardDTO.buylistImportProductCardId,
             }
         });
 
-        let inventoryProductCardServiceImportJobItemDTOs: InventoryProductCardServiceImportJobItemDTO[] = [];
+        let buylistImportProductCardItemDTOs: BuylistImportProductCardItemDTO[] = [];
 
-        if(inventoryProductCardServiceImportJobItems == null || inventoryProductCardServiceImportJobItems.length == 0) {
-            return inventoryProductCardServiceImportJobItemDTOs;
+        if(buylistImportProductCardItems == null || buylistImportProductCardItems.length == 0) {
+            return buylistImportProductCardItemDTOs;
         }
 
-        for(let i = 0; i < inventoryProductCardServiceImportJobItems.length; i++) {
-            let inventoryProductCardServiceImportJobItem = inventoryProductCardServiceImportJobItems[i];
-            let inventoryProductCardServiceImportJobItemDTO: InventoryProductCardServiceImportJobItemDTO = ({ ...inventoryProductCardServiceImportJobItem});
-            inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemCSVData = JSON.parse(inventoryProductCardServiceImportJobItem.inventoryProductCardServiceImportJobItemCSVData);
-            inventoryProductCardServiceImportJobItemDTOs.push(inventoryProductCardServiceImportJobItemDTO);
+        for(let i = 0; i < buylistImportProductCardItems.length; i++) {
+            let buylistImportProductCardItem = buylistImportProductCardItems[i];
+            let buylistImportProductCardItemDTO: BuylistImportProductCardItemDTO = ({ ...buylistImportProductCardItem});
+            buylistImportProductCardItemDTO.buylistImportProductCardItemCSVData = JSON.parse(buylistImportProductCardItem.buylistImportProductCardItemCSVData);
+            buylistImportProductCardItemDTOs.push(buylistImportProductCardItemDTO);
         }
 
-        return inventoryProductCardServiceImportJobItemDTOs;
+        return buylistImportProductCardItemDTOs;
 
     }
 
-    async approveInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+    async approveBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {
             
         this.eventEmitter.emit(
             'inventory.product.card.service.import.job.update.status',
             {
-                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
-                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
+                buylistImportProductCardId: buylistImportProductCardId,
+                buylistImportProductCardStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
             }
         )   
 
-        let inventoryProductCardServiceImportJobItemDTOs = await this.getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId);
-        for(let i = 0; i < inventoryProductCardServiceImportJobItemDTOs.length; i++) {
-            let inventoryProductCardServiceImportJobItemDTO = inventoryProductCardServiceImportJobItemDTOs[i];
-            let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByProductCardPrintingId(inventoryProductCardServiceImportJobItemDTO.commerceAccountId, inventoryProductCardServiceImportJobItemDTO.commerceLocationId, inventoryProductCardServiceImportJobItemDTO.productCardId, inventoryProductCardServiceImportJobItemDTO.productCardPrintingId, inventoryProductCardServiceImportJobItemDTO.productLanguageId);
+        let buylistImportProductCardItemDTOs = await this.getBuylistImportProductCardItemsByJobId(buylistImportProductCardId);
+        for(let i = 0; i < buylistImportProductCardItemDTOs.length; i++) {
+            let buylistImportProductCardItemDTO = buylistImportProductCardItemDTOs[i];
+            let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByProductCardPrintingId(buylistImportProductCardItemDTO.commerceAccountId, buylistImportProductCardItemDTO.commerceLocationId, buylistImportProductCardItemDTO.productCardId, buylistImportProductCardItemDTO.productCardPrintingId, buylistImportProductCardItemDTO.productLanguageId);
             
             if(inventoryProductCardDTO == null || inventoryProductCardDTO instanceof ErrorMessageDTO) {
                 continue;
             }
 
-            let inventoryProductCardItem = inventoryProductCardDTO.inventoryProductCardItems.find(item => item.productCardConditionCode === inventoryProductCardServiceImportJobItemDTO.productCardConditionCode);
+            let inventoryProductCardItem = inventoryProductCardDTO.inventoryProductCardItems.find(item => item.productCardConditionCode === buylistImportProductCardItemDTO.productCardConditionCode);
             
             if(inventoryProductCardItem == undefined) {
                 continue;
             }
 
-            inventoryProductCardItem.inventoryProductCardItemQty = inventoryProductCardItem.inventoryProductCardItemQty + inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemQty;
+            inventoryProductCardItem.inventoryProductCardItemQty = inventoryProductCardItem.inventoryProductCardItemQty + buylistImportProductCardItemDTO.buylistImportProductCardItemQty;
             
             await this.inventoryProductCardService.updateInventoryProductCard(inventoryProductCardDTO);
     }
@@ -175,8 +175,8 @@ export class InventoryProductCardServiceImportJobItemService {
         this.eventEmitter.emit(
             'inventory.product.card.service.create.job.update.status',
             {
-                inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
-                inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_COMPLETE,
+                buylistImportProductCardId: buylistImportProductCardId,
+                buylistImportProductCardStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_COMPLETE,
             }
         )
         
@@ -184,10 +184,10 @@ export class InventoryProductCardServiceImportJobItemService {
 
     }
 
-    async deleteInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+    async deleteBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {
         
-        await this.inventoryProductCardServiceImportJobItemRepository.delete({
-            inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId
+        await this.buylistImportProductCardItemRepository.delete({
+            buylistImportProductCardId: buylistImportProductCardId
         });
         
         return true;

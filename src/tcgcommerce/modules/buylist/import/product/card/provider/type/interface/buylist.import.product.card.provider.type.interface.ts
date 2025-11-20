@@ -1,11 +1,8 @@
-export interface InventoryProductCardServiceImportJobProviderTypeDataKey {
-    inventoryProductCardServiceImportJobProviderTypeDataKeyTCGPlayerId: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeyProductLine: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeySetName: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeyProductName: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeyNumber: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeyRarity: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeyCondition: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeyPrinting: string;
-    inventoryProductCardServiceImportJobProviderTypeDataKeyQty: string;
+export interface BuylistImportProductCardProviderTypeDataKey {
+    buylistImportProductCardProviderTypeDataKeySetCode: string;
+    buylistImportProductCardProviderTypeDataKeyProductName: string;
+    buylistImportProductCardProviderTypeDataKeyNumber: string;
+    buylistImportProductCardProviderTypeDataKeyCondition: string;
+    buylistImportProductCardProviderTypeDataKeyPrinting: string;
+    buylistImportProductCardProviderTypeDataKeyQty: string;
 }

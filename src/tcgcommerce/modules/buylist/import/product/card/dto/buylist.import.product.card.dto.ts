@@ -1,6 +1,6 @@
 import { IsString, IsBoolean } from "class-validator";
 
-export class BuylistProductCardImportDTO {
+export class BuylistImportProductCardDTO {
     buylistImportProductCardId: string;
     buylistProductCardId: string;
     buylistImportProductCardProviderTypeId: string;
@@ -18,7 +18,7 @@ export class BuylistProductCardImportDTO {
     
 }
 
-export class CreateBuylistProductCardImportDTO {
+export class CreateBuylistImportProductCardDTO {
     @IsString()
     buylistProductCardId: string;
     @IsString()

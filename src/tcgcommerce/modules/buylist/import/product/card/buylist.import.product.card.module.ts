@@ -1,23 +1,23 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryProductCardServiceImportJobController } from './inventory.product.card.service.import.job.controller';
-import { InventoryProductCardServiceImportJobService } from './inventory.product.card.service.import.job.service';
-import { InventoryProductCardServiceImportJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/inventory.product.card.service.import.job.entity';
-import { InventoryProductCardServiceImportJobItemModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.module';
+import { BuylistImportProductCardController } from './buylist.import.product.card.controller';
+import { BuylistImportProductCardService } from './buylist.import.product.card.service';
+import { BuylistImportProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/import/product/card/buylist.import.product.card.entity';
+import { BuylistImportProductCardItemModule } from 'src/tcgcommerce/modules/buylist/import/product/card/item/buylist.import.product.card.item.module';
 import { AwsS3Module } from 'src/system/modules/aws/s3/aws.s3.module';
-import { InventoryProductCardServiceImportJobProviderTypeModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.module';
+import { BuylistImportProductCardProviderTypeModule } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/buylist.import.product.card.provider.type.module';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryProductCardServiceImportJob]),
-        InventoryProductCardServiceImportJobItemModule,
+        TypeOrmModule.forFeature([BuylistImportProductCard]),
+        BuylistImportProductCardItemModule,
         AwsS3Module,
-        InventoryProductCardServiceImportJobProviderTypeModule,
+        BuylistImportProductCardProviderTypeModule,
         ErrorMessageModule
     ],
-    controllers: [InventoryProductCardServiceImportJobController],
-    providers: [InventoryProductCardServiceImportJobService],
-    exports: [InventoryProductCardServiceImportJobService]
+    controllers: [BuylistImportProductCardController],
+    providers: [BuylistImportProductCardService],
+    exports: [BuylistImportProductCardService]
 })
-export class InventoryProductCardServiceImportJobModule {}
+export class BuylistImportProductCardModule {}

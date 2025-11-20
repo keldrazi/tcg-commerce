@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InventoryProductCardServiceImportJobItemService } from './inventory.product.card.service.import.job.item.service';
-import { InventoryProductCardServiceImportJobItem } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.entity';
+import { BuylistImportProductCardItemService } from './buylist.import.product.card.item.service';
+import { BuylistImportProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/import/product/card/item/buylist.import.product.card.item.entity';
 import { InventoryProductCardModule } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.module';
 import { ProductCardModule } from 'src/tcgcommerce/modules/product/card/product.card.module';
 import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.set.module';
@@ -9,13 +9,13 @@ import { ProductCardConditionModule } from 'src/tcgcommerce/modules/product/card
 import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/product.language.module';
 import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/location/commerce.location.module';
-import { InventoryProductCardServiceImportJobProviderModule } from '../provider/inventory.product.card.service.import.job.provider.module';
+import { BuylistImportProductCardProviderModule } from '../provider/buylist.import.product.card.provider.module';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([InventoryProductCardServiceImportJobItem]),
+        TypeOrmModule.forFeature([BuylistImportProductCardItem]),
         ProductCardModule,
         ProductSetModule,
         ProductCardConditionModule,
@@ -23,14 +23,14 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         ProductCardPrintingModule,
         CommerceLocationModule,
         InventoryProductCardModule,
-        InventoryProductCardServiceImportJobProviderModule,
+        BuylistImportProductCardProviderModule,
         ErrorMessageModule,
     ],
     controllers: [],
-    providers: [InventoryProductCardServiceImportJobItemService],
-    exports: [InventoryProductCardServiceImportJobItemService]
+    providers: [BuylistImportProductCardItemService],
+    exports: [BuylistImportProductCardItemService]
 })
-export class InventoryProductCardServiceImportJobItemModule {
+export class BuylistImportProductCardItemModule {
 
 
 }

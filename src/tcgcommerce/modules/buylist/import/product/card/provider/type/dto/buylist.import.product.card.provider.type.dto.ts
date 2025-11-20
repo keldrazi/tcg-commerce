@@ -1,49 +1,49 @@
 import { IsString, IsBoolean } from "class-validator";
-import { InventoryProductCardServiceImportJobProviderTypeDataKey } from '../interface/inventory.product.card.service.import.job.provider.type.interface';
+import { BuylistImportProductCardProviderTypeDataKey } from '../interface/buylist.import.product.card.provider.type.interface';
 
-export class InventoryProductCardServiceImportJobProviderTypeDTO {
-    inventoryProductCardServiceImportJobProviderTypeId: string;
-    inventoryProductCardServiceImportJobProviderTypeName: string;
-    inventoryProductCardServiceImportJobProviderTypeCode: string;
-    inventoryProductCardServiceImportJobProviderTypeDescription: string;
-    inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
-    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
-    inventoryProductCardServiceImportJobProviderTypeFileDataKey: InventoryProductCardServiceImportJobProviderTypeDataKey;
-    inventoryProductCardServiceImportJobProviderTypeIsActive: boolean;
-    inventoryProductCardServiceImportJobProviderTypeCreateDate: Date;
-    inventoryProductCardServiceImportJobProviderTypeUpdateDate: Date;  
+export class BuylistImportProductCardProviderTypeDTO {
+    buylistImportProductCardProviderTypeId: string;
+    buylistImportProductCardProviderTypeName: string;
+    buylistImportProductCardProviderTypeCode: string;
+    buylistImportProductCardProviderTypeDescription: string;
+    buylistImportProductCardProviderTypeFileExtension: string;
+    buylistImportProductCardProviderTypeFileUploadPath: string;
+    buylistImportProductCardProviderTypeFileDataKey: BuylistImportProductCardProviderTypeDataKey;
+    buylistImportProductCardProviderTypeIsActive: boolean;
+    buylistImportProductCardProviderTypeCreateDate: Date;
+    buylistImportProductCardProviderTypeUpdateDate: Date;  
 }
 
-export class CreateInventoryProductCardServiceImportJobProviderTypeDTO {
+export class CreateBuylistImportProductCardProviderTypeDTO {
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeName: string;
+    buylistImportProductCardProviderTypeName: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeCode: string;
+    buylistImportProductCardProviderTypeCode: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeDescription: string;
+    buylistImportProductCardProviderTypeDescription: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
+    buylistImportProductCardProviderTypeFileExtension: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    buylistImportProductCardProviderTypeFileUploadPath: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeFileDataKey: string;
+    buylistImportProductCardProviderTypeFileDataKey: string;
 }
 
-export class UpdateInventoryProductCardServiceImportJobProviderTypeDTO {
+export class UpdateBuylistImportProductCardProviderTypeDTO {
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeId: string;
+    buylistImportProductCardProviderTypeId: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeName: string;
+    buylistImportProductCardProviderTypeName: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeCode: string;
+    buylistImportProductCardProviderTypeCode: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeDescription: string;
+    buylistImportProductCardProviderTypeDescription: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeFileExtension: string;
+    buylistImportProductCardProviderTypeFileExtension: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeFileUploadPath: string;
+    buylistImportProductCardProviderTypeFileUploadPath: string;
     @IsString()
-    inventoryProductCardServiceImportJobProviderTypeFileDataKey: string;
+    buylistImportProductCardProviderTypeFileDataKey: string;
     @IsBoolean()
-    inventoryProductCardServiceImportJobProviderTypeIsActive: boolean;
+    buylistImportProductCardProviderTypeIsActive: boolean;
 }

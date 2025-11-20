@@ -1,7 +1,7 @@
 
-export class InventoryProductCardServiceImportJobItemDTO {
-    inventoryProductCardServiceImportJobItemId: string;
-    inventoryProductCardServiceImportJobId: string;
+export class BuylistImportProductCardItemDTO {
+    buylistImportProductCardItemId: string;
+    buylistImportProductCardId: string;
     productCardId: string;
     productCardTCGdbId: string;
     productCardTCGPlayerId: number;
@@ -19,10 +19,10 @@ export class InventoryProductCardServiceImportJobItemDTO {
     productCardConditionId: string;
     productCardConditionCode: string;
     productCardConditionName: string
-    inventoryProductCardServiceImportJobItemQty: number;
-    inventoryProductCardServiceImportJobItemCSVData: any;
-    inventoryProductCardServiceImportJobItemCreateDate: Date;
-    inventoryProductCardServiceImportJobItemUpdateDate: Date; 
+    buylistImportProductCardItemQty: number;
+    buylistImportProductCardItemCSVData: any;
+    buylistImportProductCardItemCreateDate: Date;
+    buylistImportProductCardItemUpdateDate: Date; 
 }
 
 

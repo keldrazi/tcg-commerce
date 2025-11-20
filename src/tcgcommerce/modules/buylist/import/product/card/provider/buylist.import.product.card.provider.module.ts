@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
-import { InventoryProductCardServiceImportJobProviderService } from "./buylist.import.product.card.provider.service";
+import { BuylistImportProductCardProviderService } from "./buylist.import.product.card.provider.service";
 import { UtilCSVModule } from 'src/system/modules/util/csv/util.csv.module';
-import { InventoryProductCardServiceImportJobProviderUtilModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/util/inventory.product.card.service.import.job.provider.util.module';
-import { InventoryProductCardServiceImportJobProviderTypeModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.module';
+import { BuylistImportProductCardProviderUtilModule } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/util/buylist.import.product.card.provider.util.module';
+import { BuylistImportProductCardProviderTypeModule } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/buylist.import.product.card.provider.type.module';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
   imports: [
     UtilCSVModule,
-    InventoryProductCardServiceImportJobProviderUtilModule,
-    InventoryProductCardServiceImportJobProviderTypeModule,
+    BuylistImportProductCardProviderUtilModule,
+    BuylistImportProductCardProviderTypeModule,
     ErrorMessageModule
   ], 
-  providers: [InventoryProductCardServiceImportJobProviderService],
-  exports: [InventoryProductCardServiceImportJobProviderService],
+  providers: [BuylistImportProductCardProviderService],
+  exports: [BuylistImportProductCardProviderService],
 })
-export class InventoryProductCardServiceImportJobProviderModule {}
+export class BuylistImportProductCardProviderModule {}

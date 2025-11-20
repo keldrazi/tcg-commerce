@@ -1,177 +1,177 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateInventoryProductCardServiceImportJobProviderTypeDTO, UpdateInventoryProductCardServiceImportJobProviderTypeDTO, InventoryProductCardServiceImportJobProviderTypeDTO } from './dto/inventory.product.card.service.import.job.provider.type.dto';
-import { InventoryProductCardServiceImportJobProviderType } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.entity';
+import { CreateBuylistImportProductCardProviderTypeDTO, UpdateBuylistImportProductCardProviderTypeDTO, BuylistImportProductCardProviderTypeDTO } from './dto/buylist.import.product.card.provider.type.dto';
+import { BuylistImportProductCardProviderType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/import/product/card/provider/type/buylist.import.product.card.provider.type.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
-export class InventoryProductCardServiceImportJobProviderTypeService {
+export class BuylistImportProductCardProviderTypeService {
 
     constructor(
-        @InjectRepository(InventoryProductCardServiceImportJobProviderType) private inventoryProductCardServiceImportJobProviderTypeRepository: Repository<InventoryProductCardServiceImportJobProviderType>,
+        @InjectRepository(BuylistImportProductCardProviderType) private buylistImportProductCardProviderTypeRepository: Repository<BuylistImportProductCardProviderType>,
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getInventoryProductCardServiceImportJobProviderTypeById(inventoryProductCardServiceImportJobProviderTypeId: string) {
-        let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({ 
+    async getBuylistImportProductCardProviderTypeById(buylistImportProductCardProviderTypeId: string) {
+        let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({ 
             where: { 
-                inventoryProductCardServiceImportJobProviderTypeId: inventoryProductCardServiceImportJobProviderTypeId 
+                buylistImportProductCardProviderTypeId: buylistImportProductCardProviderTypeId 
             } 
         });
         
-        if (inventoryProductCardServiceImportJobProviderType == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for id: ' + inventoryProductCardServiceImportJobProviderTypeId);
+        if (buylistImportProductCardProviderType == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for id: ' + buylistImportProductCardProviderTypeId);
         }
 
-        let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeId;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeName;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCode = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCode;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeDescription = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeDescription;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileExtension = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileExtension;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileUploadPath = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileUploadPath;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey = JSON.parse(inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileDataKey);
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeIsActive = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeIsActive;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCreateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCreateDate;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeUpdateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeUpdateDate;
+        let buylistImportProductCardProviderTypeDTO = new BuylistImportProductCardProviderTypeDTO();
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeId;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeName;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCode = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCode;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeDescription = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeDescription;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileExtension = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileExtension;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileUploadPath = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileUploadPath;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey = JSON.parse(buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileDataKey);
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeIsActive = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeIsActive;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCreateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCreateDate;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeUpdateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeUpdateDate;
 
-        return inventoryProductCardServiceImportJobProviderTypeDTO;
+        return buylistImportProductCardProviderTypeDTO;
 
     }
 
-    async getInventoryProductCardServiceImportJobProviderTypes() {
-        let inventoryProductCardServiceImportJobProviderTypes = await this.inventoryProductCardServiceImportJobProviderTypeRepository.find();
+    async getBuylistImportProductCardProviderTypes() {
+        let buylistImportProductCardProviderTypes = await this.buylistImportProductCardProviderTypeRepository.find();
 
         //TO DO: CREATE AN ERROR TO RETURN;
-        if(inventoryProductCardServiceImportJobProviderTypes == null) {
+        if(buylistImportProductCardProviderTypes == null) {
             return [];
         }
 
-        let inventoryProductCardServiceImportJobProviderTypeDTOs: InventoryProductCardServiceImportJobProviderTypeDTO[] = [];
+        let buylistImportProductCardProviderTypeDTOs: BuylistImportProductCardProviderTypeDTO[] = [];
 
-        for(let i = 0; i < inventoryProductCardServiceImportJobProviderTypes.length; i++) {
-            let inventoryProductCardServiceImportJobProviderType = inventoryProductCardServiceImportJobProviderTypes[i];
-            let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeId;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeName;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCode = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCode;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeDescription = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeDescription;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileExtension = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileExtension;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileUploadPath = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileUploadPath;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey = JSON.parse(inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileDataKey);
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeIsActive = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeIsActive;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCreateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCreateDate;
-            inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeUpdateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeUpdateDate;
+        for(let i = 0; i < buylistImportProductCardProviderTypes.length; i++) {
+            let buylistImportProductCardProviderType = buylistImportProductCardProviderTypes[i];
+            let buylistImportProductCardProviderTypeDTO = new BuylistImportProductCardProviderTypeDTO();
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeId;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeName;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCode = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCode;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeDescription = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeDescription;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileExtension = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileExtension;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileUploadPath = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileUploadPath;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey = JSON.parse(buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileDataKey);
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeIsActive = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeIsActive;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCreateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCreateDate;
+            buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeUpdateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeUpdateDate;
 
-            inventoryProductCardServiceImportJobProviderTypeDTOs.push(inventoryProductCardServiceImportJobProviderTypeDTO);
+            buylistImportProductCardProviderTypeDTOs.push(buylistImportProductCardProviderTypeDTO);
         }
 
-        return inventoryProductCardServiceImportJobProviderTypeDTOs;
+        return buylistImportProductCardProviderTypeDTOs;
     }
 
-    async getInventoryProductCardServiceImportJobProviderTypeByName(name: string) {
-        let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
+    async getBuylistImportProductCardProviderTypeByName(name: string) {
+        let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
-                inventoryProductCardServiceImportJobProviderTypeName: name
+                buylistImportProductCardProviderTypeName: name
             }
         });
 
-        if (inventoryProductCardServiceImportJobProviderType == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for name: ' + name);
+        if (buylistImportProductCardProviderType == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for name: ' + name);
         }
 
-        let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeId;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeName;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCode = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCode;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeDescription = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeDescription;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileExtension = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileExtension;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileUploadPath = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileUploadPath;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey = JSON.parse(inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileDataKey);
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeIsActive = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeIsActive;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCreateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCreateDate;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeUpdateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeUpdateDate;
+        let buylistImportProductCardProviderTypeDTO = new BuylistImportProductCardProviderTypeDTO();
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeId;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeName;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCode = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCode;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeDescription = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeDescription;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileExtension = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileExtension;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileUploadPath = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileUploadPath;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey = JSON.parse(buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileDataKey);
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeIsActive = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeIsActive;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCreateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCreateDate;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeUpdateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeUpdateDate;
 
 
-        return inventoryProductCardServiceImportJobProviderTypeDTO;
+        return buylistImportProductCardProviderTypeDTO;
 
     }
 
-    async getInventoryProductCardServiceImportJobProviderTypeByCode(code: string) {
-        let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
+    async getBuylistImportProductCardProviderTypeByCode(code: string) {
+        let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
-                inventoryProductCardServiceImportJobProviderTypeCode: code
+                buylistImportProductCardProviderTypeCode: code
             }
         });
 
-        if (inventoryProductCardServiceImportJobProviderType == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for code: ' + code);
+        if (buylistImportProductCardProviderType == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for code: ' + code);
         }
 
-        let inventoryProductCardServiceImportJobProviderTypeDTO = new InventoryProductCardServiceImportJobProviderTypeDTO();
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeId;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeName;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCode = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCode;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeDescription = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeDescription;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileExtension = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileExtension;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileUploadPath = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileUploadPath;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey = JSON.parse(inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileDataKey);
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeIsActive = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeIsActive;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCreateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCreateDate;
-        inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeUpdateDate = inventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeUpdateDate;
+        let buylistImportProductCardProviderTypeDTO = new BuylistImportProductCardProviderTypeDTO();
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeId;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeName;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCode = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCode;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeDescription = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeDescription;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileExtension = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileExtension;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileUploadPath = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileUploadPath;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey = JSON.parse(buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileDataKey);
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeIsActive = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeIsActive;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCreateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCreateDate;
+        buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeUpdateDate = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeUpdateDate;
 
 
-        return inventoryProductCardServiceImportJobProviderTypeDTO;
+        return buylistImportProductCardProviderTypeDTO;
 
     }
 
-    async createInventoryProductCardServiceImportJobProviderType(createInventoryProductCardServiceImportJobProviderTypeDTO: CreateInventoryProductCardServiceImportJobProviderTypeDTO) {
+    async createBuylistImportProductCardProviderType(createBuylistImportProductCardProviderTypeDTO: CreateBuylistImportProductCardProviderTypeDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let inventoryProductCardServiceImportJobProviderType = await this.getInventoryProductCardServiceImportJobProviderTypeByName(createInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName);
+        let buylistImportProductCardProviderType = await this.getBuylistImportProductCardProviderTypeByName(createBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName);
 
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (inventoryProductCardServiceImportJobProviderType != null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_DUPLICATE', 'Inventory product card service import job provider type already exists for name: ' + createInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName);
+        if (buylistImportProductCardProviderType != null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_DUPLICATE', 'Buylist import product card provider type already exists for name: ' + createBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName);
         }
 
-        let newInventoryProductCardServiceImportJobProviderType = this.inventoryProductCardServiceImportJobProviderTypeRepository.create({ ...createInventoryProductCardServiceImportJobProviderTypeDTO });
-        newInventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.save(newInventoryProductCardServiceImportJobProviderType);
+        let newBuylistImportProductCardProviderType = this.buylistImportProductCardProviderTypeRepository.create({ ...createBuylistImportProductCardProviderTypeDTO });
+        newBuylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.save(newBuylistImportProductCardProviderType);
 
-        let inventoryProductCardServiceImportJobProviderTypeDTO = this.getInventoryProductCardServiceImportJobProviderTypeById(newInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeId);
+        let buylistImportProductCardProviderTypeDTO = this.getBuylistImportProductCardProviderTypeById(newBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeId);
 
-        return inventoryProductCardServiceImportJobProviderTypeDTO;
+        return buylistImportProductCardProviderTypeDTO;
 
     }
 
-    async updateInventoryProductCardServiceImportJobProviderType(updateInventoryProductCardServiceImportJobProviderTypeDTO: UpdateInventoryProductCardServiceImportJobProviderTypeDTO) {
+    async updateBuylistImportProductCardProviderType(updateBuylistImportProductCardProviderTypeDTO: UpdateBuylistImportProductCardProviderTypeDTO) {
 
-        let updateInventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
+        let updateBuylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
-                inventoryProductCardServiceImportJobProviderTypeId: updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId
+                buylistImportProductCardProviderTypeId: updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId
             }
         });
 
         //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!updateInventoryProductCardServiceImportJobProviderType) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for id: ' + updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeId);
+        if (!updateBuylistImportProductCardProviderType) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for id: ' + updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId);
         }
 
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeName = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName;
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeCode = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeCode;
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeDescription = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeDescription;
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileExtension = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileExtension;
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileUploadPath = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileUploadPath;
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeFileDataKey = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey;
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeIsActive = updateInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeIsActive;
-        updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeUpdateDate = new Date();
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeName = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName;
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeCode = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCode;
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeDescription = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeDescription;
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileExtension = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileExtension;
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileUploadPath = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileUploadPath;
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileDataKey = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey;
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeIsActive = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeIsActive;
+        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeUpdateDate = new Date();
 
-        await this.inventoryProductCardServiceImportJobProviderTypeRepository.save(updateInventoryProductCardServiceImportJobProviderType);
+        await this.buylistImportProductCardProviderTypeRepository.save(updateBuylistImportProductCardProviderType);
 
-        let inventoryProductCardServiceImportJobProviderTypeDTO = this.getInventoryProductCardServiceImportJobProviderTypeById(updateInventoryProductCardServiceImportJobProviderType.inventoryProductCardServiceImportJobProviderTypeId);
+        let buylistImportProductCardProviderTypeDTO = this.getBuylistImportProductCardProviderTypeById(updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeId);
 
-        return inventoryProductCardServiceImportJobProviderTypeDTO;
+        return buylistImportProductCardProviderTypeDTO;
 
     }
     

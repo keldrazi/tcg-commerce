@@ -1,4 +1,4 @@
-export class InventoryProductCardServiceImportJobProviderDTO {
+export class BuylistImportProductCardProviderDTO {
     inventoryProductCardServiceImportJobProviderTCGPlayerId: number;
     inventoryProductCardServiceImportJobProviderSetName: string;
     inventoryProductCardServiceImportJobProviderProductName: string;
