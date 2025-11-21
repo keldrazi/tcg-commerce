@@ -7,6 +7,8 @@ import { BuylistImportProductCardItemModule } from 'src/tcgcommerce/modules/buyl
 import { AwsS3Module } from 'src/system/modules/aws/s3/aws.s3.module';
 import { BuylistImportProductCardProviderTypeModule } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/buylist.import.product.card.provider.type.module';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
+import { BuylistProductCardModule } from 'src/tcgcommerce/modules/buylist/product/card/buylist.product.card.module';
+import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 
 @Module({
     imports: [
@@ -14,7 +16,9 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         BuylistImportProductCardItemModule,
         AwsS3Module,
         BuylistImportProductCardProviderTypeModule,
-        ErrorMessageModule
+        ErrorMessageModule,
+        BuylistProductCardModule,
+        ProductLineModule
     ],
     controllers: [BuylistImportProductCardController],
     providers: [BuylistImportProductCardService],

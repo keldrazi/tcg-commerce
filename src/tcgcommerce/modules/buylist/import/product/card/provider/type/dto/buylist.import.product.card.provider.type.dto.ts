@@ -1,5 +1,5 @@
 import { IsString, IsBoolean } from "class-validator";
-import { BuylistImportProductCardProviderTypeDataKey } from '../interface/buylist.import.product.card.provider.type.interface';
+import { BuylistImportProductCardProviderTypeFileDataKey, BuylistImportProductCardProviderTypeFileConditionKey, BuylistImportProductCardProviderTypeFilePrintingKey } from '../interface/buylist.import.product.card.provider.type.interface';
 
 export class BuylistImportProductCardProviderTypeDTO {
     buylistImportProductCardProviderTypeId: string;
@@ -8,7 +8,9 @@ export class BuylistImportProductCardProviderTypeDTO {
     buylistImportProductCardProviderTypeDescription: string;
     buylistImportProductCardProviderTypeFileExtension: string;
     buylistImportProductCardProviderTypeFileUploadPath: string;
-    buylistImportProductCardProviderTypeFileDataKey: BuylistImportProductCardProviderTypeDataKey;
+    buylistImportProductCardProviderTypeFileDataKey: BuylistImportProductCardProviderTypeFileDataKey;
+    buylistImportProductCardProviderTypeFileConditionKey: BuylistImportProductCardProviderTypeFileConditionKey;
+    buylistImportProductCardProviderTypeFilePrintingKey: BuylistImportProductCardProviderTypeFilePrintingKey;
     buylistImportProductCardProviderTypeIsActive: boolean;
     buylistImportProductCardProviderTypeCreateDate: Date;
     buylistImportProductCardProviderTypeUpdateDate: Date;  
@@ -27,6 +29,10 @@ export class CreateBuylistImportProductCardProviderTypeDTO {
     buylistImportProductCardProviderTypeFileUploadPath: string;
     @IsString()
     buylistImportProductCardProviderTypeFileDataKey: string;
+    @IsString()
+    buylistImportProductCardProviderTypeFileConditionKey: string;
+    @IsString()
+    buylistImportProductCardProviderTypeFilePrintingKey: string;
 }
 
 export class UpdateBuylistImportProductCardProviderTypeDTO {
@@ -44,6 +50,10 @@ export class UpdateBuylistImportProductCardProviderTypeDTO {
     buylistImportProductCardProviderTypeFileUploadPath: string;
     @IsString()
     buylistImportProductCardProviderTypeFileDataKey: string;
+    @IsString()
+    buylistImportProductCardProviderTypeFileConditionKey: string
+    @IsString()
+    buylistImportProductCardProviderTypeFilePrintingKey: string
     @IsBoolean()
     buylistImportProductCardProviderTypeIsActive: boolean;
 }

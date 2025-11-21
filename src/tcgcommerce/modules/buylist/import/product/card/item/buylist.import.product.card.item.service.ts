@@ -8,10 +8,8 @@ import { ProductCardService } from 'src/tcgcommerce/modules/product/card/product
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/card/condition/product.card.condition.service';
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
-import { InventoryProductCardService } from 'src/tcgcommerce/modules/inventory/product/card/inventory.product.card.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BuylistImportProductCardProviderService } from '../provider/buylist.import.product.card.provider.service';
-import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
+import { BuylistProductCardService } from 'src/tcgcommerce/modules/buylist/product/card/buylist.product.card.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -25,48 +23,53 @@ export class BuylistImportProductCardItemService {
         private productSetService: ProductSetService,
         private productCardConditionService: ProductCardConditionService,
         private productCardPrintingService: ProductCardPrintingService,
-        private inventoryProductCardService: InventoryProductCardService,
-        private eventEmitter: EventEmitter2,
-        private buylistImportProductCardProviderRocaService: BuylistImportProductCardProviderService,
         private errorMessageService: ErrorMessageService,
+        private buylistImportProductCardProviderService: BuylistImportProductCardProviderService,
+        private buylistProductCardService: BuylistProductCardService,
     ) { }
 
-    async getBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {
+    async getBuylistImportProductCardItemsByBuylistId(buylistImportProductCardId: string) {
     
-            let buylistImportProductCardItemDTOs: BuylistImportProductCardItemDTO[] = [];
-    
-            let buylistImportProductCardItems = await this.buylistImportProductCardItemRepository.find({
-                where: {
-                    buylistImportProductCardId: buylistImportProductCardId,
-                }
-            });
-    
-            for(let i = 0; i < buylistImportProductCardItems.length; i++) {
-                let buylistImportProductCardItem = buylistImportProductCardItems[i];
-                let buylistImportProductCardItemDTO: BuylistImportProductCardItemDTO = ({ ...buylistImportProductCardItem});
-                buylistImportProductCardItemDTO.buylistImportProductCardItemCSVData = JSON.parse(buylistImportProductCardItem.buylistImportProductCardItemCSVData);
-                
-                buylistImportProductCardItemDTOs.push(buylistImportProductCardItemDTO);
+        let buylistImportProductCardItemDTOs: BuylistImportProductCardItemDTO[] = [];
+
+        let buylistImportProductCardItems = await this.buylistImportProductCardItemRepository.find({
+            where: {
+                buylistImportProductCardId: buylistImportProductCardId,
             }
-    
-            return buylistImportProductCardItemDTOs;
-    
+        });
+
+        for(let i = 0; i < buylistImportProductCardItems.length; i++) {
+            let buylistImportProductCardItem = buylistImportProductCardItems[i];
+            let buylistImportProductCardItemDTO: BuylistImportProductCardItemDTO = ({ ...buylistImportProductCardItem});
+            buylistImportProductCardItemDTO.buylistImportProductCardItemCSVData = JSON.parse(buylistImportProductCardItem.buylistImportProductCardItemCSVData);
+            
+            buylistImportProductCardItemDTOs.push(buylistImportProductCardItemDTO);
         }
+
+        return buylistImportProductCardItemDTOs;
+
+    }
 
     async createBuylistImportProductCardItems(buylistImportProductCardFile: Express.Multer.File, buylistImportProductCardDTO: BuylistImportProductCardDTO) {
 
-        let buylistImportProductCardProviderDTOs = await this.buylistImportProductCardProviderRocaService.processBuylistImportProductCardCards(buylistImportProductCardFile, buylistImportProductCardDTO.buylistImportProductCardId, buylistImportProductCardDTO.buylistImportProductCardProviderTypeCode);
+        let buylistImportProductCardProviderDTOs = await this.buylistImportProductCardProviderService.processBuylistImportProductCardCards(buylistImportProductCardFile, buylistImportProductCardDTO.buylistImportProductCardId, buylistImportProductCardDTO.buylistImportProductCardProviderTypeCode);
         
         if(buylistImportProductCardProviderDTOs == null || buylistImportProductCardProviderDTOs instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_ITEM_DATA_INVALID', 'No valid inventory product card service import job items found in the import file.');
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_ITEM_DATA_INVALID', 'No valid buylist import product card provider items found in the import file.');
+        }
+
+        let buylistProductCard = await this.buylistProductCardService.getBuylistProductCardById(buylistImportProductCardDTO.buylistProductCardId);
+
+        if(buylistProductCard == null || buylistProductCard instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found for ID: ' + buylistImportProductCardDTO.buylistProductCardId);
         }
 
         for(let i = 0; i < buylistImportProductCardProviderDTOs.length; i++) {
             let buylistImportProductCardProviderDTO = buylistImportProductCardProviderDTOs[i];
 
-            let productCard = await this.productCardService.getProductCardByTCGPlayerId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderTCGPlayerId);
-            let productCardCondition = await this.productCardConditionService.getProductCardConditionByCodeAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderCondition, buylistImportProductCardDTO.productLineId);
-            let productCardPrinting = await this.productCardPrintingService.getProductCardPrintingByNameAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderPrinting, buylistImportProductCardDTO.productLineId);
+            let productCard = await this.productCardService.getProductCardByNameAndSetCodeAndNumber(buylistImportProductCardProviderDTO.buylistImportProductCardProviderProductName, buylistImportProductCardProviderDTO.buylistImportProductCardProviderSetCode, buylistImportProductCardProviderDTO.buylistImportProductCardProviderNumber);
+            let productCardCondition = await this.productCardConditionService.getProductCardConditionByCodeAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderCondition, buylistProductCard.productLineId);
+            let productCardPrinting = await this.productCardPrintingService.getProductCardPrintingByNameAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderPrinting, buylistProductCard.productLineId);
             
             if((productCard == null ||productCard instanceof ErrorMessageDTO) || (productCardCondition == null || productCardCondition instanceof ErrorMessageDTO) || (productCardPrinting == null || productCardPrinting instanceof ErrorMessageDTO)) {
                 continue;
@@ -83,13 +86,8 @@ export class BuylistImportProductCardItemService {
                 productCardId: productCard.productCardId,
                 productCardTCGdbId: productCard.productCardTCGdbId,
                 productCardTCGPlayerId: productCard.productCardTCGPlayerId,
-                commerceAccountId: buylistImportProductCardDTO.commerceAccountId,
-                commerceLocationId: buylistImportProductCardDTO.commerceLocationId,
-                productVendorId: buylistImportProductCardDTO.productVendorId,
-                productLineId: buylistImportProductCardDTO.productLineId,
-                productTypeId: buylistImportProductCardDTO.productTypeId,
-                productLanguageId: buylistImportProductCardDTO.productLanguageId,
-                productLanguageCode: buylistImportProductCardDTO.productLanguageCode,
+                productLanguageId: buylistProductCard.productLanguageId,
+                productLanguageCode: buylistProductCard.productLanguageCode,
                 productSetId: productSet.productSetId,
                 productSetCode: productSet.productSetCode,
                 productCardConditionId: productCardCondition.productCardConditionId,
@@ -105,82 +103,14 @@ export class BuylistImportProductCardItemService {
 
         }
 
-        this.eventEmitter.emit(
-            'inventory.product.card.service.import.job.update.status',
-            {
-                buylistImportProductCardId: buylistImportProductCardDTO.buylistImportProductCardId,
-                buylistImportProductCardStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_READY_FOR_REVIEW,
-
-            }
-        )
-
         return true;
     }
 
-    async getBuylistImportProductCardItemDetailsByJob(buylistImportProductCardDTO: BuylistImportProductCardDTO) {
-
-        let buylistImportProductCardItems = await this.buylistImportProductCardItemRepository.find({
-            where: {
-                buylistImportProductCardId: buylistImportProductCardDTO.buylistImportProductCardId,
-            }
-        });
-
-        let buylistImportProductCardItemDTOs: BuylistImportProductCardItemDTO[] = [];
-
-        if(buylistImportProductCardItems == null || buylistImportProductCardItems.length == 0) {
-            return buylistImportProductCardItemDTOs;
-        }
-
-        for(let i = 0; i < buylistImportProductCardItems.length; i++) {
-            let buylistImportProductCardItem = buylistImportProductCardItems[i];
-            let buylistImportProductCardItemDTO: BuylistImportProductCardItemDTO = ({ ...buylistImportProductCardItem});
-            buylistImportProductCardItemDTO.buylistImportProductCardItemCSVData = JSON.parse(buylistImportProductCardItem.buylistImportProductCardItemCSVData);
-            buylistImportProductCardItemDTOs.push(buylistImportProductCardItemDTO);
-        }
-
-        return buylistImportProductCardItemDTOs;
-
-    }
+   
 
     async approveBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {
             
-        this.eventEmitter.emit(
-            'inventory.product.card.service.import.job.update.status',
-            {
-                buylistImportProductCardId: buylistImportProductCardId,
-                buylistImportProductCardStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY,
-            }
-        )   
 
-        let buylistImportProductCardItemDTOs = await this.getBuylistImportProductCardItemsByJobId(buylistImportProductCardId);
-        for(let i = 0; i < buylistImportProductCardItemDTOs.length; i++) {
-            let buylistImportProductCardItemDTO = buylistImportProductCardItemDTOs[i];
-            let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByProductCardPrintingId(buylistImportProductCardItemDTO.commerceAccountId, buylistImportProductCardItemDTO.commerceLocationId, buylistImportProductCardItemDTO.productCardId, buylistImportProductCardItemDTO.productCardPrintingId, buylistImportProductCardItemDTO.productLanguageId);
-            
-            if(inventoryProductCardDTO == null || inventoryProductCardDTO instanceof ErrorMessageDTO) {
-                continue;
-            }
-
-            let inventoryProductCardItem = inventoryProductCardDTO.inventoryProductCardItems.find(item => item.productCardConditionCode === buylistImportProductCardItemDTO.productCardConditionCode);
-            
-            if(inventoryProductCardItem == undefined) {
-                continue;
-            }
-
-            inventoryProductCardItem.inventoryProductCardItemQty = inventoryProductCardItem.inventoryProductCardItemQty + buylistImportProductCardItemDTO.buylistImportProductCardItemQty;
-            
-            await this.inventoryProductCardService.updateInventoryProductCard(inventoryProductCardDTO);
-    }
-
-        this.eventEmitter.emit(
-            'inventory.product.card.service.create.job.update.status',
-            {
-                buylistImportProductCardId: buylistImportProductCardId,
-                buylistImportProductCardStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_COMPLETE,
-            }
-        )
-        
-        return true;
 
     }
 

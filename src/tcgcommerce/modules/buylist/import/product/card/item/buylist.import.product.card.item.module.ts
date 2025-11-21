@@ -10,6 +10,7 @@ import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/
 import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/location/commerce.location.module';
 import { BuylistImportProductCardProviderModule } from '../provider/buylist.import.product.card.provider.module';
+import { BuylistProductCardModule } from 'src/tcgcommerce/modules/buylist/product/card/buylist.product.card.module';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
@@ -25,6 +26,7 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         InventoryProductCardModule,
         BuylistImportProductCardProviderModule,
         ErrorMessageModule,
+        BuylistProductCardModule,
     ],
     controllers: [],
     providers: [BuylistImportProductCardItemService],

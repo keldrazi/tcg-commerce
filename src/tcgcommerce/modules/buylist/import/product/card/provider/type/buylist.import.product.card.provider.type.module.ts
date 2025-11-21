@@ -8,7 +8,7 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
 @Module({
     imports: [
         TypeOrmModule.forFeature([BuylistImportProductCardProviderType]),
-        ErrorMessageModule
+        ErrorMessageModule,
     ],
     controllers: [BuylistImportProductCardProviderTypeController],
     providers: [BuylistImportProductCardProviderTypeService],

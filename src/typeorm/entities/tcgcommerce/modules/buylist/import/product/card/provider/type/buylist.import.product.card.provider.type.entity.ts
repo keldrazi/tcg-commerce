@@ -16,6 +16,10 @@ export class BuylistImportProductCardProviderType {
     buylistImportProductCardProviderTypeFileUploadPath: string;
     @Column('jsonb')
     buylistImportProductCardProviderTypeFileDataKey: string;
+    @Column('jsonb')
+    buylistImportProductCardProviderTypeFileConditionKey: string
+    @Column('jsonb')
+    buylistImportProductCardProviderTypeFilePrintingKey: string
     @Column({type: 'boolean', default: false})
     buylistImportProductCardProviderTypeIsActive: boolean;
     @CreateDateColumn()
@@ -23,3 +27,4 @@ export class BuylistImportProductCardProviderType {
     @UpdateDateColumn()
     buylistImportProductCardProviderTypeUpdateDate: Date;
 }
+

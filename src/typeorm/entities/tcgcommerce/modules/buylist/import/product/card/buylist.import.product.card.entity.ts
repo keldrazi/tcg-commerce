@@ -21,8 +21,10 @@ export class BuylistImportProductCard {
     @Column()
     buylistImportProductCardCode: string
     @Column()
+    buylistImportProductCardStatus: string;
+    @Column()
     buylistImportProductCardCount: number;
-     @Column()
+    @Column()
     buylistImportProductCardQtyCount: number;
     @CreateDateColumn()
     buylistImportProductCardCreateDate: Date;

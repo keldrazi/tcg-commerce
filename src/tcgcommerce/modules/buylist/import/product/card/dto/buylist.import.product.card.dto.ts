@@ -10,6 +10,7 @@ export class BuylistImportProductCardDTO {
     buylistImportProductCardFileOriginalName: string;
     buylistImportProductCardDate: Date;
     buylistImportProductCardCode: string;
+    buylistImportProductCardStatus: string;
     buylistImportProductCardCount: number;
     buylistImportProductCardQtyCount: number; 
     buylistImportProductCardCreateDate: Date;

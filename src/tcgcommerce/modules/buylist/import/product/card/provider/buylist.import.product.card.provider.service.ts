@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UtilCSVService } from 'src/system/modules/util/csv/util.csv.service';
 import { BuylistImportProductCardProviderDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/dto/buylist.import.product.card.provider.dto';
-import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
-import { BuylistImportProductCardProviderUtilService } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/util/buylist.import.product.card.provider.util.service';
 import { BuylistImportProductCardProviderTypeService } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/buylist.import.product.card.provider.type.service';
 import { BuylistImportProductCardProviderTypeDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/dto/buylist.import.product.card.provider.type.dto';
-import { BuylistImportProductCardProviderTypeDataKey } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/interface/buylist.import.product.card.provider.type.interface';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { BuylistImportProductCardProviderTypeFileDataKey, BuylistImportProductCardProviderTypeFileConditionKey, BuylistImportProductCardProviderTypeFilePrintingKey } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/interface/buylist.import.product.card.provider.type.interface';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+import { BuylistImportProductCardProviderTypeUtilService } from './type/util/buylist.import.product.card.provider.type.util.service';
+
 
 
 @Injectable()
@@ -16,10 +15,9 @@ export class BuylistImportProductCardProviderService {
  
     constructor(
         private utilCSVService: UtilCSVService,
-        private buylistImportProductCardProviderUtilService: BuylistImportProductCardProviderUtilService,
         private buylistImportProductCardProviderTypeService: BuylistImportProductCardProviderTypeService,
-        private eventEmitter: EventEmitter2,
         private errorMessageService: ErrorMessageService,
+        private buylistImportProductCardProviderTypeUtilService: BuylistImportProductCardProviderTypeUtilService,
     ) {}
     
     
@@ -28,33 +26,22 @@ export class BuylistImportProductCardProviderService {
         let buylistImportProductCardProviderTypeDTO = await this.buylistImportProductCardProviderTypeService.getBuylistImportProductCardProviderTypeByCode(buylistImportProductCardProviderTypeCode);
 
         if(buylistImportProductCardProviderTypeDTO == null || buylistImportProductCardProviderTypeDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for code: ' + buylistImportProductCardProviderTypeCode);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for code: ' + buylistImportProductCardProviderTypeCode);
         }
 
-        let buylistImportProductCardProviderTypeDataKey: BuylistImportProductCardProviderTypeDataKey = buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey;
-        let buylistImportProductCardProviderTypeDataKeyTCGPlayerId = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeyTCGPlayerId;
-        let buylistImportProductCardProviderTypeDataKeySetName = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeySetName;
-        let buylistImportProductCardProviderTypeDataKeyProductName = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeyProductName;
-        let buylistImportProductCardProviderTypeDataKeyNumber = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeyNumber;
-        let buylistImportProductCardProviderTypeDataKeyRarity = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeyRarity;
-        let buylistImportProductCardProviderTypeDataKeyCondition = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeyCondition;
-        let buylistImportProductCardProviderTypeDataKeyPrinting = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeyPrinting;
-        let buylistImportProductCardProviderTypeDataKeyQty = buylistImportProductCardProviderTypeDataKey.buylistImportProductCardProviderTypeDataKeyQty;
+        let buylistImportProductCardProviderTypeFileDataKey: BuylistImportProductCardProviderTypeFileDataKey = buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey;
+        let buylistImportProductCardProviderTypeFileDataKeyProductName = buylistImportProductCardProviderTypeFileDataKey.buylistImportProductCardProviderTypeFileDataKeyProductName;
+        let buylistImportProductCardProviderTypeFileDataKeyNumber = buylistImportProductCardProviderTypeFileDataKey.buylistImportProductCardProviderTypeFileDataKeyNumber;
+        let buylistImportProductCardProviderTypeFileDataKeySetCode = buylistImportProductCardProviderTypeFileDataKey.buylistImportProductCardProviderTypeFileDataKeySetCode;
+        let buylistImportProductCardProviderTypeFileDataKeyCondition = buylistImportProductCardProviderTypeFileDataKey.buylistImportProductCardProviderTypeFileDataKeyCondition;
+        let buylistImportProductCardProviderTypeFileDataKeyPrinting = buylistImportProductCardProviderTypeFileDataKey.buylistImportProductCardProviderTypeFileDataKeyPrinting;
+        let buylistImportProductCardProviderTypeFileDataKeyQty = buylistImportProductCardProviderTypeFileDataKey.buylistImportProductCardProviderTypeFileDataKeyQty;
+
+        let buylistImportProductCardProviderTypeFileConditionKey: BuylistImportProductCardProviderTypeFileConditionKey = buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileConditionKey;
+        let buylistImportProductCardProviderTypeFilePrintingKey: BuylistImportProductCardProviderTypeFilePrintingKey = buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFilePrintingKey;
 
         let buylistImportProductCardCSVData = await this.utilCSVService.parseCSV(buylistImportProductCardFile);
-        let buylistImportProductCardData = await this.processBuylistImportProductCardCSVData(buylistImportProductCardCSVData, buylistImportProductCardProviderTypeDataKeyQty);
-
-        this.eventEmitter.emit(
-            'inventory.product.card.service.import.job.update.status',
-            {
-                buylistImportProductCardId: buylistImportProductCardId,
-                buylistImportProductCardCount: buylistImportProductCardData.buylistImportProductCardCardData.length,
-                buylistImportProductCardQtyCount: buylistImportProductCardData.totalbuylistImportProductCardCardQty,
-                buylistImportProductCardStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_UPDATE_JOB_COUNT,
-
-            }
-        )
-
+        let buylistImportProductCardData = await this.processBuylistImportProductCardCSVData(buylistImportProductCardCSVData, buylistImportProductCardProviderTypeFileDataKeyQty);
 
         let buylistImportProductCardProviderDTOs: BuylistImportProductCardProviderDTO[] = [];
 
@@ -62,17 +49,15 @@ export class BuylistImportProductCardProviderService {
 
             let buylistImportProductCardCardData = buylistImportProductCardData.buylistImportProductCardCardData[i];
 
-            if(buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyTCGPlayerId] != '') {
+            if(buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeyProductName] != undefined && buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeyNumber] != undefined) {
 
                 let buylistImportProductCardProviderDTO = new BuylistImportProductCardProviderDTO();
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderTCGPlayerId = buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyTCGPlayerId];
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderSetName = buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeySetName];
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderProductName = buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyProductName];
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderNumber = buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyNumber];
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderRarity = buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyRarity];
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderCondition = await this.buylistImportProductCardProviderUtilService.getBuylistImportProductCardTypeCardCondition(buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyCondition]);
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderPrinting = await this.buylistImportProductCardProviderUtilService.getBuylistImportProductCardTypeCardPrinting(buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyPrinting]);
-                buylistImportProductCardProviderDTO.buylistImportProductCardProviderQty = parseInt(buylistImportProductCardCardData[buylistImportProductCardProviderTypeDataKeyQty]);
+                buylistImportProductCardProviderDTO.buylistImportProductCardProviderSetCode = buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeySetCode];
+                buylistImportProductCardProviderDTO.buylistImportProductCardProviderProductName = buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeyProductName];
+                buylistImportProductCardProviderDTO.buylistImportProductCardProviderNumber = buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeyNumber];
+                buylistImportProductCardProviderDTO.buylistImportProductCardProviderCondition = await this.buylistImportProductCardProviderTypeUtilService.getBuylistImportProductCardProviderTypeCardCondition(buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeyCondition], buylistImportProductCardProviderTypeFileConditionKey);
+                buylistImportProductCardProviderDTO.buylistImportProductCardProviderPrinting = await this.buylistImportProductCardProviderTypeUtilService.getBuylistImportProductCardProviderTypeCardPrinting(buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeyPrinting], buylistImportProductCardProviderTypeFilePrintingKey);
+                buylistImportProductCardProviderDTO.buylistImportProductCardProviderQty = parseInt(buylistImportProductCardCardData[buylistImportProductCardProviderTypeFileDataKeyQty]);
 
                 buylistImportProductCardProviderDTOs.push(buylistImportProductCardProviderDTO);
             }  

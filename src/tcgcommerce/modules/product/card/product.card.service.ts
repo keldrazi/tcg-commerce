@@ -151,6 +151,24 @@ export class ProductCardService {
         return productCardDTOs;
     }
 
+    async getProductCardByNameAndSetCodeAndNumber(productCardName: string, productSetCode: string, productCardNumber: string) {
+        let productCard = await this.productCardRepository.findOne({ 
+            where: {
+                productCardName: productCardName,
+                productSetCode: productSetCode.toUpperCase(),
+                productCardNumber: productCardNumber
+            }
+        });
+
+        if(productCard == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found for productCardName: ' + productCardName + ', productSetCode: ' + productSetCode + ', productCardNumber: ' + productCardNumber);
+        }
+
+        let productCardDTO: ProductCardDTO = ({ ...productCard})
+            
+        return productCardDTO;
+    }
+
 
     async createProductCard(createProductCardDTO: CreateProductCardDTO) {
 
