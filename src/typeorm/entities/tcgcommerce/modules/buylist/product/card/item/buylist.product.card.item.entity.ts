@@ -7,14 +7,6 @@ export class BuylistProductCardItem {
     @Column()
     buylistProductCardId: string;
     @Column()
-    commerceAccountId: string;
-    @Column()
-    productVendorId: string;
-    @Column()
-    productLineId: string;
-    @Column()
-    productTypeId: string;
-    @Column()
     productCardId: string;
     @Column()
     productCardTCGdbId: string;

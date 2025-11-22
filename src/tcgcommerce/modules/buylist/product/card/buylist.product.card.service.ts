@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateBuylistProductCardDTO, UpdateBuylistProductCardDTO, BuylistProductCardDTO } from './dto/buylist.product.card.dto';
 import { BuylistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/buylist.product.card.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class BuylistProductCardService {
@@ -91,6 +92,11 @@ export class BuylistProductCardService {
 
         return buylistProductCardDTO;
     
+    }
+
+    @OnEvent('buylist.product.card.update.count')
+    async updateBuylistProductCardCount(payload: any) {
+        // Handle the event here
     }
  
 }

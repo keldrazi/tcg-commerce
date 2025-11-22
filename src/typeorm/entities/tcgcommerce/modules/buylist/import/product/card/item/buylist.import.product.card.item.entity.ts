@@ -13,15 +13,13 @@ export class BuylistImportProductCardItem {
     @Column()
     productCardTCGPlayerId: number;
     @Column()
-    commerceAccountId: string;
+    productCardName: string;
     @Column()
-    commerceLocationId: string;
+    productCardNumber: string;
     @Column()
-    productVendorId: string;
+    productCardRarityId: string;
     @Column()
-    productLineId: string;
-    @Column()
-    productTypeId: string;
+    productCardRarityCode: string;
     @Column()
     productSetId: string;
     @Column()

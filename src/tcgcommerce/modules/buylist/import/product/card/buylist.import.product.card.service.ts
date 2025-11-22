@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BuylistImportProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/import/product/card/buylist.import.product.card.entity';
 import { CreateBuylistImportProductCardDTO, BuylistImportProductCardDTO } from './dto/buylist.import.product.card.dto';
-import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NAME } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { BuylistImportProductCardItemService } from 'src/tcgcommerce/modules/buylist/import/product/card/item/buylist.import.product.card.item.service';
 import { AwsS3Service } from 'src/system/modules/aws/s3/aws.s3.service';
@@ -13,7 +12,7 @@ import { ErrorMessageService } from 'src/system/modules/error/message/error.mess
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 import { BuylistProductCardService } from 'src/tcgcommerce/modules/buylist/product/card/buylist.product.card.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
-import { ProductLineDTO } from 'src/tcgcommerce/modules/product/line/dto/product.line.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class BuylistImportProductCardService {
@@ -26,6 +25,7 @@ export class BuylistImportProductCardService {
         private errorMessageService: ErrorMessageService,
         private buylistProductCardService: BuylistProductCardService,
         private productLineService: ProductLineService,
+        private eventEmitter: EventEmitter2,
     ) { }
 
     async getBuylistImportProductCardById(buylistImportProductCardId: string) {
@@ -79,15 +79,15 @@ export class BuylistImportProductCardService {
         });
 
         if(buylistImportProductCard == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_NOT_FOUND', 'Inventory product card service import job not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
         }
 
         //MAP TO DTO;
         let buylistImportProductCardDTO: BuylistImportProductCardDTO = ({ ...buylistImportProductCard});
-        let buylistImportProductCardItemDTOs = await this.buylistImportProductCardItemService.getBuylistImportProductCardItemDetailsByJob(buylistImportProductCardDTO);
+        let buylistImportProductCardItemDTOs = await this.buylistImportProductCardItemService.getBuylistImportProductCardItemsByBuylistId(buylistImportProductCardDTO.buylistImportProductCardId);
 
         if(buylistImportProductCardItemDTOs == null || buylistImportProductCardItemDTOs instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_DETAILS_NOT_FOUND', 'Inventory product card service import job details not found for job ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_DETAILS_NOT_FOUND', 'Buylist import product card details not found for job ID: ' + buylistImportProductCardId);
         }
 
         let buylistImportProductCardDetails = {
@@ -182,12 +182,12 @@ export class BuylistImportProductCardService {
         return buylistImportProductCardFileURL;
     }
 
-    /*
+    
     async updateBuylistImportProductCardStatus(buylistImportProductCardId: string, buylistImportProductCardStatus: string) {
         let buylistImportProductCard = await this.getBuylistImportProductCardById(buylistImportProductCardId);
 
         if(buylistImportProductCard == null || buylistImportProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_NOT_FOUND', 'Inventory product card service import job not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
         }
 
         buylistImportProductCard.buylistImportProductCardStatus = buylistImportProductCardStatus;
@@ -197,33 +197,19 @@ export class BuylistImportProductCardService {
 
         return true;
     }
-
-    async updateBuylistImportProductCardCount(buylistImportProductCardId: string, buylistImportProductCardCount: number, buylistImportProductCardQtyCount: number) {
-        let buylistImportProductCard = await this.getBuylistImportProductCardById(buylistImportProductCardId);
-
-        if(buylistImportProductCard == null || buylistImportProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_NOT_FOUND', 'Inventory product card service import job not found for ID: ' + buylistImportProductCardId);
-        }
-
-        buylistImportProductCard.buylistImportProductCardCount = buylistImportProductCardCount;
-        buylistImportProductCard.buylistImportProductCardQtyCount = buylistImportProductCardQtyCount;
-        buylistImportProductCard.buylistImportProductCardUpdateDate = new Date();
-
-        await this.buylistImportProductCardRepository.save(buylistImportProductCard);
-
-        return true;
-    }
-    */
+    
     async approveBuylistImportProductCardById(buylistImportProductCardId: string) {
         let buylistImportProductCardDTO = await this.getBuylistImportProductCardById(buylistImportProductCardId);
 
         if(buylistImportProductCardDTO == null || buylistImportProductCardDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_NOT_FOUND', 'Inventory product card service import job not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
         }
 
-        await this.updateBuylistImportProductCardStatus(buylistImportProductCardId, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
+        await this.updateBuylistImportProductCardStatus(buylistImportProductCardId, 'APPROVED');
 
-        await this.buylistImportProductCardItemService.approveBuylistImportProductCardItemsByJobId(buylistImportProductCardDTO.buylistImportProductCardId);
+        this.eventEmitter.emit('buylist.import.product.card.approved', {
+            buylistImportProductCardId: buylistImportProductCardId,
+        });
 
         return buylistImportProductCardDTO;
     }
@@ -232,11 +218,11 @@ export class BuylistImportProductCardService {
         let buylistImportProductCardDTO = await this.getBuylistImportProductCardById(buylistImportProductCardId);
 
         if(buylistImportProductCardDTO == null || buylistImportProductCardDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_NOT_FOUND', 'Inventory product card service import job not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
         }
 
-        if(buylistImportProductCardDTO.buylistImportProductCardStatus == INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_COMPLETE) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_CANNOT_DELETE_COMPLETED', 'Cannot delete inventory product card service import job that is completed.');
+        if(buylistImportProductCardDTO.buylistImportProductCardStatus == 'APPROVED') {
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_CANNOT_DELETE_APPROVED', 'Cannot delete buylist import product card that is approved.');
         }
 
         await this.buylistImportProductCardItemService.deleteBuylistImportProductCardItemsByJobId(buylistImportProductCardDTO.buylistImportProductCardId);
@@ -248,21 +234,32 @@ export class BuylistImportProductCardService {
         return buylistImportProductCardDTO;
     }
 
+    async updateBuylistImportProductCardCount(buylistImportProductCardId: string, buylistImportProductCardCount: number, buylistImportProductCardQtyCount: number) {
+        let buylistImportProductCard = await this.getBuylistImportProductCardById(buylistImportProductCardId);
+
+        if(buylistImportProductCard == null || buylistImportProductCard instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
+        }
+
+        buylistImportProductCard.buylistImportProductCardCount = buylistImportProductCardCount;
+        buylistImportProductCard.buylistImportProductCardQtyCount = buylistImportProductCardQtyCount;
+        buylistImportProductCard.buylistImportProductCardUpdateDate = new Date();
+
+        await this.buylistImportProductCardRepository.save(buylistImportProductCard);
+
+        return true;
+    }
+
     /* EVENT LISTENERS */
-    @OnEvent('inventory.product.card.service.import.job.update.status')
+    @OnEvent('buylist.import.product.card.update.count')
     async handleBuylistImportProductCardStatusEvent(payload: any) {
 
         let buylistImportProductCardId = payload.buylistImportProductCardId;
-        let buylistImportProductCardStatus = payload.buylistImportProductCardStatus;
+        let buylistImportProductCardCount = payload.buylistImportProductCardCount;
+        let buylistImportProductCardQtyCount = payload.buylistImportProductCardQtyCount;
+        
+        await this.updateBuylistImportProductCardCount(buylistImportProductCardId, buylistImportProductCardCount, buylistImportProductCardQtyCount);
 
-        if(buylistImportProductCardStatus == INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_UPDATE_JOB_COUNT) {
-            let buylistImportProductCardCount = payload.buylistImportProductCardCount;
-            let buylistImportProductCardQtyCount = payload.buylistImportProductCardQtyCount;
-            await this.updateBuylistImportProductCardCount(buylistImportProductCardId, buylistImportProductCardCount, buylistImportProductCardQtyCount);
-        }
-        else {
-            await this.updateBuylistImportProductCardStatus(buylistImportProductCardId, buylistImportProductCardStatus);
-        }
     }
 
 }

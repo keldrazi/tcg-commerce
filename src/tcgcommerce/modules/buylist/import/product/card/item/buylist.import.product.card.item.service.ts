@@ -12,6 +12,7 @@ import { BuylistImportProductCardProviderService } from '../provider/buylist.imp
 import { BuylistProductCardService } from 'src/tcgcommerce/modules/buylist/product/card/buylist.product.card.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 
 @Injectable()
@@ -26,6 +27,7 @@ export class BuylistImportProductCardItemService {
         private errorMessageService: ErrorMessageService,
         private buylistImportProductCardProviderService: BuylistImportProductCardProviderService,
         private buylistProductCardService: BuylistProductCardService,
+        private eventEmitter: EventEmitter2,
     ) { }
 
     async getBuylistImportProductCardItemsByBuylistId(buylistImportProductCardId: string) {
@@ -64,6 +66,9 @@ export class BuylistImportProductCardItemService {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found for ID: ' + buylistImportProductCardDTO.buylistProductCardId);
         }
 
+        let buylistImportProductCardCount = 0;
+        let buylistImportProductCardQtyCount = 0;
+
         for(let i = 0; i < buylistImportProductCardProviderDTOs.length; i++) {
             let buylistImportProductCardProviderDTO = buylistImportProductCardProviderDTOs[i];
 
@@ -86,6 +91,10 @@ export class BuylistImportProductCardItemService {
                 productCardId: productCard.productCardId,
                 productCardTCGdbId: productCard.productCardTCGdbId,
                 productCardTCGPlayerId: productCard.productCardTCGPlayerId,
+                productCardName: productCard.productCardName,
+                productCardNumber: productCard.productCardNumber,
+                productCardRarityId: productCard.productCardRarityId,
+                productCardRarityCode: productCard.productCardRarityCode,
                 productLanguageId: buylistProductCard.productLanguageId,
                 productLanguageCode: buylistProductCard.productLanguageCode,
                 productSetId: productSet.productSetId,
@@ -101,17 +110,18 @@ export class BuylistImportProductCardItemService {
 
             await this.buylistImportProductCardItemRepository.save(buylistImportProductCardItem); 
 
+            buylistImportProductCardCount = buylistImportProductCardCount + 1;
+            buylistImportProductCardQtyCount = buylistImportProductCardQtyCount + buylistImportProductCardProviderDTO.buylistImportProductCardProviderQty;
+
         }
 
+        this.eventEmitter.emit('buylist.import.product.card.update.count', {
+            buylistImportProductCardId: buylistImportProductCardDTO.buylistImportProductCardId,
+            buylistImportProductCardCount: buylistImportProductCardCount,
+            buylistImportProductCardQtyCount: buylistImportProductCardQtyCount,
+        });
+
         return true;
-    }
-
-   
-
-    async approveBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {
-            
-
-
     }
 
     async deleteBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {

@@ -5,11 +5,10 @@ export class BuylistImportProductCardItemDTO {
     productCardId: string;
     productCardTCGdbId: string;
     productCardTCGPlayerId: number;
-    commerceAccountId: string;
-    commerceLocationId: string;
-    productVendorId: string;
-    productLineId: string;
-    productTypeId: string;
+    productCardName: string;   
+    productCardNumber: string;   
+    productCardRarityId: string;
+    productCardRarityCode: string;
     productLanguageId: string;
     productLanguageCode: string;
     productSetId: string;

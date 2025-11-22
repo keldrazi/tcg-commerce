@@ -9,6 +9,7 @@ export class ProductCardDTO {
     productTypeId: string;
     productSetId: string;
     productSetCode: string;
+    productCardRarityId: string;
     productCardRarityCode: string;
     productCardNumber: string;
     productCardName: string;

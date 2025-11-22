@@ -3,10 +3,6 @@ import { IsString, IsBoolean, IsNumber } from "class-validator";
 export class BuylistProductCardItemDTO {
     buylistProductCardItemId: string;
     buylistProductCardId: string;
-    commerceAccountId: string;
-    productVendorId: string;
-    productLineId: string;
-    productTypeId: string;
     productCardId: string;
     productCardTCGdbId: string;
     productCardTCGPlayerId: number
