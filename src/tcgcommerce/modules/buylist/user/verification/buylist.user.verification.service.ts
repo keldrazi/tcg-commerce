@@ -60,7 +60,7 @@ export class BuylistUserVerificationService {
 
         let now = new Date();
         if (buylistUserVerification == null || buylistUserVerification.buylistUserVerificationCodeIsUsed || buylistUserVerification.buylistUserVerificationCodeExpires < now) {
-            return false;
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_VERIFICATION_INVALID_OR_EXPIRED', 'Invalid or expired verification code.');
         }
 
         buylistUserVerification.buylistUserVerificationCodeIsUsed = true;

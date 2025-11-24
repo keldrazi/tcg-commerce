@@ -6,6 +6,7 @@ import { CreateBuylistUserDTO, UpdateBuylistUserDTO, BuylistUserDTO } from './dt
 import * as bcrypt from 'bcrypt';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { BuylistUserVerificationService } from './verification/buylist.user.verification.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 
 @Injectable()
@@ -174,18 +175,20 @@ export class BuylistUserService {
     }
 
     async verifyBuylistUserPassword(commerceAccountId: string, buylistUserId: string, buylistUserVerificationCode: number, buylistUserPassword: string) {
-        let isVerified = await this.buylistUserVerificationService.verifyBuylistUserVerification(commerceAccountId, buylistUserId, buylistUserVerificationCode, 'BUYLIST_USER_PASSWORD_RESET');
-
-        if(!isVerified) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_VERIFICATION_FAILED', 'Buylist user verification failed for buylistUserId: ' + buylistUserId);
-        }
-
+        
         let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
 
         if (buylistUser == null) {
             return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
         }
+        
+        let isVerified = await this.buylistUserVerificationService.verifyBuylistUserVerification(commerceAccountId, buylistUserId, buylistUserVerificationCode, 'BUYLIST_USER_PASSWORD_RESET');
 
+        if(!isVerified || isVerified instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_VERIFICATION_FAILED', 'Buylist user verification failed for buylistUserId: ' + buylistUserId);
+        }
+
+        
         let buylistUserDTO = await this.updateBuylistUserPassword(buylistUserId, buylistUserPassword);
         
         return buylistUserDTO;

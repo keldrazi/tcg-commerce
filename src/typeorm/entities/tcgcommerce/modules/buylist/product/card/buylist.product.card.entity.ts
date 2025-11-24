@@ -39,9 +39,11 @@ export class BuylistProductCard {
     @Column('jsonb')
     buylistProductCardDetails: string;
     @Column()
-    buylistProductCardTotalCardCount: number;
+    buylistProductCardTotalCount: number;
     @Column()
-    buylistProductCardTotalCardPrice: number
+    buylistProductCardTotalQtyCount: number;
+    @Column()
+    buylistProductCardTotalPrice: number
     @CreateDateColumn()
     buylistProductCardCreateDate: Date;
     @UpdateDateColumn()

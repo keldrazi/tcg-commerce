@@ -5,6 +5,7 @@ import { CreateBuylistProductCardDTO, UpdateBuylistProductCardDTO, BuylistProduc
 import { BuylistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/buylist.product.card.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { OnEvent } from '@nestjs/event-emitter';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class BuylistProductCardService {
@@ -85,6 +86,7 @@ export class BuylistProductCardService {
         existingBuylistProductCard.buylistTypeId = updateBuylistProductCardDTO.buylistTypeId;
         existingBuylistProductCard.buylistPaymentTypeId = updateBuylistProductCardDTO.buylistPaymentTypeId;
         existingBuylistProductCard.buylistPaymentServiceId = updateBuylistProductCardDTO.buylistPaymentServiceId;
+        existingBuylistProductCard.buylistProductCardUpdateDate = new Date();
         
         await this.buylistProductCardRepository.save(existingBuylistProductCard);
 
@@ -96,7 +98,17 @@ export class BuylistProductCardService {
 
     @OnEvent('buylist.product.card.update.count')
     async updateBuylistProductCardCount(payload: any) {
-        // Handle the event here
+        let buylistProductCard = await this.getBuylistProductCardById(payload.buylistProductCardId);
+        
+        if(buylistProductCard == null || buylistProductCard instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found for buylistProductCardId: ' + payload.buylistProductCardId); 
+        }
+
+        buylistProductCard.buylistProductCardTotalCount = buylistProductCard.buylistProductCardTotalCount + payload.buylistProductCardItemCount;
+        buylistProductCard.buylistProductCardTotalQtyCount = buylistProductCard.buylistProductCardTotalQtyCount + payload.buylistProductCardItemQtyCount;
+        buylistProductCard.buylistProductCardUpdateDate = new Date();
+
+        await this.buylistProductCardRepository.save({ ...buylistProductCard });
     }
  
 }

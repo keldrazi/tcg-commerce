@@ -9,11 +9,13 @@ export class EmailTemplate {
     @Column()
     emailTemplateDescription: string;
     @Column()
+    emailTemplateFrom: string;
+    @Column()
     emailTemplateSubject: string;
     @Column()
     emailTemplateHBSTemplateName: string;
     @Column('jsonb')
-    emailTemplateSettings: string;
+    emailTemplateContext: string;
     @Column({type: 'boolean', default: false})
     emailTemplateIsActive: boolean;
     @CreateDateColumn()

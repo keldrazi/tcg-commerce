@@ -17,8 +17,9 @@ export class BuylistProductCardDTO {
     buylistProductCardStatus: string;   
     buylistProductCardCode: string;
     buylistProductCardDateTime: Date;
-    buylistProductCardTotalCardCount: number;
-    buylistProductCardTotalCardPrice: number;   
+    buylistProductCardTotalCount: number;
+    buylistProductCardTotalQtyCount: number;
+    buylistProductCardTotalPrice: number;   
     buylistProductCardCreateDate: Date;
     buylistProductCardUpdateDate: Date;
 
