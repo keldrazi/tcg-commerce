@@ -17,11 +17,6 @@ export class BuylistProductCardItemController {
         return await this.buylistProductCardItemService.getBuylistProductCardItemById(buylistProductCardItemId);
     }
 
-    @Get('/all/:commerceAccountId')
-    async getBuylistProductCardItems(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.buylistProductCardItemService.getBuylistProductCardItemsByCommerceAccountId(commerceAccountId);
-    }
-
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createBuylistProductCardItem(@Body() createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO) {

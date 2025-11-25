@@ -8,6 +8,7 @@ import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.s
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductTypeService } from 'src/tcgcommerce/modules/product/type/product.type.service';
+import { ProductCardRarityService } from 'src/tcgcommerce/modules/product/card/rarity/product.card.rarity.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -22,6 +23,7 @@ export class ProductCardService {
         private productLineService: ProductLineService,
         private productVendorService: ProductVendorService,
         private productTypeService: ProductTypeService,
+        private productCardRarityService: ProductCardRarityService,
         private errorMessageService: ErrorMessageService
     ) { }
 
@@ -256,20 +258,26 @@ export class ProductCardService {
 
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
-            
+            console.log("Processing set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
             let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetId(productSet.productSetTCGdbId);
 
             if(productCardsBySet == null) {
+                console.log("No cards found for set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
                 continue;
             }
-
+            console.log("Found " + productCardsBySet.tcgdbMTGCards.length + " cards for set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
             for(let j = 0; j < productCardsBySet.tcgdbMTGCards.length; j++) {
                 let tcgdbMTGCard = productCardsBySet.tcgdbMTGCards[j];
-
+                let productCardRarity = await this.productCardRarityService.getProductCardRarityByCodeAndProductLineId(tcgdbMTGCard.tcgdbMTGCardRarityCode, productLineId);
+                
+                if(productCardRarity == null || productCardRarity instanceof ErrorMessageDTO) {
+                    console.log("Skipping card due to missing rarity: " + tcgdbMTGCard.tcgdbMTGCardName + " (" + tcgdbMTGCard.tcgdbMTGCardNumber + ") Rarity: " + tcgdbMTGCard.tcgdbMTGCardRarityCode);
+                    continue;
+                }
                 //CHECK TO SEE IF THE CARD EXISTS;
                 let productCardCheck = await this.getProductCardByTCGdbId(tcgdbMTGCard.tcgdbMTGCardId);
                 
-                if (productCardCheck != null) {
+                if (productCardCheck instanceof ProductCardDTO) {
                     continue;
                 }
 
@@ -287,7 +295,8 @@ export class ProductCardService {
                     productTypeId: productTypeId,
                     productSetId: productSet.productSetId,
                     productSetCode: productSet.productSetCode,
-                    productCardRarityCode: tcgdbMTGCard.tcgdbMTGCardRarityCode,
+                    productCardRarityId: productCardRarity.productCardRarityId,
+                    productCardRarityCode: productCardRarity.productCardRarityCode,
                     productCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
                     productCardName: tcgdbMTGCard.tcgdbMTGCardName,
                     productCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
@@ -303,8 +312,14 @@ export class ProductCardService {
 
                 productCardRecordCount++;
             }
+            //DELAY TO AVOID TCGDB RATE LIMITS;
+            await this.delay(1000);
         }
 
         return productCardRecordCount;
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }

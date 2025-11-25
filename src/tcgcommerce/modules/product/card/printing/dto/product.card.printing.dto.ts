@@ -4,6 +4,7 @@ export class ProductCardPrintingDTO {
     productCardPrintingId: string;
     productCardPrintingTCGdbId: string;
     productCardPrintingTCGPlayerId: number;
+    productVendorId: string;
     productLineId: string;
     productCardPrintingName: string;
     productCardPrintingDisplayOrder: number;
@@ -18,6 +19,8 @@ export class CreateProductCardPrintingDTO {
     @IsNumber()
     productCardPrintingTCGPlayerId: number;
     @IsString()
+    productVendorId: string;
+    @IsString()
     productLineId: string;
     @IsString()
     productCardPrintingName: string;
@@ -30,6 +33,8 @@ export class CreateProductCardPrintingDTO {
 export class UpdateProductCardPrintingDTO {
     @IsString()
     productCardPrintingId: string;
+    @IsString()
+    productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()

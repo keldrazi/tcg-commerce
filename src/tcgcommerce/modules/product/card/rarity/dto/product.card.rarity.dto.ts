@@ -4,6 +4,7 @@ export class ProductCardRarityDTO {
     productCardRarityId: string;
     productCardRarityTCGdbId: string;
     productCardRarityTCGPlayerId: number;
+    productVendorId: string;
     productLineId: string;
     productCardRarityName: string;
     productCardRarityCode: string;
@@ -18,6 +19,8 @@ export class CreateProductCardRarityDTO {
     @IsNumber()
     productCardRarityTCGPlayerId: number;
     @IsString()
+    productVendorId: string;
+    @IsString()
     productLineId: string;
     @IsString()
     productCardRarityName: string;
@@ -30,6 +33,8 @@ export class CreateProductCardRarityDTO {
 export class UpdateProductCardRarityDTO {
     @IsString()
     productCardRarityId: string;
+    @IsString()
+    productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()

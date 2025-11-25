@@ -5,6 +5,7 @@ import { CreateProductCardPrintingDTO, ProductCardPrintingDTO, UpdateProductCard
 import { ProductCardPrinting } from 'src/typeorm/entities/tcgcommerce/modules/product/card/printing/product.card.printing.entity';
 import { TCGdbMTGPrintingService } from 'src/tcgdb/modules/tcgdb/api/mtg/printing/tcgdb.mtg.printing.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -15,6 +16,7 @@ export class ProductCardPrintingService {
         @InjectRepository(ProductCardPrinting) private productCardPrintingRepository: Repository<ProductCardPrinting>,
         private tcgdbMTGPrintingService: TCGdbMTGPrintingService,
         private productLineService: ProductLineService,
+        private productVendorService: ProductVendorService,
         private errorMessageService: ErrorMessageService
     ) { }
 
@@ -56,7 +58,7 @@ export class ProductCardPrintingService {
         
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
 
-        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+        if(productLine == null || productLine instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + productLineCode);
         }
 
@@ -147,7 +149,7 @@ export class ProductCardPrintingService {
             } 
         });
         
-        if (productCardPrinting == null) {
+        if(productCardPrinting == null) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTING_NOT_FOUND', 'Product card printing was not found for productCardPrintingName: ' + name + ' and productLineId: ' + productLineId);
         }
 
@@ -163,12 +165,13 @@ export class ProductCardPrintingService {
         let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
             where: { 
                 productCardPrintingName: createProductCardPrintingDTO.productCardPrintingName,
-                productLineId: createProductCardPrintingDTO.productLineId 
+                productLineId: createProductCardPrintingDTO.productLineId,
+                productVendorId: createProductCardPrintingDTO.productVendorId
             } 
         });
 
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (productCardPrinting != null) {
+        if(productCardPrinting != null) {
             return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_CARD_PRINTING', 'A product card printing with the same name and product line ID already exists.');
         }
         
@@ -189,7 +192,7 @@ export class ProductCardPrintingService {
             } 
         });
 
-        if (!existingProductCardPrinting) {
+        if(!existingProductCardPrinting) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTING_NOT_FOUND', 'Product card printing was not found for productCardPrintingId: ' + updateProductCardPrintingDTO.productCardPrintingId);
         }
 
@@ -218,17 +221,23 @@ export class ProductCardPrintingService {
 
     async createTCGdbMTGProductCardPrintings() {
 
+        let productVendor = await this.productVendorService.getProductVendorByCode("WOTC");
+
+        if(productVendor == null || productVendor instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorCode: WoTC');
+        }
+
         //GET THE PRODUCT LINE ID FOR MTG;
         let productLine = await this.productLineService.getProductLineByCode("MTG");
         
-        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+        if(productLine == null || productLine instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: MTG');
         }
         
         //GET THE PRODUCT CARD PRINTINGS FROM TCGDB;
         let tcgdbMTGProductCardPrintings = await this.tcgdbMTGPrintingService.getTCGdbMTGPrintings();
         
-        if (tcgdbMTGProductCardPrintings == null) {
+        if(tcgdbMTGProductCardPrintings == null) {
             return this.errorMessageService.createErrorMessage('TCGDB_MTG_PRINTINGS_NOT_FOUND', 'TCGDB MTG printings were not found.');
         }
 
@@ -238,6 +247,7 @@ export class ProductCardPrintingService {
             let tcgdbMTGProductCardPrinting = tcgdbMTGProductCardPrintings[i];
             
             let createProductCardPrintingDTO = new CreateProductCardPrintingDTO();
+            createProductCardPrintingDTO.productVendorId = productVendor.productVendorId;
             createProductCardPrintingDTO.productLineId = productLine.productLineId;
             createProductCardPrintingDTO.productCardPrintingTCGdbId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingId;
             createProductCardPrintingDTO.productCardPrintingTCGPlayerId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingTCGPlayerId;

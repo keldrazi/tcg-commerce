@@ -5,6 +5,7 @@ import { CreateProductLanguageDTO, ProductLanguageDTO, UpdateProductLanguageDTO 
 import { ProductLanguage } from 'src/typeorm/entities/tcgcommerce/modules/product/language/product.language.entity';
 import { TCGdbMTGLanguageService } from 'src/tcgdb/modules/tcgdb/api/mtg/language/tcgdb.mtg.language.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -15,6 +16,7 @@ export class ProductLanguageService {
         @InjectRepository(ProductLanguage) private productLanguageRepository: Repository<ProductLanguage>,
         private tcgdbMTGLanguageService: TCGdbMTGLanguageService,
         private productLineService: ProductLineService,
+        private productVendorService: ProductVendorService,
         private errorMessageService: ErrorMessageService
     ) { }
 
@@ -153,6 +155,7 @@ export class ProductLanguageService {
          let productLanguage = await this.productLanguageRepository.findOne({ 
             where: { 
                 productLanguageCode: createProductLanguageDTO.productLanguageCode,
+                productVendorId: createProductLanguageDTO.productVendorId,
                 productLineId: createProductLanguageDTO.productLineId 
             } 
         });
@@ -208,7 +211,13 @@ export class ProductLanguageService {
     async createTCGdbMTGProductLanguages() {
 
         //GET THE PRODUCT LINE ID FOR MTG;
+        let productVendorId = await this.productVendorService.getProductVendorByCode("WOTC");
         let productLine = await this.productLineService.getProductLineByCode("MTG");
+
+
+        if(productVendorId == null || productVendorId instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorCode: WOTC');
+        }
 
         if (productLine == null || productLine instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: MTG');
@@ -229,6 +238,7 @@ export class ProductLanguageService {
             let createProductLanguageDTO = new CreateProductLanguageDTO();
             createProductLanguageDTO.productLanguageTCGdbId = tcgdbMTGProductLanguage.tcgdbMTGLanguageId;
             createProductLanguageDTO.productLanguageTCGPlayerId = tcgdbMTGProductLanguage.tcgdbMTGLanguageTCGPlayerId;
+            createProductLanguageDTO.productVendorId = productVendorId.productVendorId;
             createProductLanguageDTO.productLineId = productLine.productLineId;
             createProductLanguageDTO.productLanguageName = tcgdbMTGProductLanguage.tcgdbMTGLanguageName;
             createProductLanguageDTO.productLanguageCode = tcgdbMTGProductLanguage.tcgdbMTGLanguageCode;

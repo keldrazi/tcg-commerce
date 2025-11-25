@@ -4,6 +4,7 @@ export class ProductCardConditionDTO {
     productCardConditionId: string;
     productCardConditionTCGdbId: string;
     productCardConditionTCGPlayerId: number;
+    productVendorId: string;
     productLineId: string;
     productCardConditionName: string;
     productCardConditionCode: string;
@@ -19,6 +20,8 @@ export class CreateProductCardConditionDTO {
     productCardConditionTCGdbId: string;
     @IsNumber()
     productCardConditionTCGPlayerId: number;
+    @IsString()
+    productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
@@ -40,6 +43,8 @@ export class UpdateProductCardConditionDTO {
     productCardConditionTCGdbId: string;
     @IsNumber()
     productCardConditionTCGPlayerId: number;
+    @IsString()
+    productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()

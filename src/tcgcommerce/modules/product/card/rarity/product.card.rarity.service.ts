@@ -5,6 +5,7 @@ import { CreateProductCardRarityDTO, ProductCardRarityDTO, UpdateProductCardRari
 import { ProductCardRarity } from 'src/typeorm/entities/tcgcommerce/modules/product/card/rarity/product.card.rarity.entity';
 import { TCGdbMTGRarityService } from 'src/tcgdb/modules/tcgdb/api/mtg/rarity/tcgdb.mtg.rarity.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -15,6 +16,7 @@ export class ProductCardRarityService {
         @InjectRepository(ProductCardRarity) private productCardRarityRepository: Repository<ProductCardRarity>,
         private tcgdbMTGRarityService: TCGdbMTGRarityService,
         private productLineService: ProductLineService,
+        private productVendorService: ProductVendorService,
         private errorMessageService: ErrorMessageService
     ) { }
 
@@ -106,13 +108,32 @@ export class ProductCardRarityService {
         
     }
 
+    async getProductCardRarityByCodeAndProductLineId(code: string, productLineId: string) {
+        let productCardRarity = await this.productCardRarityRepository.findOne({ 
+            where: { 
+                productCardRarityCode: code,
+                productLineId: productLineId 
+            } 
+        });
+        
+        if (productCardRarity == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_RARITY_NOT_FOUND', 'Product card rarity was not found for productCardRarityName: ' + name + ' and productLineId: ' + productLineId);
+        }
+
+        let productCardRarityDTO: ProductCardRarityDTO = ({ ...productCardRarity });
+
+        return productCardRarityDTO;
+        
+    }
+
     async createProductCardRarity(createProductCardRarityDTO: CreateProductCardRarityDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;
         let productCardRarity = await this.productCardRarityRepository.findOne({ 
             where: { 
                 productCardRarityName: createProductCardRarityDTO.productCardRarityName,
-                productLineId: createProductCardRarityDTO.productLineId 
+                productLineId: createProductCardRarityDTO.productLineId,
+                productVendorId: createProductCardRarityDTO.productVendorId
             } 
         });
         
@@ -166,14 +187,18 @@ export class ProductCardRarityService {
 
     async createTCGdbMTGProductCardRarities() {
 
+        let productVendor = await this.productVendorService.getProductVendorByCode("WOTC");
+
+        if (productVendor == null || productVendor instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorCode: WoTC');
+        }
+
         //GET THE PRODUCT LINE ID FOR MTG;
         let productLine = await this.productLineService.getProductLineByCode("MTG");
 
         if (productLine == null || productLine instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: MTG');
         }
-
-        let productLineId = productLine.productLineId;
 
         //GET THE PRODUCT CARD RARITIES FROM TCGDB;
         let tcgdbMTGProductCardRarities = await this.tcgdbMTGRarityService.getTCGdbMTGRarities();
@@ -188,7 +213,8 @@ export class ProductCardRarityService {
             let tcgdbMTGProductCardRarity = tcgdbMTGProductCardRarities[i];
             
             let createProductCardRarityDTO = new CreateProductCardRarityDTO();
-            createProductCardRarityDTO.productLineId = productLineId;
+            createProductCardRarityDTO.productVendorId = productVendor.productVendorId;
+            createProductCardRarityDTO.productLineId = productLine.productLineId;
             createProductCardRarityDTO.productCardRarityTCGdbId = tcgdbMTGProductCardRarity.tcgdbMTGRarityId;
             createProductCardRarityDTO.productCardRarityTCGPlayerId = tcgdbMTGProductCardRarity.tcgdbMTGRarityTCGPlayerId;
             createProductCardRarityDTO.productCardRarityName = tcgdbMTGProductCardRarity.tcgdbMTGRarityName;

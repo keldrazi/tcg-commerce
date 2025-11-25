@@ -5,6 +5,7 @@ import { CreateProductCardConditionDTO, ProductCardConditionDTO, UpdateProductCa
 import { ProductCardCondition } from 'src/typeorm/entities/tcgcommerce/modules/product/card/condition/product.card.condition.entity';
 import { TCGdbMTGConditionService } from 'src/tcgdb/modules/tcgdb/api/mtg/condition/tcgdb.mtg.condition.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
+import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -15,6 +16,7 @@ export class ProductCardConditionService {
         @InjectRepository(ProductCardCondition) private productCardConditionRepository: Repository<ProductCardCondition>,
         private tcgdbMTGConditionService: TCGdbMTGConditionService,
         private productLineService: ProductLineService,
+        private productVendorService: ProductVendorService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -63,7 +65,7 @@ export class ProductCardConditionService {
         
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
 
-        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+        if(productLine == null || productLine instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + productLineCode);
         }
 
@@ -128,7 +130,7 @@ export class ProductCardConditionService {
             } 
         });
         
-        if (productCardCondition == null) {
+        if(productCardCondition == null) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CONDITION_NOT_FOUND', 'Product card condition was not found for productCardConditionName: ' + name + ' and productLineId: ' + productLineId);
         }
 
@@ -146,7 +148,7 @@ export class ProductCardConditionService {
             } 
         });
         
-        if (productCardCondition == null) {
+        if(productCardCondition == null) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CONDITION_NOT_FOUND', 'Product card condition was not found for productCardConditionCode: ' + code + ' and productLineId: ' + productLineId);
         }
 
@@ -162,11 +164,12 @@ export class ProductCardConditionService {
         let productCardCondition = await this.productCardConditionRepository.findOne({ 
             where: { 
                 productCardConditionName: createProductCardConditionDTO.productCardConditionName,
-                productLineId: createProductCardConditionDTO.productLineId 
+                productLineId: createProductCardConditionDTO.productLineId,
+                productVendorId: createProductCardConditionDTO.productVendorId
             } 
         });
 
-        if (productCardCondition != null) {
+        if(productCardCondition != null) {
             return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_CARD_CONDITION', 'A product card condition with the same name already exists for productLineId: ' + createProductCardConditionDTO.productLineId);
         }
         
@@ -187,7 +190,7 @@ export class ProductCardConditionService {
             } 
         });
 
-        if (!existingProductCardCondition) {
+        if(!existingProductCardCondition) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CONDITION_NOT_FOUND', 'Product card condition was not found for productCardConditionId: ' + updateProductCardConditionDTO.productCardConditionId);
         }
 
@@ -218,10 +221,16 @@ export class ProductCardConditionService {
 
     async createTCGdbMTGProductCardConditions() {
 
+        let productVendor = await this.productVendorService.getProductVendorByCode("WOTC");
+
+        if(productVendor == null || productVendor instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorCode: WoTC');
+        }
+
         //GET THE PRODUCT LINE BY CODE;
         let productLine = await this.productLineService.getProductLineByCode("MTG");
         
-        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+        if(productLine == null || productLine instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: MTG');
         }
 
@@ -230,7 +239,7 @@ export class ProductCardConditionService {
         //GET THE TCGDB MTG PRODUCT CARD CONDITIONS;
         let tcgdbMTGProductCardConditions = await this.tcgdbMTGConditionService.getTCGdbMTGConditions();
 
-        if (tcgdbMTGProductCardConditions == null) {
+        if(tcgdbMTGProductCardConditions == null) {
             return this.errorMessageService.createErrorMessage('TCGDB_MTG_PRODUCT_CARD_CONDITIONS_NOT_FOUND', 'TCGdb MTG product card conditions were not found');
         }
 
@@ -240,6 +249,7 @@ export class ProductCardConditionService {
             let tcgdbMTGProductCardCondition = tcgdbMTGProductCardConditions[i];
             
             let createProductCardConditionDTO = new CreateProductCardConditionDTO();
+            createProductCardConditionDTO.productVendorId = productVendor.productVendorId;
             createProductCardConditionDTO.productLineId = productLineId;
             createProductCardConditionDTO.productCardConditionTCGdbId = tcgdbMTGProductCardCondition.tcgdbMTGConditionId;
             createProductCardConditionDTO.productCardConditionTCGPlayerId = tcgdbMTGProductCardCondition.tcgdbMTGConditionTCGPlayerId;

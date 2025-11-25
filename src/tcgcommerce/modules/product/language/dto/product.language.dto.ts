@@ -4,6 +4,7 @@ export class ProductLanguageDTO {
     productLanguageId: string;
     productLanguageTCGdbId: string;
     productLanguageTCGPlayerId: number;
+    productVendorId: string;
     productLineId: string;
     productLanguageName: string;
     productLanguageCode: string;
@@ -18,6 +19,8 @@ export class CreateProductLanguageDTO {
     @IsNumber()
     productLanguageTCGPlayerId: number;
     @IsString()
+    productVendorId: string;
+    @IsString()
     productLineId: string;
     @IsString()
     productLanguageName: string;
@@ -30,6 +33,8 @@ export class CreateProductLanguageDTO {
 export class UpdateProductLanguageDTO {
     @IsString()
     productLanguageId: string;
+    @IsString()
+    productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()

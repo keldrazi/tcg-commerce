@@ -9,6 +9,8 @@ export class ProductCardRarity {
     @Column()
     productCardRarityTCGPlayerId: number;
     @Column()
+    productVendorId: string;
+    @Column()
     productLineId: string;
     @Column()
     productCardRarityName: string;

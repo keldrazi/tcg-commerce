@@ -9,6 +9,8 @@ export class ProductLanguage {
     @Column()
     productLanguageTCGPlayerId: number;
     @Column()
+    productVendorId: string;
+    @Column()
     productLineId: string;
     @Column()
     productLanguageName: string;
