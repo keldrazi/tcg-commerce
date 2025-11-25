@@ -9,6 +9,8 @@ export class CommerceAccountDTO {
     commerceAccountContactPhone: string;
     commerceAccountHandle: string;
     commerceAccountApplicationModules: CommerceAccountApplicationModule[];
+    commerceAccountAPIClientId: string;
+    commerceAccountAPIClientToken: string;
     commerceAccountIsActive: boolean;
     commerceAccountCreateDate: Date;
     commerceAccountUpdateDate: Date; 

@@ -18,6 +18,10 @@ export class CommerceAccount {
     commerceAccountHandle: string;
     @Column({type: 'jsonb', nullable: true})
     commerceAccountApplicationModules: string;
+    @Column({nullable: true})
+    commerceAccountAPIClientId: string;
+    @Column({nullable: true})
+    commerceAccountAPIClientToken: string;
     @Column({type: 'boolean', default: true})
     commerceAccountIsActive: boolean;
     @CreateDateColumn()
