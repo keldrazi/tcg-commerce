@@ -58,6 +58,7 @@ import { TCGdbPokemonPriceHistoryModule } from './tcgdb/modules/tcgdb/pokemon/pr
 import { ApplicationModuleModule } from './tcgcommerce/modules/application/module/application.module.module';
 //Commerce Modules;
 import { CommerceAccountModule } from './tcgcommerce/modules/commerce/account/commerce.account.module';
+import { CommerceAccountTokenModule } from './tcgcommerce/modules/commerce/account/token/commerce.account.token.module';
 import { CommerceLocationModule } from './tcgcommerce/modules/commerce/location/commerce.location.module';
 import { CommerceModuleModule } from './tcgcommerce/modules/commerce/module/commerce.module.module';
 import { CommerceUserModule } from './tcgcommerce/modules/commerce/user/commerce.user.module';
@@ -156,6 +157,7 @@ const NODE_ENV = process.env.NODE_ENV;
     ApplicationModuleModule,
     //Commerce Modules;
     CommerceAccountModule,
+    CommerceAccountTokenModule,
     CommerceLocationModule,
     CommerceModuleModule,
     CommerceUserModule,
