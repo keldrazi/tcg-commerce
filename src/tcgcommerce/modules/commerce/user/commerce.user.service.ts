@@ -33,7 +33,7 @@ export class CommerceUserService {
     async getCommerceUsersByCommerceAccountId(commerceAccountId: string) {
         let commerceUsers = await this.commerceUserRepository.find({ 
             where: { 
-                commerceAccountId 
+                commerceAccountId: commerceAccountId 
             } 
         });
 
@@ -51,6 +51,29 @@ export class CommerceUserService {
         }
 
         return commerceUserDTOs;
+
+    }
+
+    async loginCommerceUser(commerceUserEmail:string, commerceUserPassword:string) {
+        let commerceUser = await this.commerceUserRepository.findOne({ 
+            where: { 
+                commerceUserEmail: commerceUserEmail 
+            } 
+        });
+
+        if (commerceUser == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_INVALID_LOGIN', 'Commerce user was not found for email: ' + commerceUserEmail);
+        }
+
+        let isPasswordValid = await bcrypt.compare(commerceUserPassword, commerceUser.commerceUserPassword);
+
+        if (!isPasswordValid) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_USER_INVALID_LOGIN', 'Commerce user login is invalid for email: ' + commerceUserEmail);
+        }
+
+        let commerceUserDTO = await this.getCommerceUser(commerceUser.commerceUserId);
+
+        return commerceUserDTO;
 
     }
 
