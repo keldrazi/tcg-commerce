@@ -1,10 +1,12 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Equal, ILike, Not, Repository } from 'typeorm';
 import { ProductCardSearchResultDTO, ProductCardSearchDTO } from './dto/product.card.search.dto';
 import { ProductCard } from 'src/typeorm/entities/tcgcommerce/modules/product/card/product.card.entity';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
+import { AiImageCardServiceXimilarService } from 'src/system/modules/ai/image/card/service/ximilar/ai.image.card.service.ximilar.service';
+import { AiImageCardServiceXimilarDTO } from 'src/system/modules/ai/image/card/service/ximilar/dto/ai.image.card.service.ximilar.dto';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -16,6 +18,7 @@ export class ProductCardSearchService implements OnModuleInit {
         @InjectRepository(ProductCard) private productCardRepository: Repository<ProductCard>,
         private productLineService: ProductLineService,
         private productSetService: ProductSetService,
+        private aiImageCardServiceXimilarService: AiImageCardServiceXimilarService,
         private errorMessageService: ErrorMessageService
     ) { }
 
@@ -148,6 +151,47 @@ export class ProductCardSearchService implements OnModuleInit {
         return productCardSearchResultDTO;
     }
 
+    async searchProductCardByImage(productLineCode: string,productCardImageBase64: string, productCardPrintingType: string) {
+        
+        let productLineId = this.getProductLineIdByCode(productLineCode);
+        
+        if(productLineId == "0") {
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + productLineCode);
+        }
+
+        let aiImageCardServiceXimilarDTO: AiImageCardServiceXimilarDTO | null = await this.aiImageCardServiceXimilarService.analyzeCardImage(productCardImageBase64, productCardPrintingType);
+
+        if(aiImageCardServiceXimilarDTO != null) {
+            
+            let productCard = await this.productCardRepository.findOne({ 
+                where: { 
+                    productSetCode: aiImageCardServiceXimilarDTO.aiImageCardServiceXimilarSetCode,
+                    productCardNumber: aiImageCardServiceXimilarDTO.aiImageCardServiceXimilarCardNumber,
+                    productCardRarityCode: Not(Equal('T'))
+                }
+            });
+
+            if(productCard != null) {
+                const productCardSearchDTO = new ProductCardSearchDTO();
+                productCardSearchDTO.productCardId = productCard.productCardId;
+                productCardSearchDTO.productCardTCGdbId = productCard.productCardTCGdbId;
+                productCardSearchDTO.productCardTCGPlayerId = productCard.productCardTCGPlayerId;
+                productCardSearchDTO.productVendorId = productCard.productVendorId;
+                productCardSearchDTO.productLineId = productCard.productLineId;
+                productCardSearchDTO.productSetId = productCard.productSetId;
+                productCardSearchDTO.productSetCode = productCard.productSetCode;
+                productCardSearchDTO.productCardRarityCode = productCard.productCardRarityCode;
+                productCardSearchDTO.productCardNumber = productCard.productCardNumber;
+                productCardSearchDTO.productCardName = productCard.productCardName;
+                productCardSearchDTO.productCardCleanName = productCard.productCardCleanName;
+                productCardSearchDTO.productCardImage = productCard.productCardImage;
+
+                return productCardSearchDTO;
+            }
+
+        }
+    }  
+      
     private getProductLineIdByCode(productLineCode: string): string {
         switch(productLineCode.toUpperCase()) {
             case 'MTG':
