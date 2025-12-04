@@ -46,8 +46,6 @@ export class CreateBuylistHotlistProductCardItemDTO {
     buylistHotlistProductCardItemOverridePriceEnabled: boolean;
     @IsNumber()
     buylistHotlistProductCardItemOverridePrice: number;
-   
-    
 }
 
 export class UpdateBuylistHotlistProductCardItemDTO {
@@ -60,8 +58,7 @@ export class UpdateBuylistHotlistProductCardItemDTO {
     @IsBoolean()
     buylistHotlistProductCardItemOverridePriceEnabled: boolean;
     @IsNumber()
-    buylistHotlistProductCardItemOverridePrice: number;
-    
+    buylistHotlistProductCardItemOverridePrice: number;  
 }
 
 

@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistQuicklistProductCardItemDTO, BuylistQuicklistProductCardItemDTO } from './dto/buylist.quicklist.product.card.item.dto';
 import { BuylistQuicklistProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/quicklist/product/card/item/buylist.quicklist.product.card.item.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class BuylistQuicklistProductCardItemService {
 
     constructor(
         @InjectRepository(BuylistQuicklistProductCardItem) private buylistQuicklistProductCardItemRepository: Repository<BuylistQuicklistProductCardItem>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistQuicklistProductCardItemById(buylistQuicklistProductCardItemId: string) {
@@ -19,7 +22,7 @@ export class BuylistQuicklistProductCardItemService {
         });
         
         if (buylistQuicklistProductCardItem == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist quicklist product card item was not found');
         }
 
         let buylistQuicklistProductCardItemDTO: BuylistQuicklistProductCardItemDTO = ({ ...buylistQuicklistProductCardItem });
@@ -42,6 +45,5 @@ export class BuylistQuicklistProductCardItemService {
         
     }
 
-    
-
+    //TO DO:DELETE METHOD;
 }

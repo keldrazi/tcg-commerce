@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, IsNumber } from "class-validator";
+import { IsString } from "class-validator";
 
 export class BuylistQuicklistProductCardItemDTO {
     buylistQuicklistProductCardItemId: string;

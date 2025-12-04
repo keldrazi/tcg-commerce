@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistHotlistProductCardItemDTO, UpdateBuylistHotlistProductCardItemDTO, BuylistHotlistProductCardItemDTO } from './dto/buylist.hotlist.product.card.item.dto';
 import { BuylistHotlistProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/hotlist/product/card/item/buylist.hotlist.product.card.item.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class BuylistHotlistProductCardItemService {
 
     constructor(
         @InjectRepository(BuylistHotlistProductCardItem) private buylistHotlistProductCardItemRepository: Repository<BuylistHotlistProductCardItem>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getBuylistHotlistProductCardItemById(buylistHotlistProductCardItemId: string) {
@@ -18,8 +21,8 @@ export class BuylistHotlistProductCardItemService {
             } 
         });
         
-        if (buylistHotlistProductCardItem == null) {
-            return null;
+        if(buylistHotlistProductCardItem == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_HOTLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist hotlist product card item was not found');
         }
 
         let buylistHotlistProductCardItemDTO: BuylistHotlistProductCardItemDTO = ({ ...buylistHotlistProductCardItem });
@@ -29,6 +32,9 @@ export class BuylistHotlistProductCardItemService {
     }
 
     async getBuylistHotlistProductCardItemsByCommerceAccountId(commerceAccountId: string) {
+        
+        let buylistHotlistProductCardItemDTOs: BuylistHotlistProductCardItemDTO[] = [];
+        
         let buylistHotlistProductCardItems = await this.buylistHotlistProductCardItemRepository.find({
             where: {
                 commerceAccountId: commerceAccountId
@@ -37,11 +43,9 @@ export class BuylistHotlistProductCardItemService {
         
         //TO DO: CREATE AN ERROR TO RETURN;
         if(buylistHotlistProductCardItems == null) {
-            return null;
+            return buylistHotlistProductCardItemDTOs;
         }
         
-        let buylistHotlistProductCardItemDTOs: BuylistHotlistProductCardItemDTO[] = [];
-
         for(let i = 0; i < buylistHotlistProductCardItems.length; i++) {
             let buylistHotlistProductCardItem = buylistHotlistProductCardItems[i];
             let buylistHotlistProductCardItemDTO: BuylistHotlistProductCardItemDTO = ({ ...buylistHotlistProductCardItem });
@@ -70,8 +74,8 @@ export class BuylistHotlistProductCardItemService {
         let existingBuylistHotlistProductCardItem = await this.getBuylistHotlistProductCardItemById(updateBuylistHotlistProductCardItemDTO.buylistHotlistProductCardItemId);
             
         //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
-        if (!existingBuylistHotlistProductCardItem) {
-            return null; 
+        if (existingBuylistHotlistProductCardItem == null || existingBuylistHotlistProductCardItem instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_HOTLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist hotlist product card item was not found');
         }
 
         existingBuylistHotlistProductCardItem.productCardPrintingId = updateBuylistHotlistProductCardItemDTO.productCardPrintingId;
@@ -86,5 +90,7 @@ export class BuylistHotlistProductCardItemService {
         return buylistHotlistProductCardItemDTO;
     
     }
+
+    //TO DO:DELETE METHOD;
 
 }

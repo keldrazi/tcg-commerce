@@ -16,8 +16,6 @@ export class BuylistHotlistProductCardDTO {
     buylistHotlistProductCardIsExternal: boolean;
     buylistHotlistProductCardCreateDate: Date;
     buylistHotlistProductCardUpdateDate: Date;
-
-    
 }
 
 export class CreateBuylistHotlistProductCardDTO {
@@ -40,8 +38,7 @@ export class CreateBuylistHotlistProductCardDTO {
     @IsDate()
     buylistHotlistProductCardEndDateTime: Date;
     @IsBoolean()
-    buylistHotlistProductCardIsExternal: boolean;
-    
+    buylistHotlistProductCardIsExternal: boolean;  
 }
 
 export class UpdateBuylistHotlistProductCardDTO {

@@ -3,11 +3,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { BuylistHotlistProductCardItemService } from './buylist.hotlist.product.card.item.service';
 import { BuylistHotlistProductCardItemController } from './buylist.hotlist.product.card.item.controller';
 import { BuylistHotlistProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/hotlist/product/card/item/buylist.hotlist.product.card.item.entity';
-
+import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([BuylistHotlistProductCardItem])
+        TypeOrmModule.forFeature([BuylistHotlistProductCardItem]),
+        ErrorMessageModule,
     ],
     controllers: [BuylistHotlistProductCardItemController],
     providers: [BuylistHotlistProductCardItemService],

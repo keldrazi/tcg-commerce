@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, IsDate } from "class-validator";
+import { IsString, IsBoolean } from "class-validator";
 
 export class BuylistQuicklistProductCardDTO {
     buylistQuicklistProductCardId: string;
@@ -14,8 +14,6 @@ export class BuylistQuicklistProductCardDTO {
     buylistQuicklistProductCardIsActive: boolean;
     buylistQuicklistProductCardCreateDate: Date;
     buylistQuicklistProductCardUpdateDate: Date;
-
-    
 }
 
 export class CreateBuylistQuicklistProductCardDTO {
@@ -35,7 +33,6 @@ export class CreateBuylistQuicklistProductCardDTO {
     productLanguageId: string;
     @IsBoolean()
     buylistQuicklistProductCardIsActive: boolean;
-    
 }
 
 export class UpdateBuylistQuicklistProductCardDTO {

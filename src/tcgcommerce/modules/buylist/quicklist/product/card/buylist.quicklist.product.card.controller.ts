@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistQuicklistProductCardDTO, UpdateBuylistQuicklistProductCardDTO, BuylistQuicklistProductCardDTO } from './dto/buylist.quicklist.product.card.dto';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateBuylistQuicklistProductCardDTO, UpdateBuylistQuicklistProductCardDTO } from './dto/buylist.quicklist.product.card.dto';
 import { BuylistQuicklistProductCardService } from './buylist.quicklist.product.card.service';
 
 

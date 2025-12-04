@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistHotlistProductCardDTO, UpdateBuylistHotlistProductCardDTO, BuylistHotlistProductCardDTO } from './dto/buylist.hotlist.product.card.dto';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateBuylistHotlistProductCardDTO, UpdateBuylistHotlistProductCardDTO } from './dto/buylist.hotlist.product.card.dto';
 import { BuylistHotlistProductCardService } from './buylist.hotlist.product.card.service';
 
 
