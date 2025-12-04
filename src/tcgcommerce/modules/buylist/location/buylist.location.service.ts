@@ -21,7 +21,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found for buylistLocationId: ' + buylistLocationId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found');
         }
 
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
@@ -61,7 +61,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found for name: ' + name);
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found');
         }
 
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
@@ -80,7 +80,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_EXISTS', 'Buylist location with name already exists: ' + createBuylistLocationDTO.buylistLocationName);
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_EXISTS', 'Buylist location with name already exists');
         }
         
         let newBuylistLocation = this.buylistLocationRepository.create({ ...createBuylistLocationDTO });
@@ -101,7 +101,7 @@ export class BuylistLocationService {
         });    
         
         if (!existingBuylistLocation) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found for buylistLocationId: ' + updateBuylistLocationDTO.buylistLocationId); 
+            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found');
         }
 
         existingBuylistLocation.buylistLocationName = updateBuylistLocationDTO.buylistLocationName;

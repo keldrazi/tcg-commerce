@@ -21,7 +21,7 @@ export class BuylistModuleService {
         });
         
         if (buylistModule == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found for buylistModuleId: ' + buylistModuleId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found');
         }
 
         let buylistModuleDTO :BuylistModuleDTO = ({ ...buylistModule})
@@ -70,7 +70,7 @@ export class BuylistModuleService {
         });
 
         if (existingBuylistModule == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found for buylistModuleId: ' + updateBuylistModuleDTO.buylistModuleId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found');
         }
 
         existingBuylistModule.buylistModuleSettings = updateBuylistModuleDTO.buylistModuleSettings;

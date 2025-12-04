@@ -22,7 +22,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if(buylistPriceProductCardRuleHotlist == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found for buylistPriceProductCardRuleHotlistId: ' + buylistPriceProductCardRuleHotlistId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found');
         }
 
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
@@ -41,7 +41,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if(buylistPriceProductCardRuleHotlist == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found for commerceAccountId: ' + commerceAccountId + ', productVendorId: ' + productVendorId + ', productLineId: ' + productLineId + ', productTypeId: ' + productTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found');
         }
 
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
@@ -64,7 +64,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if (buylistPriceProductCardRuleHotlist != null) {
-           return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_ALREADY_EXISTS', 'Buylist price product card rule hotlist already exists for commerceAccountId: ' + createBuylistPriceProductCardRuleHotlistDTO.commerceAccountId + ', productVendorId: ' + createBuylistPriceProductCardRuleHotlistDTO.productVendorId + ', productLineId: ' + createBuylistPriceProductCardRuleHotlistDTO.productLineId + ', productTypeId: ' + createBuylistPriceProductCardRuleHotlistDTO.productTypeId);
+           return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_ALREADY_EXISTS', 'Buylist price product card rule hotlist already exists');
         }
 
         let newBuylistPriceProductCardRuleHotlist = this.buylistPriceProductCardRuleHotlistRepository.create({ ...createBuylistPriceProductCardRuleHotlistDTO });
@@ -85,7 +85,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if (buylistPriceProductCardRuleHotlist == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found for buylistPriceProductCardRuleHotlistId: ' + updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found');
         }
 
         buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistId = updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistId;

@@ -1,4 +1,4 @@
-import { IsString, IsBoolean } from "class-validator";
+import { IsString } from "class-validator";
 
 export class BuylistImportProductCardDTO {
     buylistImportProductCardId: string;
@@ -14,9 +14,7 @@ export class BuylistImportProductCardDTO {
     buylistImportProductCardCount: number;
     buylistImportProductCardQtyCount: number; 
     buylistImportProductCardCreateDate: Date;
-    buylistImportProductCardUpdateDate: Date;
-
-    
+    buylistImportProductCardUpdateDate: Date; 
 }
 
 export class CreateBuylistImportProductCardDTO {

@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } fro
 import { CreateBuylistPriceProductCardRuleBaseDTO, UpdateBuylistPriceProductCardRuleBaseDTO } from './dto/buylist.price.product.card.rule.base.dto';
 import { BuylistPriceProductCardRuleBaseService } from './buylist.price.product.card.rule.base.service';
 
-
-
 @Controller('buylist/price/product/card/rule/base')
 export class BuylistPriceProductCardRuleBaseController {
 

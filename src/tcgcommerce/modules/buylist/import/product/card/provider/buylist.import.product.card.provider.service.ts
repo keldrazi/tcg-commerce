@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { UtilCSVService } from 'src/system/modules/util/csv/util.csv.service';
 import { BuylistImportProductCardProviderDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/dto/buylist.import.product.card.provider.dto';
 import { BuylistImportProductCardProviderTypeService } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/buylist.import.product.card.provider.type.service';
-import { BuylistImportProductCardProviderTypeDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/dto/buylist.import.product.card.provider.type.dto';
 import { BuylistImportProductCardProviderTypeFileDataKey, BuylistImportProductCardProviderTypeFileConditionKey, BuylistImportProductCardProviderTypeFilePrintingKey } from 'src/tcgcommerce/modules/buylist/import/product/card/provider/type/interface/buylist.import.product.card.provider.type.interface';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
@@ -26,7 +25,7 @@ export class BuylistImportProductCardProviderService {
         let buylistImportProductCardProviderTypeDTO = await this.buylistImportProductCardProviderTypeService.getBuylistImportProductCardProviderTypeByCode(buylistImportProductCardProviderTypeCode);
 
         if(buylistImportProductCardProviderTypeDTO == null || buylistImportProductCardProviderTypeDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for code: ' + buylistImportProductCardProviderTypeCode);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
         }
 
         let buylistImportProductCardProviderTypeFileDataKey: BuylistImportProductCardProviderTypeFileDataKey = buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey;

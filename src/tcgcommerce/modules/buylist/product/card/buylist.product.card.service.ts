@@ -23,7 +23,7 @@ export class BuylistProductCardService {
         });
         
         if (buylistProductCard == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found for buylistProductCardId: ' + buylistProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found');
         }
 
         let buylistProductCardDTO: BuylistProductCardDTO = ({ ...buylistProductCard });
@@ -76,9 +76,8 @@ export class BuylistProductCardService {
             } 
         });
             
-        //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
         if (!existingBuylistProductCard) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found for buylistProductCardId: ' + updateBuylistProductCardDTO.buylistProductCardId); 
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found'); 
         }
 
         existingBuylistProductCard.commerceUserId = updateBuylistProductCardDTO.commerceUserId;
@@ -101,7 +100,7 @@ export class BuylistProductCardService {
         let buylistProductCard = await this.getBuylistProductCardById(payload.buylistProductCardId);
         
         if(buylistProductCard == null || buylistProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found for buylistProductCardId: ' + payload.buylistProductCardId); 
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found'); 
         }
 
         buylistProductCard.buylistProductCardTotalCount = buylistProductCard.buylistProductCardTotalCount + payload.buylistProductCardItemCount;

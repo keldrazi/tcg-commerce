@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO, BuylistTypeDTO } from './dto/buylist.type.dto';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO } from './dto/buylist.type.dto';
 import { BuylistTypeService } from './buylist.type.service';
 
 

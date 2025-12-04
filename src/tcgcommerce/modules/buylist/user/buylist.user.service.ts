@@ -22,7 +22,7 @@ export class BuylistUserService {
         let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
         
         if (buylistUser == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found');
         }
 
         let buylistUserDTO:BuylistUserDTO = ({ ...buylistUser });
@@ -32,6 +32,9 @@ export class BuylistUserService {
     }
 
     async getBuylistUsersByCommerceAccountId(commerceAccountId: string) {
+        
+        let buylistUserDTOs: BuylistUserDTO[] = [];
+        
         let buylistUsers = await this.buylistUserRepository.find({ 
             where: { 
                 commerceAccountId 
@@ -39,10 +42,8 @@ export class BuylistUserService {
         });
 
         if (buylistUsers == null) {
-            return [];
+            return buylistUserDTOs;
         }
-
-        let buylistUserDTOs: BuylistUserDTO[] = [];
 
         for(let i = 0; i < buylistUsers.length; i++) {
             let buylistUser = buylistUsers[i];
@@ -59,7 +60,7 @@ export class BuylistUserService {
         let checkBuylistUser = await this.buylistUserRepository.findOne({ where: { commerceAccountId: buylistUser.commerceAccountId, buylistUserEmail: buylistUser.buylistUserEmail } });
 
         if(checkBuylistUser != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_ALREADY_EXISTS', 'Buylist user already exists for email: ' + buylistUser.buylistUserEmail);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_ALREADY_EXISTS', 'Buylist user already exists');
         }
 
         let buylistUserPasswordHash = await this.hashPassword(buylistUser.buylistUserPassword);
@@ -78,9 +79,8 @@ export class BuylistUserService {
     async updateBuylistUser(buylistUser: UpdateBuylistUserDTO) {
         let updateBuylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId: buylistUser.buylistUserId } });
         
-        //TO DO: CREATE AN ERROR TO RETURN IF BUYLIST USER IS NULL;
         if (updateBuylistUser == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUser.buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found');
         }
 
         updateBuylistUser.buylistUserFirstName = buylistUser.buylistUserFirstName;
@@ -105,7 +105,7 @@ export class BuylistUserService {
         let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
 
         if (buylistUser == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found');
         }
 
         buylistUser.buylistUserIsActive = false;
@@ -122,7 +122,7 @@ export class BuylistUserService {
         let buylistUser = await this.buylistUserRepository.findOne({ where: { commerceAccountId, buylistUserEmail } });
 
         if (buylistUser == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for email: ' + buylistUserEmail);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found');
         }
 
         await this.buylistUserVerificationService.createBuylistUserVerification(commerceAccountId, buylistUser.buylistUserId, 'BUYLIST_USER_PASSWORD_RESET');
@@ -136,7 +136,7 @@ export class BuylistUserService {
         let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
 
         if (buylistUser == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found');
         }
 
         let buylistUserPasswordHash = await this.hashPassword(buylistUserPassword);
@@ -154,13 +154,13 @@ export class BuylistUserService {
         let isVerified = await this.buylistUserVerificationService.verifyBuylistUserVerification(commerceAccountId, buylistUserId, buylistUserVerificationCode, 'BUYLIST_USER_REGISTRATION');
 
         if(!isVerified) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_VERIFICATION_FAILED', 'Buylist user verification failed for buylistUserId: ' + buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_VERIFICATION_FAILED', 'Buylist user verification failed');
         }
 
         let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
 
         if (buylistUser == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found');
         }
 
         buylistUser.buylistUserIsVerified = true;
@@ -179,13 +179,13 @@ export class BuylistUserService {
         let buylistUser = await this.buylistUserRepository.findOne({ where: { buylistUserId } });
 
         if (buylistUser == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found for buylistUserId: ' + buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_NOT_FOUND', 'Buylist user was not found');
         }
         
         let isVerified = await this.buylistUserVerificationService.verifyBuylistUserVerification(commerceAccountId, buylistUserId, buylistUserVerificationCode, 'BUYLIST_USER_PASSWORD_RESET');
 
         if(!isVerified || isVerified instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_USER_VERIFICATION_FAILED', 'Buylist user verification failed for buylistUserId: ' + buylistUserId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_USER_VERIFICATION_FAILED', 'Buylist user verification failed');
         }
 
         

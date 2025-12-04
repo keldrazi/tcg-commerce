@@ -36,7 +36,7 @@ export class BuylistImportProductCardService {
         });
 
         if(buylistImportProductCard == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
         }
 
         let buylistImportProductCardDTO: BuylistImportProductCardDTO = ({ ...buylistImportProductCard });
@@ -79,7 +79,7 @@ export class BuylistImportProductCardService {
         });
 
         if(buylistImportProductCard == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
         }
 
         //MAP TO DTO;
@@ -87,7 +87,7 @@ export class BuylistImportProductCardService {
         let buylistImportProductCardItemDTOs = await this.buylistImportProductCardItemService.getBuylistImportProductCardItemsByBuylistId(buylistImportProductCardDTO.buylistImportProductCardId);
 
         if(buylistImportProductCardItemDTOs == null || buylistImportProductCardItemDTOs instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_DETAILS_NOT_FOUND', 'Buylist import product card details not found for job ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_DETAILS_NOT_FOUND', 'Buylist import product card details not found');
         }
 
         let buylistImportProductCardDetails = {
@@ -114,25 +114,25 @@ export class BuylistImportProductCardService {
         let existingImportJobCard = await this.getBuylistImportProductCardByOriginalFileName(createBuylistImportProductCardDTO.buylistProductCardId, buylistImportProductCardFile.originalname);
 
         if(existingImportJobCard != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_FILE_EXISTS', 'An buylist import job with the same file name already exists. Please rename the file and try again.');
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_FILE_EXISTS', 'A buylist import job with the same file name already exists. Please rename the file and try again.');
         }
 
         let buylistImportProductCardProviderTypeDTO = await this.buylistImportProductCardProviderTypeService.getBuylistImportProductCardProviderTypeByName(createBuylistImportProductCardDTO.buylistImportProductCardProviderTypeName);
 
         if(buylistImportProductCardProviderTypeDTO == null || buylistImportProductCardProviderTypeDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card service provider type not found for name: ' + createBuylistImportProductCardDTO.buylistImportProductCardProviderTypeName);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card service provider type not found');
         }
 
         let buylistProductCardDTO = await this.buylistProductCardService.getBuylistProductCardById(createBuylistImportProductCardDTO.buylistProductCardId);
 
         if(buylistProductCardDTO == null || buylistProductCardDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found for ID: ' + createBuylistImportProductCardDTO.buylistProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found');
         }
 
         let productLineDTO = await this.productLineService.getProductLine(buylistProductCardDTO.productLineId);
 
         if(productLineDTO == null || productLineDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line not found for ID: ' + buylistProductCardDTO.productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line not found');
         }
 
 
@@ -187,7 +187,7 @@ export class BuylistImportProductCardService {
         let buylistImportProductCard = await this.getBuylistImportProductCardById(buylistImportProductCardId);
 
         if(buylistImportProductCard == null || buylistImportProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
         }
 
         buylistImportProductCard.buylistImportProductCardStatus = buylistImportProductCardStatus;
@@ -202,7 +202,7 @@ export class BuylistImportProductCardService {
         let buylistImportProductCardDTO = await this.getBuylistImportProductCardById(buylistImportProductCardId);
 
         if(buylistImportProductCardDTO == null || buylistImportProductCardDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
         }
 
         await this.updateBuylistImportProductCardStatus(buylistImportProductCardId, 'APPROVED');
@@ -218,7 +218,7 @@ export class BuylistImportProductCardService {
         let buylistImportProductCardDTO = await this.getBuylistImportProductCardById(buylistImportProductCardId);
 
         if(buylistImportProductCardDTO == null || buylistImportProductCardDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
         }
 
         if(buylistImportProductCardDTO.buylistImportProductCardStatus == 'APPROVED') {
@@ -238,7 +238,7 @@ export class BuylistImportProductCardService {
         let buylistImportProductCard = await this.getBuylistImportProductCardById(buylistImportProductCardId);
 
         if(buylistImportProductCard == null || buylistImportProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
         }
 
         buylistImportProductCard.buylistImportProductCardCount = buylistImportProductCardCount;

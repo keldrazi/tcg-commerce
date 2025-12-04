@@ -7,9 +7,7 @@ export class BuylistLocationDTO {
     buylistLocationCode: string;
     buylistLocationIsActive: boolean;
     buylistLocationCreateDate: Date;
-    buylistLocationUpdateDate: Date;
-
-    
+    buylistLocationUpdateDate: Date; 
 }
 
 export class CreateBuylistLocationDTO {
@@ -21,8 +19,6 @@ export class CreateBuylistLocationDTO {
     buylistLocationCode: string;
     @IsBoolean()
     buylistLocationIsActive: boolean;
-   
-    
 }
 
 export class UpdateBuylistLocationDTO {
@@ -35,7 +31,6 @@ export class UpdateBuylistLocationDTO {
     @IsString()
     buylistLocationCode: string;
     @IsBoolean()
-    buylistLocationIsActive: boolean;
-    
+    buylistLocationIsActive: boolean; 
 }
 

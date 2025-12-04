@@ -21,7 +21,7 @@ export class BuylistPaymentServiceService {
         });
         
         if (buylistPaymentService == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found for buylistPaymentServiceId: ' + buylistPaymentServiceId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found');
         }
 
         let buylistPaymentServiceDTO: BuylistPaymentServiceDTO = ({ ...buylistPaymentService });
@@ -57,7 +57,7 @@ export class BuylistPaymentServiceService {
         });
         
         if (buylistPaymentService == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found for name: ' + name);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found');
         }
 
         let buylistPaymentServiceDTO: BuylistPaymentServiceDTO = ({ ...buylistPaymentService });
@@ -76,7 +76,7 @@ export class BuylistPaymentServiceService {
         });
         
         if (buylistPaymentService != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_EXISTS', 'Buylist payment service with name already exists: ' + createBuylistPaymentServiceDTO.buylistPaymentServiceName);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_EXISTS', 'Buylist payment service with name already exists');
         }
         
         let newBuylistPaymentService = this.buylistPaymentServiceRepository.create({ ...createBuylistPaymentServiceDTO });
@@ -97,7 +97,7 @@ export class BuylistPaymentServiceService {
         });
             
         if (!existingBuylistPaymentService) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found for buylistPaymentServiceId: ' + updateBuylistPaymentServiceDTO.buylistPaymentServiceId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found');
         }
 
         existingBuylistPaymentService.buylistPaymentServiceName = updateBuylistPaymentServiceDTO.buylistPaymentServiceName;

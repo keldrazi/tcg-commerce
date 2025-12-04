@@ -21,7 +21,7 @@ export class BuylistPaymentTypeService {
         });
         
         if (buylistPaymentType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found for buylistPaymentTypeId: ' + buylistPaymentTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found');
         }
 
         let buylistPaymentTypeDTO: BuylistPaymentTypeDTO = ({ ...buylistPaymentType });
@@ -57,7 +57,7 @@ export class BuylistPaymentTypeService {
         });
         
         if (buylistPaymentType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found for name: ' + name);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found');
         }
 
         let buylistPaymentTypeDTO: BuylistPaymentTypeDTO = ({ ...buylistPaymentType });
@@ -76,7 +76,7 @@ export class BuylistPaymentTypeService {
         });
         
         if (buylistPaymentType != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_EXISTS', 'Buylist payment type with name already exists: ' + createBuylistPaymentTypeDTO.buylistPaymentTypeName);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_EXISTS', 'Buylist payment type with name already exists');
         }
         
         let newBuylistPaymentType = this.buylistPaymentTypeRepository.create({ ...createBuylistPaymentTypeDTO });
@@ -97,7 +97,7 @@ export class BuylistPaymentTypeService {
         });
         
         if (!existingBuylistPaymentType) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found for buylistPaymentTypeId: ' + updateBuylistPaymentTypeDTO.buylistPaymentTypeId); 
+            return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_TYPE_NOT_FOUND', 'Buylist payment type was not found');
         }
 
         existingBuylistPaymentType.buylistPaymentTypeName = updateBuylistPaymentTypeDTO.buylistPaymentTypeName;

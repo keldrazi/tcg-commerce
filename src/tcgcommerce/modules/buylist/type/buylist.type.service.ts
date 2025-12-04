@@ -21,7 +21,7 @@ export class BuylistTypeService {
         });
         
         if (buylistType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found for buylistTypeId: ' + buylistTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
         }
 
         let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
@@ -73,7 +73,7 @@ export class BuylistTypeService {
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (buylistType != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_ALREADY_EXISTS', 'Buylist type already exists for buylistTypeName: ' + createBuylistTypeDTO.buylistTypeName);
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_ALREADY_EXISTS', 'Buylist type already exists');
         }
         
         let newBuylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });
@@ -95,7 +95,7 @@ export class BuylistTypeService {
             
         //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
         if (!existingBuylistType) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found for buylistTypeId: ' + updateBuylistTypeDTO.buylistTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
         }
 
         existingBuylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;

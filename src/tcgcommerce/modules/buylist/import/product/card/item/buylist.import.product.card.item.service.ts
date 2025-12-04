@@ -63,7 +63,7 @@ export class BuylistImportProductCardItemService {
         let buylistProductCard = await this.buylistProductCardService.getBuylistProductCardById(buylistImportProductCardDTO.buylistProductCardId);
 
         if(buylistProductCard == null || buylistProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found for ID: ' + buylistImportProductCardDTO.buylistProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found');
         }
 
         let buylistImportProductCardCount = 0;

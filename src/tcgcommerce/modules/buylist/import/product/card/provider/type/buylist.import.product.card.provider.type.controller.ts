@@ -1,8 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistImportProductCardProviderTypeDTO, UpdateBuylistImportProductCardProviderTypeDTO, BuylistImportProductCardProviderTypeDTO } from './dto/buylist.import.product.card.provider.type.dto';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateBuylistImportProductCardProviderTypeDTO, UpdateBuylistImportProductCardProviderTypeDTO } from './dto/buylist.import.product.card.provider.type.dto';
 import { BuylistImportProductCardProviderTypeService } from './buylist.import.product.card.provider.type.service';
-
-
 
 @Controller('buylist/import/product/card/provider/type')
 export class BuylistImportProductCardProviderTypeController {

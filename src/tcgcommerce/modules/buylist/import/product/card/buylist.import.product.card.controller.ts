@@ -1,6 +1,5 @@
 import { Body, Controller, Get, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { BuylistImportProductCardService } from './buylist.import.product.card.service';
-import { BuylistImportProductCardDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/dto/buylist.import.product.card.dto';
 import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('inventory/product/card/service/import/job')
@@ -51,14 +50,4 @@ export class BuylistImportProductCardController {
         
         return buylistImportProductCardDTO;
     }
-
-
-
-
-    //GET ALL IMPORT JOBS FOR A COMMERCE ACCOUNT;
-    //REVIEW IMPORT JOB
-    //REJECT IMPORT JOB
-    //APPROVE IMPORT JOB
-
-
 }

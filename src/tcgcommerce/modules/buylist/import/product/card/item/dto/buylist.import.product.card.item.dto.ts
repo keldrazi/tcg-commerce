@@ -1,4 +1,3 @@
-
 export class BuylistImportProductCardItemDTO {
     buylistImportProductCardItemId: string;
     buylistImportProductCardId: string;

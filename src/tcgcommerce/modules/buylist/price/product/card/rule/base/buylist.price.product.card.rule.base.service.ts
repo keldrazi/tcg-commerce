@@ -22,7 +22,7 @@ export class BuylistPriceProductCardRuleBaseService {
         });
        
         if(buylistPriceProductCardRuleBase == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_NOT_FOUND', 'Buylist price product card rule base was not found for buylistPriceProductCardRuleBaseId: ' + buylistPriceProductCardRuleBaseId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_NOT_FOUND', 'Buylist price product card rule base was not found');
         }
 
         let buylistPriceProductCardRuleBaseDTO: BuylistPriceProductCardRuleBaseDTO = ({ ...buylistPriceProductCardRuleBase})
@@ -41,7 +41,7 @@ export class BuylistPriceProductCardRuleBaseService {
         });
         
         if(buylistPriceProductCardRuleBase == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_NOT_FOUND', 'Buylist price product card rule base was not found for commerceAccountId: ' + commerceAccountId + ', productVendorId: ' + productVendorId + ', productLineId: ' + productLineId + ', productTypeId: ' + productTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_NOT_FOUND', 'Buylist price product card rule base was not found');
         }
 
         let buylistPriceProductCardRuleBaseDTO: BuylistPriceProductCardRuleBaseDTO = ({ ...buylistPriceProductCardRuleBase})
@@ -64,7 +64,7 @@ export class BuylistPriceProductCardRuleBaseService {
         });
         
         if (buylistPriceProductCardRuleBase != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_EXISTS', 'Buylist price product card rule base already exists for commerceAccountId: ' + createBuylistPriceProductCardRuleBaseDTO.commerceAccountId + ', productVendorId: ' + createBuylistPriceProductCardRuleBaseDTO.productVendorId + ', productLineId: ' + createBuylistPriceProductCardRuleBaseDTO.productLineId + ', productTypeId: ' + createBuylistPriceProductCardRuleBaseDTO.productTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_EXISTS', 'Buylist price product card rule base already exists');
         }
 
         let newBuylistPriceProductCardRuleBase = this.buylistPriceProductCardRuleBaseRepository.create({ ...createBuylistPriceProductCardRuleBaseDTO });
@@ -85,7 +85,7 @@ export class BuylistPriceProductCardRuleBaseService {
         });
         
         if (buylistPriceProductCardRuleBase == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_NOT_FOUND', 'Buylist price product card rule base was not found for buylistPriceProductCardRuleBaseId: ' + updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_NOT_FOUND', 'Buylist price product card rule base was not found');
         }
 
         buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseId = updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseId;

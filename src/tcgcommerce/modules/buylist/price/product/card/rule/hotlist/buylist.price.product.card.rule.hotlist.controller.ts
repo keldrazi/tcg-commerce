@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } fro
 import { CreateBuylistPriceProductCardRuleHotlistDTO, UpdateBuylistPriceProductCardRuleHotlistDTO } from './dto/buylist.price.product.card.rule.hotlist.dto';
 import { BuylistPriceProductCardRuleHotlistService } from './buylist.price.product.card.rule.hotlist.service';
 
-
-
 @Controller('buylist/price/product/card/rule/hotlist')
 export class BuylistPriceProductCardRuleHotlistController {
 

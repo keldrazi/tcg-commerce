@@ -1,8 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistLocationDTO, UpdateBuylistLocationDTO, BuylistLocationDTO } from './dto/buylist.location.dto';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateBuylistLocationDTO, UpdateBuylistLocationDTO } from './dto/buylist.location.dto';
 import { BuylistLocationService } from './buylist.location.service';
-
-
 
 @Controller('buylist/location')
 export class BuylistLocationController {

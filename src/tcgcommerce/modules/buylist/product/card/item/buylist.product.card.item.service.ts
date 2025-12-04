@@ -29,7 +29,7 @@ export class BuylistProductCardItemService {
         });
         
         if (buylistProductCardItem == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found for buylistProductCardItemId: ' + buylistProductCardItemId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found');
         }
 
         let buylistProductCardItemDTO: BuylistProductCardItemDTO = ({ ...buylistProductCardItem });
@@ -56,7 +56,7 @@ export class BuylistProductCardItemService {
         let buylistImportProductCardDTO = await this.buylistImportProductCardService.getBuylistImportProductCardById(payload.buylistImportProductCardId);
 
         if(buylistImportProductCardDTO == null || buylistImportProductCardDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found for ID: ' + payload.buylistImportProductCardId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
         }
         let buylistImportProductCardItemDTOs = await this.buylistImportProductCardItemService.getBuylistImportProductCardItemsByBuylistId(payload.buylistImportProductCardId);
 
@@ -109,7 +109,7 @@ export class BuylistProductCardItemService {
         });   
         
         if (!existingBuylistProductCardItem) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found for buylistProductCardItemId: ' + updateBuylistProductCardItemDTO.buylistProductCardItemId); 
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found'); 
         }
 
         existingBuylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;

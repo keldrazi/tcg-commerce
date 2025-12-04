@@ -22,7 +22,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
         
         if (buylistImportProductCardProviderType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for id: ' + buylistImportProductCardProviderTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
         }
 
         let buylistImportProductCardProviderTypeDTO = await this.createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType);
@@ -59,7 +59,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
 
         if (buylistImportProductCardProviderType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for name: ' + name);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
         }
 
         let buylistImportProductCardProviderTypeDTO =await this.createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType);
@@ -76,7 +76,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
 
         if (buylistImportProductCardProviderType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for code: ' + code);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
         }
 
         let buylistImportProductCardProviderTypeDTO = await this.createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType);
@@ -111,7 +111,7 @@ export class BuylistImportProductCardProviderTypeService {
 
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (buylistImportProductCardProviderType != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_DUPLICATE', 'Buylist import product card provider type already exists for name: ' + createBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_DUPLICATE', 'Buylist import product card provider type already exists');
         }
 
         let newBuylistImportProductCardProviderType = this.buylistImportProductCardProviderTypeRepository.create({ ...createBuylistImportProductCardProviderTypeDTO });
@@ -133,7 +133,7 @@ export class BuylistImportProductCardProviderTypeService {
 
         //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!updateBuylistImportProductCardProviderType) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found for id: ' + updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId);
+            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
         }
 
         updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeName = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName;

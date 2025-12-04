@@ -1,8 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateBuylistPaymentServiceDTO, UpdateBuylistPaymentServiceDTO, BuylistPaymentServiceDTO } from './dto/buylist.payment.service.dto';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateBuylistPaymentServiceDTO, UpdateBuylistPaymentServiceDTO } from './dto/buylist.payment.service.dto';
 import { BuylistPaymentServiceService } from './buylist.payment.service.service';
-
-
 
 @Controller('buylist/payment/service')
 export class BuylistPaymentServiceController {
