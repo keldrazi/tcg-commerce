@@ -30,6 +30,7 @@ export class EmailTemplateService {
         emailTemplateDTO.emailTemplateName = emailTemplate.emailTemplateName;
         emailTemplateDTO.emailTemplateDescription = emailTemplate.emailTemplateDescription;
         emailTemplateDTO.emailTemplateSubject = emailTemplate.emailTemplateSubject;
+        emailTemplateDTO.emailTemplateHBSTemplatePath = emailTemplate.emailTemplateHBSTemplatePath;
         emailTemplateDTO.emailTemplateHBSTemplateName = emailTemplate.emailTemplateHBSTemplateName;
         emailTemplateDTO.emailTemplateContext = JSON.parse(emailTemplate.emailTemplateContext) as EmailTemplateContext[];
         emailTemplateDTO.emailTemplateIsActive = emailTemplate.emailTemplateIsActive;
@@ -57,6 +58,7 @@ export class EmailTemplateService {
         emailTemplateDTO.emailTemplateDescription = emailTemplate.emailTemplateDescription;
         emailTemplateDTO.emailTemplateFrom = emailTemplate.emailTemplateFrom;
         emailTemplateDTO.emailTemplateSubject = emailTemplate.emailTemplateSubject;
+        emailTemplateDTO.emailTemplateHBSTemplatePath = emailTemplate.emailTemplateHBSTemplatePath;
         emailTemplateDTO.emailTemplateHBSTemplateName = emailTemplate.emailTemplateHBSTemplateName;
         emailTemplateDTO.emailTemplateContext = JSON.parse(emailTemplate.emailTemplateContext) as EmailTemplateContext[];
         emailTemplateDTO.emailTemplateIsActive = emailTemplate.emailTemplateIsActive;
@@ -84,6 +86,7 @@ export class EmailTemplateService {
             emailTemplateDTO.emailTemplateDescription = emailTemplate.emailTemplateDescription;
             emailTemplateDTO.emailTemplateFrom = emailTemplate.emailTemplateFrom;
             emailTemplateDTO.emailTemplateSubject = emailTemplate.emailTemplateSubject;
+            emailTemplateDTO.emailTemplateHBSTemplatePath = emailTemplate.emailTemplateHBSTemplatePath;
             emailTemplateDTO.emailTemplateHBSTemplateName = emailTemplate.emailTemplateHBSTemplateName;
             emailTemplateDTO.emailTemplateContext = JSON.parse(emailTemplate.emailTemplateContext) as EmailTemplateContext[];
             emailTemplateDTO.emailTemplateIsActive = emailTemplate.emailTemplateIsActive;
@@ -122,6 +125,7 @@ export class EmailTemplateService {
         emailTemplate.emailTemplateDescription = updateEmailTemplateDTO.emailTemplateDescription;
         emailTemplate.emailTemplateFrom = updateEmailTemplateDTO.emailTemplateFrom;
         emailTemplate.emailTemplateSubject = updateEmailTemplateDTO.emailTemplateSubject;
+        emailTemplate.emailTemplateHBSTemplatePath = updateEmailTemplateDTO.emailTemplateHBSTemplatePath;
         emailTemplate.emailTemplateHBSTemplateName = updateEmailTemplateDTO.emailTemplateHBSTemplateName;
         emailTemplate.emailTemplateContext = updateEmailTemplateDTO.emailTemplateContext;
         emailTemplate.emailTemplateIsActive = updateEmailTemplateDTO.emailTemplateIsActive;

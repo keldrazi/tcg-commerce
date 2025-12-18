@@ -29,6 +29,8 @@ export class EmailServiceSendService {
       context[emailTemplateContext.emailTemplateContextNameField] = emailTemplateContextValues[emailTemplateContext.emailTemplateContextValueField];
     }
 
+    let emailTemplate = './' +emailTemplateDTO.emailTemplateHBSTemplatePath + '/' + emailTemplateDTO.emailTemplateHBSTemplateName;
+    
     await this
       .mailerService
       .sendMail({

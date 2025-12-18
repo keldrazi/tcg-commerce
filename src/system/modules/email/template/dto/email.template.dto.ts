@@ -7,6 +7,7 @@ export class EmailTemplateDTO {
     emailTemplateDescription: string;
     emailTemplateFrom: string;
     emailTemplateSubject: string;
+    emailTemplateHBSTemplatePath: string;
     emailTemplateHBSTemplateName: string;
     emailTemplateContext: EmailTemplateContext[];
     emailTemplateIsActive: boolean;
@@ -23,6 +24,8 @@ export class CreateEmailTemplateDTO {
     emailTemplateFrom: string;
     @IsString()
     emailTemplateSubject: string;
+    @IsString()
+    emailTemplateHBSTemplatePath: string;
     @IsString()
     emailTemplateHBSTemplateName: string;
     @IsString()
@@ -42,6 +45,8 @@ export class UpdateEmailTemplateDTO {
     emailTemplateFrom: string;
     @IsString()
     emailTemplateSubject: string;
+    @IsString()
+    emailTemplateHBSTemplatePath: string;
     @IsString()
     emailTemplateHBSTemplateName: string;
     @IsString()

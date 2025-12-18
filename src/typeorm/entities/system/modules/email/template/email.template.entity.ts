@@ -13,6 +13,8 @@ export class EmailTemplate {
     @Column()
     emailTemplateSubject: string;
     @Column()
+    emailTemplateHBSTemplatePath: string;
+    @Column()
     emailTemplateHBSTemplateName: string;
     @Column('jsonb')
     emailTemplateContext: string;
