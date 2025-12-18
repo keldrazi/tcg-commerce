@@ -313,9 +313,106 @@ export class ProductCardService {
                 productCardRecordCount++;
             }
             //DELAY TO AVOID TCGDB RATE LIMITS;
-            await this.delay(1000);
+            await this.delay(500);
         }
 
+        return productCardRecordCount;
+    }
+
+    //CREATE PRODUCT CARDS;
+    async createProductCardsBySet(productSetCode: string, productVendorCode: string, productLineCode: string, productTypeCode: string) {
+        
+        let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
+        let productLine = await this.productLineService.getProductLineByCode(productLineCode);
+        let productType = await this.productTypeService.getProductTypeByCode(productTypeCode);
+        
+        if((productLine == null || productLine instanceof ErrorMessageDTO) || (productVendor == null || productVendor instanceof ErrorMessageDTO) || (productType == null || productType instanceof ErrorMessageDTO)) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CREATION_FAILED', 'Failed to create product cards due to invalid product line, vendor, or type.');
+        }
+
+        let productSet = await this.productSetService.getProductSetByCode(productVendor.productVendorId, productLine.productLineId, productSetCode);
+
+        if(productSet == null || productSet instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set not found for set code: ' + productSetCode);
+        }
+
+        switch (productLine.productLineCode) {
+            case "MTG":
+                console.log("MTG");
+                return await this.createMTGProductCardsBySet(productSet.productSetId, productVendor.productVendorId, productLine.productLineId, productType.productTypeId);
+
+        }
+        
+        return true;
+
+        
+    }
+
+    //CREATE PRODUCT CARDS BY SET (MTG);
+    async createMTGProductCardsBySet(productSetId: string, productVendorId: string, productLineId: string, productTypeId: string) {
+        
+        let productCardRecordCount = 0;
+
+        let productSet = await this.productSetService.getProductSet(productSetId);
+
+        if(productSet == null || productSet instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set not found');
+        }
+            
+        let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetId(productSet.productSetTCGdbId);
+
+        if(productCardsBySet == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'No cards found for set: ' + productSet.productSetName + " (" + productSet.productSetCode + ")");
+        }
+
+        console.log("Found " + productCardsBySet.tcgdbMTGCards.length + " cards for set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
+        for(let j = 0; j < productCardsBySet.tcgdbMTGCards.length; j++) {
+            let tcgdbMTGCard = productCardsBySet.tcgdbMTGCards[j];
+            let productCardRarity = await this.productCardRarityService.getProductCardRarityByCodeAndProductLineId(tcgdbMTGCard.tcgdbMTGCardRarityCode, productLineId);
+            
+            if(productCardRarity == null || productCardRarity instanceof ErrorMessageDTO) {
+                console.log("Skipping card due to missing rarity: " + tcgdbMTGCard.tcgdbMTGCardName + " (" + tcgdbMTGCard.tcgdbMTGCardNumber + ") Rarity: " + tcgdbMTGCard.tcgdbMTGCardRarityCode);
+                continue;
+            }
+            //CHECK TO SEE IF THE CARD EXISTS;
+            let productCardCheck = await this.getProductCardByTCGdbId(tcgdbMTGCard.tcgdbMTGCardId);
+            
+            if (productCardCheck instanceof ProductCardDTO) {
+                continue;
+            }
+
+            let productCardMetadata = "[]";
+            
+            if (tcgdbMTGCard.tcgdbMTGCardScryfallData != null) {
+                productCardMetadata = tcgdbMTGCard.tcgdbMTGCardScryfallData;
+            }
+
+            const newProductCard = this.productCardRepository.create({
+                productCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
+                productCardTCGPlayerId: tcgdbMTGCard.tcgdbMTGCardTCGPlayerId,
+                productVendorId: productVendorId,
+                productLineId: productLineId,
+                productTypeId: productTypeId,
+                productSetId: productSet.productSetId,
+                productSetCode: productSet.productSetCode,
+                productCardRarityId: productCardRarity.productCardRarityId,
+                productCardRarityCode: productCardRarity.productCardRarityCode,
+                productCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
+                productCardName: tcgdbMTGCard.tcgdbMTGCardName,
+                productCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
+                productCardImage: tcgdbMTGCard.tcgdbMTGCardImageURL,
+                productCardExtendedData: tcgdbMTGCard.tcgdbMTGCardTCGPlayerData,
+                productCardMetadata: productCardMetadata,
+                productCardSKUs: tcgdbMTGCard.tcgdbMTGCardTCGPlayerSKUs,
+                productCardIsPresale: false,
+                productCardIsActive: true,
+            });
+
+            await this.productCardRepository.save(newProductCard);
+
+            productCardRecordCount++;
+        }
+        
         return productCardRecordCount;
     }
 

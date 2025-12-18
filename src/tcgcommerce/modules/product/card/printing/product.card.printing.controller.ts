@@ -15,7 +15,7 @@ export class ProductCardPrintingController {
         return await this.productCardPrintingService.getProductCardPrintings();
     }
 
-    @Get('/code/:productLineCode')
+    @Get('/lineCode/:productLineCode')
     async getProductCardPrintingsByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardPrintingService.getProductCardPrintingsByProductLineCode(productLineCode);
     }

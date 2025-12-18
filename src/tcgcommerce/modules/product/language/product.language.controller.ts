@@ -15,7 +15,7 @@ export class ProductLanguageController {
         return await this.productCardLanguageService.getProductLanguages();
     }
 
-    @Get('/code/:productLineCode')
+    @Get('/lineCode/:productLineCode')
     async getProductLanguagesByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardLanguageService.getProductLanguagesByProductLineCode(productLineCode);
     }

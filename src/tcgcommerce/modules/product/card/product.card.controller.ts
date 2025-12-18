@@ -12,17 +12,22 @@ export class ProductCardController {
     ) { }
     
     
-    @Get('/create/:productVendorCode/:productLineCode/:productTypeCode')
+    @Get('/create/vendorCode/:productVendorCode/lineCode/:productLineCode/typeCode/:productTypeCode')
     async createProductCards(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string, @Param('productTypeCode') productTypeCode: string) {
         return await this.productCardService.createProductCards(productVendorCode.toUpperCase(), productLineCode.toUpperCase(), productTypeCode.toUpperCase());
     }
 
-    @Get('/set/:productSetId')
+    @Get('/create/productSetCode/:productSetCode/vendorCode/:productVendorCode/lineCode/:productLineCode/typeCode/:productTypeCode')
+    async createProductCardsBySet(@Param('productSetCode') productSetCode: string, @Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string, @Param('productTypeCode') productTypeCode: string) {
+        return await this.productCardService.createProductCardsBySet(productSetCode.toUpperCase(), productVendorCode.toUpperCase(), productLineCode.toUpperCase(), productTypeCode.toUpperCase());
+    }
+
+    @Get('/set/id/:productSetId')
     async getProductCardsByProductSetId(@Param('productSetId') productSetId: string) {
         return await this.productCardService.getProductCardsByProductSetId(productSetId);
     }
 
-    @Get('/set/:setCode')
+    @Get('/set/code/:setCode')
     async getProductCardsByProductSetCode(@Param('setCode') setCode: string) {
         return await this.productCardService.getProductCardsByProductSetCode(setCode.toUpperCase());
     }

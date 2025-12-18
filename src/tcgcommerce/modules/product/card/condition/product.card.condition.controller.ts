@@ -15,7 +15,7 @@ export class ProductCardConditionController {
         return await this.productCardConditionService.getProductCardConditions();
     }
 
-    @Get('/code/:productLineCode')
+    @Get('/lineCode/:productLineCode')
     async getProductCardConditionsByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardConditionService.getProductCardConditionsByProductLineCode(productLineCode);
     }

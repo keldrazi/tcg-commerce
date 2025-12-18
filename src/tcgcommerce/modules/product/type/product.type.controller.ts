@@ -17,7 +17,7 @@ export class ProductTypeController {
         return await this.productTypeService.getProductType(productTypeId);
     }
 
-    @Get('/vendor/:productVendorId/line/:productLineId')
+    @Get('/vendorId/:productVendorId/lineId/:productLineId')
     async getProductTypesByProductVendorIdAndProductLineId(@Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string) {
         return await this.productTypeService.getProductTypesByProductVendorIdAndProductLineId(productVendorId, productLineId);
     }

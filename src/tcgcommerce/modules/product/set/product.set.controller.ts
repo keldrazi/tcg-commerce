@@ -12,7 +12,7 @@ export class ProductSetController {
     ) { }
     
     
-    @Get(':productVendorCode/:productLineCode')
+    @Get('/vendorCode/:productVendorCode/lineCode/:productLineCode')
     async getProductSetsByProductVendorCodeAndProductLineCode(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string) {
         return await this.productSetService.getProductSetsByProductVendorCodeAndProductLineCode(productVendorCode.toUpperCase(), productLineCode.toUpperCase());
     }

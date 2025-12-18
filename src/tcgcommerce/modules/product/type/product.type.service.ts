@@ -113,7 +113,9 @@ export class ProductTypeService {
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let productType = await this.productTypeRepository.findOne({ 
             where: { 
-                productTypeName: createProductTypeDTO.productTypeName 
+                productTypeName: createProductTypeDTO.productTypeName,
+                productVendorId: createProductTypeDTO.productVendorId,
+                productLineId: createProductTypeDTO.productLineId 
             } 
         });
         
