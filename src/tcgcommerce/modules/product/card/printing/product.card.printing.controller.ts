@@ -15,14 +15,14 @@ export class ProductCardPrintingController {
         return await this.productCardPrintingService.getProductCardPrintings();
     }
 
-    @Get('/lineCode/:productLineCode')
+    @Get('/linecode/:productLineCode')
     async getProductCardPrintingsByProductLineCode(@Param('productLineCode') productLineCode: string) {
-        return await this.productCardPrintingService.getProductCardPrintingsByProductLineCode(productLineCode);
+        return await this.productCardPrintingService.getProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
     }
     
-    @Get('/create/:productLineName')
-    async createProductCardPrintingsByProductLineName(@Param('productLineName') productLineName: string) {
-        return await this.productCardPrintingService.createProductCardPrintingsByProductLineName(productLineName);
+    @Get('/create/:productLineCode')
+    async createProductCardPrintingsByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productCardPrintingService.createProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
     }  
 
     @Post()

@@ -21,7 +21,7 @@ export class ProductTypeService {
         });
         
         if (productType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeId: ' + productTypeId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
         }
 
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
@@ -34,7 +34,11 @@ export class ProductTypeService {
         let productTypes = await this.productTypeRepository.find({ 
             where: { 
                 productVendorId: productVendorId,
-                productLineId: productLineId 
+                productLineId: productLineId,
+                productTypeIsActive: true 
+            },
+            order: {
+                productTypeName: 'ASC'
             } 
         });
         
@@ -52,6 +56,25 @@ export class ProductTypeService {
         }
 
         return productTypeDTOs;
+        
+    }
+
+    async getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendorId: string, productLineId: string, productTypeCode: string) {
+        let productType = await this.productTypeRepository.findOne({ 
+            where: { 
+                productVendorId: productVendorId,
+                productLineId: productLineId,
+                productTypeCode: productTypeCode,
+            }
+        });
+        
+        if (productType == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
+        }
+
+        let productTypeDTO: ProductTypeDTO = ({ ...productType });
+
+        return productTypeDTO;
         
     }
 
@@ -82,7 +105,7 @@ export class ProductTypeService {
         });
         
         if (productType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeName: ' + name);
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
         }
 
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
@@ -99,7 +122,7 @@ export class ProductTypeService {
         });
         
         if (productType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeCode: ' + code);
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
         }
 
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
@@ -121,7 +144,7 @@ export class ProductTypeService {
         
         //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productType != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_ALREADY_EXISTS', 'Product type already exists with name: ' + createProductTypeDTO.productTypeName);
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_ALREADY_EXISTS', 'Product type already exists');
         }
         
         let newProductType = this.productTypeRepository.create({ ...createProductTypeDTO });
@@ -142,7 +165,7 @@ export class ProductTypeService {
         });
 
         if (!existingProductType) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found for productTypeId: ' + updateProductTypeDTO.productTypeId); 
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found'); 
         }
 
         existingProductType.productTypeName = updateProductTypeDTO.productTypeName;

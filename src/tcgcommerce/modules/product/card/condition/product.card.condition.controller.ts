@@ -15,14 +15,14 @@ export class ProductCardConditionController {
         return await this.productCardConditionService.getProductCardConditions();
     }
 
-    @Get('/lineCode/:productLineCode')
+    @Get('/linecode/:productLineCode')
     async getProductCardConditionsByProductLineCode(@Param('productLineCode') productLineCode: string) {
-        return await this.productCardConditionService.getProductCardConditionsByProductLineCode(productLineCode);
+        return await this.productCardConditionService.getProductCardConditionsByProductLineCode(productLineCode.toUpperCase());
     }
 
-    @Get('/create/:productLineName')
-    async createProductCardConditionsByProductLineName(@Param('productLineName') productLineName: string) {
-        return await this.productCardConditionService.createProductCardConditionsByProductLineName(productLineName);
+    @Get('/create/:productLineCode')
+    async createProductCardConditionsByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productCardConditionService.createProductCardConditionsByProductLineCode(productLineCode.toUpperCase());
     }
 
     @Post()

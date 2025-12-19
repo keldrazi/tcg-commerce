@@ -16,12 +16,12 @@ export class ProductVendorService {
     async getProductVendor(productVendorId: string) {
         let productVendor = await this.productVendorRepository.findOne({ 
             where: { 
-                productVendorId: productVendorId 
+                productVendorId: productVendorId
             } 
         });
         
         if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorId: ' + productVendorId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
         }
 
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });        
@@ -31,7 +31,14 @@ export class ProductVendorService {
     }
 
     async getProductVendors() {
-        let productVendors = await this.productVendorRepository.find();
+        let productVendors = await this.productVendorRepository.find({
+            where: {
+                productVendorIsActive: true
+            },
+            order: {
+                productVendorName: 'ASC'
+            }
+        });
         
         let productVendorDTOs: ProductVendorDTO[] = [];
         
@@ -57,7 +64,7 @@ export class ProductVendorService {
         });
         
         if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorName: ' + name);
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
         }
 
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
@@ -74,7 +81,7 @@ export class ProductVendorService {
         });
         
         if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorCode: ' + code);
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
         }
 
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
@@ -93,7 +100,7 @@ export class ProductVendorService {
         });
         
         if (productVendor != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'Product vendor already exists with name: ' + createProductVendorDTO.productVendorName);
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'Product vendor already exists');
         }
         
         let newProductVendor = this.productVendorRepository.create({ ...createProductVendorDTO });
@@ -114,7 +121,7 @@ export class ProductVendorService {
         });
 
         if (!existingProductVendor) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorId: ' + updateProductVendorDTO.productVendorId); 
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
         }
 
         existingProductVendor.productVendorName = updateProductVendorDTO.productVendorName;

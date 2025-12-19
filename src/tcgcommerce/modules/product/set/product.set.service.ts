@@ -8,6 +8,7 @@ import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/pro
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
 export class ProductSetService {
@@ -28,7 +29,7 @@ export class ProductSetService {
         });
 
         if(productSet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productSetId: ' + productSetId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
         }
 
         let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -45,7 +46,8 @@ export class ProductSetService {
         });
 
         if(productSet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productSetTCGdbId: ' + productSetTCGdbId);
+            let errorMessage: ErrorMessageDTO = await this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
+            return errorMessage;
         }
 
         let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -61,7 +63,7 @@ export class ProductSetService {
         
 
         if((productVendor != null && productVendor instanceof ErrorMessageDTO) || (productLine != null && productLine instanceof ErrorMessageDTO)) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_OR_PRODUCT_LINE_NOT_FOUND', 'Product vendor or product line was not found for productVendorCode: ' + productVendorCode + ' and productLineCode: ' + productLineCode);
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_OR_PRODUCT_LINE_NOT_FOUND', 'Product vendor or product line was not found');
         }
 
         let productSetsDTOs = await this.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
@@ -82,7 +84,7 @@ export class ProductSetService {
         });
         
         if(productSets == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found for productVendorId: ' + productVendorId + ' and productLineId: ' + productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found');
         }
         
         let productSetDTOs: ProductSetDTO[] = [];
@@ -109,7 +111,7 @@ export class ProductSetService {
         });
         
         if(productSets == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found for productLineId: ' + productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found');
         }
         
         let productSetDTOs: ProductSetDTO[] = [];
@@ -137,7 +139,7 @@ export class ProductSetService {
         });
         
         if(productSet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productVendorId: ' + productVendorId + ', productLineId: ' + productLineId + ', and productSetCode: ' + productSetCode);
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
         }
         
         let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -157,7 +159,7 @@ export class ProductSetService {
         });
         
         if(productSet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productLineId: ' + productLineId + ', and productSetCode: ' + productSetCode);
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
         }
         
         let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -174,7 +176,7 @@ export class ProductSetService {
         });
 
         if(!existingProductSet) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for productSetId: ' + updateProductSetDTO.productSetId); 
+            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found'); 
         }
 
         existingProductSet.productSetName = updateProductSetDTO.productSetName;
@@ -192,23 +194,27 @@ export class ProductSetService {
     
     }
 
-    async createProductSetsByProductLineName(productLineName: string) {
+    async createProductSetsByProductLineCode(productLineCode: string) {
         //TO DO: CREATE PRODUCT SETS FOR ALL VENDORS;
-        if (productLineName == "mtg") {
+        if (productLineCode == PRODUCT_LINE_CODE.MAGIC_THE_GATHERING) {
             return this.createTCGdbMTGProductSets();
         } else {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found'); 
         }
     }
 
     //TCGdb MTG PRODUCT SET CREATION;
     async createTCGdbMTGProductSets() {
 
-        let productVendor = await this.productVendorService.getProductVendorByCode('WoTC');
-        let productLine = await this.productLineService.getProductLineByCode('MTG');
+        let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
+        let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING);
 
-        if((productVendor != null && productVendor instanceof ErrorMessageDTO) || (productLine != null && productLine instanceof ErrorMessageDTO)) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_OR_PRODUCT_LINE_NOT_FOUND', 'Product vendor or product line was not found for productVendorCode: WoTC and productLineCode: MTG');
+        if(productVendor == null || productVendor instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        }
+
+        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
 
         let tcgdbMTGSets = await this.tcgdbMTGSetService.getTCGdbMTGSets();
@@ -216,28 +222,25 @@ export class ProductSetService {
 
         for(let i = 0; i < tcgdbMTGSets.length; i++) {
             let tcgdbMTGSet = tcgdbMTGSets[i];
-
+            
             let productSet = await this.getProductSetByTCGdbId(tcgdbMTGSet.tcgdbMTGSetId);
             
-            if (productSet != null) {
-                continue;
+            if (productSet instanceof ErrorMessageDTO) {
+                let newProductSet = this.productSetRepository.create({
+                    productSetTCGdbId: tcgdbMTGSet.tcgdbMTGSetId,
+                    productSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
+                    productVendorId: productVendor.productVendorId,
+                    productLineId: productLine.productLineId,
+                    productSetName: tcgdbMTGSet.tcgdbMTGSetName,
+                    productSetCode: tcgdbMTGSet.tcgdbMTGSetCode,
+                    productSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
+                    productSetReleaseDate: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
+                    productSetIsActive: true,
+                });
+
+                let productSetDTO = await this.productSetRepository.save(newProductSet);
+                productSetDTOs.push(productSetDTO);
             }
-
-            let newProductSet = this.productSetRepository.create({
-                productSetTCGdbId: tcgdbMTGSet.tcgdbMTGSetId,
-                productSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
-                productVendorId: productVendor.productVendorId,
-                productLineId: productLine.productLineId,
-                productSetName: tcgdbMTGSet.tcgdbMTGSetName,
-                productSetCode: tcgdbMTGSet.tcgdbMTGSetCode,
-                productSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,
-                productSetReleaseDate: tcgdbMTGSet.tcgdbMTGSetPublishedOn,
-                productSetIsActive: true,
-            });
-
-            let productSetDTO = await this.productSetRepository.save(newProductSet);
-            productSetDTOs.push(productSetDTO);
-
         }
 
         return productSetDTOs;

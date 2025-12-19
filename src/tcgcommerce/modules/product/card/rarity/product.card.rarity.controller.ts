@@ -20,9 +20,9 @@ export class ProductCardRarityController {
         return await this.productCardRarityService.getProductCardRaritiesByProductLineCode(productLineCode);
     }
 
-    @Get('/create/:productLineName')
-    async createProductCardRaritiesByProductLineName(@Param('productLineName') productLineName: string) {
-        return await this.productCardRarityService.createProductCardRaritiesByProductLineName(productLineName);
+    @Get('/create/:productLineCode')
+    async createProductCardRaritiesByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productCardRarityService.createProductCardRaritiesByProductLineCode(productLineCode.toUpperCase());
     }
 
     @Post()

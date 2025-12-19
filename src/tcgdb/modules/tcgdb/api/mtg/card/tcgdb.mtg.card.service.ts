@@ -68,6 +68,26 @@ export class TCGdbMTGCardService {
 
     }
 
+     async getTCGdbMTGCardsScryfallDataBySetId(setId: string) {
+
+        //GET ALL TCGDB CARDS BY SET CODE;
+        const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/card/scryfall/set/id/' + setId;
+        const headers = { 'Authorization': 'Bearer ' + accessToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
+
+        let data = await lastValueFrom(response);
+
+        
+        return data;
+
+    }
+
 }
 
 

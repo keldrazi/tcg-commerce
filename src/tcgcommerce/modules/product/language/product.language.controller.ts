@@ -17,12 +17,12 @@ export class ProductLanguageController {
 
     @Get('/lineCode/:productLineCode')
     async getProductLanguagesByProductLineCode(@Param('productLineCode') productLineCode: string) {
-        return await this.productCardLanguageService.getProductLanguagesByProductLineCode(productLineCode);
+        return await this.productCardLanguageService.getProductLanguagesByProductLineCode(productLineCode.toUpperCase());
     }
 
-    @Get('/create/:productLineName')
-    async createProductLanguagesByProductLineName(@Param('productLineName') productLineName: string) {
-        return await this.productCardLanguageService.createProductLanguagesByProductLineName(productLineName);
+    @Get('/create/:productLineCode')
+    async createProductLanguagesByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productCardLanguageService.createProductLanguagesByProductLineCode(productLineCode.toUpperCase());
     }
 
     @Post()

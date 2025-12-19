@@ -21,7 +21,7 @@ export class ProductLineService {
         });
         
         if (productLine == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineId: ' + productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
 
         let productLineDTO: ProductLineDTO = ({ ...productLine });
@@ -31,7 +31,14 @@ export class ProductLineService {
     }
 
     async getProductLines() {
-        let productLines = await this.productLineRepository.find();
+        let productLines = await this.productLineRepository.find({
+            where: {
+                productLineIsActive: true
+            },  
+            order: {
+                productLineName: 'ASC'
+            }
+        });
         
         let productLineDTOs: ProductLineDTO[] = [];
 
@@ -52,8 +59,12 @@ export class ProductLineService {
     async getProductLinesByVendor(productVendorId: string) {
         let productLines = await this.productLineRepository.find({ 
             where: { 
-                productVendorId: productVendorId 
-            } 
+                productVendorId: productVendorId,
+                productLineIsActive: true 
+            }, 
+            order: {
+                productLineName: 'ASC'
+            }
         });
 
         let productLineDTOs: ProductLineDTO[] = [];
@@ -81,7 +92,7 @@ export class ProductLineService {
         });
         
         if (productLine == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineName: ' + name);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
 
         let productLineDTO: ProductLineDTO = ({ ...productLine });
@@ -98,7 +109,7 @@ export class ProductLineService {
         });
         
         if (productLine == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + code);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
 
         let productLineDTO: ProductLineDTO = ({ ...productLine });
@@ -117,7 +128,7 @@ export class ProductLineService {
         });
         
         if (productLine != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_ALREADY_EXISTS', 'Product line already exists with name: ' + createProductLineDTO.productLineName);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_ALREADY_EXISTS', 'Product line already exists');
         }
         
         let newProductLine = this.productLineRepository.create({ ...createProductLineDTO });
@@ -138,7 +149,7 @@ export class ProductLineService {
         });
 
         if (!existingProductLine) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineId: ' + updateProductLineDTO.productLineId); 
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
 
         existingProductLine.productLineName = updateProductLineDTO.productLineName;

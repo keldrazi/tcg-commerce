@@ -34,7 +34,7 @@ export class ProductCard {
     productCardIsPresale: boolean;
     @Column('jsonb')
     productCardExtendedData: string;
-    @Column('jsonb')
+    @Column('jsonb', { default: null })
     productCardMetadata: string;
     @Column('jsonb')
     productCardSKUs: string;

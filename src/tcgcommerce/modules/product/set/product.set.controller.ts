@@ -12,14 +12,14 @@ export class ProductSetController {
     ) { }
     
     
-    @Get('/vendorCode/:productVendorCode/lineCode/:productLineCode')
+    @Get('/vendorcode/:productVendorCode/linecode/:productLineCode')
     async getProductSetsByProductVendorCodeAndProductLineCode(@Param('productVendorCode') productVendorCode: string, @Param('productLineCode') productLineCode: string) {
         return await this.productSetService.getProductSetsByProductVendorCodeAndProductLineCode(productVendorCode.toUpperCase(), productLineCode.toUpperCase());
     }
 
-    @Get('create/:productLineName')
-    async createProductSetsByProductLineName(@Param('productLineName') productLineName: string) {
-        return await this.productSetService.createProductSetsByProductLineName(productLineName);
+    @Get('create/:productLineCode')
+    async createProductSetsByProductLineCode(@Param('productLineCode') productLineCode: string) {
+        return await this.productSetService.createProductSetsByProductLineCode(productLineCode.toUpperCase());
     }
 
     

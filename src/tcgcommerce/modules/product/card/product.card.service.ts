@@ -11,6 +11,7 @@ import { ProductTypeService } from 'src/tcgcommerce/modules/product/type/product
 import { ProductCardRarityService } from 'src/tcgcommerce/modules/product/card/rarity/product.card.rarity.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE, PRODUCT_TYPE_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
 export class ProductCardService {
@@ -35,7 +36,7 @@ export class ProductCardService {
         });
 
         if(productCard == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found for productCardId: ' + productCardId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found');
         } 
         
         let productCardDTO: ProductCardDTO = ({ ...productCard})
@@ -51,7 +52,7 @@ export class ProductCardService {
         });
 
         if(productCard == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found for productCardTCGdbId: ' + tcgdbId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found');
         }
 
         let productCardDTO: ProductCardDTO = ({ ...productCard})
@@ -67,7 +68,7 @@ export class ProductCardService {
         });
 
         if(productCard == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found for productCardTCGPlayerId: ' + tcgPlayerId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found');
         }
 
         let productCardDTO: ProductCardDTO = ({ ...productCard})
@@ -85,7 +86,7 @@ export class ProductCardService {
         });
 
         if(productCards == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found for productLineId: ' + productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found');
         }
 
         let productCardDTOs: ProductCardDTO[] = [];
@@ -111,7 +112,7 @@ export class ProductCardService {
         });
 
         if(productCards == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found for productSetId: ' + productSetId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found');
         }
 
         let productCardDTOs: ProductCardDTO[] = [];
@@ -127,17 +128,25 @@ export class ProductCardService {
         return productCardDTOs;
     }
 
-    async getProductCardsByProductSetCode(setCode: string) {
-        //TO DO: ADD LIMITS AND OFFSETS;
+    async getMTGProductCardsByProductSetCode(setCode: string) {
+        let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING); 
+        
+        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
+        }
         
         let productCards = await this.productCardRepository.find({ 
             where: {
+                productLineId: productLine.productLineId,
                 productSetCode: setCode, 
+            },
+            order: {
+                productCardName: 'ASC'
             }
         });
 
         if(productCards == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found for productSetCode: ' + setCode);   
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found');
         }
 
         let productCardDTOs: ProductCardDTO[] = [];
@@ -163,7 +172,7 @@ export class ProductCardService {
         });
 
         if(productCard == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found for productCardName: ' + productCardName + ', productSetCode: ' + productSetCode + ', productCardNumber: ' + productCardNumber);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found');
         }
 
         let productCardDTO: ProductCardDTO = ({ ...productCard})
@@ -182,7 +191,7 @@ export class ProductCardService {
         });
         
         if(productCard != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_ALREADY_EXISTS', 'Product card already exists for productCardTCGdbId: ' + createProductCardDTO.productCardTCGdbId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_ALREADY_EXISTS', 'Product card already exists');
         }
 
         let newProductCard = this.productCardRepository.create({ ...createProductCardDTO });
@@ -202,7 +211,7 @@ export class ProductCardService {
         });
 
         if (!existingProductCard) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found for productCardId: ' + updateProductCardDTO.productCardId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found');
         }
 
         existingProductCard.productSetCode = updateProductCardDTO.productSetCode;
@@ -224,34 +233,41 @@ export class ProductCardService {
     } 
 
     //CREATE PRODUCT CARDS;
-    async createProductCards(productVendorCode: string, productLineCode: string, productTypeCode: string) {
+    async createProductCardsByProductLineCode(productLineCode: string) {
         
-        let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
-        let productLine = await this.productLineService.getProductLineByCode(productLineCode);
-        let productType = await this.productTypeService.getProductTypeByCode(productTypeCode);
-        
-        if((productLine == null || productLine instanceof ErrorMessageDTO) || (productVendor == null || productVendor instanceof ErrorMessageDTO) || (productType == null || productType instanceof ErrorMessageDTO)) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CREATION_FAILED', 'Failed to create product cards due to invalid product line, vendor, or type.');
+        if (productLineCode == PRODUCT_LINE_CODE.MAGIC_THE_GATHERING) {
+            return this.createTCGdbMTGProductCards();
+        } else {
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
-
-        switch (productLine.productLineCode) {
-            case "MTG":
-                console.log("MTG");
-                return await this.createMTGProductCards(productVendor.productVendorId, productLine.productLineId, productType.productTypeId);
-
-        }
-        
-        return true;
-
         
     }
 
     //CREATE PRODUCT CARDS (MTG);
-    async createMTGProductCards(productVendorId: string, productLineId: string, productTypeId: string) {
-        let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendorId, productLineId);
+    async createTCGdbMTGProductCards() {
+
+        let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
+        let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING); 
+        
+
+        if (productVendor == null || productVendor instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        }
+        
+        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
+        }
+
+        let productType = await this.productTypeService.getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendor.productVendorId, productLine.productLineId, PRODUCT_TYPE_CODE.SINGLE);
+
+        if (productType == null || productType instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
+        }
+
+        let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
         
         if(productSets == null || productSets instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'No product sets found for productVendorId: ' + productVendorId + ' and productLineId: ' + productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'No product sets found for vendor and line.');
         }
         
         let productCardRecordCount = 0;
@@ -268,7 +284,7 @@ export class ProductCardService {
             console.log("Found " + productCardsBySet.tcgdbMTGCards.length + " cards for set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
             for(let j = 0; j < productCardsBySet.tcgdbMTGCards.length; j++) {
                 let tcgdbMTGCard = productCardsBySet.tcgdbMTGCards[j];
-                let productCardRarity = await this.productCardRarityService.getProductCardRarityByCodeAndProductLineId(tcgdbMTGCard.tcgdbMTGCardRarityCode, productLineId);
+                let productCardRarity = await this.productCardRarityService.getProductCardRarityByCodeAndProductLineId(tcgdbMTGCard.tcgdbMTGCardRarityCode, productLine.productLineId);
                 
                 if(productCardRarity == null || productCardRarity instanceof ErrorMessageDTO) {
                     console.log("Skipping card due to missing rarity: " + tcgdbMTGCard.tcgdbMTGCardName + " (" + tcgdbMTGCard.tcgdbMTGCardNumber + ") Rarity: " + tcgdbMTGCard.tcgdbMTGCardRarityCode);
@@ -278,21 +294,27 @@ export class ProductCardService {
                 let productCardCheck = await this.getProductCardByTCGdbId(tcgdbMTGCard.tcgdbMTGCardId);
                 
                 if (productCardCheck instanceof ProductCardDTO) {
-                    continue;
+                    console.log("Skipping existing card: " + tcgdbMTGCard.tcgdbMTGCardName + " (" + tcgdbMTGCard.tcgdbMTGCardNumber + ")" );
+                    continue;  
                 }
 
-                let productCardMetadata = "[]";
+                let productCardMetadata = null;
                 
                 if (tcgdbMTGCard.tcgdbMTGCardScryfallData != null) {
                     productCardMetadata = tcgdbMTGCard.tcgdbMTGCardScryfallData;
                 }
 
+                
+                let productCardExtendedData = tcgdbMTGCard.tcgdbMTGCardTCGPlayerData.extendedData;
+                let productCardSKUs = tcgdbMTGCard.tcgdbMTGCardTCGPlayerData.skus;
+                
+                
                 const newProductCard = this.productCardRepository.create({
                     productCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
                     productCardTCGPlayerId: tcgdbMTGCard.tcgdbMTGCardTCGPlayerId,
-                    productVendorId: productVendorId,
-                    productLineId: productLineId,
-                    productTypeId: productTypeId,
+                    productVendorId: productVendor.productVendorId,
+                    productLineId: productLine.productLineId,
+                    productTypeId: productType.productTypeId,
                     productSetId: productSet.productSetId,
                     productSetCode: productSet.productSetCode,
                     productCardRarityId: productCardRarity.productCardRarityId,
@@ -301,17 +323,84 @@ export class ProductCardService {
                     productCardName: tcgdbMTGCard.tcgdbMTGCardName,
                     productCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
                     productCardImage: tcgdbMTGCard.tcgdbMTGCardImageURL,
-                    productCardExtendedData: tcgdbMTGCard.tcgdbMTGCardTCGPlayerData,
-                    productCardMetadata: productCardMetadata,
-                    productCardSKUs: tcgdbMTGCard.tcgdbMTGCardTCGPlayerSKUs,
+                    productCardExtendedData: productCardExtendedData,
+                    productCardSKUs: productCardSKUs,
                     productCardIsPresale: false,
                     productCardIsActive: true,
                 });
 
                 await this.productCardRepository.save(newProductCard);
+                console.log(tcgdbMTGCard.tcgdbMTGCardName);
 
                 productCardRecordCount++;
+                
             }
+
+            //DELAY TO AVOID TCGDB RATE LIMITS;
+            await this.delay(500);
+        }
+
+        return productCardRecordCount;
+    }
+
+    //CREATE PRODUCT CARDS (MTG);
+    async updateTCGdbMTGProductCardsWithScryfallData() {
+
+        let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
+        let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING); 
+        
+
+        if (productVendor == null || productVendor instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        }
+        
+        if (productLine == null || productLine instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
+        }
+
+        let productType = await this.productTypeService.getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendor.productVendorId, productLine.productLineId, PRODUCT_TYPE_CODE.SINGLE);
+
+        if (productType == null || productType instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
+        }
+
+        let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
+        
+        if(productSets == null || productSets instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'No product sets found for vendor and line.');
+        }
+        
+        let productCardRecordCount = 0;
+
+        for(let i = 0; i < productSets.length; i++) {
+            let productSet = productSets[i];
+            console.log("Processing set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
+            let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsScryfallDataBySetId(productSet.productSetTCGdbId);
+
+            if(productCardsBySet == null) {
+                console.log("No cards found for set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
+                continue;
+            }
+            console.log("Found " + productCardsBySet.tcgdbMTGCards.length + " cards for set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
+            for(let j = 0; j < productCardsBySet.tcgdbMTGCards.length; j++) {
+                let tcgdbMTGCard = productCardsBySet.tcgdbMTGCards[j];
+                
+                //CHECK TO SEE IF THE CARD EXISTS;
+                let productCard = await this.productCardRepository.findOne({ 
+                    where: { 
+                        productCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId
+                    } 
+                });
+                
+                if (productCard != null) {
+                    productCard.productCardMetadata = tcgdbMTGCard.tcgdbMTGCardScryfallData;
+                    await this.productCardRepository.save(productCard);
+                    console.log("Updated existing card: " + tcgdbMTGCard.tcgdbMTGCardId);
+                    productCardRecordCount++;
+                }
+                
+            }
+
             //DELAY TO AVOID TCGDB RATE LIMITS;
             await this.delay(500);
         }
@@ -320,6 +409,8 @@ export class ProductCardService {
     }
 
     //CREATE PRODUCT CARDS;
+    //WILL EVENTUALLY NEED THIS FOR PRERELEASE SETS;
+    /*
     async createProductCardsBySet(productSetCode: string, productVendorCode: string, productLineCode: string, productTypeCode: string) {
         
         let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
@@ -415,6 +506,7 @@ export class ProductCardService {
         
         return productCardRecordCount;
     }
+    */
 
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

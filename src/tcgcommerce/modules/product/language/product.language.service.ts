@@ -8,6 +8,7 @@ import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
 export class ProductLanguageService {
@@ -28,7 +29,7 @@ export class ProductLanguageService {
         });
 
         if(productLanguage == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found for productLanguageId: ' + productLanguageId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found');
         }
 
         let productLanguageDTO: ProductLanguageDTO = ({ ...productLanguage });
@@ -62,14 +63,18 @@ export class ProductLanguageService {
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
 
         if (productLine == null || productLine instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + productLineCode);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
 
         let productLineId = productLine.productLineId;
 
         let productLanguages = await this.productLanguageRepository.find({
             where: { 
-                productLineId: productLineId 
+                productLineId: productLineId,
+                productLanguageIsActive: true 
+            },
+            order: {
+                productLanguageName: 'ASC'
             }
         });
         
@@ -98,7 +103,7 @@ export class ProductLanguageService {
         });
         
         if (productLanguage == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found for productLanguageName: ' + name + ' and productLineId: ' + productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found');
         }
 
         let productLanguageDTO: ProductLanguageDTO = ({ ...productLanguage });
@@ -111,12 +116,13 @@ export class ProductLanguageService {
         let productLanguage = await this.productLanguageRepository.findOne({ 
             where: { 
                 productLanguageCode: productLanguageCode,
-                productLineId: productLineId 
-            } 
+                productLineId: productLineId,
+                productLanguageIsActive: true 
+            }
         });
         
         if (productLanguage == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found for productLanguageCode: ' + productLanguageCode + ' and productLineId: ' + productLineId);
+            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found');
         }
 
         let productLanguageDTO: ProductLanguageDTO = ({ ...productLanguage });
@@ -128,7 +134,8 @@ export class ProductLanguageService {
     async getProductLanguagesByProductLineId(productLineId: string) {
         let productLanguages = await this.productLanguageRepository.find({ 
             where: { 
-                productLineId: productLineId 
+                productLineId: productLineId,
+                productLanguageIsActive: true 
             } 
         });
         
@@ -161,7 +168,7 @@ export class ProductLanguageService {
         });
 
         if (productLanguage != null) {
-            return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_LANGUAGE', 'Product language already exists for productLanguageCode: ' + createProductLanguageDTO.productLanguageCode + ' and productLineId: ' + createProductLanguageDTO.productLineId);
+            return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_LANGUAGE', 'Product language already exists');
         }
         
         let newProductLanguage = this.productLanguageRepository.create({ ...createProductLanguageDTO });
@@ -182,7 +189,7 @@ export class ProductLanguageService {
         });
 
         if (!existingProductLanguage) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found for productLanguageId: ' + updateProductLanguageDTO.productLanguageId); 
+            return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found');
         }
 
         existingProductLanguage.productLanguageName = updateProductLanguageDTO.productLanguageName;
@@ -199,28 +206,28 @@ export class ProductLanguageService {
     }
 
     //BULK CREATE PRODUCT CARD LANGAUGES;
-    async createProductLanguagesByProductLineName(productLineName: string) {
+    async createProductLanguagesByProductLineCode(productLineCode: string) {
         //TO DO: CREATE PRODUCT CARD LANGUAGES;
-        if (productLineName == "mtg") {
+        if (productLineCode == PRODUCT_LINE_CODE.MAGIC_THE_GATHERING) {
             return this.createTCGdbMTGProductLanguages();
         } else {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
     }
 
     async createTCGdbMTGProductLanguages() {
 
         //GET THE PRODUCT LINE ID FOR MTG;
-        let productVendorId = await this.productVendorService.getProductVendorByCode("WOTC");
-        let productLine = await this.productLineService.getProductLineByCode("MTG");
+        let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
+        let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING);
 
 
-        if(productVendorId == null || productVendorId instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found for productVendorCode: WOTC');
+        if(productVendor == null || productVendor instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
         }
 
         if (productLine == null || productLine instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: MTG');
+            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
         
         //GET THE PRODUCT CARD LANGUAGES FROM TCGDB;
@@ -235,18 +242,23 @@ export class ProductLanguageService {
         for(let i = 0; i < tcgdbMTGProductLanguages.length; i++) {
             let tcgdbMTGProductLanguage = tcgdbMTGProductLanguages[i];
             
-            let createProductLanguageDTO = new CreateProductLanguageDTO();
-            createProductLanguageDTO.productLanguageTCGdbId = tcgdbMTGProductLanguage.tcgdbMTGLanguageId;
-            createProductLanguageDTO.productLanguageTCGPlayerId = tcgdbMTGProductLanguage.tcgdbMTGLanguageTCGPlayerId;
-            createProductLanguageDTO.productVendorId = productVendorId.productVendorId;
-            createProductLanguageDTO.productLineId = productLine.productLineId;
-            createProductLanguageDTO.productLanguageName = tcgdbMTGProductLanguage.tcgdbMTGLanguageName;
-            createProductLanguageDTO.productLanguageCode = tcgdbMTGProductLanguage.tcgdbMTGLanguageCode;
-            createProductLanguageDTO.productLanguageIsActive = true;
-            
-            await this.createProductLanguage(createProductLanguageDTO);
+            let productLanguage = await this.getProductLanguageByCodeAndProductLineId(tcgdbMTGProductLanguage.tcgdbMTGLanguageCode, productLine.productLineId);
 
-            productLanguageRecordCount++; 
+            if (productLanguage instanceof ErrorMessageDTO) {
+                let createProductLanguageDTO = new CreateProductLanguageDTO();
+                createProductLanguageDTO.productLanguageTCGdbId = tcgdbMTGProductLanguage.tcgdbMTGLanguageId;
+                createProductLanguageDTO.productLanguageTCGPlayerId = tcgdbMTGProductLanguage.tcgdbMTGLanguageTCGPlayerId;
+                createProductLanguageDTO.productVendorId = productVendor.productVendorId;
+                createProductLanguageDTO.productLineId = productLine.productLineId;
+                createProductLanguageDTO.productLanguageName = tcgdbMTGProductLanguage.tcgdbMTGLanguageName;
+                createProductLanguageDTO.productLanguageCode = tcgdbMTGProductLanguage.tcgdbMTGLanguageCode;
+                createProductLanguageDTO.productLanguageIsActive = true;
+                
+                await this.createProductLanguage(createProductLanguageDTO);
+
+                productLanguageRecordCount++; 
+            }
+            
         }
 
         return productLanguageRecordCount;
