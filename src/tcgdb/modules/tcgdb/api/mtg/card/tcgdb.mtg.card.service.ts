@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { map, catchError, lastValueFrom } from 'rxjs';
-import { TCGdbMTGSetCardDTO, TCGdbMTGCardDTO } from './dto/tcgdb.mtg.card.dto';
+import { TCGdbMTGCardDTO } from './dto/tcgdb.mtg.card.dto';
 import { TCGdbMTGSetDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/set/dto/tcgdb.mtg.set.dto';
 import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.service';
 import { TCGdbAPIUtilService } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.util.service';

@@ -1,9 +1,8 @@
 import { Module } from "@nestjs/common";
+import { TCGdbPokemonConditionService } from './tcgdb.pokemon.condition.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
-import { TCGdbMTGPriceChangeDailyService } from './tcgdb.mtg.price.change.daily.service';
 import { TCGdbAPIUtilModule } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.util.module';
-
 
 @Module({
     imports: [
@@ -12,8 +11,8 @@ import { TCGdbAPIUtilModule } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.u
         ConfigModule,
     ], 
     controllers: [],
-    providers: [TCGdbMTGPriceChangeDailyService],
-    exports: [TCGdbMTGPriceChangeDailyService],
+    providers: [TCGdbPokemonConditionService],
+    exports: [TCGdbPokemonConditionService],
 })
 
-export class TCGdbMTGPriceChangeDailyModule {}
+export class TCGdbPokemonConditionModule {}

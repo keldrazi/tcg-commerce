@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { TCGdbMTGPriceCurrentService } from './tcgdb.mtg.price.current.service';
-import { TCGdbMTGPriceCurrentController } from "./tcgdb.mtg.price.current.controller";
 import { TCGdbAPIUtilModule } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.util.module';
 
 @Module({
@@ -11,7 +10,7 @@ import { TCGdbAPIUtilModule } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.u
         ConfigModule,
         HttpModule,
     ], 
-    controllers: [TCGdbMTGPriceCurrentController],
+    controllers: [],
     providers: [TCGdbMTGPriceCurrentService],
     exports: [TCGdbMTGPriceCurrentService],
 })

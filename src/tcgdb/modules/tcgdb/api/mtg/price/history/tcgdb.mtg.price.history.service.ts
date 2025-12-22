@@ -1,22 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
-import { TCGPlayerMTGPriceService } from 'src/tcgdb/modules/tcgplayer/mtg/price/tcgplayer.mtg.price.service';
 import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.service';
 import { TCGdbMTGPricesHistoryDTO, TCGdbMTGPriceHistoryDTO } from './dto/tcgdb.mtg.price.history.dto';
-import { TCGdbMTGPriceHistory } from 'src/typeorm/entities/tcgdb/modules/tcgdb/api/mtg/price/history/tcgdb.mtg.price.history.entity';
 import { TCGdbMTGCardDTO } from 'src/tcgdb/modules/tcgdb/api/mtg/card/dto/tcgdb.mtg.card.dto';
-import { TCGPlayerMTGPrice } from 'src/typeorm/entities/tcgdb/modules/tcgplayer/mtg/price/tcgplayer.mtg.price.entity';
 
 @Injectable()
 export class TCGdbMTGPriceHistoryService {
 
     constructor(
-        @InjectRepository(TCGdbMTGPriceHistory) private tcgdbMTGPriceHistoryRepository: Repository<TCGdbMTGPriceHistory>, 
-        private tcgPlayerMTGPriceService: TCGPlayerMTGPriceService,
         private tcgdbMTGCardService: TCGdbMTGCardService,
     ) {}
 
+    /*
     async getTCGdbMTGPricesHistoryByCardIdAndDate(cardId: string) {
         
         let date = new Date();
@@ -122,7 +116,8 @@ export class TCGdbMTGPriceHistoryService {
         
         return true;
 
-    }    
+    }   
+    */ 
 }
 
 
