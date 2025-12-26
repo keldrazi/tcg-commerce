@@ -67,7 +67,7 @@ export class ApplicationModuleService {
                 applicationModuleId: updateApplicationModuleDTO.applicationModuleId
             }
         });
-
+ 
         if (applicationModule == null) {
             return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found');
         }
