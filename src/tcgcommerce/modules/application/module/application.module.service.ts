@@ -21,19 +21,11 @@ export class ApplicationModuleService {
         });
         
         if (applicationModule == null) {
-            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found for applicationModuleId: ' + applicationModuleId);
+            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found');
         }
 
-        let applicationModuleDTO = new ApplicationModuleDTO();
-        applicationModuleDTO.applicationModuleId = applicationModule.applicationModuleId;
-        applicationModuleDTO.applicationModuleName = applicationModule.applicationModuleName;
-        applicationModuleDTO.applicationModuleHandle = applicationModule.applicationModuleHandle;
-        applicationModuleDTO.applicationModuleDescription = applicationModule.applicationModuleDescription;
-        applicationModuleDTO.applicationModuleSettings = applicationModule.applicationModuleSettings;
-        applicationModuleDTO.applicationModuleRoles = applicationModule.applicationModuleRoles;
-        applicationModuleDTO.applicationModuleIsActive = applicationModule.applicationModuleIsActive;
-        applicationModuleDTO.applicationModuleCreateDate = applicationModule.applicationModuleCreateDate;
-        applicationModuleDTO.applicationModuleUpdateDate = applicationModule.applicationModuleUpdateDate;
+        let applicationModuleDTO: ApplicationModuleDTO = ({ ...applicationModule });
+
 
         return applicationModuleDTO;
         
@@ -50,16 +42,7 @@ export class ApplicationModuleService {
 
         for(let i = 0; i < applicationModules.length; i++) {
             let applicationModule = applicationModules[i];
-            let applicationModuleDTO = new ApplicationModuleDTO();
-            applicationModuleDTO.applicationModuleId = applicationModule.applicationModuleId;
-            applicationModuleDTO.applicationModuleName = applicationModule.applicationModuleName;
-            applicationModuleDTO.applicationModuleHandle = applicationModule.applicationModuleHandle;
-            applicationModuleDTO.applicationModuleDescription = applicationModule.applicationModuleDescription;
-            applicationModuleDTO.applicationModuleSettings = applicationModule.applicationModuleSettings;
-            applicationModuleDTO.applicationModuleRoles = applicationModule.applicationModuleRoles;
-            applicationModuleDTO.applicationModuleIsActive = applicationModule.applicationModuleIsActive;
-            applicationModuleDTO.applicationModuleCreateDate = applicationModule.applicationModuleCreateDate;
-            applicationModuleDTO.applicationModuleUpdateDate = applicationModule.applicationModuleUpdateDate;
+            let applicationModuleDTO: ApplicationModuleDTO = ({ ...applicationModule });
 
             applicationModuleDTOs.push(applicationModuleDTO);
 
@@ -79,25 +62,22 @@ export class ApplicationModuleService {
     }
 
     async updateApplicationModule(updateApplicationModuleDTO: UpdateApplicationModuleDTO) {
-        let existingApplicationModule = await this.applicationModuleRepository.findOne({
+        let applicationModule = await this.applicationModuleRepository.findOne({
             where: {    
                 applicationModuleId: updateApplicationModuleDTO.applicationModuleId
             }
         });
 
-        //TO DO: THROW AN ERROR IF APPLICATION MODULE NOT FOUND;
-        if (existingApplicationModule == null) {
-            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found for applicationModuleId: ' + updateApplicationModuleDTO.applicationModuleId);
+        if (applicationModule == null) {
+            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found');
         }
 
-        existingApplicationModule.applicationModuleDescription = updateApplicationModuleDTO.applicationModuleDescription;
-        existingApplicationModule.applicationModuleSettings = updateApplicationModuleDTO.applicationModuleSettings;
-        existingApplicationModule.applicationModuleRoles = updateApplicationModuleDTO.applicationModuleRoles;
-        existingApplicationModule.applicationModuleIsActive = updateApplicationModuleDTO.applicationModuleIsActive;
+        applicationModule.applicationModuleName = updateApplicationModuleDTO.applicationModuleName;
+        applicationModule.applicationModuleDescription = updateApplicationModuleDTO.applicationModuleDescription;
+        applicationModule.applicationModuleIsActive = updateApplicationModuleDTO.applicationModuleIsActive;
 
-        await this.applicationModuleRepository.save(existingApplicationModule);
-
-        let applicationModuleDTO = await this.getApplicationModule(existingApplicationModule.applicationModuleId);
+        await this.applicationModuleRepository.save(applicationModule);     
+        let applicationModuleDTO = await this.getApplicationModule(applicationModule.applicationModuleId);
 
         return applicationModuleDTO;
     }

@@ -5,8 +5,6 @@ export class ApplicationModuleDTO {
     applicationModuleName: string;
     applicationModuleHandle: string;
     applicationModuleDescription: string;
-    applicationModuleSettings: string;
-    applicationModuleRoles: string;
     applicationModuleIsActive: boolean;
     applicationModuleCreateDate: Date;
     applicationModuleUpdateDate: Date; 
@@ -19,10 +17,6 @@ export class CreateApplicationModuleDTO {
     applicationModuleHandle: string;
     @IsString()
     applicationModuleDescription: string;
-    @IsString()
-    applicationModuleSettings: string;
-    @IsString()
-    applicationModuleRoles: string;
     @IsBoolean()
     applicationModuleIsActive: boolean;
 }
@@ -36,10 +30,6 @@ export class UpdateApplicationModuleDTO {
     applicationModuleHandle: string;
     @IsString()
     applicationModuleDescription: string;
-    @IsString()
-    applicationModuleSettings: string;
-    @IsString()
-    applicationModuleRoles: string;
     @IsBoolean()
     applicationModuleIsActive: boolean;
 }

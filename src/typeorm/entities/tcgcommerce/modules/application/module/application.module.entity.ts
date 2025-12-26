@@ -10,10 +10,6 @@ export class ApplicationModule {
     applicationModuleHandle: string;
     @Column()
     applicationModuleDescription: string;
-    @Column('jsonb')
-    applicationModuleSettings: string;
-    @Column('jsonb')
-    applicationModuleRoles: string;
     @Column({type: 'boolean', default: false})
     applicationModuleIsActive: boolean;
     @CreateDateColumn()
