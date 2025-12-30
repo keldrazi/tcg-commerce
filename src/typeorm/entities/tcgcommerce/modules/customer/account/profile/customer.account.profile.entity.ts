@@ -13,10 +13,6 @@ export class CustomerAccountProfile {
     @Column()
     customerAccountProfileLastName: string;
     @Column()
-    customerAccountProfileScreenName: string;
-    @Column()
-    customerAccountProfilePhoto: string;
-    @Column()
     customerAccountProfileShippingAddressPrimary: string;
     @Column()
     customerAccountProfileShippingAddressSecondary: string;
@@ -36,6 +32,8 @@ export class CustomerAccountProfile {
     customerAccountProfileBillingAddressState: string
     @Column()
     customerAccountProfileBillingAddressZip: string
+    @Column({type: 'boolean', default: true})
+    customerAccountProfileIsActive: boolean;
     @CreateDateColumn()
     customerAccountProfileCreateDate: Date;
     @UpdateDateColumn()

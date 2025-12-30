@@ -1,13 +1,11 @@
-import { IsBoolean, IsEmail, IsString, MinLength } from "class-validator";
+import { IsString, MinLength } from "class-validator";
 
-export class CommerceAccountProfileDTO {
+export class CustomerAccountProfileDTO {
     customerAccountProfileId: string;
     customerAccountUserId: string;
     commerceAccountId: string;
     customerAccountProfileFirstName: string;
     customerAccountProfileLastName: string;
-    customerAccountProfileScreenName: string;
-    customerAccountProfilePhoto: string;
     customerAccountProfileShippingAddressPrimary: string;
     customerAccountProfileShippingAddressSecondary: string;
     customerAccountProfileShippingAddressCity: string;
@@ -18,11 +16,12 @@ export class CommerceAccountProfileDTO {
     customerAccountProfileBillingAddressCity: string;
     customerAccountProfileBillingAddressState: string;
     customerAccountProfileBillingAddressZip: string;
+    customerAccountProfileIsActive: boolean;
     customerAccountProfileCreateDate: Date;
     customerAccountProfileUpdateDate: Date;
 }
 
-export class CreateCommerceAccountProfileDTO {
+export class CreateCustomerAccountProfileDTO {
     @IsString()
     customerAccountUserId: string;
     @IsString()
@@ -31,10 +30,6 @@ export class CreateCommerceAccountProfileDTO {
     customerAccountProfileFirstName: string;
     @IsString()
     customerAccountProfileLastName: string;
-    @IsString()
-    customerAccountProfileScreenName: string;
-    @IsString()
-    customerAccountProfilePhoto: string
     @IsString()
     customerAccountProfileShippingAddressPrimary: string
     @IsString()
@@ -58,7 +53,7 @@ export class CreateCommerceAccountProfileDTO {
 
 }
 
-export class UpdateBuylistUserDTO {
+export class UpdateCustomerAccountProfileDTO {
     @IsString()
     customerAccountProfileId: string;
     @IsString()
@@ -69,10 +64,6 @@ export class UpdateBuylistUserDTO {
     customerAccountProfileFirstName: string;
     @IsString()
     customerAccountProfileLastName: string;
-    @IsString()
-    customerAccountProfileScreenName: string;
-    @IsString()
-    customerAccountProfilePhoto: string
     @IsString()
     customerAccountProfileShippingAddressPrimary: string
     @IsString()

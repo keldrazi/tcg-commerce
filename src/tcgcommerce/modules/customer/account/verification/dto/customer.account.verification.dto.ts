@@ -3,7 +3,7 @@ export class CustomerAccountVerificationDTO {
     customerAccountUserId: string;
     commerceAccountId: string;
     customerAccountVerificationType: string;
-    customerAccountVerificationCode: number;
+    customerAccountVerificationCode: string;
     customerAccountVerificationCodeExpires: Date;
     customerAccountVerificationCodeIsValid: boolean;
     customerAccountVerificationCreateDate: Date;

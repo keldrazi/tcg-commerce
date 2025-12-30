@@ -1,25 +1,24 @@
 import { MinLength } from 'class-validator';
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('customerAccountUserVerification')
-export class CustomerAccountUserVerification {
+@Entity('customerAccountVerification')
+export class CustomerAccountVerification {
     @PrimaryGeneratedColumn('uuid')
-    customerAccountUserVerificationId: string;
+    customerAccountVerificationId: string;
     @Column()
     commerceAccountId: string;
     @Column()
     customerAccountUserId: string;
     @Column()
-    customerAccountUserVerificationType: string;
+    customerAccountVerificationType: string;
     @Column({unique: true})
-    @MinLength(6)
-    customerAccountUserVerificationCode: number;
+    customerAccountVerificationCode: string;
     @Column()
-    customerAccountUserVerificationCodeExpires: Date;
+    customerAccountVerificationCodeExpires: Date;
     @Column({type: 'boolean', default: true})
-    customerAccountUserVerificationCodeIsValid: boolean;
+    customerAccountVerificationCodeIsValid: boolean;
     @CreateDateColumn()
-    customerAccountUserVerificationCreateDate: Date;
+    customerAccountVerificationCreateDate: Date;
     @UpdateDateColumn()
-    customerAccountUserVerificationUpdateDate: Date; 
+    customerAccountVerificationUpdateDate: Date; 
 } 
