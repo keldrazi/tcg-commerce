@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TCGdbMTGPriceChangeWeeklyDTO } from './dto/tcgdb.mtg.price.change.weekly.dto';
 import { TCGdbAPIUtilService } from 'src/tcgdb/modules/tcgdb/api/util/tcgdb.api.util.service';
 import { HttpService } from '@nestjs/axios';
 import { map, catchError } from 'rxjs/operators';

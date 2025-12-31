@@ -9,7 +9,7 @@ export class BuylistProductCard {
     @Column()
     commerceUserId: string;
     @Column()
-    buylistUserId: string;
+    customerAccountUserId: string;
     @Column()
     buylistLocationId: string;
     @Column()

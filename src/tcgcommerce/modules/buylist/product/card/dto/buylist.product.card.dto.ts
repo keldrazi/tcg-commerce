@@ -4,7 +4,7 @@ export class BuylistProductCardDTO {
     buylistProductCardId: string;
     commerceAccountId: string;
     commerceUserId: string;
-    buylistUserId: string;
+    customerAccountUserId: string;
     buylistLocationId: string;
     buylistTypeId: string;
     buylistPaymentTypeId: string;
@@ -32,7 +32,7 @@ export class CreateBuylistProductCardDTO {
     @IsString()
     commerceUserId: string;
     @IsString()
-    buylistUserId: string;
+    customerAccountUserId: string;
     @IsString()
     buylistLocationId: string;
     @IsString()
@@ -56,7 +56,7 @@ export class UpdateBuylistProductCardDTO {
     @IsString()
     buylistProductCardId: string;
     @IsString()
-    commerceUserId: string;
+    customerAccountUserId: string;
     @IsString()
     buylistLocationId: string;
     @IsString()

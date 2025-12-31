@@ -80,7 +80,7 @@ export class BuylistProductCardService {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found'); 
         }
 
-        existingBuylistProductCard.commerceUserId = updateBuylistProductCardDTO.commerceUserId;
+        existingBuylistProductCard.customerAccountUserId = updateBuylistProductCardDTO.customerAccountUserId;
         existingBuylistProductCard.buylistLocationId = updateBuylistProductCardDTO.buylistLocationId;
         existingBuylistProductCard.buylistTypeId = updateBuylistProductCardDTO.buylistTypeId;
         existingBuylistProductCard.buylistPaymentTypeId = updateBuylistProductCardDTO.buylistPaymentTypeId;
