@@ -18,5 +18,4 @@ export class CommerceModule {
     commerceModuleCreateDate: Date;
     @UpdateDateColumn()
     commerceModuleUpdateDate: Date; 
-
 } 
