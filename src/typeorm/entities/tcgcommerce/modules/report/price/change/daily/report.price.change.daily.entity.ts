@@ -11,6 +11,8 @@ export class ReportPriceChangeDaily {
     @Column()
     productTypeId: string;
     @Column()
+    reportPriceTypeId: string;
+    @Column()
     reportPriceChangeDailyName: string;
     @Column()
     reportPriceChangeDailyDescription: string;
