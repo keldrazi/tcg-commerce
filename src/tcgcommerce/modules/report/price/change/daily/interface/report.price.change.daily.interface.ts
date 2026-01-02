@@ -1,10 +1,10 @@
 export interface ReportPriceChangeDailySettings {
-    reportPriceChangeDailyMinimumPrice: number;
-    reportPriceChangeDailyMaximumPrice: number;
-    reportPriceChangeDailyMinimumPriceChange: number;
-    reportPriceChangeDailyMinimumPercentChange: number;
-    reportPriceChangeDailyMaximumRecordCount: number;
-    reportPriceChangeDailyProductCardPrinting: string;
-    reportPriceChangeDailyPriceOption: string;
+    reportPriceChangeDailyDefaultMinimumPrice: number;
+    reportPriceChangeDailyDefaultMaximumPrice: number;
+    reportPriceChangeDailyDefaultMinimumPriceChange: number;
+    reportPriceChangeDailyDefaultMinimumPercentChange: number;
+    reportPriceChangeDailyDefaultMaximumRecordCount: number;
+    reportPriceChangeDailyDefaultProductCardPrinting: string;
+    reportPriceChangeDailyDefaultPriceOption: string;
 }
     
