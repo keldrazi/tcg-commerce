@@ -5,13 +5,13 @@ export class ReportPriceCurrent {
     @PrimaryGeneratedColumn('uuid')
     reportPriceCurrentId: string;
     @Column()
-    reportTypeId: string;
-    @Column()
     productVendorId: string;
     @Column()
     productLineId: string;
     @Column()
     productTypeId: string;
+    @Column()
+    reportTypeId: string;
     @Column()
     reportPriceCurrentName: string;
     @Column()
@@ -19,7 +19,9 @@ export class ReportPriceCurrent {
     @Column('jsonb')
     reportPriceCurrentCategories: string;
     @Column('jsonb')
-    reportPriceCurrentSettings: string;
+    reportPriceCurrentDefaultSettings: string;
+    @Column({type: 'boolean', default: false})
+    reportPriceCurrentIsActive: boolean;
     @CreateDateColumn()
     reportPriceCurrentCreateDate: Date;
     @UpdateDateColumn()

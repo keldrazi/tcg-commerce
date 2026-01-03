@@ -1,28 +1,30 @@
 import { IsString, IsBoolean } from "class-validator";
+import { ReportPriceHistoryDefaultSettings, ReportPriceHistoryCategory } from '../interface/report.price.history.interface';
 
 export class ReportPriceHistoryDTO {
     reportPriceHistoryId: string;
-    reportTypeId: string;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
+    reportTypeId: string;
     reportPriceHistoryName: string;
     reportPriceHistoryDescription: string;
-    reportPriceHistoryCategories: string;
-    reportPriceHistorySettings: string;
+    reportPriceHistoryCategories: ReportPriceHistoryCategory[];
+    reportPriceHistoryDefaultSettings: ReportPriceHistoryDefaultSettings;
+    reportPriceHistoryIsActive: boolean;
     reportPriceHistoryCreateDate: Date;
     reportPriceHistoryUpdateDate: Date;
 }
 
 export class CreateReportPriceHistoryDTO {
     @IsString()
-    reportTypeId: string;
-    @IsString()
     productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
     productTypeId: string;
+    @IsString()
+    reportTypeId: string;
     @IsString()
     reportPriceHistoryName: string;
     @IsString()
@@ -30,20 +32,22 @@ export class CreateReportPriceHistoryDTO {
     @IsString()
     reportPriceHistoryCategories: string;
     @IsString()
-    reportPriceHistorySettings: string;
+    reportPriceHistoryDefaultSettings: string;
+    @IsBoolean()
+    reportPriceHistoryIsActive: boolean;
 }
 
 export class UpdateReportPriceHistoryDTO {
     @IsString()
     reportPriceHistoryId: string;
     @IsString()
-    reportTypeId: string;
-    @IsString()
     productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
     productTypeId: string;
+    @IsString()
+    reportTypeId: string;
     @IsString()
     reportPriceHistoryName: string;
     @IsString()
@@ -51,5 +55,7 @@ export class UpdateReportPriceHistoryDTO {
     @IsString()
     reportPriceHistoryCategories: string; 
     @IsString()
-    reportPriceHistorySettings: string;  
+    reportPriceHistoryDefaultSettings: string; 
+    @IsBoolean()
+    reportPriceHistoryIsActive: boolean; 
 }

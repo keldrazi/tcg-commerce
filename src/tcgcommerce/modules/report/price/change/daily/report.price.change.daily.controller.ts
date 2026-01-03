@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { CreateReportPriceChangeDailyDTO, UpdateReportPriceChangeDailyDTO } from './dto/report.price.change.daily.dto';
 import { ReportPriceChangeDailyService } from './report.price.change.daily.service';
 
-
-
 @Controller('report/price/change/daily')
 export class ReportPriceChangeDailyController {
 

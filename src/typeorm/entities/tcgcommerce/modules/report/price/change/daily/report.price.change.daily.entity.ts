@@ -11,7 +11,7 @@ export class ReportPriceChangeDaily {
     @Column()
     productTypeId: string;
     @Column()
-    reportPriceTypeId: string;
+    reportTypeId: string;
     @Column()
     reportPriceChangeDailyName: string;
     @Column()
@@ -19,7 +19,9 @@ export class ReportPriceChangeDaily {
     @Column('jsonb')
     reportPriceChangeDailyCategories: string;
     @Column('jsonb')
-    reportPriceChangeDailySettings: string;
+    reportPriceChangeDailyDefaultSettings: string;
+    @Column({type: 'boolean', default: false})
+    reportPriceChangeDailyIsActive: boolean;
     @CreateDateColumn()
     reportPriceChangeDailyCreateDate: Date;
     @UpdateDateColumn()

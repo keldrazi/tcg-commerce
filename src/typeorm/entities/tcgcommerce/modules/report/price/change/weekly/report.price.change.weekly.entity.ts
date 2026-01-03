@@ -5,13 +5,13 @@ export class ReportPriceChangeWeekly {
     @PrimaryGeneratedColumn('uuid')
     reportPriceChangeWeeklyId: string;
     @Column()
-    reportTypeId: string;
-    @Column()
     productVendorId: string;
     @Column()
     productLineId: string;
     @Column()
     productTypeId: string;
+    @Column()
+    reportTypeId: string;
     @Column()
     reportPriceChangeWeeklyName: string;
     @Column()
@@ -19,7 +19,9 @@ export class ReportPriceChangeWeekly {
     @Column('jsonb')
     reportPriceChangeWeeklyCategories: string;
     @Column('jsonb')
-    reportPriceChangeWeeklySettings: string;
+    reportPriceChangeWeeklyDefaultSettings: string;
+    @Column({type: 'boolean', default: false})
+    reportPriceChangeWeeklyIsActive: boolean;
     @CreateDateColumn()
     reportPriceChangeWeeklyCreateDate: Date;
     @UpdateDateColumn()

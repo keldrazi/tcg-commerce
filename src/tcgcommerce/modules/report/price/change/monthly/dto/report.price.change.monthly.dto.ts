@@ -1,28 +1,31 @@
-import { IsString } from "class-validator";
+import { IsBoolean, IsString } from "class-validator";
+import { ReportPriceChangeMonthlyDefaultSettings, ReportPriceChangeMonthlyCategory } from '../interface/report.price.change.monthly.interface';
+
 
 export class ReportPriceChangeMonthlyDTO {
     reportPriceChangeMonthlyId: string;
-    reportTypeId: string;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
+    reportTypeId: string;
     reportPriceChangeMonthlyName: string;
     reportPriceChangeMonthlyDescription: string;
-    reportPriceChangeMonthlyCategories: string;
-    reportPriceChangeMonthlySettings: string;
+    reportPriceChangeMonthlyCategories: ReportPriceChangeMonthlyCategory[];
+    reportPriceChangeMonthlyDefaultSettings: ReportPriceChangeMonthlyDefaultSettings;
+    reportPriceChangeMonthlyIsActive: boolean;
     reportPriceChangeMonthlyCreateDate: Date;
     reportPriceChangeMonthlyUpdateDate: Date;
 }
 
 export class CreateReportPriceChangeMonthlyDTO {
     @IsString()
-    reportTypeId: string;
-    @IsString()
     productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
     productTypeId: string;
+    @IsString()
+    reportTypeId: string;
     @IsString()
     reportPriceChangeMonthlyName: string;
     @IsString()
@@ -30,20 +33,22 @@ export class CreateReportPriceChangeMonthlyDTO {
     @IsString()
     reportPriceChangeMonthlyCategories: string;
     @IsString()
-    reportPriceChangeMonthlySettings: string;
+    reportPriceChangeMonthlyDefaultSettings: string;
+    @IsBoolean()
+    reportPriceChangeMonthlyIsActive: boolean;
 }
 
 export class UpdateReportPriceChangeMonthlyDTO {
     @IsString()
     reportPriceChangeMonthlyId: string;
     @IsString()
-    reportTypeId: string;
-    @IsString()
     productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
     productTypeId: string;
+    @IsString()
+    reportTypeId: string;
     @IsString()
     reportPriceChangeMonthlyName: string;
     @IsString()
@@ -51,5 +56,7 @@ export class UpdateReportPriceChangeMonthlyDTO {
     @IsString()
     reportPriceChangeMonthlyCategories: string;
     @IsString()
-    reportPriceChangeMonthlySettings: string;  
+    reportPriceChangeMonthlyDefaultSettings: string;
+    @IsBoolean()
+    reportPriceChangeMonthlyIsActive: boolean;
 }

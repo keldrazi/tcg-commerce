@@ -1,29 +1,30 @@
-import { IsString } from "class-validator";
-import { ReportPriceChangeDailySettings } from '../interface/report.price.change.daily.interface';
+import { IsBoolean, IsString } from "class-validator";
+import { ReportPriceChangeDailyDefaultSettings, ReportPriceChangeDailyCategory } from '../interface/report.price.change.daily.interface';
 
 export class ReportPriceChangeDailyDTO {
     reportPriceChangeDailyId: string;
-    reportPriceTypeId: string;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
+    reportTypeId: string;
     reportPriceChangeDailyName: string;
     reportPriceChangeDailyDescription: string;
-    reportPriceChangeDailyCategories: string;
-    reportPriceChangeDailySettings: ReportPriceChangeDailySettings;
+    reportPriceChangeDailyCategories: ReportPriceChangeDailyCategory[];
+    reportPriceChangeDailyDefaultSettings: ReportPriceChangeDailyDefaultSettings;
+    reportPriceChangeDailyIsActive: boolean;
     reportPriceChangeDailyCreateDate: Date;
     reportPriceChangeDailyUpdateDate: Date;
 }
 
 export class CreateReportPriceChangeDailyDTO {
     @IsString()
-    reportPriceTypeId: string;
-    @IsString()
     productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
     productTypeId: string;
+    @IsString()
+    reportTypeId: string;
     @IsString()
     reportPriceChangeDailyName: string;
     @IsString()
@@ -31,20 +32,22 @@ export class CreateReportPriceChangeDailyDTO {
     @IsString()
     reportPriceChangeDailyCategories: string;
     @IsString()
-    reportPriceChangeDailySettings: string;
+    reportPriceChangeDailyDefaultSettings: string;
+    @IsBoolean()
+    reportPriceChangeDailyIsActive: boolean;
 }
 
 export class UpdateReportPriceChangeDailyDTO {
     @IsString()
     reportPriceChangeDailyId: string;
     @IsString()
-    reportPriceTypeId: string;
-    @IsString()
     productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
     productTypeId: string;
+    @IsString()
+    reportTypeId: string;
     @IsString()
     reportPriceChangeDailyName: string;
     @IsString()
@@ -52,6 +55,8 @@ export class UpdateReportPriceChangeDailyDTO {
     @IsString()
     reportPriceChangeDailyCategories: string;
     @IsString()
-    reportPriceChangeDailySettings: string;
-
+    reportPriceChangeDailyDefaultSettings: string;
+    @IsBoolean()
+    reportPriceChangeDailyIsActive: boolean;
 }
+

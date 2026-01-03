@@ -5,13 +5,13 @@ export class ReportPriceChangeYearly {
     @PrimaryGeneratedColumn('uuid')
     reportPriceChangeYearlyId: string;
     @Column()
-    reportTypeId: string;
-    @Column()
     productVendorId: string;
     @Column()
     productLineId: string;
     @Column()
     productTypeId: string;
+    @Column()
+    reportTypeId: string;
     @Column()
     reportPriceChangeYearlyName: string;
     @Column()
@@ -19,7 +19,9 @@ export class ReportPriceChangeYearly {
     @Column('jsonb')
     reportPriceChangeYearlyCategories: string;
     @Column('jsonb')
-    reportPriceChangeYearlySettings: string;
+    reportPriceChangeYearlyDefaultSettings: string;
+    @Column({type: 'boolean', default: false})
+    reportPriceChangeYearlyIsActive: boolean;
     @CreateDateColumn()
     reportPriceChangeYearlyCreateDate: Date;
     @UpdateDateColumn()

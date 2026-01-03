@@ -1,28 +1,31 @@
-import { IsString } from "class-validator";
+import { IsString, IsBoolean } from "class-validator";
+import { ReportPriceChangeYearlyDefaultSettings, ReportPriceChangeYearlyCategory } from '../interface/report.price.change.yearly.interface';
 
 export class ReportPriceChangeYearlyDTO {
     reportPriceChangeYearlyId: string;
-    reportTypeId: string;
     productVendorId: string;
     productLineId: string;
     productTypeId: string;
+    reportTypeId: string;
     reportPriceChangeYearlyName: string;
     reportPriceChangeYearlyDescription: string;
-    reportPriceChangeYearlyCategories: string;
-    reportPriceChangeYearlySettings: string;
+    reportPriceChangeYearlyCategories: ReportPriceChangeYearlyCategory[];
+    reportPriceChangeYearlyDefaultSettings: ReportPriceChangeYearlyDefaultSettings;
+    reportPriceChangeYearlyIsActive: boolean;
     reportPriceChangeYearlyCreateDate: Date;
     reportPriceChangeYearlyUpdateDate: Date;
+    
 }
 
 export class CreateReportPriceChangeYearlyDTO {
     @IsString()
-    reportTypeId: string;
-    @IsString()
     productVendorId: string;
     @IsString()
     productLineId: string;
     @IsString()
     productTypeId: string;
+    @IsString()
+    reportTypeId: string;
     @IsString()
     reportPriceChangeYearlyName: string;
     @IsString()
@@ -30,14 +33,14 @@ export class CreateReportPriceChangeYearlyDTO {
     @IsString()
     reportPriceChangeYearlyCategories: string;
     @IsString()
-    reportPriceChangeYearlySettings: string;
+    reportPriceChangeYearlyDefaultSettings: string;
+    @IsBoolean()
+    reportPriceChangeYearlyIsActive: boolean;
 }
 
 export class UpdateReportPriceChangeYearlyDTO {
     @IsString()
-    reportPriceChangeYearlyId: string;
-    @IsString()
-    reportTypeId: string;
+    reportPriceChangeYearlyId: string
     @IsString()
     productVendorId: string;
     @IsString()
@@ -45,11 +48,15 @@ export class UpdateReportPriceChangeYearlyDTO {
     @IsString()
     productTypeId: string;
     @IsString()
+    reportTypeId: string;
+    @IsString()
     reportPriceChangeYearlyName: string;
     @IsString()
     reportPriceChangeYearlyDescription: string;
     @IsString()
     reportPriceChangeYearlyCategories: string;
     @IsString()
-    reportPriceChangeYearlySettings: string;  
+    reportPriceChangeYearlyDefaultSettings: string;
+    @IsBoolean()
+    reportPriceChangeYearlyIsActive: boolean;
 }
