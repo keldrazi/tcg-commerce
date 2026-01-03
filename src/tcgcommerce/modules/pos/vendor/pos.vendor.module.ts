@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ProductVendorService } from './product.vendor.service';
-import { ProductVendorController } from './product.vendor.controller';
-import { ProductVendor } from 'src/typeorm/entities/tcgcommerce/modules/product/vendor/product.vendor.entity';
+import { POSVendorService } from './pos.vendor.service';
+import { POSVendorController } from './pos.vendor.controller';
+import { POSVendor } from 'src/typeorm/entities/tcgcommerce/modules/pos/vendor/pos.vendor.entity';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([ProductVendor]),
+        TypeOrmModule.forFeature([POSVendor]),
         ErrorMessageModule
     ],
-    controllers: [ProductVendorController],
-    providers: [ProductVendorService],
-    exports: [ProductVendorService]
+    controllers: [POSVendorController],
+    providers: [POSVendorService],
+    exports: [POSVendorService]
 })
-export class ProductVendorModule {}
+export class POSVendorModule {}

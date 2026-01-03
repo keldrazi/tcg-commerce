@@ -9,6 +9,8 @@ export class POSVendor {
     @Column()
     posVendorDescription: string;
     @Column()
+    posVendorCode: string;
+    @Column()
     posVendorURL: string;
     @Column({type: 'boolean', default: false})
     posVendorIsActive: boolean;

@@ -1,139 +1,141 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateProductVendorDTO, UpdateProductVendorDTO, ProductVendorDTO } from './dto/product.vendor.dto';
-import { ProductVendor } from 'src/typeorm/entities/tcgcommerce/modules/product/vendor/product.vendor.entity';
+import { CreatePOSVendorDTO, UpdatePOSVendorDTO, POSVendorDTO } from './dto/pos.vendor.dto';
+import { POSVendor } from 'src/typeorm/entities/tcgcommerce/modules/pos/vendor/pos.vendor.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
-export class ProductVendorService {
+export class POSVendorService {
 
     constructor(
-        @InjectRepository(ProductVendor) private productVendorRepository: Repository<ProductVendor>,
+        @InjectRepository(POSVendor) private posVendorRepository: Repository<POSVendor>,
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductVendor(productVendorId: string) {
-        let productVendor = await this.productVendorRepository.findOne({ 
+    async getPOSVendor(posVendorId: string) {
+        let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
-                productVendorId: productVendorId
+                posVendorId: posVendorId
             } 
         });
         
-        if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        if (posVendor == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
         }
 
-        let productVendorDTO:ProductVendorDTO = ({ ...productVendor });        
+        let posVendorDTO:POSVendorDTO = ({ ...posVendor });        
         
-        return productVendorDTO;
+        return posVendorDTO;
         
     }
 
-    async getProductVendors() {
-        let productVendors = await this.productVendorRepository.find({
+    async getPOSVendors() {
+        let posVendors = await this.posVendorRepository.find({
             where: {
-                productVendorIsActive: true
+                posVendorIsActive: true
             },
             order: {
-                productVendorName: 'ASC'
+                posVendorName: 'ASC'
             }
         });
         
-        let productVendorDTOs: ProductVendorDTO[] = [];
+        let posVendorDTOs: POSVendorDTO[] = [];
         
-        if(productVendors == null) {
-            return productVendorDTOs;
+        if(posVendors == null) {
+            return posVendorDTOs;
         }
         
-        for(let i = 0; i < productVendors.length; i++) {
-            let productVendor = productVendors[i];
-            let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
+        for(let i = 0; i < posVendors.length; i++) {
+            let posVendor = posVendors[i];
+            let posVendorDTO:POSVendorDTO = ({ ...posVendor });   
 
-            productVendorDTOs.push(productVendorDTO);
+            posVendorDTOs.push(posVendorDTO);
         }
 
-        return productVendorDTOs;
+        return posVendorDTOs;
     }
     
-    async getProductVendorByName(name: string) {
-        let productVendor = await this.productVendorRepository.findOne({ 
+    async getPOSVendorByName(name: string) {
+        let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
-                productVendorName: name 
+                posVendorName: name 
             } 
         });
         
-        if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        if (posVendor == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
         }
 
-        let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
+        let posVendorDTO:POSVendorDTO = ({ ...posVendor });   
         
-        return productVendorDTO;
+        return posVendorDTO;
         
     }
 
-    async getProductVendorByCode(code: string) {
-        let productVendor = await this.productVendorRepository.findOne({ 
+    async getPOSVendorByCode(code: string) {
+        let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
-                productVendorCode: code 
+                posVendorCode: code 
             } 
         });
         
-        if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        if (posVendor == null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
         }
 
-        let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
+        let posVendorDTO:POSVendorDTO = ({ ...posVendor });   
         
-        return productVendorDTO;
+        return posVendorDTO;
         
     }
     
-    async createProductVendor(createProductVendorDTO: CreateProductVendorDTO) {
+    async createPOSVendor(createPOSVendorDTO: CreatePOSVendorDTO) {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let productVendor = await this.productVendorRepository.findOne({ 
+        let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
-                productVendorName: createProductVendorDTO.productVendorName 
+                posVendorName: createPOSVendorDTO.posVendorName 
             } 
         });
         
-        if (productVendor != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'Product vendor already exists');
+        if (posVendor != null) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'POS vendor already exists');
         }
         
-        let newProductVendor = this.productVendorRepository.create({ ...createProductVendorDTO });
-        newProductVendor = await this.productVendorRepository.save(newProductVendor);
+        posVendor = this.posVendorRepository.create({ ...createPOSVendorDTO });
+        posVendor = await this.posVendorRepository.save(posVendor);
 
-        let productVendorDTO = this.getProductVendor(newProductVendor.productVendorId);
+        let posVendorDTO = this.getPOSVendor(posVendor.posVendorId);
 
-        return productVendorDTO;
+        return posVendorDTO;
         
     }
 
-    async updateProductVendor(updateProductVendorDTO: UpdateProductVendorDTO) {
+    async updatePOSVendor(updatePOSVendorDTO: UpdatePOSVendorDTO) {
                 
-        let existingProductVendor = await this.productVendorRepository.findOne({ 
+        let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
-                productVendorId: updateProductVendorDTO.productVendorId
+                posVendorId: updatePOSVendorDTO.posVendorId
             } 
         });
 
-        if (!existingProductVendor) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        if (!posVendor) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
         }
 
-        existingProductVendor.productVendorName = updateProductVendorDTO.productVendorName;
-        existingProductVendor.productVendorCode = updateProductVendorDTO.productVendorCode;
-        existingProductVendor.productVendorIsActive = updateProductVendorDTO.productVendorIsActive;
-        existingProductVendor.productVendorUpdateDate = new Date();
+        posVendor.posVendorName = updatePOSVendorDTO.posVendorName;
+        posVendor.posVendorDescription = updatePOSVendorDTO.posVendorDescription;
+        posVendor.posVendorCode = updatePOSVendorDTO.posVendorCode;
+        posVendor.posVendorURL = updatePOSVendorDTO.posVendorURL;
+        posVendor.posVendorIsActive = updatePOSVendorDTO.posVendorIsActive;
+        posVendor.posVendorUpdateDate = new Date();
         
-        await this.productVendorRepository.save(existingProductVendor);
+        await this.posVendorRepository.save(posVendor);
 
-        let productVendorDTO = this.getProductVendor(existingProductVendor.productVendorId);
+        let posVendorDTO = this.getPOSVendor(posVendor.posVendorId);
 
-        return productVendorDTO;
+        return posVendorDTO;
     
     }
     

@@ -1,31 +1,33 @@
 import { IsBoolean, IsString } from "class-validator";
 
-export class ProductVendorDTO {
-    productVendorId: string;
-    productVendorName: string;
-    productVendorCode: string;
-    productVendorIsActive: boolean;
-    productVendorCreateDate: Date;
-    productVendorUpdateDate: Date;
-    
+export class POSVendorOptionPriceDTO {
+    posVendorId: string;
+    posVendorOptionPriceId: string;
+    posVendorOptionPriceName: string;
+    posVendorOptionPriceCode: string;
+    posVendorOptionPriceIsActive: boolean;
+    posVendorOptionPriceCreateDate: Date;
+    posVendorOptionPriceUpdateDate: Date;
 }
 
-export class CreateProductVendorDTO {
+export class CreatePOSVendorOptionPriceDTO {
     @IsString()
-    productVendorName: string;
+    posVendorId: string;
     @IsString()
-    productVendorCode: string
-    
-}
-
-export class UpdateProductVendorDTO {
+    posVendorOptionPriceName: string;
     @IsString()
-    productVendorId: string;
-    @IsString()
-    productVendorName: string;
-    @IsString()
-    productVendorCode: string;
+    posVendorOptionPriceCode: string
     @IsBoolean()
-    productVendorIsActive: boolean;
-    
+    posVendorOptionPriceIsActive: boolean; 
+}
+
+export class UpdatePOSVendorOptionPriceDTO {
+    @IsString()
+    posVendorOptionPriceId: string
+    @IsString()
+    posVendorOptionPriceName: string;
+    @IsString()
+    posVendorOptionPriceCode: string;
+    @IsBoolean()
+    posVendorOptionPriceIsActive: boolean; 
 }
