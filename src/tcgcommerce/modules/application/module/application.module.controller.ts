@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { ApplicationModuleService } from './application.module.service';
 import { CreateApplicationModuleDTO, UpdateApplicationModuleDTO } from './dto/application.module.dto';
 
-
-
 @Controller('application/module')
 export class ApplicationModuleController {
 
@@ -11,7 +9,7 @@ export class ApplicationModuleController {
         private applicationModuleService: ApplicationModuleService,
     ) { }
     
-    @Get('/all')
+    @Get()
     async getApplicationModules() {
         return await this.applicationModuleService.getApplicationModules();
     }

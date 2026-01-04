@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO, BuylistTypeDTO } from './dto/buylist.type.dto';
 import { BuylistType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/type/buylist.type.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class BuylistTypeService {
@@ -57,7 +58,7 @@ export class BuylistTypeService {
         });
         
         if (buylistType == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
         }
 
         let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
@@ -68,18 +69,20 @@ export class BuylistTypeService {
     
     async createBuylistType(createBuylistTypeDTO: CreateBuylistTypeDTO) {
     
-        //CHECK TO SEE IF THE BUYLIST TYPE ALREADY EXISTS;
-        let buylistType = await this.getBuylistTypeByName(createBuylistTypeDTO.buylistTypeName);
-        
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
-        if (buylistType != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_ALREADY_EXISTS', 'Buylist type already exists');
+        let buylistType = await this.buylistTypeRepository.findOne({ 
+            where: { 
+                buylistTypeName: createBuylistTypeDTO.buylistTypeName 
+            } 
+        });
+
+        if (buylistType == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
         }
         
-        let newBuylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });
-        newBuylistType = await this.buylistTypeRepository.save(newBuylistType);
+        buylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });
+        buylistType = await this.buylistTypeRepository.save(buylistType);
 
-        let buylistTypeDTO = this.getBuylistTypeById(newBuylistType.buylistTypeId);
+        let buylistTypeDTO = await this.getBuylistTypeById(buylistType.buylistTypeId);
         
         return buylistTypeDTO;
         
@@ -87,26 +90,25 @@ export class BuylistTypeService {
 
     async updateBuylistType(updateBuylistTypeDTO: UpdateBuylistTypeDTO) {
                     
-        let existingBuylistType = await this.buylistTypeRepository.findOne({ 
+        let buylistType = await this.buylistTypeRepository.findOne({ 
             where: { 
                 buylistTypeId: updateBuylistTypeDTO.buylistTypeId 
             } 
         });
             
-        //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
-        if (!existingBuylistType) {
+        if (!buylistType) {
             return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
         }
 
-        existingBuylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;
-        existingBuylistType.buylistTypeCode = updateBuylistTypeDTO.buylistTypeCode;
-        existingBuylistType.buylistTypeIsActive = updateBuylistTypeDTO.buylistTypeIsActive;
-        existingBuylistType.buylistTypeUpdateDate = new Date();
+        buylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;
+        buylistType.buylistTypeCode = updateBuylistTypeDTO.buylistTypeCode;
+        buylistType.buylistTypeIsActive = updateBuylistTypeDTO.buylistTypeIsActive;
+        buylistType.buylistTypeUpdateDate = new Date();
         
-        await this.buylistTypeRepository.save(existingBuylistType);
+        await this.buylistTypeRepository.save(buylistType);
 
-        let buylistTypeDTO = this.getBuylistTypeById(existingBuylistType.buylistTypeId);
-
+        let buylistTypeDTO = await this.getBuylistTypeById(buylistType.buylistTypeId);
+        
         return buylistTypeDTO;
     
     }

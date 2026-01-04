@@ -15,7 +15,7 @@ export class BuylistPaymentServiceController {
         return await this.buylistPaymentServiceService.getBuylistPaymentServiceById(buylistPaymentServiceId);
     }
 
-    @Get('/all')
+    @Get()
     async getBuylistPaymentServices() {
         return await this.buylistPaymentServiceService.getBuylistPaymentServices();
     }

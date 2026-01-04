@@ -9,14 +9,19 @@ export class BuylistModuleController {
         private buylistModuleService: BuylistModuleService,
     ) { }
     
-    @Get('/all')
+    @Get()
     async getBuylistModules() {
         return await this.buylistModuleService.getBuylistModules();
     }
 
-    @Get('/:buylistModuleId')
-    async getBuylistModule(@Param('buylistModuleId') buylistModuleId: string) {
-        return await this.buylistModuleService.getBuylistModule(buylistModuleId);
+    @Get('/id/:buylistModuleId')
+    async getBuylistModuleById(@Param('buylistModuleId') buylistModuleId: string) {
+        return await this.buylistModuleService.getBuylistModuleById(buylistModuleId);
+    }
+
+    @Get('/caid/:commerceAccountId')
+    async getBuylistModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
+        return await this.buylistModuleService.getBuylistModuleByCommerceAccountId(commerceAccountId);
     }
 
     @Post('/create')

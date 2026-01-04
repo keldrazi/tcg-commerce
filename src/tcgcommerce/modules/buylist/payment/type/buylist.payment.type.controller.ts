@@ -15,7 +15,7 @@ export class BuylistPaymentTypeController {
         return await this.buylistPaymentTypeService.getBuylistPaymentTypeById(buylistPaymentTypeId);
     }
 
-    @Get('/all')
+    @Get()
     async getBuylistPaymentTypes() {
         return await this.buylistPaymentTypeService.getBuylistPaymentTypes();
     }

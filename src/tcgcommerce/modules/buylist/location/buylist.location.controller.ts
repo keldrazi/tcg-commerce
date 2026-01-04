@@ -15,7 +15,7 @@ export class BuylistLocationController {
         return await this.buylistLocationService.getBuylistLocationById(buylistLocationId);
     }
 
-    @Get('/all/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getBuylistLocationsByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.buylistLocationService.getBuylistLocationsByCommerceAccountId(commerceAccountId);
     }

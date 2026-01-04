@@ -67,35 +67,35 @@ export class PriceModuleService {
     }
 
     async createPriceModule(createPriceModuleDTO: CreatePriceModuleDTO) {
-        let newPriceModule = this.priceModuleRepository.create({ ...createPriceModuleDTO });
-        newPriceModule = await this.priceModuleRepository.save(newPriceModule);
+        let priceModule = this.priceModuleRepository.create({ ...createPriceModuleDTO });
+        priceModule = await this.priceModuleRepository.save(priceModule);
 
-        let priceModuleDTO = await this.getPriceModule(newPriceModule.priceModuleId);
+        let priceModuleDTO = await this.getPriceModule(priceModule.priceModuleId);
 
         return priceModuleDTO;
     }
 
     async updatePriceModule(updatePriceModuleDTO: UpdatePriceModuleDTO) {
             
-        let existingPriceModule = await this.priceModuleRepository.findOne({ 
+        let priceModule = await this.priceModuleRepository.findOne({ 
             where: { 
                 priceModuleId: updatePriceModuleDTO.priceModuleId
             } 
         });
 
         //TO DO: RETURN AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!existingPriceModule) {
+        if (!priceModule) {
             return null; 
         }
 
-        existingPriceModule.priceModuleSettings = updatePriceModuleDTO.priceModuleSettings;
-        existingPriceModule.priceModuleRoles = updatePriceModuleDTO.priceModuleRoles;
-        existingPriceModule.priceModuleIsActive = updatePriceModuleDTO.priceModuleIsActive;
-        existingPriceModule.priceModuleUpdateDate = new Date();
+        priceModule.priceModuleSettings = updatePriceModuleDTO.priceModuleSettings;
+        priceModule.priceModuleRoles = updatePriceModuleDTO.priceModuleRoles;
+        priceModule.priceModuleIsActive = updatePriceModuleDTO.priceModuleIsActive;
+        priceModule.priceModuleUpdateDate = new Date();
         
-        await this.priceModuleRepository.save(existingPriceModule);
+        await this.priceModuleRepository.save(priceModule);
 
-        let priceModuleDTO = await this.getPriceModule(existingPriceModule.priceModuleId);
+        let priceModuleDTO = await this.getPriceModule(priceModule.priceModuleId);
         
         return priceModuleDTO;
     }

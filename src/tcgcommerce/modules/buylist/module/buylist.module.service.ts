@@ -13,10 +13,27 @@ export class BuylistModuleService {
         private errorMessageService: ErrorMessageService
     ) { }
 
-    async getBuylistModule(buylistModuleId: string) {
+    async getBuylistModuleById(buylistModuleId: string) {
         let buylistModule = await this.buylistModuleRepository.findOne({ 
             where: { 
                 buylistModuleId : buylistModuleId
+            } 
+        });
+        
+        if (buylistModule == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found');
+        }
+
+        let buylistModuleDTO :BuylistModuleDTO = ({ ...buylistModule})
+
+        return buylistModuleDTO;
+        
+    }
+
+    async getBuylistModuleByCommerceAccountId(commerceAccountId: string) {
+        let buylistModule = await this.buylistModuleRepository.findOne({ 
+            where: { 
+                commerceAccountId : commerceAccountId
             } 
         });
         
@@ -53,34 +70,40 @@ export class BuylistModuleService {
 
     async createBuylistModule(createBuylistModuleDTO: CreateBuylistModuleDTO) {
         
-        let newBuylistModule = this.buylistModuleRepository.create({ ...createBuylistModuleDTO });
-        newBuylistModule = await this.buylistModuleRepository.save(newBuylistModule);
+        let buylistModule = await this.buylistModuleRepository.findOne({ 
+            where: { 
+                commerceAccountId : createBuylistModuleDTO.commerceAccountId
+            } 
+        });
 
-        let buylistModuleDTO = await this.getBuylistModule(newBuylistModule.buylistModuleId);
+        buylistModule = this.buylistModuleRepository.create({ ...createBuylistModuleDTO });
+        buylistModule = await this.buylistModuleRepository.save(buylistModule);
+
+        let buylistModuleDTO = await this.getBuylistModuleById(buylistModule.buylistModuleId);
 
         return buylistModuleDTO;
     }
 
     async updateBuylistModule(updateBuylistModuleDTO: UpdateBuylistModuleDTO) {
             
-        let existingBuylistModule = await this.buylistModuleRepository.findOne({ 
+        let buylistModule = await this.buylistModuleRepository.findOne({ 
             where: { 
                 buylistModuleId: updateBuylistModuleDTO.buylistModuleId
             } 
         });
 
-        if (existingBuylistModule == null) {
+        if (buylistModule == null) {
             return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found');
         }
 
-        existingBuylistModule.buylistModuleSettings = updateBuylistModuleDTO.buylistModuleSettings;
-        existingBuylistModule.buylistModuleRoles = updateBuylistModuleDTO.buylistModuleRoles;
-        existingBuylistModule.buylistModuleIsActive = updateBuylistModuleDTO.buylistModuleIsActive;
-        existingBuylistModule.buylistModuleUpdateDate = new Date();
+        buylistModule.buylistModuleSettings = updateBuylistModuleDTO.buylistModuleSettings;
+        buylistModule.buylistModuleRoles = updateBuylistModuleDTO.buylistModuleRoles;
+        buylistModule.buylistModuleIsActive = updateBuylistModuleDTO.buylistModuleIsActive;
+        buylistModule.buylistModuleUpdateDate = new Date();
         
-        await this.buylistModuleRepository.save(existingBuylistModule);
+        await this.buylistModuleRepository.save(buylistModule);
 
-        let buylistModuleDTO = await this.getBuylistModule(existingBuylistModule.buylistModuleId);
+        let buylistModuleDTO = await this.getBuylistModuleById(buylistModule.buylistModuleId);
         
         return buylistModuleDTO;
     }

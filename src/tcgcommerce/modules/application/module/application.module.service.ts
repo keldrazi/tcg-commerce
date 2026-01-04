@@ -53,10 +53,21 @@ export class ApplicationModuleService {
     }
 
     async createApplicationModule(createApplicationModuleDTO: CreateApplicationModuleDTO) {
-        let newApplicationModule = this.applicationModuleRepository.create({ ...createApplicationModuleDTO });
-        newApplicationModule = await this.applicationModuleRepository.save(newApplicationModule);
+        
+        let applicationModule = await this.applicationModuleRepository.findOne({ 
+            where: { 
+                applicationModuleName : createApplicationModuleDTO.applicationModuleName
+            } 
+        });
+        
+        if (applicationModule != null) {
+            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_ALREADY_EXISTS', 'Application module already exists');
+        }
+        
+        applicationModule = this.applicationModuleRepository.create({ ...createApplicationModuleDTO });
+        applicationModule = await this.applicationModuleRepository.save(applicationModule);
 
-        let applicationModuleDTO = await this.getApplicationModule(newApplicationModule.applicationModuleId);
+        let applicationModuleDTO = await this.getApplicationModule(applicationModule.applicationModuleId);
 
         return applicationModuleDTO;
     }

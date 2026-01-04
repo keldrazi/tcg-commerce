@@ -79,10 +79,10 @@ export class BuylistPaymentServiceService {
             return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_EXISTS', 'Buylist payment service with name already exists');
         }
         
-        let newBuylistPaymentService = this.buylistPaymentServiceRepository.create({ ...createBuylistPaymentServiceDTO });
-        newBuylistPaymentService = await this.buylistPaymentServiceRepository.save(newBuylistPaymentService);
+        buylistPaymentService = this.buylistPaymentServiceRepository.create({ ...createBuylistPaymentServiceDTO });
+        buylistPaymentService = await this.buylistPaymentServiceRepository.save(buylistPaymentService);
 
-        let buylistPaymentServiceDTO = this.getBuylistPaymentServiceById(newBuylistPaymentService.buylistPaymentServiceId);
+        let buylistPaymentServiceDTO = await this.getBuylistPaymentServiceById(buylistPaymentService.buylistPaymentServiceId);
         
         return buylistPaymentServiceDTO;
         
@@ -90,24 +90,24 @@ export class BuylistPaymentServiceService {
 
     async updateBuylistPaymentService(updateBuylistPaymentServiceDTO: UpdateBuylistPaymentServiceDTO) {
                     
-        let existingBuylistPaymentService = await this.buylistPaymentServiceRepository.findOne({ 
+        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOne({ 
             where: { 
                 buylistPaymentServiceId: updateBuylistPaymentServiceDTO.buylistPaymentServiceId 
             } 
         });
             
-        if (!existingBuylistPaymentService) {
+        if (!buylistPaymentService) {
             return this.errorMessageService.createErrorMessage('BUYLIST_PAYMENT_SERVICE_NOT_FOUND', 'Buylist payment service was not found');
         }
 
-        existingBuylistPaymentService.buylistPaymentServiceName = updateBuylistPaymentServiceDTO.buylistPaymentServiceName;
-        existingBuylistPaymentService.buylistPaymentServiceCode = updateBuylistPaymentServiceDTO.buylistPaymentServiceCode;
-        existingBuylistPaymentService.buylistPaymentServiceIsActive = updateBuylistPaymentServiceDTO.buylistPaymentServiceIsActive;
-        existingBuylistPaymentService.buylistPaymentServiceUpdateDate = new Date();
+        buylistPaymentService.buylistPaymentServiceName = updateBuylistPaymentServiceDTO.buylistPaymentServiceName;
+        buylistPaymentService.buylistPaymentServiceCode = updateBuylistPaymentServiceDTO.buylistPaymentServiceCode;
+        buylistPaymentService.buylistPaymentServiceIsActive = updateBuylistPaymentServiceDTO.buylistPaymentServiceIsActive;
+        buylistPaymentService.buylistPaymentServiceUpdateDate = new Date();
         
-        await this.buylistPaymentServiceRepository.save(existingBuylistPaymentService);
+        await this.buylistPaymentServiceRepository.save(buylistPaymentService);
 
-        let buylistPaymentServiceDTO = this.getBuylistPaymentServiceById(existingBuylistPaymentService.buylistPaymentServiceId);
+        let buylistPaymentServiceDTO = await this.getBuylistPaymentServiceById(buylistPaymentService.buylistPaymentServiceId);
 
         return buylistPaymentServiceDTO;
     

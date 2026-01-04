@@ -83,10 +83,10 @@ export class BuylistLocationService {
             return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_EXISTS', 'Buylist location with name already exists');
         }
         
-        let newBuylistLocation = this.buylistLocationRepository.create({ ...createBuylistLocationDTO });
-        newBuylistLocation = await this.buylistLocationRepository.save(newBuylistLocation);
+        buylistLocation = this.buylistLocationRepository.create({ ...createBuylistLocationDTO });
+        buylistLocation = await this.buylistLocationRepository.save(buylistLocation);
 
-        let buylistLocationDTO = this.getBuylistLocationById(newBuylistLocation.buylistLocationId);
+        let buylistLocationDTO = await this.getBuylistLocationById(buylistLocation.buylistLocationId);
         
         return buylistLocationDTO;
         
@@ -94,24 +94,24 @@ export class BuylistLocationService {
 
     async updateBuylistLocation(updateBuylistLocationDTO: UpdateBuylistLocationDTO) {
                     
-        let existingBuylistLocation = await this.buylistLocationRepository.findOne({ 
+        let buylistLocation = await this.buylistLocationRepository.findOne({ 
             where: { 
                 buylistLocationId: updateBuylistLocationDTO.buylistLocationId 
             } 
         });    
         
-        if (!existingBuylistLocation) {
+        if (!buylistLocation) {
             return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found');
         }
 
-        existingBuylistLocation.buylistLocationName = updateBuylistLocationDTO.buylistLocationName;
-        existingBuylistLocation.buylistLocationCode = updateBuylistLocationDTO.buylistLocationCode;
-        existingBuylistLocation.buylistLocationIsActive = updateBuylistLocationDTO.buylistLocationIsActive;
-        existingBuylistLocation.buylistLocationUpdateDate = new Date();
+        buylistLocation.buylistLocationName = updateBuylistLocationDTO.buylistLocationName;
+        buylistLocation.buylistLocationCode = updateBuylistLocationDTO.buylistLocationCode;
+        buylistLocation.buylistLocationIsActive = updateBuylistLocationDTO.buylistLocationIsActive;
+        buylistLocation.buylistLocationUpdateDate = new Date();
         
-        await this.buylistLocationRepository.save(existingBuylistLocation);
+        await this.buylistLocationRepository.save(buylistLocation);
 
-        let buylistLocationDTO = this.getBuylistLocationById(existingBuylistLocation.buylistLocationId);
+        let buylistLocationDTO = await this.getBuylistLocationById(buylistLocation.buylistLocationId);
 
         return buylistLocationDTO;
     

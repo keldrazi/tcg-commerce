@@ -48,9 +48,7 @@ export class BuylistPriceProductCardRuleBaseService {
 
         return buylistPriceProductCardRuleBaseDTO;
     }
-
-
-
+    
     async createBuylistPriceProductCardRuleBase(createBuylistPriceProductCardRuleBaseDTO: CreateBuylistPriceProductCardRuleBaseDTO) {
         
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
@@ -67,10 +65,10 @@ export class BuylistPriceProductCardRuleBaseService {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_BASE_EXISTS', 'Buylist price product card rule base already exists');
         }
 
-        let newBuylistPriceProductCardRuleBase = this.buylistPriceProductCardRuleBaseRepository.create({ ...createBuylistPriceProductCardRuleBaseDTO });
-        newBuylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.save(newBuylistPriceProductCardRuleBase);
+        buylistPriceProductCardRuleBase = this.buylistPriceProductCardRuleBaseRepository.create({ ...createBuylistPriceProductCardRuleBaseDTO });
+        buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.save(buylistPriceProductCardRuleBase);
 
-        let buylistPriceProductCardRuleBaseDTO = await this.getBuylistPriceProductCardRuleBaseById(newBuylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseId);
+        let buylistPriceProductCardRuleBaseDTO = await this.getBuylistPriceProductCardRuleBaseById(buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseId);
 
         return buylistPriceProductCardRuleBaseDTO;
     }   
@@ -99,7 +97,7 @@ export class BuylistPriceProductCardRuleBaseService {
         buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseDMPercentage = updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseDMPercentage;
         buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseUpdateDate = new Date();
 
-        buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.save(buylistPriceProductCardRuleBase);
+        await this.buylistPriceProductCardRuleBaseRepository.save(buylistPriceProductCardRuleBase);
         
         let buylistPriceProductCardRuleBaseDTO = await this.getBuylistPriceProductCardRuleBaseById(buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseId);
         
