@@ -1,36 +1,36 @@
 import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CustomerAccountUserService } from './customer.account.user.service';
-import { CreateCustomerAccountUserDTO, UpdateCustomerAccountUserDTO } from './dto/customer.user.dto';
+import { CustomerUserService } from './customer.user.service';
+import { CreateCustomerUserDTO, UpdateCustomerUserDTO } from './dto/customer.user.dto';
 
 
 
-@Controller('customer/account/user')
-export class CustomerAccountUserController {
+@Controller('customer/user')
+export class CustomerUserController {
 
     constructor(
-        private customerAccountUserService: CustomerAccountUserService,
+        private customerUserService: CustomerUserService,
     ) { }
     
-    @Get('/:customerAccountUserId')
-    async getCustomerAccountUser(@Param('customerAccountUserId') customerAccountUserId: string) {
-        return await this.customerAccountUserService.getCustomerAccountUserById(customerAccountUserId);
+    @Get('id/:customerUserId')
+    async getCustomerUserById(@Param('customerUserId') customerUserId: string) {
+        return await this.customerUserService.getCustomerUserById(customerUserId);
     }
 
-    @Get('/all/:commerceAccountId')
-    async getCustomerAccountUsersByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.customerAccountUserService.getCustomerAccountUsersByCommerceAccountId(commerceAccountId);
+    @Get('/caid/:commerceAccountId')
+    async getCustomerUsersByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
+        return await this.customerUserService.getCustomerUsersByCommerceAccountId(commerceAccountId);
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
-    async createCustomerAccountUser(@Body() createCustomerAccountUserDTO: CreateCustomerAccountUserDTO) {
-        return this.customerAccountUserService.createCustomerAccountUser(createCustomerAccountUserDTO);
+    async createCustomerUser(@Body() createCustomerUserDTO: CreateCustomerUserDTO) {
+        return this.customerUserService.createCustomerUser(createCustomerUserDTO);
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
-    async updateCustomerAccountUser(@Body() updateCustomerAccountUserDTO: UpdateCustomerAccountUserDTO) {
-        return this.customerAccountUserService.updateCustomerAccountUser(updateCustomerAccountUserDTO);
+    async updateCustomerUser(@Body() updateCustomerUserDTO: UpdateCustomerUserDTO) {
+        return this.customerUserService.updateCustomerUser(updateCustomerUserDTO);
     }
 
 
