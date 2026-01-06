@@ -27,7 +27,7 @@ export class CommerceUserVerificationService {
             commerceUserVerificationType: commerceUserVerificationType,
             commerceUserVerificationCode: commerceUserVerificationCode,
             commerceUserVerificationCodeExpires: commerceUserVerificationCodeExpires,
-            commerceUserVerificationCodeIsUsed: false,
+            commerceUserVerificationCodeIsValid: true,
         });
 
         await this.commerceUserVerificationRepository.save(commerceUserVerification);
@@ -38,7 +38,7 @@ export class CommerceUserVerificationService {
         commerceUserVerificationDTO.commerceUserVerificationId = commerceUserVerification.commerceUserVerificationId;
         commerceUserVerificationDTO.commerceUserVerificationCode = commerceUserVerification.commerceUserVerificationCode;
         commerceUserVerificationDTO.commerceUserVerificationCodeExpires = commerceUserVerification.commerceUserVerificationCodeExpires;
-        commerceUserVerificationDTO.commerceUserVerificationCodeIsUsed = commerceUserVerification.commerceUserVerificationCodeIsUsed;
+        commerceUserVerificationDTO.commerceUserVerificationCodeIsValid = commerceUserVerification.commerceUserVerificationCodeIsValid;
         commerceUserVerificationDTO.commerceUserVerificationCreateDate = commerceUserVerification.commerceUserVerificationCreateDate;
         commerceUserVerificationDTO.commerceUserVerificationUpdateDate = commerceUserVerification.commerceUserVerificationUpdateDate;
 
@@ -48,7 +48,7 @@ export class CommerceUserVerificationService {
 
     }
 
-    async verifyCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: number, commerceUserVerificationType: string) {
+    async verifyCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: string, commerceUserVerificationType: string) {
 
         let commerceUserVerification = await this.commerceUserVerificationRepository.findOne({ 
             where: { 
@@ -60,11 +60,11 @@ export class CommerceUserVerificationService {
         });
 
         let now = new Date();
-        if (commerceUserVerification == null || commerceUserVerification.commerceUserVerificationCodeIsUsed || commerceUserVerification.commerceUserVerificationCodeExpires < now) {
+        if (commerceUserVerification == null || !commerceUserVerification.commerceUserVerificationCodeIsValid || commerceUserVerification.commerceUserVerificationCodeExpires < now) {
             return false;
         }
 
-        commerceUserVerification.commerceUserVerificationCodeIsUsed = true;
+        commerceUserVerification.commerceUserVerificationCodeIsValid = false;
         commerceUserVerification.commerceUserVerificationUpdateDate = new Date();
 
         await this.commerceUserVerificationRepository.save(commerceUserVerification);
