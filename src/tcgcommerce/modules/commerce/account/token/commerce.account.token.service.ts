@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { CommerceAccountToken } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/token/commerce.account.token.entity';
 import { CreateCommerceAccountTokenDTO, UpdateCommerceAccountTokenDTO, CommerceAccountTokenDTO } from './dto/commerce.account.token.dto';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { UpdateCommerceAccountDTO } from '../dto/commerce.account.dto';
 
 @Injectable()
 export class CommerceAccountTokenService {

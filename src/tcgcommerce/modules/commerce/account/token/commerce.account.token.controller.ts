@@ -10,7 +10,7 @@ export class CommerceAccountTokenController {
     ) { }
      
     @Get('caid/:commerceAccountId')
-    async getCommerceAccountToken(@Param('commerceAccountId') commerceAccountId: string) {
+    async getCommerceAccountTokenByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.commerceAccountTokenService.getCommerceAccountTokenByCommerceAccountId(commerceAccountId);
     }
 

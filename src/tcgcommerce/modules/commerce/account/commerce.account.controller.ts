@@ -10,7 +10,7 @@ export class CommerceAccountController {
     ) { }
      
     @Get('id/:commerceAccountId')
-    async getCommerceAccount(@Param('commerceAccountId') commerceAccountId: string) {
+    async getCommerceAccountById(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.commerceAccountService.getCommerceAccountById(commerceAccountId);
     }
 
