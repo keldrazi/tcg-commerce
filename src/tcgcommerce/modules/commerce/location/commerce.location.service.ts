@@ -13,7 +13,7 @@ export class CommerceLocationService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getCommerceLocation(commerceLocationId: string) {
+    async getCommerceLocationById(commerceLocationId: string) {
         let commerceLocation = await this.commerceLocationRepository.findOne({ 
             where: { 
                 commerceLocationId : commerceLocationId
@@ -21,7 +21,7 @@ export class CommerceLocationService {
         });
 
         if (commerceLocation == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_NOT_FOUND', 'Commerce location was not found for commerceLocationId: ' + commerceLocationId);
+            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_NOT_FOUND', 'Commerce location was not found');
         }
 
         let commerceLocationDTO: CommerceLocationDTO = ({ ...commerceLocation });
@@ -30,7 +30,7 @@ export class CommerceLocationService {
         
     }
 
-    async getActiveCommerceLocations(commerceAccountId: string) {
+    async getActiveCommerceLocationsByCommerceAccountId(commerceAccountId: string) {
         let commerceLocations = await this.commerceLocationRepository.find({ 
             where: { 
                 commerceAccountId : commerceAccountId,
@@ -55,7 +55,7 @@ export class CommerceLocationService {
         
     }
 
-    async getCommerceLocations(commerceAccountId: string) {
+    async getCommerceLocationsByCommerceAccountId(commerceAccountId: string) {
         let commerceLocations = await this.commerceLocationRepository.find({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -81,59 +81,48 @@ export class CommerceLocationService {
 
     async createCommerceLocation(createCommerceLocationDTO: CreateCommerceLocationDTO) {
 
-        let existingCommerceLocation = await this.commerceLocationRepository.findOne({ 
+        let commerceLocation = await this.commerceLocationRepository.findOne({ 
             where: {
                 commerceAccountId : createCommerceLocationDTO.commerceAccountId, 
                 commerceLocationName : createCommerceLocationDTO.commerceLocationName
             } 
         });
 
-        if(existingCommerceLocation != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_EXISTS', 'Commerce location with name already exists: ' + createCommerceLocationDTO.commerceLocationName);
+        if(commerceLocation != null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_EXISTS', 'Commerce location already exists');
         }
 
-        let newCommerceLocation = this.commerceLocationRepository.create({ ...createCommerceLocationDTO });
-        newCommerceLocation = await this.commerceLocationRepository.save(newCommerceLocation);
+        commerceLocation = this.commerceLocationRepository.create({ ...createCommerceLocationDTO });
+        commerceLocation = await this.commerceLocationRepository.save(commerceLocation);
 
-        let commerceLocationDTO = await this.getCommerceLocation(newCommerceLocation.commerceLocationId);
+        let commerceLocationDTO = await this.getCommerceLocationById(commerceLocation.commerceLocationId);
 
         return commerceLocationDTO;
     }
 
     async updateCommerceLocation(updateCommerceLocationDTO: UpdateCommerceLocationDTO) {
-        let updateCommerceLocation = await this.commerceLocationRepository.findOne({
+        let commerceLocation = await this.commerceLocationRepository.findOne({
             where: {
                 commerceLocationId: updateCommerceLocationDTO.commerceLocationId
             }
         });
 
-        if(updateCommerceLocation == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_NOT_FOUND', 'Commerce location was not found for commerceLocationId: ' + updateCommerceLocationDTO.commerceLocationId);
-        }
-        
-        let existingCommerceLocation = await this.commerceLocationRepository.findOne({ 
-            where: {
-                commerceAccountId : updateCommerceLocationDTO.commerceAccountId, 
-                commerceLocationName : updateCommerceLocationDTO.commerceLocationName
-            } 
-        });
-
-        if(existingCommerceLocation != null && existingCommerceLocation.commerceLocationId !== updateCommerceLocationDTO.commerceLocationId) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_EXISTS', 'Commerce location with name already exists: ' + updateCommerceLocationDTO.commerceLocationName);
+        if(commerceLocation == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_NOT_FOUND', 'Commerce location was not found');
         }
 
-        updateCommerceLocation.commerceLocationName = updateCommerceLocationDTO.commerceLocationName;
-        updateCommerceLocation.commerceLocationAddress = updateCommerceLocationDTO.commerceLocationAddress;
-        updateCommerceLocation.commerceLocationCity = updateCommerceLocationDTO.commerceLocationCity;
-        updateCommerceLocation.commerceLocationState = updateCommerceLocationDTO.commerceLocationState;
-        updateCommerceLocation.commerceLocationZip = updateCommerceLocationDTO.commerceLocationZip;
-        updateCommerceLocation.commerceLocationPhoneNumber = updateCommerceLocationDTO.commerceLocationPhoneNumber;
-        updateCommerceLocation.commerceLocationIsActive = updateCommerceLocationDTO.commerceLocationIsActive;
-        updateCommerceLocation.commerceLocationUpdateDate = new Date();
+        commerceLocation.commerceLocationName = updateCommerceLocationDTO.commerceLocationName;
+        commerceLocation.commerceLocationAddress = updateCommerceLocationDTO.commerceLocationAddress;
+        commerceLocation.commerceLocationCity = updateCommerceLocationDTO.commerceLocationCity;
+        commerceLocation.commerceLocationState = updateCommerceLocationDTO.commerceLocationState;
+        commerceLocation.commerceLocationZip = updateCommerceLocationDTO.commerceLocationZip;
+        commerceLocation.commerceLocationPhoneNumber = updateCommerceLocationDTO.commerceLocationPhoneNumber;
+        commerceLocation.commerceLocationIsActive = updateCommerceLocationDTO.commerceLocationIsActive;
+        commerceLocation.commerceLocationUpdateDate = new Date();
 
-        updateCommerceLocation = await this.commerceLocationRepository.save(updateCommerceLocation);
+        commerceLocation = await this.commerceLocationRepository.save(commerceLocation);
 
-        let commerceLocationDTO = await this.getCommerceLocation(updateCommerceLocation.commerceLocationId);
+        let commerceLocationDTO = await this.getCommerceLocationById(commerceLocation.commerceLocationId);
         
         return commerceLocationDTO;
     }

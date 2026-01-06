@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateCommerceAccountTokenDTO, UpdateCommerceAccountTokenDTO } from './dto/commerce.account.token.dto';
 import { CommerceAccountTokenService } from './commerce.account.token.service';
 
@@ -9,9 +9,9 @@ export class CommerceAccountTokenController {
         private commerceAccountTokenService: CommerceAccountTokenService,
     ) { }
      
-    @Get('/:commerceAccountId')
+    @Get('caid/:commerceAccountId')
     async getCommerceAccountToken(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountTokenService.getCommerceAccountToken(commerceAccountId);
+        return await this.commerceAccountTokenService.getCommerceAccountTokenByCommerceAccountId(commerceAccountId);
     }
 
     @Post('/create')

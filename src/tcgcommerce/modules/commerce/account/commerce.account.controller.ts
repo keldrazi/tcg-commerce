@@ -9,9 +9,9 @@ export class CommerceAccountController {
         private commerceAccountService: CommerceAccountService,
     ) { }
      
-    @Get('/:commerceAccountId')
+    @Get('id/:commerceAccountId')
     async getCommerceAccount(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountService.getCommerceAccount(commerceAccountId);
+        return await this.commerceAccountService.getCommerceAccountById(commerceAccountId);
     }
 
     @Post('/create')

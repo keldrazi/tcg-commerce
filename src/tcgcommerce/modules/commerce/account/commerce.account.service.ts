@@ -46,7 +46,7 @@ export class CommerceAccountService {
         return commerceAccountDTOs;
     }
 
-    async getCommerceAccount(commerceAccountId: string) {
+    async getCommerceAccountById(commerceAccountId: string) {
         let commerceAccount = await this.commerceAccountRepository.findOne({ 
             where: { 
                 commerceAccountId: commerceAccountId 
@@ -54,7 +54,7 @@ export class CommerceAccountService {
         });
         
         if (commerceAccount == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_NOT_FOUND', 'Commerce account was not found for commerceAccountId: ' + commerceAccountId);
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_NOT_FOUND', 'Commerce account was not found');
         }
 
          let commerceAccountDTO: CommerceAccountDTO = {
@@ -90,52 +90,52 @@ export class CommerceAccountService {
 
     async createCommerceAccount(createCommerceAccountDTO: CreateCommerceAccountDTO) {
 
-        let existingCommerceAccount = await this.commerceAccountRepository.findOne({ 
+        let commerceAccount = await this.commerceAccountRepository.findOne({ 
             where: { 
                 commerceAccountHandle: createCommerceAccountDTO.commerceAccountHandle 
             } 
         });
 
-        if (existingCommerceAccount != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_EXISTS', 'Commerce account with handle already exists: ' + createCommerceAccountDTO.commerceAccountHandle);
+        if (commerceAccount != null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_EXISTS', 'Commerce account with already exists');
         }
 
         let commerceAccountAPIHandle = await this.createCommerceAccountAPIHandle(createCommerceAccountDTO.commerceAccountHandle);
         let commerceAccountAPIClientId = 'client_' + commerceAccountAPIHandle + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         let commerceAccountAPIClientToken = 'token_' + commerceAccountAPIHandle +  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-        let newCommerceAccount = this.commerceAccountRepository.create({ ...createCommerceAccountDTO, commerceAccountAPIClientId, commerceAccountAPIClientToken });
-        newCommerceAccount.commerceAccountAPIClientId = commerceAccountAPIClientId;
-        newCommerceAccount.commerceAccountAPIClientToken = commerceAccountAPIClientToken;
-        newCommerceAccount = await this.commerceAccountRepository.save(newCommerceAccount);
+        commerceAccount = this.commerceAccountRepository.create({ ...createCommerceAccountDTO, commerceAccountAPIClientId, commerceAccountAPIClientToken });
+        commerceAccount.commerceAccountAPIClientId = commerceAccountAPIClientId;
+        commerceAccount.commerceAccountAPIClientToken = commerceAccountAPIClientToken;
+        commerceAccount = await this.commerceAccountRepository.save(commerceAccount);
 
-        let commerceAccountDTO = await this.getCommerceAccount(newCommerceAccount.commerceAccountId);
+        let commerceAccountDTO = await this.getCommerceAccountById(commerceAccount.commerceAccountId);
 
         return commerceAccountDTO;
     }
 
     async updateCommerceAccount(updateCommerceAccountDTO: UpdateCommerceAccountDTO) {
-        let updateCommerceAccount = await this.commerceAccountRepository.findOne({ 
+        let commerceAccount = await this.commerceAccountRepository.findOne({ 
             where: { 
                 commerceAccountId: updateCommerceAccountDTO.commerceAccountId 
             } 
         });
 
-        if (updateCommerceAccount == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_NOT_FOUND', 'Commerce account was not found for commerceAccountId: ' + updateCommerceAccountDTO.commerceAccountId);
+        if (commerceAccount == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_NOT_FOUND', 'Commerce account was not found');
         }
 
-        updateCommerceAccount.commerceAccountName = updateCommerceAccountDTO.commerceAccountName;
-        updateCommerceAccount.commerceAccountContactName = updateCommerceAccountDTO.commerceAccountContactName;
-        updateCommerceAccount.commerceAccountContactEmail = updateCommerceAccountDTO.commerceAccountContactEmail;
-        updateCommerceAccount.commerceAccountContactPhone = updateCommerceAccountDTO.commerceAccountContactPhone;
-        updateCommerceAccount.commerceAccountApplicationModules = updateCommerceAccountDTO.commerceAccountApplicationModules;
-        updateCommerceAccount.commerceAccountIsActive = updateCommerceAccountDTO.commerceAccountIsActive;
-        updateCommerceAccount.commerceAccountUpdateDate = new Date();
+        commerceAccount.commerceAccountName = updateCommerceAccountDTO.commerceAccountName;
+        commerceAccount.commerceAccountContactName = updateCommerceAccountDTO.commerceAccountContactName;
+        commerceAccount.commerceAccountContactEmail = updateCommerceAccountDTO.commerceAccountContactEmail;
+        commerceAccount.commerceAccountContactPhone = updateCommerceAccountDTO.commerceAccountContactPhone;
+        commerceAccount.commerceAccountApplicationModules = updateCommerceAccountDTO.commerceAccountApplicationModules;
+        commerceAccount.commerceAccountIsActive = updateCommerceAccountDTO.commerceAccountIsActive;
+        commerceAccount.commerceAccountUpdateDate = new Date();
 
-        updateCommerceAccount = await this.commerceAccountRepository.save(updateCommerceAccount);
+        commerceAccount = await this.commerceAccountRepository.save(commerceAccount);
 
-        let commerceAccountDTO = await this.getCommerceAccount(updateCommerceAccount.commerceAccountId);
+        let commerceAccountDTO = await this.getCommerceAccountById(commerceAccount.commerceAccountId);
 
         return commerceAccountDTO;
     }

@@ -9,14 +9,14 @@ export class CommerceLocationController {
         private commerceLocationService: CommerceLocationService,
     ) { }
     
-    @Get('/all/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getCommerceLocations(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceLocationService.getCommerceLocations(commerceAccountId);
+        return await this.commerceLocationService.getCommerceLocationsByCommerceAccountId(commerceAccountId);
     }
 
-    @Get('/:commerceLocationId')
+    @Get('id/:commerceLocationId')
     async getCommerceLocation(@Param('commerceLocationId') commerceLocationId: string) {
-        return await this.commerceLocationService.getCommerceLocation(commerceLocationId);
+        return await this.commerceLocationService.getCommerceLocationById(commerceLocationId);
     }
 
     @Post('/create')

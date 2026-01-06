@@ -14,7 +14,7 @@ export class CommerceAccountTokenService {
     ) { }
 
 
-    async getCommerceAccountToken(commerceAccountId: string) {
+    async getCommerceAccountTokenByCommerceAccountId(commerceAccountId: string) {
         let commerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
             where: { 
                 commerceAccountId: commerceAccountId 
@@ -22,11 +22,10 @@ export class CommerceAccountTokenService {
         });
         
         if (commerceAccountToken == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_NOT_FOUND', 'Commerce account token was not found for commerceAccountId: ' + commerceAccountId);
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_NOT_FOUND', 'Commerce account token was not found');
         }
 
-         let commerceAccountTokenDTO: CommerceAccountTokenDTO = ({ ...commerceAccountToken });
-         
+        let commerceAccountTokenDTO: CommerceAccountTokenDTO = ({ ...commerceAccountToken });
         
         return commerceAccountTokenDTO;
         
@@ -34,52 +33,52 @@ export class CommerceAccountTokenService {
 
     async createCommerceAccountToken(createCommerceAccountTokenDTO: CreateCommerceAccountTokenDTO) {
 
-        let existingCommerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
+        let commerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
             where: { 
                 commerceAccountId: createCommerceAccountTokenDTO.commerceAccountId 
             } 
         });
 
-        if (existingCommerceAccountToken != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_EXISTS', 'Commerce account token already exists: ' + createCommerceAccountTokenDTO.commerceAccountId);
+        if (commerceAccountToken != null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_EXISTS', 'Commerce account token already exists');
         }
 
-        let newCommerceAccountToken = this.commerceAccountTokenRepository.create({
+        commerceAccountToken = this.commerceAccountTokenRepository.create({
             commerceAccountId: createCommerceAccountTokenDTO.commerceAccountId,
             commerceAccountToken: createCommerceAccountTokenDTO.commerceAccountToken,
             commerceAccountTokenIssued: createCommerceAccountTokenDTO.commerceAccountTokenIssued,
             commerceAccountTokenExpires: createCommerceAccountTokenDTO.commerceAccountTokenExpires,
         });
 
-        newCommerceAccountToken =  await this.commerceAccountTokenRepository.save(newCommerceAccountToken);
+        commerceAccountToken =  await this.commerceAccountTokenRepository.save(commerceAccountToken);
 
-        let commerceAccountTokenDTO = await this.getCommerceAccountToken(newCommerceAccountToken.commerceAccountId);
+        let commerceAccountTokenDTO = await this.getCommerceAccountTokenByCommerceAccountId(commerceAccountToken.commerceAccountId);
 
         return commerceAccountTokenDTO;
     }
 
     async updateCommerceAccountToken(updateCommerceAccountTokenDTO: UpdateCommerceAccountTokenDTO) {
-        let updateCommerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
+        let commerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
             where: { 
                 commerceAccountId: updateCommerceAccountTokenDTO.commerceAccountId 
             } 
         });
 
-        if (updateCommerceAccountToken == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_NOT_FOUND', 'Commerce account token was not found for commerceAccountId: ' + updateCommerceAccountTokenDTO.commerceAccountId);
+        if (commerceAccountToken == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_NOT_FOUND', 'Commerce account token was not found');
         }
 
-        updateCommerceAccountToken.commerceAccountTokenId = updateCommerceAccountTokenDTO.commerceAccountTokenId;
-        updateCommerceAccountToken.commerceAccountId = updateCommerceAccountTokenDTO.commerceAccountId;
-        updateCommerceAccountToken.commerceAccountToken = updateCommerceAccountTokenDTO.commerceAccountToken;
-        updateCommerceAccountToken.commerceAccountTokenIssued = updateCommerceAccountTokenDTO.commerceAccountTokenIssued;
-        updateCommerceAccountToken.commerceAccountTokenExpires = updateCommerceAccountTokenDTO.commerceAccountTokenExpires;
-        updateCommerceAccountToken.commerceAccountTokenUpdateDate = new Date();
+        commerceAccountToken.commerceAccountTokenId = updateCommerceAccountTokenDTO.commerceAccountTokenId;
+        commerceAccountToken.commerceAccountId = updateCommerceAccountTokenDTO.commerceAccountId;
+        commerceAccountToken.commerceAccountToken = updateCommerceAccountTokenDTO.commerceAccountToken;
+        commerceAccountToken.commerceAccountTokenIssued = updateCommerceAccountTokenDTO.commerceAccountTokenIssued;
+        commerceAccountToken.commerceAccountTokenExpires = updateCommerceAccountTokenDTO.commerceAccountTokenExpires;
+        commerceAccountToken.commerceAccountTokenUpdateDate = new Date();
 
-        updateCommerceAccountToken = await this.commerceAccountTokenRepository.save(updateCommerceAccountToken);
+        commerceAccountToken = await this.commerceAccountTokenRepository.save(commerceAccountToken);
 
-        let commerceAccountTokenDTO = await this.getCommerceAccountToken(updateCommerceAccountToken.commerceAccountId);
-
+        let commerceAccountTokenDTO = await this.getCommerceAccountTokenByCommerceAccountId(commerceAccountToken.commerceAccountId);
+        
         return commerceAccountTokenDTO;
     }
 }

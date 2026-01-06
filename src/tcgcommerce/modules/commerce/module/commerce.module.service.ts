@@ -13,7 +13,7 @@ export class CommerceModuleService {
         private errorMessageService: ErrorMessageService
     ) { }
 
-    async getCommerceModule(commerceModuleId: string) {
+    async getCommerceModuleById(commerceModuleId: string) {
         let commerceModule = await this.commerceModuleRepository.findOne({ 
             where: { 
                 commerceModuleId : commerceModuleId
@@ -53,34 +53,44 @@ export class CommerceModuleService {
 
     async createCommerceModule(createCommerceModuleDTO: CreateCommerceModuleDTO) {
         
-        let newCommerceModule = this.commerceModuleRepository.create({ ...createCommerceModuleDTO });
-        newCommerceModule = await this.commerceModuleRepository.save(newCommerceModule);
+        let commerceModule = await this.commerceModuleRepository.findOne({ 
+            where: { 
+                commerceAccountId: createCommerceModuleDTO.commerceAccountId
+            } 
+        });
 
-        let commerceModuleDTO = await this.getCommerceModule(newCommerceModule.commerceModuleId);
+        if (commerceModule != null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_EXISTS', 'Commerce module already exists');
+        }
+        
+        commerceModule = this.commerceModuleRepository.create({ ...createCommerceModuleDTO });
+        commerceModule = await this.commerceModuleRepository.save(commerceModule);
+
+        let commerceModuleDTO = await this.getCommerceModuleById(commerceModule.commerceModuleId);
 
         return commerceModuleDTO;
     }
 
     async updateCommerceModule(updateCommerceModuleDTO: UpdateCommerceModuleDTO) {
             
-        let existingCommerceModule = await this.commerceModuleRepository.findOne({ 
+        let commerceModule = await this.commerceModuleRepository.findOne({ 
             where: { 
                 commerceModuleId: updateCommerceModuleDTO.commerceModuleId
             } 
         });
 
-        if (existingCommerceModule == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found for commerceModuleId: ' + updateCommerceModuleDTO.commerceModuleId);
+        if (commerceModule == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found');
         }
 
-        existingCommerceModule.commerceModuleSettings = updateCommerceModuleDTO.commerceModuleSettings;
-        existingCommerceModule.commerceModuleRoles = updateCommerceModuleDTO.commerceModuleRoles;
-        existingCommerceModule.commerceModuleIsActive = updateCommerceModuleDTO.commerceModuleIsActive;
-        existingCommerceModule.commerceModuleUpdateDate = new Date();
+        commerceModule.commerceModuleSettings = updateCommerceModuleDTO.commerceModuleSettings;
+        commerceModule.commerceModuleRoles = updateCommerceModuleDTO.commerceModuleRoles;
+        commerceModule.commerceModuleIsActive = updateCommerceModuleDTO.commerceModuleIsActive;
+        commerceModule.commerceModuleUpdateDate = new Date();
         
-        await this.commerceModuleRepository.save(existingCommerceModule);
+        await this.commerceModuleRepository.save(commerceModule);
 
-        let commerceModuleDTO = await this.getCommerceModule(existingCommerceModule.commerceModuleId);
+        let commerceModuleDTO = await this.getCommerceModuleById(commerceModule.commerceModuleId);
         
         return commerceModuleDTO;
     }

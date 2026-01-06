@@ -11,14 +11,14 @@ export class CommerceModuleController {
         private commerceModuleService: CommerceModuleService,
     ) { }
     
-    @Get('/all')
+    @Get()
     async getCommerceModules() {
         return await this.commerceModuleService.getCommerceModules();
     }
 
-    @Get('/:commerceModuleId')
+    @Get('id/:commerceModuleId')
     async getCommerceModule(@Param('commerceModuleId') commerceModuleId: string) {
-        return await this.commerceModuleService.getCommerceModule(commerceModuleId);
+        return await this.commerceModuleService.getCommerceModuleById(commerceModuleId);
     }
 
     @Post('/create')
