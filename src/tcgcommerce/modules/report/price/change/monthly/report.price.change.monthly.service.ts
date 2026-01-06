@@ -14,7 +14,7 @@ export class ReportPriceChangeMonthlyService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeMonthly(reportPriceChangeMonthlyId: string) {
+    async getReportPriceChangeMonthlyById(reportPriceChangeMonthlyId: string) {
         let reportPriceChangeMonthly = await this.reportPriceChangeMonthlyRepository.findOne({ 
             where: { 
                 reportPriceChangeMonthlyId: reportPriceChangeMonthlyId
@@ -60,7 +60,7 @@ export class ReportPriceChangeMonthlyService {
         reportPriceChangeMonthly.reportPriceChangeMonthlyDefaultSettings = JSON.stringify(reportPriceChangeMonthly.reportPriceChangeMonthlyDefaultSettings);
         reportPriceChangeMonthly = await this.reportPriceChangeMonthlyRepository.save(reportPriceChangeMonthly);
 
-        let reportPriceChangeMonthlyDTO = await this.getReportPriceChangeMonthly(reportPriceChangeMonthly.reportPriceChangeMonthlyId);
+        let reportPriceChangeMonthlyDTO = await this.getReportPriceChangeMonthlyById(reportPriceChangeMonthly.reportPriceChangeMonthlyId);
         
         return reportPriceChangeMonthlyDTO;
         
@@ -82,11 +82,11 @@ export class ReportPriceChangeMonthlyService {
         reportPriceChangeMonthly.reportPriceChangeMonthlyDescription = updateReportPriceChangeMonthlyDTO.reportPriceChangeMonthlyDescription;
         reportPriceChangeMonthly.reportPriceChangeMonthlyCategories = JSON.stringify(updateReportPriceChangeMonthlyDTO.reportPriceChangeMonthlyCategories);
         reportPriceChangeMonthly.reportPriceChangeMonthlyDefaultSettings = JSON.stringify(updateReportPriceChangeMonthlyDTO.reportPriceChangeMonthlyDefaultSettings);
-
         reportPriceChangeMonthly.reportPriceChangeMonthlyUpdateDate = new Date();
         
         await this.reportPriceChangeMonthlyRepository.save(reportPriceChangeMonthly);
-        let reportPriceChangeMonthlyDTO = await this.getReportPriceChangeMonthly(reportPriceChangeMonthly.reportPriceChangeMonthlyId);
+
+        let reportPriceChangeMonthlyDTO = await this.getReportPriceChangeMonthlyById(reportPriceChangeMonthly.reportPriceChangeMonthlyId);
 
         return reportPriceChangeMonthlyDTO;
     

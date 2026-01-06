@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateReportPriceCurrentDTO, UpdateReportPriceCurrentDTO } from './dto/report.price.current.dto';
 import { ReportPriceCurrentService } from './report.price.current.service';
 
@@ -9,6 +9,10 @@ export class ReportPriceCurrentController {
         private reportPriceCurrentService: ReportPriceCurrentService,
     ) { }
     
+    @Get('/id/:reportPriceCurrentId')
+    async getReportPriceCurrentById(@Param('reportPriceCurrentId') reportPriceCurrentId: string) {
+        return await this.reportPriceCurrentService.getReportPriceCurrentById(reportPriceCurrentId);
+    }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())

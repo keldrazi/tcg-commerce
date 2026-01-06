@@ -12,10 +12,10 @@ export class ReportTypeController {
     
     @Get('/id/:reportTypeId')
     async getReportType(@Param('reportTypeId') reportTypeId: string) {
-        return await this.reportTypeService.getReportType(reportTypeId);
+        return await this.reportTypeService.getReportTypeById(reportTypeId);
     }
 
-    @Get('/all')
+    @Get()
     async getReportTypes() {
         return await this.reportTypeService.getReportTypes();
     }

@@ -15,7 +15,7 @@ export class ReportPriceChangeDailyService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeDaily(reportPriceChangeDailyId: string) {
+    async getReportPriceChangeDailyById(reportPriceChangeDailyId: string) {
         let reportPriceChangeDaily = await this.reportPriceChangeDailyRepository.findOne({ 
             where: { 
                 reportPriceChangeDailyId: reportPriceChangeDailyId
@@ -61,7 +61,7 @@ export class ReportPriceChangeDailyService {
         reportPriceChangeDaily.reportPriceChangeDailyDefaultSettings = JSON.stringify(reportPriceChangeDaily.reportPriceChangeDailyDefaultSettings);
         reportPriceChangeDaily = await this.reportPriceChangeDailyRepository.save(reportPriceChangeDaily);
 
-        let reportPriceChangeDailyDTO = await this.getReportPriceChangeDaily(reportPriceChangeDaily.reportPriceChangeDailyId);
+        let reportPriceChangeDailyDTO = await this.getReportPriceChangeDailyById(reportPriceChangeDaily.reportPriceChangeDailyId);
         
         return reportPriceChangeDailyDTO;
         
@@ -83,11 +83,11 @@ export class ReportPriceChangeDailyService {
         reportPriceChangeDaily.reportPriceChangeDailyDescription = updateReportPriceChangeDailyDTO.reportPriceChangeDailyDescription;
         reportPriceChangeDaily.reportPriceChangeDailyCategories = JSON.stringify(updateReportPriceChangeDailyDTO.reportPriceChangeDailyCategories);
         reportPriceChangeDaily.reportPriceChangeDailyDefaultSettings = JSON.stringify(updateReportPriceChangeDailyDTO.reportPriceChangeDailyDefaultSettings);
-
         reportPriceChangeDaily.reportPriceChangeDailyUpdateDate = new Date();
         
         await this.reportPriceChangeDailyRepository.save(reportPriceChangeDaily);
-        let reportPriceChangeDailyDTO = await this.getReportPriceChangeDaily(reportPriceChangeDaily.reportPriceChangeDailyId);
+
+        let reportPriceChangeDailyDTO = await this.getReportPriceChangeDailyById(reportPriceChangeDaily.reportPriceChangeDailyId);
 
         return reportPriceChangeDailyDTO;
     

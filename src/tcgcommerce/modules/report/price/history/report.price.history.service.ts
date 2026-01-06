@@ -15,7 +15,7 @@ export class ReportPriceHistoryService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceHistory(reportPriceHistoryId: string) {
+    async getReportPriceHistoryById(reportPriceHistoryId: string) {
         let reportPriceHistory = await this.reportPriceHistoryRepository.findOne({ 
             where: { 
                 reportPriceHistoryId: reportPriceHistoryId
@@ -42,7 +42,6 @@ export class ReportPriceHistoryService {
     
     async createReportPriceHistory(createReportPriceHistoryDTO: CreateReportPriceHistoryDTO) {
     
-        //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let reportPriceHistory = await this.reportPriceHistoryRepository.findOne({ 
             where: { 
                 productVendorId: createReportPriceHistoryDTO.productVendorId,
@@ -61,7 +60,7 @@ export class ReportPriceHistoryService {
         reportPriceHistory.reportPriceHistoryDefaultSettings = JSON.stringify(reportPriceHistory.reportPriceHistoryDefaultSettings);
         reportPriceHistory = await this.reportPriceHistoryRepository.save(reportPriceHistory);
 
-        let reportPriceHistoryDTO = await this.getReportPriceHistory(reportPriceHistory.reportPriceHistoryId);
+        let reportPriceHistoryDTO = await this.getReportPriceHistoryById(reportPriceHistory.reportPriceHistoryId);
         
         return reportPriceHistoryDTO;
         
@@ -87,7 +86,8 @@ export class ReportPriceHistoryService {
         reportPriceHistory.reportPriceHistoryUpdateDate = new Date();
         
         await this.reportPriceHistoryRepository.save(reportPriceHistory);
-        let reportPriceHistoryDTO = await this.getReportPriceHistory(reportPriceHistory.reportPriceHistoryId);
+        
+        let reportPriceHistoryDTO = await this.getReportPriceHistoryById(reportPriceHistory.reportPriceHistoryId);
 
         return reportPriceHistoryDTO;
     

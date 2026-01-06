@@ -9,6 +9,10 @@ export class ReportPriceChangeDailyController {
         private reportPriceChangeDailyService: ReportPriceChangeDailyService,
     ) { }
     
+    @Get('/id/:reportPriceChangeDailyId')
+    async getReportPriceChangeDailyById(@Param('reportPriceChangeDailyId') reportPriceChangeDailyId: string) {
+        return await this.reportPriceChangeDailyService.getReportPriceChangeDailyById(reportPriceChangeDailyId);
+    }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())

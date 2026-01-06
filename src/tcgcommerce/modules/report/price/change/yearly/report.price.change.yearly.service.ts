@@ -15,7 +15,7 @@ export class ReportPriceChangeYearlyService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeYearly(reportPriceChangeYearlyId: string) {
+    async getReportPriceChangeYearlyById(reportPriceChangeYearlyId: string) {
         let reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.findOne({ 
             where: { 
                 reportPriceChangeYearlyId: reportPriceChangeYearlyId
@@ -42,7 +42,6 @@ export class ReportPriceChangeYearlyService {
     
     async createReportPriceChangeYearly(createReportPriceChangeYearlyDTO: CreateReportPriceChangeYearlyDTO) {
     
-        //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.findOne({ 
             where: { 
                 productVendorId: createReportPriceChangeYearlyDTO.productVendorId,
@@ -61,7 +60,7 @@ export class ReportPriceChangeYearlyService {
         reportPriceChangeYearly.reportPriceChangeYearlyDefaultSettings = JSON.stringify(reportPriceChangeYearly.reportPriceChangeYearlyDefaultSettings);
         reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.save(reportPriceChangeYearly);
 
-        let reportPriceChangeYearlyDTO = await this.getReportPriceChangeYearly(reportPriceChangeYearly.reportPriceChangeYearlyId);
+        let reportPriceChangeYearlyDTO = await this.getReportPriceChangeYearlyById(reportPriceChangeYearly.reportPriceChangeYearlyId);
         
         return reportPriceChangeYearlyDTO;
         
@@ -78,6 +77,7 @@ export class ReportPriceChangeYearlyService {
         if (!reportPriceChangeYearly) {
             return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_YEARLY_NOT_FOUND', 'Report price change yearly was not found'); 
         }
+
         reportPriceChangeYearly.reportTypeId = updateReportPriceChangeYearlyDTO.reportTypeId;
         reportPriceChangeYearly.reportPriceChangeYearlyName = updateReportPriceChangeYearlyDTO.reportPriceChangeYearlyName;
         reportPriceChangeYearly.reportPriceChangeYearlyDescription = updateReportPriceChangeYearlyDTO.reportPriceChangeYearlyDescription;
@@ -87,7 +87,8 @@ export class ReportPriceChangeYearlyService {
         reportPriceChangeYearly.reportPriceChangeYearlyUpdateDate = new Date();
         
         await this.reportPriceChangeYearlyRepository.save(reportPriceChangeYearly);
-        let reportPriceChangeYearlyDTO = await this.getReportPriceChangeYearly(reportPriceChangeYearly.reportPriceChangeYearlyId);
+        
+        let reportPriceChangeYearlyDTO = await this.getReportPriceChangeYearlyById(reportPriceChangeYearly.reportPriceChangeYearlyId);
 
         return reportPriceChangeYearlyDTO;
     

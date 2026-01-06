@@ -13,7 +13,7 @@ export class ReportTypeService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportType(reportTypeId: string) {
+    async getReportTypeById(reportTypeId: string) {
         let reportType = await this.reportTypeRepository.findOne({ 
             where: { 
                 reportTypeId: reportTypeId 
@@ -21,7 +21,7 @@ export class ReportTypeService {
         });
         
         if (reportType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Report type was not found');
+            return this.errorMessageService.createErrorMessage('REPORT_TYPE_NOT_FOUND', 'Report type was not found');
         }
 
         let reportTypeDTO: ReportTypeDTO = ({ ...reportType });
@@ -38,7 +38,7 @@ export class ReportTypeService {
         let reportTypeDTOs: ReportTypeDTO[] = [];
 
         if(reportTypes == null) {
-            return reportTypeDTOs;
+            return [];
         }
         
         for(let i = 0; i < reportTypes.length; i++) {
@@ -51,10 +51,10 @@ export class ReportTypeService {
         return reportTypeDTOs;
     }
     
-    async getReportTypeByName(name: string) {
+    async getReportTypeByName(reportTypeName: string) {
         let reportType = await this.reportTypeRepository.findOne({ 
             where: { 
-                reportTypeName: name 
+                reportTypeName: reportTypeName 
             } 
         });
         
@@ -68,10 +68,10 @@ export class ReportTypeService {
         
     }
 
-    async getReportTypeByCode(code: string) {
+    async getReportTypeByCode(reportTypeCode: string) {
         let reportType = await this.reportTypeRepository.findOne({ 
             where: { 
-                reportTypeCode: code 
+                reportTypeCode: reportTypeCode 
             } 
         });
         
@@ -102,7 +102,7 @@ export class ReportTypeService {
         reportType = this.reportTypeRepository.create({ ...createReportTypeDTO });
         reportType = await this.reportTypeRepository.save(reportType);
 
-        let reportTypeDTO = this.getReportType(reportType.reportTypeId);
+        let reportTypeDTO = this.getReportTypeById(reportType.reportTypeId);
         
         return reportTypeDTO;
         
@@ -127,7 +127,7 @@ export class ReportTypeService {
         
         await this.reportTypeRepository.save(reportType);
 
-        let reportTypeDTO = this.getReportType(reportType.reportTypeId);
+        let reportTypeDTO = this.getReportTypeById(reportType.reportTypeId);
         
         return reportTypeDTO;
     

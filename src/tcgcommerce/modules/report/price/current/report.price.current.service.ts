@@ -15,7 +15,7 @@ export class ReportPriceCurrentService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceCurrent(reportPriceCurrentId: string) {
+    async getReportPriceCurrentById(reportPriceCurrentId: string) {
         let reportPriceCurrent = await this.reportPriceCurrentRepository.findOne({ 
             where: { 
                 reportPriceCurrentId: reportPriceCurrentId
@@ -23,7 +23,7 @@ export class ReportPriceCurrentService {
         });
 
         if (reportPriceCurrent == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_DAILY_NOT_FOUND', 'Report price change daily was not found');
+            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CURRENT_NOT_FOUND', 'Report price current was not found');
         }
 
         let reportPriceCurrentDTO: ReportPriceCurrentDTO = new ReportPriceCurrentDTO();
@@ -53,7 +53,7 @@ export class ReportPriceCurrentService {
         });
         
         if (reportPriceCurrent != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_DAILY_ALREADY_EXISTS', 'Report price change daily already exists');
+            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CURRENT_ALREADY_EXISTS', 'Report price current already exists');
         }
         
         reportPriceCurrent = this.reportPriceCurrentRepository.create({ ...createReportPriceCurrentDTO });
@@ -61,7 +61,7 @@ export class ReportPriceCurrentService {
         reportPriceCurrent.reportPriceCurrentDefaultSettings = JSON.stringify(reportPriceCurrent.reportPriceCurrentDefaultSettings);
         reportPriceCurrent = await this.reportPriceCurrentRepository.save(reportPriceCurrent);
 
-        let reportPriceCurrentDTO = await this.getReportPriceCurrent(reportPriceCurrent.reportPriceCurrentId);
+        let reportPriceCurrentDTO = await this.getReportPriceCurrentById(reportPriceCurrent.reportPriceCurrentId);
         
         return reportPriceCurrentDTO;
         
@@ -76,7 +76,7 @@ export class ReportPriceCurrentService {
         });
 
         if (!reportPriceCurrent) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_DAILY_NOT_FOUND', 'Report price change daily was not found'); 
+            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CURRENT_NOT_FOUND', 'Report price current was not found'); 
         }
         reportPriceCurrent.reportTypeId = updateReportPriceCurrentDTO.reportTypeId;
         reportPriceCurrent.reportPriceCurrentName = updateReportPriceCurrentDTO.reportPriceCurrentName;
@@ -87,7 +87,8 @@ export class ReportPriceCurrentService {
         reportPriceCurrent.reportPriceCurrentUpdateDate = new Date();
         
         await this.reportPriceCurrentRepository.save(reportPriceCurrent);
-        let reportPriceCurrentDTO = await this.getReportPriceCurrent(reportPriceCurrent.reportPriceCurrentId);
+        
+        let reportPriceCurrentDTO = await this.getReportPriceCurrentById(reportPriceCurrent.reportPriceCurrentId);
 
         return reportPriceCurrentDTO;
     

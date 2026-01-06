@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateReportPriceChangeYearlyDTO, UpdateReportPriceChangeYearlyDTO } from './dto/report.price.change.yearly.dto';
 import { ReportPriceChangeYearlyService } from './report.price.change.yearly.service';
 
@@ -9,6 +9,10 @@ export class ReportPriceChangeYearlyController {
         private reportPriceChangeYearlyService: ReportPriceChangeYearlyService,
     ) { }
     
+    @Get('/id/:reportPriceChangeYearlyId')
+    async getReportPriceChangeYearlyById(@Param('reportPriceChangeYearlyId') reportPriceChangeYearlyId: string) {
+        return await this.reportPriceChangeYearlyService.getReportPriceChangeYearlyById(reportPriceChangeYearlyId);
+    }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())

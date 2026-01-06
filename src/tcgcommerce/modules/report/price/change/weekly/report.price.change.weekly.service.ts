@@ -14,7 +14,7 @@ export class ReportPriceChangeWeeklyService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeWeekly(reportPriceChangeWeeklyId: string) {
+    async getReportPriceChangeWeeklyById(reportPriceChangeWeeklyId: string) {
         let reportPriceChangeWeekly = await this.reportPriceChangeWeeklyRepository.findOne({ 
             where: { 
                 reportPriceChangeWeeklyId: reportPriceChangeWeeklyId
@@ -60,7 +60,7 @@ export class ReportPriceChangeWeeklyService {
         reportPriceChangeWeekly.reportPriceChangeWeeklyDefaultSettings = JSON.stringify(reportPriceChangeWeekly.reportPriceChangeWeeklyDefaultSettings);
         reportPriceChangeWeekly = await this.reportPriceChangeWeeklyRepository.save(reportPriceChangeWeekly);
 
-        let reportPriceChangeWeeklyDTO = await this.getReportPriceChangeWeekly(reportPriceChangeWeekly.reportPriceChangeWeeklyId);
+        let reportPriceChangeWeeklyDTO = await this.getReportPriceChangeWeeklyById(reportPriceChangeWeekly.reportPriceChangeWeeklyId);
         
         return reportPriceChangeWeeklyDTO;
         
@@ -86,7 +86,7 @@ export class ReportPriceChangeWeeklyService {
         reportPriceChangeWeekly.reportPriceChangeWeeklyUpdateDate = new Date();
         
         await this.reportPriceChangeWeeklyRepository.save(reportPriceChangeWeekly);
-        let reportPriceChangeWeeklyDTO = await this.getReportPriceChangeWeekly(reportPriceChangeWeekly.reportPriceChangeWeeklyId);
+        let reportPriceChangeWeeklyDTO = await this.getReportPriceChangeWeeklyById(reportPriceChangeWeekly.reportPriceChangeWeeklyId);
 
         return reportPriceChangeWeeklyDTO;
     
