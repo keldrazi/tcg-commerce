@@ -186,7 +186,7 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
-    async verifyCommerceUserPassword(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: number, commerceUserPassword: string) {
+    async verifyCommerceUserPassword(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: string, commerceUserPassword: string) {
         let isVerified = await this.commerceUserVerificationService.verifyCommerceUserVerification(commerceAccountId, commerceUserId, commerceUserVerificationCode, 'COMMERCE_USER_PASSWORD_RESET');
 
         if(!isVerified) {

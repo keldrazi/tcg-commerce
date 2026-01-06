@@ -13,11 +13,11 @@ export class CommerceUserVerification {
     commerceUserVerificationType: string;
     @Column({unique: true})
     @MinLength(6)
-    commerceUserVerificationCode: number;
+    commerceUserVerificationCode: string;
     @Column()
     commerceUserVerificationCodeExpires: Date;
-    @Column({type: 'boolean', default: false})
-    commerceUserVerificationCodeIsUsed: boolean;
+    @Column({type: 'boolean', default: true})
+    commerceUserVerificationCodeIsValid: boolean;
     @CreateDateColumn()
     commerceUserVerificationCreateDate: Date;
     @UpdateDateColumn()

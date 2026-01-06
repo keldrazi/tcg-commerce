@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CommerceUserVerification } from 'src/typeorm/entities/tcgcommerce/modules/commerce/user/verification/commerce.user.verification.entity';
 import { CommerceUserVerificationDTO } from './dto/commerce.user.verification.dto';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
+import { create } from 'axios';
 
 
 @Injectable()
@@ -16,7 +17,7 @@ export class CommerceUserVerificationService {
 
     async createCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationType: string) {
 
-        let commerceUserVerificationCode = Math.floor(100000 + Math.random() * 900000);
+        let commerceUserVerificationCode = await this.createCommerceUserVerificationCode();
         let commerceUserVerificationCodeExpires = new Date();
         commerceUserVerificationCodeExpires.setMinutes(commerceUserVerificationCodeExpires.getMinutes() + 15);
 
@@ -69,6 +70,21 @@ export class CommerceUserVerificationService {
         await this.commerceUserVerificationRepository.save(commerceUserVerification);
 
         return true;
+    }
+
+    async createCommerceUserVerificationCode() {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let verificationCodePartA = '';
+        let verificationCodePartB = '';
+        
+        for (let i = 0; i < 3; i++) {
+            verificationCodePartA += characters.charAt(Math.floor(Math.random() * characters.length));
+            verificationCodePartB += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        
+        let commerceUserVerificationCode = `${verificationCodePartA} ${verificationCodePartB}`;
+        
+        return commerceUserVerificationCode;
     }
 
 }

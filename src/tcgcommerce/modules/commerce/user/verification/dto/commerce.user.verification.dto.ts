@@ -3,9 +3,9 @@ export class CommerceUserVerificationDTO {
     commerceAccountId: string;
     commerceUserId: string;
     commerceUserVerificationType: string;
-    commerceUserVerificationCode: number;
+    commerceUserVerificationCode: string;
     commerceUserVerificationCodeExpires: Date;
-    commerceUserVerificationCodeIsUsed: boolean;
+    commerceUserVerificationCodeIsValid: boolean;
     commerceUserVerificationCreateDate: Date;
     commerceUserVerificationUpdateDate: Date;
 }
