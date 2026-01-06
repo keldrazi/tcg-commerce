@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CustomerAccountProfileService } from './customer.account.profile.service';
-import { CustomerAccountProfileController } from './customer.account.profile.controller';
+import { CustomerAccountUserService } from './customer.account.user.service';
+import { CustomerAccountUserController } from './customer.user.controller';
 import { CustomerAccountUser } from 'src/typeorm/entities/tcgcommerce/modules/customer/account/user/customer.account.user.entity';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 import { CustomerAccountVerificationModule } from 'src/tcgcommerce/modules/customer/account/verification/customer.account.verification.module';
@@ -12,8 +12,8 @@ import { CustomerAccountVerificationModule } from 'src/tcgcommerce/modules/custo
         ErrorMessageModule,
         CustomerAccountVerificationModule
     ],
-    controllers: [CustomerAccountProfileController],
-    providers: [CustomerAccountProfileService],
-    exports: [CustomerAccountProfileService]
+    controllers: [CustomerAccountUserController],
+    providers: [CustomerAccountUserService],
+    exports: [CustomerAccountUserService]
 })
-export class CustomerAccountProfileModule {}
+export class CustomerAccountUserModule {}

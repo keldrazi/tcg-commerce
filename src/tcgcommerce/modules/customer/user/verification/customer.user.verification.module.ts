@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CustomerAccountVerificationService } from './customer.account.verification.service';
+import { CustomerAccountVerificationService } from './customer.user.verification.service';
 import { CustomerAccountVerification } from 'src/typeorm/entities/tcgcommerce/modules/customer/account/verification/customer.account.verification.entity';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 

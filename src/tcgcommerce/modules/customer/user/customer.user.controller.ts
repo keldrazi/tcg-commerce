@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CustomerAccountUserService } from './customer.account.user.service';
-import { CreateCustomerAccountUserDTO, UpdateCustomerAccountUserDTO } from './dto/customer.account.user.dto';
+import { CreateCustomerAccountUserDTO, UpdateCustomerAccountUserDTO } from './dto/customer.user.dto';
 
 
 

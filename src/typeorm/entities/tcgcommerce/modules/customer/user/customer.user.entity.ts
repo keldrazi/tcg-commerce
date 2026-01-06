@@ -2,26 +2,26 @@ import { Exclude } from 'class-transformer';
 import { IsEmail, IsString, MinLength } from 'class-validator';
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm'
 
-@Entity('customerAccountUser')
-export class CustomerAccountUser {
+@Entity('customerUser')
+export class CustomerUser {
     @PrimaryGeneratedColumn('uuid')
-    customerAccountUserId: string;
+    customerUserId: string;
     @Column()
     commerceAccountId: string;
     @Column({unique: true})
     @IsEmail()
-    customerAccountUserEmail: string;
+    customerUserEmail: string;
     @Column()
     @Exclude()
     @IsString()
     @MinLength(8)
-    customerAccountUserPassword: string;
+    customerUserPassword: string;
     @Column({type: 'boolean', default: false})
-    customerAccountUserIsVerified: boolean;
+    customerUserIsVerified: boolean;
     @Column({type: 'boolean', default: true})
-    customerAccountUserIsActive: boolean;
+    customerUserIsActive: boolean;
     @CreateDateColumn()
-    customerAccountUserCreateDate: Date;
+    customerUserCreateDate: Date;
     @UpdateDateColumn()
-    customerAccountUserUpdateDate: Date; 
+    customerUserUpdateDate: Date; 
 } 
