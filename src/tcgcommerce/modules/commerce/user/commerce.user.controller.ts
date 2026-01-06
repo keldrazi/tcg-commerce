@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CommerceUserService } from './commerce.user.service';
 import { CreateCommerceUserDTO, UpdateCommerceUserDTO } from './dto/commerce.user.dto';
 
@@ -9,12 +9,12 @@ export class CommerceUserController {
         private commerceUserService: CommerceUserService,
     ) { }
     
-    @Get('/:commerceUserId')
+    @Get('/id/:commerceUserId')
     async getCommerceUser(@Param('commerceUserId') commerceUserId: string) {
-        return await this.commerceUserService.getCommerceUser(commerceUserId);
+        return await this.commerceUserService.getCommerceUserById(commerceUserId);
     }
 
-    @Get('/commerceAccount/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getCommerceUsersByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.commerceUserService.getCommerceUsersByCommerceAccountId(commerceAccountId);
     }
