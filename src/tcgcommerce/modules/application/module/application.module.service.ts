@@ -13,7 +13,7 @@ export class ApplicationModuleService {
         private errorMessageService: ErrorMessageService
     ) { }
 
-    async getApplicationModule(applicationModuleId: string) {
+    async getApplicationModuleById(applicationModuleId: string) {
         let applicationModule = await this.applicationModuleRepository.findOne({ 
             where: { 
                 applicationModuleId : applicationModuleId
@@ -67,7 +67,7 @@ export class ApplicationModuleService {
         applicationModule = this.applicationModuleRepository.create({ ...createApplicationModuleDTO });
         applicationModule = await this.applicationModuleRepository.save(applicationModule);
 
-        let applicationModuleDTO = await this.getApplicationModule(applicationModule.applicationModuleId);
+        let applicationModuleDTO = await this.getApplicationModuleById(applicationModule.applicationModuleId);
 
         return applicationModuleDTO;
     }
@@ -88,7 +88,7 @@ export class ApplicationModuleService {
         applicationModule.applicationModuleIsActive = updateApplicationModuleDTO.applicationModuleIsActive;
 
         await this.applicationModuleRepository.save(applicationModule);     
-        let applicationModuleDTO = await this.getApplicationModule(applicationModule.applicationModuleId);
+        let applicationModuleDTO = await this.getApplicationModuleById(applicationModule.applicationModuleId);
 
         return applicationModuleDTO;
     }

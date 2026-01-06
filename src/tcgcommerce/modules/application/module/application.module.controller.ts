@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApplicationModuleService } from './application.module.service';
 import { CreateApplicationModuleDTO, UpdateApplicationModuleDTO } from './dto/application.module.dto';
 
@@ -14,9 +14,9 @@ export class ApplicationModuleController {
         return await this.applicationModuleService.getApplicationModules();
     }
 
-    @Get('/:moduleId')
-    async getApplicationModule(@Param('applicationModuleId') applicatioModuleId: string) {
-        return await this.applicationModuleService.getApplicationModule(applicatioModuleId);
+    @Get('id/:applicationModuleId')
+    async getApplicationModuleById(@Param('applicationModuleId') applicationModuleId: string) {
+        return await this.applicationModuleService.getApplicationModuleById(applicationModuleId);
     }
 
     @Post('/create')
