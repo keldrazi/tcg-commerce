@@ -17,7 +17,7 @@ export class ReportModuleController {
     }
 
     @Get('id/:reportModuleId')
-    async getReportModule(@Param('reportModuleId') reportModuleId: string) {
+    async getReportModuleById(@Param('reportModuleId') reportModuleId: string) {
         return await this.reportModuleService.getReportModuleById(reportModuleId);
     }
 

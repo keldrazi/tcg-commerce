@@ -17,8 +17,13 @@ export class CommerceModuleController {
     }
 
     @Get('id/:commerceModuleId')
-    async getCommerceModule(@Param('commerceModuleId') commerceModuleId: string) {
+    async getCommerceModuleById(@Param('commerceModuleId') commerceModuleId: string) {
         return await this.commerceModuleService.getCommerceModuleById(commerceModuleId);
+    }
+
+    @Get('caid/:commerceAccountId')
+    async getCommerceModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
+        return await this.commerceModuleService.getCommerceModuleByCommerceAccountId(commerceAccountId);
     }
 
     @Post('/create')

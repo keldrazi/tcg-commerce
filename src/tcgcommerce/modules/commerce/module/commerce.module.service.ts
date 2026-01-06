@@ -21,7 +21,24 @@ export class CommerceModuleService {
         });
         
         if (commerceModule == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found for commerceModuleId: ' + commerceModuleId);
+            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found');
+        }
+
+        let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
+
+        return commerceModuleDTO;
+        
+    }
+
+    async getCommerceModuleByCommerceAccountId(commerceAccountId: string) {
+        let commerceModule = await this.commerceModuleRepository.findOne({ 
+            where: { 
+                commerceAccountId : commerceAccountId
+            } 
+        });
+        
+        if (commerceModule == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found');
         }
 
         let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
