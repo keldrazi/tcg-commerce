@@ -27,8 +27,13 @@ export class BuylistQuicklistProductCardItemController {
     }
 
     @Delete('/delete/:buylistQuicklistProductCardItemId')
-    async deleteBuylistQuicklistProductCardItem(@Param('buylistQuicklistProductCardItemId') buylistQuicklistProductCardItemId: string) {
-        return await this.buylistQuicklistProductCardItemService.deleteBuylistQuicklistProductCardItem(buylistQuicklistProductCardItemId);
+    async deleteBuylistQuicklistProductCardItemById(@Param('buylistQuicklistProductCardItemId') buylistQuicklistProductCardItemId: string) {
+        return await this.buylistQuicklistProductCardItemService.deleteBuylistQuicklistProductCardItemById(buylistQuicklistProductCardItemId);
+    }
+
+    @Delete('/delete/blqlpcid/:buylistQuicklistProductCardId')
+    async deleteBuylistQuicklistProductCardItemsByBuylistQuicklistProductCardId(@Param('buylistQuicklistProductCardId') buylistQuicklistProductCardId: string) {
+        return await this.buylistQuicklistProductCardItemService.deleteBuylistQuicklistProductCardItemsByBuylistQuicklistProductCardId(buylistQuicklistProductCardId);
     }
 
 }

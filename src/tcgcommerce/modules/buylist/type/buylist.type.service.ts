@@ -75,8 +75,8 @@ export class BuylistTypeService {
             } 
         });
 
-        if (buylistType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
+        if (buylistType != null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_ALREADY_EXISTS', 'Buylist type already exists');
         }
         
         buylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });

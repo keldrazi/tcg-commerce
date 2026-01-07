@@ -6,17 +6,27 @@ export class BuylistProductCardDTO {
     commerceUserId: string;
     customerAccountUserId: string;
     buylistLocationId: string;
+    buylistLocationName: string;
     buylistTypeId: string;
+    buylistTypeName: string;
+    buylistStatusId: string
+    buylistStatusName: string;
     buylistPaymentTypeId: string;
+    buylistPaymentTypeName: string;
     buylistPaymentServiceId: string;
+    buylistPaymentServiceName: string;
     productVendorId: string;
+    productVendorName: string;
+    productVendorCode: string;
     productLineId: string;
+    productLineName: string;
+    productLineCode: string;    
     productTypeId: string;
+    productTypeName: string;
+    productTypeCode: string;
     productLanguageId: string;
     productLanguageCode: string;
-    buylistProductCardStatus: string;   
     buylistProductCardCode: string;
-    buylistProductCardDateTime: Date;
     buylistProductCardTotalCount: number;
     buylistProductCardTotalQtyCount: number;
     buylistProductCardTotalPrice: number;   
@@ -36,19 +46,45 @@ export class CreateBuylistProductCardDTO {
     @IsString()
     buylistLocationId: string;
     @IsString()
+    buylistLocationName: string;
+    @IsString()
     buyListTypeId: string;
     @IsString()
-    buylistPaymentTypeId: string;
+    buylistTypeName: string
+    @IsString()
+    buylistStatusId: string;
+    @IsString()
+    buylistStatusName: string;
+    @IsString()
+    buylistPaymentTypeId: string
+    @IsString()
+    buylistPaymentTypeName: string;
     @IsString()
     buylistPaymentServiceId: string;
     @IsString()
+    buylistPaymentServiceName: string
+    @IsString()
     productVendorId: string;
     @IsString()
-    productLineId: string;
+    productVendorName: string;
+    @IsString()
+    productVendorCode: string;
+    @IsString()
+    productLineId: string
+    @IsString()
+    productLineName: string;
+    @IsString()
+    productLineCode: string;
     @IsString()
     productTypeId: string;
     @IsString()
+    productTypeName: string;
+    @IsString()
+    productTypeCode: string;
+    @IsString()
     productLanguageId: string;
+    @IsString()
+    productLanguageCode: string;
     
 }
 
@@ -60,9 +96,21 @@ export class UpdateBuylistProductCardDTO {
     @IsString()
     buylistLocationId: string;
     @IsString()
+    buylistLocationName: string;
+    @IsString()
     buylistTypeId: string;
+    @IsString()
+    buylistTypeName: string;
+    @IsString()
+    buylistStatusId: string;
+    @IsString()
+    buylistStatusName: string
     @IsString()
     buylistPaymentTypeId: string;
     @IsString()
+    buylistPaymentTypeName: string
+    @IsString()
     buylistPaymentServiceId: string;
+    @IsString()
+    buylistPaymentServiceName: string
 }

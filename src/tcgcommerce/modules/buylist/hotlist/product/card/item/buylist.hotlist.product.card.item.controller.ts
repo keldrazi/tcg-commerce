@@ -33,8 +33,13 @@ export class BuylistHotlistProductCardItemController {
     }
 
     @Delete('/delete/:buylistHotlistProductCardItemId')
-    async deleteBuylistHotlistProductCardItem(@Param('buylistHotlistProductCardItemId') buylistHotlistProductCardItemId: string) {
-        return await this.buylistHotlistProductCardItemService.deleteBuylistHotlistProductCardItem(buylistHotlistProductCardItemId);
+    async deleteBuylistHotlistProductCardItemById(@Param('buylistHotlistProductCardItemId') buylistHotlistProductCardItemId: string) {
+        return await this.buylistHotlistProductCardItemService.deleteBuylistHotlistProductCardItemById(buylistHotlistProductCardItemId);
+    }
+
+    @Delete('/delete/blhlpcid/:buylistHotlistProductCardId')
+    async deleteBuylistHotlistProductCardItemsByBuylistHotlistProductCardId(@Param('buylistHotlistProductCardId') buylistHotlistProductCardId: string) {
+        return await this.buylistHotlistProductCardItemService.deleteBuylistHotlistProductCardItemsByBuylistHotlistProductCardId(buylistHotlistProductCardId);
     }
 
 }

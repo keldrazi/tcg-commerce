@@ -13,36 +13,52 @@ export class BuylistProductCard {
     @Column()
     buylistLocationId: string;
     @Column()
+    buylistLocationName: string
+    @Column()
     buylistTypeId: string;
+    @Column()
+    buylistTypeName: string;
+    @Column()
+    buylistStatusId: string;
+    @Column()
+    buylistStatusName: string
     @Column()
     buylistPaymentTypeId: string;
     @Column()
+    buylistPaymentTypeName: string
+    @Column()
     buylistPaymentServiceId: string;
+    @Column()
+    buylistPaymentServiceName: string
     @Column()
     productVendorId: string;
     @Column()
+    productVendorName: string;
+    @Column()
+    productVendorCode: string;
+    @Column()
     productLineId: string;
     @Column()
+    productLineName: string;
+    @Column()
+    productLineCode: string;
+    @Column()
     productTypeId: string;
+    @Column()
+    productTypeName: string;
+    @Column()
+    productTypeCode: string;
     @Column()
     productLanguageId: string;
     @Column()
     productLanguageCode: string;
     @Column()
-    buylistProductCardStatus: string;
-    @Column()
     buylistProductCardCode: string;
-    @Column()
-    buylistProductCardDateTime: Date;
-    @Column()
-    buylistProductCardNotes: string;
-    @Column('jsonb')
-    buylistProductCardDetails: string;
-    @Column()
+    @Column({ default: 0 })
     buylistProductCardTotalCount: number;
-    @Column()
+    @Column({ default: 0 })
     buylistProductCardTotalQtyCount: number;
-    @Column()
+    @Column({type: 'decimal', default: 0})
     buylistProductCardTotalPrice: number
     @CreateDateColumn()
     buylistProductCardCreateDate: Date;

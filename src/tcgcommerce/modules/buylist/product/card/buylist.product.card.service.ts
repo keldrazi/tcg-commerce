@@ -82,9 +82,15 @@ export class BuylistProductCardService {
 
         buylistProductCard.customerAccountUserId = updateBuylistProductCardDTO.customerAccountUserId;
         buylistProductCard.buylistLocationId = updateBuylistProductCardDTO.buylistLocationId;
+        buylistProductCard.buylistLocationName = updateBuylistProductCardDTO.buylistLocationName;
         buylistProductCard.buylistTypeId = updateBuylistProductCardDTO.buylistTypeId;
+        buylistProductCard.buylistTypeName = updateBuylistProductCardDTO.buylistTypeName;
+        buylistProductCard.buylistStatusId = updateBuylistProductCardDTO.buylistStatusId;
+        buylistProductCard.buylistStatusName = updateBuylistProductCardDTO.buylistStatusName;
         buylistProductCard.buylistPaymentTypeId = updateBuylistProductCardDTO.buylistPaymentTypeId;
+        buylistProductCard.buylistPaymentTypeName = updateBuylistProductCardDTO.buylistPaymentTypeName;
         buylistProductCard.buylistPaymentServiceId = updateBuylistProductCardDTO.buylistPaymentServiceId;
+        buylistProductCard.buylistPaymentServiceName = updateBuylistProductCardDTO.buylistPaymentServiceName;
         buylistProductCard.buylistProductCardUpdateDate = new Date();
         
         await this.buylistProductCardRepository.save(buylistProductCard);

@@ -105,7 +105,7 @@ export class BuylistHotlistProductCardItemService {
     
     }
 
-    async deleteBuylistHotlistProductCardItem(buylistHotlistProductCardItemId: string) {
+    async deleteBuylistHotlistProductCardItemById(buylistHotlistProductCardItemId: string) {
         let buylistHotlistProductCardItem = await this.buylistHotlistProductCardItemRepository.findOne({ 
             where: { 
                 buylistHotlistProductCardItemId: buylistHotlistProductCardItemId 
@@ -120,5 +120,22 @@ export class BuylistHotlistProductCardItemService {
 
         return true;
     }
+
+    async deleteBuylistHotlistProductCardItemsByBuylistHotlistProductCardId(buylistHotlistProductCardId: string) {
+        let buylistHotlistProductCardItems = await this.buylistHotlistProductCardItemRepository.find({ 
+            where: { 
+                buylistHotlistProductCardId: buylistHotlistProductCardId 
+            } 
+        });
+
+        if (buylistHotlistProductCardItems == null || buylistHotlistProductCardItems.length == 0) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_HOTLIST_PRODUCT_CARD_ITEMS_NOT_FOUND', 'Buylist hotlist product card items were not found');
+        }
+
+        await this.buylistHotlistProductCardItemRepository.delete({ buylistHotlistProductCardId: buylistHotlistProductCardId });
+
+        return true;
+    }
+
 
 }
