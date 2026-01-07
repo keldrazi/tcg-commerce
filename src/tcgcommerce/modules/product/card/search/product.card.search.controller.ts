@@ -9,7 +9,7 @@ export class ProductCardSearchController {
     ) { }
     
     
-    @Get('/name/:productLineCode/:query')
+    @Get('/name/plc/:productLineCode/query:query')
     async searchProductCardsByName(@Param('productLineCode') productLineCode: string, @Param('query') query: string) {
         return await this.productCardSearchService.searchProductCardsByName(productLineCode, query);
     }

@@ -21,7 +21,7 @@ export class ProductCardPrintingService {
         private errorMessageService: ErrorMessageService
     ) { }
 
-    async getProductCardPrinting(productCardPrintingId: string) {
+    async getProductCardPrintingById(productCardPrintingId: string) {
         let productCardPrinting = await this.productCardPrintingRepository.findOne({
             where: { 
                 productCardPrintingId: productCardPrintingId 
@@ -75,7 +75,7 @@ export class ProductCardPrintingService {
         });
         
         if(productCardPrintings == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTINGS_NOT_FOUND', 'Product card printings were not found');
+            return [];
         }
         
         let productCardPrintingDTOs: ProductCardPrintingDTO[] = [];
@@ -127,7 +127,7 @@ export class ProductCardPrintingService {
         });
         
         if(productCardPrintings == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTINGS_NOT_FOUND', 'No product card printings were found.');
+            return [];
         }
         
         let productCardPrintingDTOs: ProductCardPrintingDTO[] = [];
@@ -142,10 +142,10 @@ export class ProductCardPrintingService {
         return productCardPrintingDTOs;
     }
 
-    async getProductCardPrintingByNameAndProductLineId(name: string, productLineId: string) {
+    async getProductCardPrintingByNameAndProductLineId(productCardPrintingName: string, productLineId: string) {
         let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
             where: { 
-                productCardPrintingName: name,
+                productCardPrintingName: productCardPrintingName,
                 productLineId: productLineId 
             } 
         });
@@ -171,15 +171,14 @@ export class ProductCardPrintingService {
             } 
         });
 
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if(productCardPrinting != null) {
             return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_CARD_PRINTING', 'A product card printing already exists.');
         }
         
-        let newProductCardPrinting = this.productCardPrintingRepository.create({ ...createProductCardPrintingDTO });
-        newProductCardPrinting = await this.productCardPrintingRepository.save(newProductCardPrinting);
+        productCardPrinting = this.productCardPrintingRepository.create({ ...createProductCardPrintingDTO });
+        productCardPrinting = await this.productCardPrintingRepository.save(productCardPrinting);
 
-        let productCardPrintingDTO = this.getProductCardPrinting(newProductCardPrinting.productCardPrintingId);
+        let productCardPrintingDTO = this.getProductCardPrintingById(productCardPrinting.productCardPrintingId);
         
         return productCardPrintingDTO;
         
@@ -187,24 +186,24 @@ export class ProductCardPrintingService {
 
     async updateProductCardPrinting(updateProductCardPrintingDTO: UpdateProductCardPrintingDTO) {
                         
-        let existingProductCardPrinting = await this.productCardPrintingRepository.findOne({ 
+        let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
             where: { 
                 productCardPrintingId: updateProductCardPrintingDTO.productCardPrintingId
             } 
         });
 
-        if(!existingProductCardPrinting) {
+        if(!productCardPrinting) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTING_NOT_FOUND', 'Product card printing was not found');
         }
 
-        existingProductCardPrinting.productCardPrintingName = updateProductCardPrintingDTO.productCardPrintingName;
-        existingProductCardPrinting.productCardPrintingDisplayOrder = updateProductCardPrintingDTO.productCardPrintingDisplayOrder;
-        existingProductCardPrinting.productCardPrintingIsActive = updateProductCardPrintingDTO.productCardPrintingIsActive;
-        existingProductCardPrinting.productCardPrintingUpdateDate = new Date();
+        productCardPrinting.productCardPrintingName = updateProductCardPrintingDTO.productCardPrintingName;
+        productCardPrinting.productCardPrintingDisplayOrder = updateProductCardPrintingDTO.productCardPrintingDisplayOrder;
+        productCardPrinting.productCardPrintingIsActive = updateProductCardPrintingDTO.productCardPrintingIsActive;
+        productCardPrinting.productCardPrintingUpdateDate = new Date();
         
-        await this.productCardPrintingRepository.save(existingProductCardPrinting);
+        await this.productCardPrintingRepository.save(productCardPrinting);
 
-        let productCardPrintingDTO = this.getProductCardPrinting(existingProductCardPrinting.productCardPrintingId);
+        let productCardPrintingDTO = this.getProductCardPrintingById(productCardPrinting.productCardPrintingId);
 
         return productCardPrintingDTO;
     

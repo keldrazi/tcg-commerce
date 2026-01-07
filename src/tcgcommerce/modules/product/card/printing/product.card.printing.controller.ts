@@ -15,7 +15,7 @@ export class ProductCardPrintingController {
         return await this.productCardPrintingService.getProductCardPrintings();
     }
 
-    @Get('/linecode/:productLineCode')
+    @Get('/plc/:productLineCode')
     async getProductCardPrintingsByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardPrintingService.getProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
     }
@@ -25,13 +25,13 @@ export class ProductCardPrintingController {
         return await this.productCardPrintingService.createProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
     }  
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductCardPrinting(@Body() createProductCardPrintingDTO: CreateProductCardPrintingDTO) {
         return await this.productCardPrintingService.createProductCardPrinting(createProductCardPrintingDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductCardPrinting(@Body() updateProductCardPrintingDTO: UpdateProductCardPrintingDTO) {
         return await this.productCardPrintingService.updateProductCardPrinting(updateProductCardPrintingDTO);

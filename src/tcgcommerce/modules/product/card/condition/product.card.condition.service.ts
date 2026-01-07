@@ -21,7 +21,7 @@ export class ProductCardConditionService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductCardCondition(productCardConditionId: string) {
+    async getProductCardConditionById(productCardConditionId: string) {
         let productCardCondition = await this.productCardConditionRepository.findOne({
             where: { 
                 productCardConditionId: productCardConditionId 
@@ -82,7 +82,7 @@ export class ProductCardConditionService {
         });
         
         if(productCardConditions == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CONDITIONS_NOT_FOUND', 'Product card conditions were not found');
+            return [];
         }
         
         let productCardConditionDTOs: ProductCardConditionDTO[] = [];
@@ -108,7 +108,7 @@ export class ProductCardConditionService {
         });
         
         if(productCardConditions == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CONDITIONS_NOT_FOUND', 'Product card conditions were not found');
+            return [];
         }
         
         let productCardConditionDTOs: ProductCardConditionDTO[] = [];
@@ -123,10 +123,10 @@ export class ProductCardConditionService {
         return productCardConditionDTOs;
     }
 
-    async getProductCardConditionByNameAndProductLineId(name: string, productLineId: string) {
+    async getProductCardConditionByNameAndProductLineId(productCardConditionName: string, productLineId: string) {
         let productCardCondition = await this.productCardConditionRepository.findOne({ 
             where: { 
-                productCardConditionName: name,
+                productCardConditionName: productCardConditionName,
                 productLineId: productLineId 
             } 
         });
@@ -141,10 +141,10 @@ export class ProductCardConditionService {
         
     }
 
-    async getProductCardConditionByCodeAndProductLineId(code: string, productLineId: string) {
+    async getProductCardConditionByCodeAndProductLineId(productCardConditionCode: string, productLineId: string) {
         let productCardCondition = await this.productCardConditionRepository.findOne({ 
             where: { 
-                productCardConditionCode: code,
+                productCardConditionCode: productCardConditionCode,
                 productLineId: productLineId 
             } 
         });
@@ -174,10 +174,10 @@ export class ProductCardConditionService {
             return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_CARD_CONDITION', 'A product card condition with the same name already exists');
         }
         
-        let newProductCardCondition = this.productCardConditionRepository.create({ ...createProductCardConditionDTO });
-        newProductCardCondition = await this.productCardConditionRepository.save(newProductCardCondition);
+        productCardCondition = this.productCardConditionRepository.create({ ...createProductCardConditionDTO });
+        productCardCondition = await this.productCardConditionRepository.save(productCardCondition);
 
-        let productCardConditionDTO = this.getProductCardCondition(newProductCardCondition.productCardConditionId);
+        let productCardConditionDTO = this.getProductCardConditionById(productCardCondition.productCardConditionId);
         
         return productCardConditionDTO;
         
@@ -185,26 +185,26 @@ export class ProductCardConditionService {
 
     async updateProductCardCondition(updateProductCardConditionDTO: UpdateProductCardConditionDTO) {
                         
-        let existingProductCardCondition = await this.productCardConditionRepository.findOne({ 
+        let productCardCondition = await this.productCardConditionRepository.findOne({ 
             where: { 
                 productCardConditionId: updateProductCardConditionDTO.productCardConditionId
             } 
         });
 
-        if(!existingProductCardCondition) {
+        if(!productCardCondition) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CONDITION_NOT_FOUND', 'Product card condition was not found');
         }
 
-        existingProductCardCondition.productCardConditionName = updateProductCardConditionDTO.productCardConditionName;
-        existingProductCardCondition.productCardConditionCode = updateProductCardConditionDTO.productCardConditionCode;
-        existingProductCardCondition.productCardConditionPriceFactor = updateProductCardConditionDTO.productCardConditionPriceFactor;
-        existingProductCardCondition.productCardConditionDisplayOrder = updateProductCardConditionDTO.productCardConditionDisplayOrder;
-        existingProductCardCondition.productCardConditionIsActive = updateProductCardConditionDTO.productCardConditionIsActive;
-        existingProductCardCondition.productCardConditionUpdateDate = new Date();
+        productCardCondition.productCardConditionName = updateProductCardConditionDTO.productCardConditionName;
+        productCardCondition.productCardConditionCode = updateProductCardConditionDTO.productCardConditionCode;
+        productCardCondition.productCardConditionPriceFactor = updateProductCardConditionDTO.productCardConditionPriceFactor;
+        productCardCondition.productCardConditionDisplayOrder = updateProductCardConditionDTO.productCardConditionDisplayOrder;
+        productCardCondition.productCardConditionIsActive = updateProductCardConditionDTO.productCardConditionIsActive;
+        productCardCondition.productCardConditionUpdateDate = new Date();
         
-        await this.productCardConditionRepository.save(existingProductCardCondition);
+        await this.productCardConditionRepository.save(productCardCondition);
 
-        let productCardConditionDTO = this.getProductCardCondition(existingProductCardCondition.productCardConditionId);
+        let productCardConditionDTO = this.getProductCardConditionById(productCardCondition.productCardConditionId);
 
         return productCardConditionDTO;
     

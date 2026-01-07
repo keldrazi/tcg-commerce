@@ -21,7 +21,7 @@ export class ProductCardRarityService {
         private errorMessageService: ErrorMessageService
     ) { }
 
-    async getProductCardRarity(productCardRarityId: string) {
+    async getProductCardRarityById(productCardRarityId: string) {
         let productCardRarity = await this.productCardRarityRepository.findOne({
             where: { 
                 productCardRarityId: productCardRarityId 
@@ -91,10 +91,10 @@ export class ProductCardRarityService {
         return productCardRarityDTOs;
     }
 
-    async getProductCardRarityByNameAndProductLineId(name: string, productLineId: string) {
+    async getProductCardRarityByNameAndProductLineId(productCardRarityName: string, productLineId: string) {
         let productCardRarity = await this.productCardRarityRepository.findOne({ 
             where: { 
-                productCardRarityName: name,
+                productCardRarityName: productCardRarityName,
                 productLineId: productLineId 
             } 
         });
@@ -109,10 +109,10 @@ export class ProductCardRarityService {
         
     }
 
-    async getProductCardRarityByCodeAndProductLineId(code: string, productLineId: string) {
+    async getProductCardRarityByCodeAndProductLineId(productCardRarityCode: string, productLineId: string) {
         let productCardRarity = await this.productCardRarityRepository.findOne({ 
             where: { 
-                productCardRarityCode: code,
+                productCardRarityCode: productCardRarityCode,
                 productLineId: productLineId 
             } 
         });
@@ -142,10 +142,10 @@ export class ProductCardRarityService {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_RARITY_ALREADY_EXISTS', 'Product card rarity already exists');
         }
         
-        let newProductCardRarity = this.productCardRarityRepository.create({ ...createProductCardRarityDTO });
-        newProductCardRarity = await this.productCardRarityRepository.save(newProductCardRarity);
+        productCardRarity = this.productCardRarityRepository.create({ ...createProductCardRarityDTO });
+        productCardRarity = await this.productCardRarityRepository.save(productCardRarity);
 
-        let productCardRarityDTO = this.getProductCardRarity(newProductCardRarity.productCardRarityId);
+        let productCardRarityDTO = this.getProductCardRarityById(productCardRarity.productCardRarityId);
         
         return productCardRarityDTO;
         
@@ -153,25 +153,25 @@ export class ProductCardRarityService {
 
     async updateProductCardRarity(updateProductCardRarityDTO: UpdateProductCardRarityDTO) {
                         
-        let existingProductCardRarity = await this.productCardRarityRepository.findOne({ 
+        let productCardRarity = await this.productCardRarityRepository.findOne({ 
             where: { 
                 productCardRarityId: updateProductCardRarityDTO.productCardRarityId
             } 
         });
 
-        if (!existingProductCardRarity) {
+        if (!productCardRarity) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_RARITY_NOT_FOUND', 'Product card rarity was not found');
         }
 
-        existingProductCardRarity.productCardRarityName = updateProductCardRarityDTO.productCardRarityName;
-        existingProductCardRarity.productCardRarityCode = updateProductCardRarityDTO.productCardRarityCode;
-        existingProductCardRarity.productCardRarityIsActive = updateProductCardRarityDTO.productCardRarityIsActive;
-        existingProductCardRarity.productCardRarityUpdateDate = new Date();
+        productCardRarity.productCardRarityName = updateProductCardRarityDTO.productCardRarityName;
+        productCardRarity.productCardRarityCode = updateProductCardRarityDTO.productCardRarityCode;
+        productCardRarity.productCardRarityIsActive = updateProductCardRarityDTO.productCardRarityIsActive;
+        productCardRarity.productCardRarityUpdateDate = new Date();
         
-        await this.productCardRarityRepository.save(existingProductCardRarity);
+        await this.productCardRarityRepository.save(productCardRarity);
 
-        let productCardRarityDTO = this.getProductCardRarity(existingProductCardRarity.productCardRarityId);
-
+        let productCardRarityDTO = this.getProductCardRarityById(productCardRarity.productCardRarityId);
+        
         return productCardRarityDTO;
     
     }

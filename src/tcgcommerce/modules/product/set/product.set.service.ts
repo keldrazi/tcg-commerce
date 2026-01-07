@@ -84,7 +84,7 @@ export class ProductSetService {
         });
         
         if(productSets == null) {
-            [];    
+            return [];    
         }
         
         let productSetDTOs: ProductSetDTO[] = [];

@@ -85,7 +85,7 @@ export class ProductCardService {
         });
 
         if(productCards == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found');
+            return [];
         }
 
         let productCardDTOs: ProductCardDTO[] = [];
@@ -111,7 +111,7 @@ export class ProductCardService {
         });
 
         if(productCards == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found');
+            return [];
         }
 
         let productCardDTOs: ProductCardDTO[] = [];
@@ -145,7 +145,7 @@ export class ProductCardService {
         });
 
         if(productCards == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'Product cards were not found');
+            return [];
         }
 
         let productCardDTOs: ProductCardDTO[] = [];
@@ -193,40 +193,40 @@ export class ProductCardService {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_ALREADY_EXISTS', 'Product card already exists');
         }
 
-        let newProductCard = this.productCardRepository.create({ ...createProductCardDTO });
-        newProductCard = await this.productCardRepository.save(newProductCard);
+        productCard = this.productCardRepository.create({ ...createProductCardDTO });
+        productCard = await this.productCardRepository.save(productCard);
 
-        let productCardDTO = this.getProductCardByProductCardId(newProductCard.productCardId);
+        let productCardDTO = this.getProductCardByProductCardId(productCard.productCardId);
        
         return productCardDTO;
     } 
 
     async updateProductCard(updateProductCardDTO: UpdateProductCardDTO) {
                                 
-        let existingProductCard = await this.productCardRepository.findOne({ 
+        let productCard = await this.productCardRepository.findOne({ 
             where: { 
                 productCardId: updateProductCardDTO.productCardId
             } 
         });
 
-        if (!existingProductCard) {
+        if (!productCard) {
             return this.errorMessageService.createErrorMessage('PRODUCT_CARD_NOT_FOUND', 'Product card was not found');
         }
 
-        existingProductCard.productSetCode = updateProductCardDTO.productSetCode;
-        existingProductCard.productCardNumber = updateProductCardDTO.productCardNumber;
-        existingProductCard.productCardName = updateProductCardDTO.productCardName;
-        existingProductCard.productCardCleanName = updateProductCardDTO.productCardCleanName;
-        existingProductCard.productCardImage = updateProductCardDTO.productCardImage;
-        existingProductCard.productCardExtendedData = updateProductCardDTO.productCardExtendedData;
-        existingProductCard.productCardMetadata = updateProductCardDTO.productCardMetadata;
-        existingProductCard.productCardSKUs = updateProductCardDTO.productCardSKUs;
-        existingProductCard.productCardIsActive = updateProductCardDTO.productCardIsActive;
-        existingProductCard.productCardUpdateDate = new Date();
+        productCard.productSetCode = updateProductCardDTO.productSetCode;
+        productCard.productCardNumber = updateProductCardDTO.productCardNumber;
+        productCard.productCardName = updateProductCardDTO.productCardName;
+        productCard.productCardCleanName = updateProductCardDTO.productCardCleanName;
+        productCard.productCardImage = updateProductCardDTO.productCardImage;
+        productCard.productCardExtendedData = updateProductCardDTO.productCardExtendedData;
+        productCard.productCardMetadata = updateProductCardDTO.productCardMetadata;
+        productCard.productCardSKUs = updateProductCardDTO.productCardSKUs;
+        productCard.productCardIsActive = updateProductCardDTO.productCardIsActive;
+        productCard.productCardUpdateDate = new Date();
         
-        await this.productCardRepository.save(existingProductCard);
+        await this.productCardRepository.save(productCard);
 
-        let productCardDTO = this.getProductCardByProductCardId(existingProductCard.productCardId);
+        let productCardDTO = this.getProductCardByProductCardId(productCard.productCardId);
        
         return productCardDTO;
     } 

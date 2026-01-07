@@ -15,29 +15,25 @@ export class ProductCardConditionController {
         return await this.productCardConditionService.getProductCardConditions();
     }
 
-    @Get('/linecode/:productLineCode')
+    @Get('/plc/:productLineCode')
     async getProductCardConditionsByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardConditionService.getProductCardConditionsByProductLineCode(productLineCode.toUpperCase());
     }
 
-    @Get('/create/:productLineCode')
+    @Get('/create/plc/:productLineCode')
     async createProductCardConditionsByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardConditionService.createProductCardConditionsByProductLineCode(productLineCode.toUpperCase());
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductCardCondition(@Body() createProductCardConditionDTO: CreateProductCardConditionDTO) {
         return await this.productCardConditionService.createProductCardCondition(createProductCardConditionDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductCardCondition(@Body() updateProductCardConditionDTO: UpdateProductCardConditionDTO) {
         return await this.productCardConditionService.updateProductCardCondition(updateProductCardConditionDTO);
     }
-
-
-
-
 }

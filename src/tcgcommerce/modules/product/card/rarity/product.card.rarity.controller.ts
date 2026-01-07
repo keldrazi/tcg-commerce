@@ -15,23 +15,23 @@ export class ProductCardRarityController {
         return await this.productCardRarityService.getProductCardRarities();
     }
 
-    @Get('/lineCode/:productLineCode')
+    @Get('/plc/:productLineCode')
     async getProductCardRaritiesByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardRarityService.getProductCardRaritiesByProductLineCode(productLineCode);
     }
 
-    @Get('/create/:productLineCode')
+    @Get('/create/plc/:productLineCode')
     async createProductCardRaritiesByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardRarityService.createProductCardRaritiesByProductLineCode(productLineCode.toUpperCase());
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductCardRarity(@Body() createProductCardRarityDTO: CreateProductCardRarityDTO) {
         return await this.productCardRarityService.createProductCardRarity(createProductCardRarityDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductCardRarity(@Body() updateProductCardRarityDTO: UpdateProductCardRarityDTO) {
         return await this.productCardRarityService.updateProductCardRarity(updateProductCardRarityDTO);

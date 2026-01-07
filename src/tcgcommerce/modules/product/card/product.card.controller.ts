@@ -12,7 +12,7 @@ export class ProductCardController {
     ) { }
     
     
-    @Get('/create/:productLineCode')
+    @Get('/create/plc/:productLineCode')
     async createProductCards(@Param('productLineCode') productLineCode: string) {
         return await this.productCardService.createProductCardsByProductLineCode(productLineCode.toUpperCase());
     }

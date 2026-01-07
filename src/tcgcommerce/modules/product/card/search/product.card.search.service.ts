@@ -82,7 +82,7 @@ export class ProductCardSearchService implements OnModuleInit {
             return dto;
         });
 
-       productCardSearchResultDTO = {
+        productCardSearchResultDTO = {
             productCardSearchResultCount: productCardSearchDTOs.length,
             productCardSearchResults: productCardSearchDTOs
         }
@@ -143,7 +143,7 @@ export class ProductCardSearchService implements OnModuleInit {
             return dto;
         });
 
-       productCardSearchResultDTO = {
+        productCardSearchResultDTO = {
             productCardSearchResultCount: productCardSearchDTOs.length,
             productCardSearchResults: productCardSearchDTOs
         }
