@@ -21,7 +21,7 @@ export class ProductLanguageService {
         private errorMessageService: ErrorMessageService
     ) { }
 
-    async getProductLanguage(productLanguageId: string) {
+    async getProductLanguageById(productLanguageId: string) {
         let productLanguage = await this.productLanguageRepository.findOne({
             where: { 
                 productLanguageId: productLanguageId 
@@ -94,10 +94,10 @@ export class ProductLanguageService {
         return productLanguageDTOs;
     }
 
-    async getProductLanguageByNameAndProductLineId(name: string, productLineId: string) {
+    async getProductLanguageByNameAndProductLineId(productLanguageName: string, productLineId: string) {
         let productLanguage = await this.productLanguageRepository.findOne({ 
             where: { 
-                productLanguageName: name,
+                productLanguageName: productLanguageName,
                 productLineId: productLineId 
             } 
         });
@@ -171,10 +171,10 @@ export class ProductLanguageService {
             return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_LANGUAGE', 'Product language already exists');
         }
         
-        let newProductLanguage = this.productLanguageRepository.create({ ...createProductLanguageDTO });
-        newProductLanguage = await this.productLanguageRepository.save(newProductLanguage);
+        productLanguage = this.productLanguageRepository.create({ ...createProductLanguageDTO });
+        productLanguage = await this.productLanguageRepository.save(productLanguage);
 
-        let productLanguageDTO = this.getProductLanguage(newProductLanguage.productLanguageId);
+        let productLanguageDTO = this.getProductLanguageById(productLanguage.productLanguageId);
         
         return productLanguageDTO;
         
@@ -182,24 +182,24 @@ export class ProductLanguageService {
 
     async updateProductLanguage(updateProductLanguageDTO: UpdateProductLanguageDTO) {
                         
-        let existingProductLanguage = await this.productLanguageRepository.findOne({ 
+        let productLanguage = await this.productLanguageRepository.findOne({ 
             where: { 
                 productLanguageId: updateProductLanguageDTO.productLanguageId
             } 
         });
 
-        if (!existingProductLanguage) {
+        if (!productLanguage) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LANGUAGE_NOT_FOUND', 'Product language was not found');
         }
 
-        existingProductLanguage.productLanguageName = updateProductLanguageDTO.productLanguageName;
-        existingProductLanguage.productLanguageCode = updateProductLanguageDTO.productLanguageCode;
-        existingProductLanguage.productLanguageIsActive = updateProductLanguageDTO.productLanguageIsActive;
-        existingProductLanguage.productLanguageUpdateDate = new Date();
+        productLanguage.productLanguageName = updateProductLanguageDTO.productLanguageName;
+        productLanguage.productLanguageCode = updateProductLanguageDTO.productLanguageCode;
+        productLanguage.productLanguageIsActive = updateProductLanguageDTO.productLanguageIsActive;
+        productLanguage.productLanguageUpdateDate = new Date();
         
-        await this.productLanguageRepository.save(existingProductLanguage);
+        await this.productLanguageRepository.save(productLanguage);
 
-        let productLanguageDTO = this.getProductLanguage(existingProductLanguage.productLanguageId);
+        let productLanguageDTO = this.getProductLanguageById(productLanguage.productLanguageId);
 
         return productLanguageDTO;
     
@@ -207,7 +207,6 @@ export class ProductLanguageService {
 
     //BULK CREATE PRODUCT CARD LANGAUGES;
     async createProductLanguagesByProductLineCode(productLineCode: string) {
-        //TO DO: CREATE PRODUCT CARD LANGUAGES;
         if (productLineCode == PRODUCT_LINE_CODE.MAGIC_THE_GATHERING) {
             return this.createTCGdbMTGProductLanguages();
         } else {

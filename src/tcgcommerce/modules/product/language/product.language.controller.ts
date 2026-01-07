@@ -15,23 +15,23 @@ export class ProductLanguageController {
         return await this.productCardLanguageService.getProductLanguages();
     }
 
-    @Get('/lineCode/:productLineCode')
+    @Get('/plc/:productLineCode')
     async getProductLanguagesByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardLanguageService.getProductLanguagesByProductLineCode(productLineCode.toUpperCase());
     }
 
-    @Get('/create/:productLineCode')
+    @Get('/create/plc/:productLineCode')
     async createProductLanguagesByProductLineCode(@Param('productLineCode') productLineCode: string) {
         return await this.productCardLanguageService.createProductLanguagesByProductLineCode(productLineCode.toUpperCase());
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductLanguage(@Body() createProductLanguageDTO: CreateProductLanguageDTO) {
         return await this.productCardLanguageService.createProductLanguage(createProductLanguageDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductLanguage(@Body() updateProductLanguageDTO: UpdateProductLanguageDTO) {
         return await this.productCardLanguageService.updateProductLanguage(updateProductLanguageDTO);

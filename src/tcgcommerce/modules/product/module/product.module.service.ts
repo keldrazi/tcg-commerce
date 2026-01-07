@@ -3,15 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductModule } from 'src/typeorm/entities/tcgcommerce/modules/product/module/product.module.entity';
 import { CreateProductModuleDTO, UpdateProductModuleDTO, ProductModuleDTO } from './dto/product.module.dto';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductModuleService {
 
     constructor(
         @InjectRepository(ProductModule) private productModuleRepository: Repository<ProductModule>,
+        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductModule(productModuleId: string) {
+    async getProductModuleById(productModuleId: string) {
         let productModule = await this.productModuleRepository.findOne({ 
             where: { 
                 productModuleId : productModuleId
@@ -19,7 +21,7 @@ export class ProductModuleService {
         });
         
         if (productModule == null) {
-            return null;
+            return await this.errorMessageService.createErrorMessage('PRODUCT_MODULE_NOT_FOUND', 'Product module was not found');
         }
 
         let productModuleDTO: ProductModuleDTO = ({ ...productModule });
@@ -36,7 +38,7 @@ export class ProductModuleService {
         });
         
         if (!productModule) {
-            return null;
+            return await this.errorMessageService.createErrorMessage('PRODUCT_MODULE_NOT_FOUND', 'Product module was not found');
         }
 
         let productModuleDTO: ProductModuleDTO = ({ ...productModule });
@@ -68,35 +70,44 @@ export class ProductModuleService {
     }
 
     async createProductModule(createProductModuleDTO: CreateProductModuleDTO) {
-        let newProductModule = this.productModuleRepository.create({ ...createProductModuleDTO });
-        newProductModule = await this.productModuleRepository.save(newProductModule);
+        let productModule = await this.productModuleRepository.findOne({ 
+            where: { 
+                commerceAccountId : createProductModuleDTO.commerceAccountId
+            } 
+        });
 
-        let productModuleDTO = await this.getProductModule(newProductModule.productModuleId);
+        if (productModule != null) {
+            return await this.errorMessageService.createErrorMessage('PRODUCT_MODULE_ALREADY_EXISTS', 'Product module already exists');
+        }
+        
+        productModule = this.productModuleRepository.create({ ...createProductModuleDTO });
+        productModule = await this.productModuleRepository.save(productModule);
+
+        let productModuleDTO = await this.getProductModuleById(productModule.productModuleId);
 
         return productModuleDTO;
     }
 
     async updateProductModule(updateProductModuleDTO: UpdateProductModuleDTO) {
         
-        let existingProductModule = await this.productModuleRepository.findOne({ 
+        let productModule = await this.productModuleRepository.findOne({ 
             where: { 
                 productModuleId: updateProductModuleDTO.productModuleId
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!existingProductModule) {
-            return null; 
+        if (!productModule) {
+            return this.errorMessageService.createErrorMessage('PRODUCT_MODULE_NOT_FOUND', 'Product module was not found'); 
         }
 
-        existingProductModule.productModuleSettings = updateProductModuleDTO.productModuleSettings;
-        existingProductModule.productModuleRoles = updateProductModuleDTO.productModuleRoles;
-        existingProductModule.productModuleIsActive = updateProductModuleDTO.productModuleIsActive;
-        existingProductModule.productModuleUpdateDate = new Date();
+        productModule.productModuleSettings = updateProductModuleDTO.productModuleSettings;
+        productModule.productModuleRoles = updateProductModuleDTO.productModuleRoles;
+        productModule.productModuleIsActive = updateProductModuleDTO.productModuleIsActive;
+        productModule.productModuleUpdateDate = new Date();
         
-        await this.productModuleRepository.save(existingProductModule);
+        await this.productModuleRepository.save(productModule);
 
-        let productModuleDTO = await this.getProductModule(existingProductModule.productModuleId);
+        let productModuleDTO = await this.getProductModuleById(productModule.productModuleId);
         
         return productModuleDTO;
     }

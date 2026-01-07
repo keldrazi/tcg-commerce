@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { ProductModuleService } from './product.module.service';
 import { CreateProductModuleDTO, UpdateProductModuleDTO } from './dto/product.module.dto';
 
-
-
 @Controller('product/module')
 export class ProductModuleController {
 
@@ -11,28 +9,28 @@ export class ProductModuleController {
         private productModuleService: ProductModuleService,
     ) { }
     
-    @Get('/all')
+    @Get()
     async getProductModules() {
         return await this.productModuleService.getProductModules();
     }
 
-    @Get('/:moduleId')
-    async getProductModule(@Param('productModuleId') applicatioModuleId: string) {
-        return await this.productModuleService.getProductModule(applicatioModuleId);
+    @Get('/id/:productModuleId')
+    async getProductModuleById(@Param('productModuleId') productModuleId: string) {
+        return await this.productModuleService.getProductModuleById(productModuleId);
     }
 
-    @Get('/commerceAccount/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getProductModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.productModuleService.getProductModuleByCommerceAccountId(commerceAccountId);
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductModule(@Body() createProductModuleDTO: CreateProductModuleDTO) {
         return this.productModuleService.createProductModule(createProductModuleDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductModule(@Body() updateProductModuleDTO: UpdateProductModuleDTO) {
         return this.productModuleService.updateProductModule(updateProductModuleDTO);

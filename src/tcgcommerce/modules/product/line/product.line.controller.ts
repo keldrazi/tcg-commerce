@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { CreateProductLineDTO, UpdateProductLineDTO, ProductLineDTO } from './dto/product.line.dto';
 import { ProductLineService } from './product.line.service';
 
-
-
 @Controller('product/line')
 export class ProductLineController {
 
@@ -13,16 +11,16 @@ export class ProductLineController {
     
     
     @Get('/id/:productLineId')
-    async getProductLine(@Param('productLineId') productLineId: string) {
-        return await this.productLineService.getProductLine(productLineId);
+    async getProductLineById(@Param('productLineId') productLineId: string) {
+        return await this.productLineService.getProductLineById(productLineId);
     }
 
-    @Get('/vendorId/:productVendorId')
+    @Get('/pvid/:productVendorId')
     async getProductLinesByVendor(@Param('productVendorId') productVendorId: string) {
         return await this.productLineService.getProductLinesByVendor(productVendorId);
     }
 
-    @Get('/all')
+    @Get()
     async getProductLines() {
         return await this.productLineService.getProductLines();
     }

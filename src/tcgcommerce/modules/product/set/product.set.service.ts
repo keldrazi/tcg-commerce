@@ -21,7 +21,7 @@ export class ProductSetService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductSet(productSetId: string) {
+    async getProductSetById(productSetId: string) {
         let productSet = await this.productSetRepository.findOne({
             where: { 
                 productSetId: productSetId 
@@ -84,7 +84,7 @@ export class ProductSetService {
         });
         
         if(productSets == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found');
+            [];    
         }
         
         let productSetDTOs: ProductSetDTO[] = [];
@@ -111,7 +111,7 @@ export class ProductSetService {
         });
         
         if(productSets == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets were not found');
+            []
         }
         
         let productSetDTOs: ProductSetDTO[] = [];
@@ -169,26 +169,26 @@ export class ProductSetService {
     
     async updateProductSet(updateProductSetDTO: UpdateProductSetDTO) {
                             
-        let existingProductSet = await this.productSetRepository.findOne({ 
+        let productSet = await this.productSetRepository.findOne({ 
             where: { 
                 productSetId: updateProductSetDTO.productSetId
             } 
         });
 
-        if(!existingProductSet) {
+        if(!productSet) {
             return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found'); 
         }
 
-        existingProductSet.productSetName = updateProductSetDTO.productSetName;
-        existingProductSet.productSetCode = updateProductSetDTO.productSetCode;
-        existingProductSet.productSetReleaseDate = updateProductSetDTO.productSetReleaseDate;
-        existingProductSet.productSetTotalCards = updateProductSetDTO.productSetTotalCards;
-        existingProductSet.productSetIsActive = updateProductSetDTO.productSetIsActive;
-        existingProductSet.productSetUpdateDate = new Date();
+        productSet.productSetName = updateProductSetDTO.productSetName;
+        productSet.productSetCode = updateProductSetDTO.productSetCode;
+        productSet.productSetReleaseDate = updateProductSetDTO.productSetReleaseDate;
+        productSet.productSetTotalCards = updateProductSetDTO.productSetTotalCards;
+        productSet.productSetIsActive = updateProductSetDTO.productSetIsActive;
+        productSet.productSetUpdateDate = new Date();
         
-        await this.productSetRepository.save(existingProductSet);
+        await this.productSetRepository.save(productSet);
 
-        let productSetDTO = this.getProductSet(existingProductSet.productSetId);
+        let productSetDTO = this.getProductSetById(productSet.productSetId);
 
         return productSetDTO;
     
@@ -226,7 +226,7 @@ export class ProductSetService {
             let productSet = await this.getProductSetByTCGdbId(tcgdbMTGSet.tcgdbMTGSetId);
             
             if (productSet instanceof ErrorMessageDTO) {
-                let newProductSet = this.productSetRepository.create({
+                productSet = this.productSetRepository.create({
                     productSetTCGdbId: tcgdbMTGSet.tcgdbMTGSetId,
                     productSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
                     productVendorId: productVendor.productVendorId,
@@ -238,7 +238,10 @@ export class ProductSetService {
                     productSetIsActive: true,
                 });
 
-                let productSetDTO = await this.productSetRepository.save(newProductSet);
+                await this.productSetRepository.save(productSet);
+                
+                let productSetDTO: ProductSetDTO = ({ ...productSet });
+
                 productSetDTOs.push(productSetDTO);
             }
         }

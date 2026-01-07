@@ -13,7 +13,7 @@ export class ProductVendorService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductVendor(productVendorId: string) {
+    async getProductVendorById(productVendorId: string) {
         let productVendor = await this.productVendorRepository.findOne({ 
             where: { 
                 productVendorId: productVendorId
@@ -56,10 +56,10 @@ export class ProductVendorService {
         return productVendorDTOs;
     }
     
-    async getProductVendorByName(name: string) {
+    async getProductVendorByName(productVendorName: string) {
         let productVendor = await this.productVendorRepository.findOne({ 
             where: { 
-                productVendorName: name 
+                productVendorName: productVendorName 
             } 
         });
         
@@ -73,10 +73,10 @@ export class ProductVendorService {
         
     }
 
-    async getProductVendorByCode(code: string) {
+    async getProductVendorByCode(productVendorCode: string) {
         let productVendor = await this.productVendorRepository.findOne({ 
             where: { 
-                productVendorCode: code 
+                productVendorCode: productVendorCode 
             } 
         });
         
@@ -103,10 +103,10 @@ export class ProductVendorService {
             return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'Product vendor already exists');
         }
         
-        let newProductVendor = this.productVendorRepository.create({ ...createProductVendorDTO });
-        newProductVendor = await this.productVendorRepository.save(newProductVendor);
+        productVendor = this.productVendorRepository.create({ ...createProductVendorDTO });
+        productVendor = await this.productVendorRepository.save(productVendor);
 
-        let productVendorDTO = this.getProductVendor(newProductVendor.productVendorId);
+        let productVendorDTO = this.getProductVendorById(productVendor.productVendorId);
 
         return productVendorDTO;
         
@@ -114,25 +114,25 @@ export class ProductVendorService {
 
     async updateProductVendor(updateProductVendorDTO: UpdateProductVendorDTO) {
                 
-        let existingProductVendor = await this.productVendorRepository.findOne({ 
+        let productVendor = await this.productVendorRepository.findOne({ 
             where: { 
                 productVendorId: updateProductVendorDTO.productVendorId
             } 
         });
 
-        if (!existingProductVendor) {
+        if (!productVendor) {
             return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
         }
 
-        existingProductVendor.productVendorName = updateProductVendorDTO.productVendorName;
-        existingProductVendor.productVendorCode = updateProductVendorDTO.productVendorCode;
-        existingProductVendor.productVendorIsActive = updateProductVendorDTO.productVendorIsActive;
-        existingProductVendor.productVendorUpdateDate = new Date();
+        productVendor.productVendorName = updateProductVendorDTO.productVendorName;
+        productVendor.productVendorCode = updateProductVendorDTO.productVendorCode;
+        productVendor.productVendorIsActive = updateProductVendorDTO.productVendorIsActive;
+        productVendor.productVendorUpdateDate = new Date();
         
-        await this.productVendorRepository.save(existingProductVendor);
+        await this.productVendorRepository.save(productVendor);
 
-        let productVendorDTO = this.getProductVendor(existingProductVendor.productVendorId);
-
+        let productVendorDTO = this.getProductVendorById(productVendor.productVendorId);
+        
         return productVendorDTO;
     
     }

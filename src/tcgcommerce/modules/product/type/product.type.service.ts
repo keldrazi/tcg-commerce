@@ -13,7 +13,7 @@ export class ProductTypeService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductType(productTypeId: string) {
+    async getProductTypeById(productTypeId: string) {
         let productType = await this.productTypeRepository.findOne({ 
             where: { 
                 productTypeId: productTypeId 
@@ -97,10 +97,10 @@ export class ProductTypeService {
         return productTypeDTOs;
     }
     
-    async getProductTypeByName(name: string) {
+    async getProductTypeByName(productTypeName: string) {
         let productType = await this.productTypeRepository.findOne({ 
             where: { 
-                productTypeName: name 
+                productTypeName: productTypeName 
             } 
         });
         
@@ -114,10 +114,10 @@ export class ProductTypeService {
         
     }
 
-    async getProductTypeByCode(code: string) {
+    async getProductTypeByCode(productTypeCode: string) {
         let productType = await this.productTypeRepository.findOne({ 
             where: { 
-                productTypeCode: code 
+                productTypeCode: productTypeCode 
             } 
         });
         
@@ -142,15 +142,14 @@ export class ProductTypeService {
             } 
         });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (productType != null) {
             return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_ALREADY_EXISTS', 'Product type already exists');
         }
         
-        let newProductType = this.productTypeRepository.create({ ...createProductTypeDTO });
-        newProductType = await this.productTypeRepository.save(newProductType);
+        productType = this.productTypeRepository.create({ ...createProductTypeDTO });
+        productType = await this.productTypeRepository.save(productType);
 
-        let productTypeDTO = this.getProductType(newProductType.productTypeId);
+        let productTypeDTO = this.getProductTypeById(productType.productTypeId);
         
         return productTypeDTO;
         
@@ -158,25 +157,25 @@ export class ProductTypeService {
 
     async updateProductType(updateProductTypeDTO: UpdateProductTypeDTO) {
                     
-        let existingProductType = await this.productTypeRepository.findOne({ 
+        let productType = await this.productTypeRepository.findOne({ 
             where: { 
                 productTypeId: updateProductTypeDTO.productTypeId
             } 
         });
 
-        if (!existingProductType) {
+        if (!productType) {
             return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found'); 
         }
 
-        existingProductType.productTypeName = updateProductTypeDTO.productTypeName;
-        existingProductType.productTypeCode = updateProductTypeDTO.productTypeCode;
-        existingProductType.productTypeIsActive = updateProductTypeDTO.productTypeIsActive;
-        existingProductType.productTypeUpdateDate = new Date();
+        productType.productTypeName = updateProductTypeDTO.productTypeName;
+        productType.productTypeCode = updateProductTypeDTO.productTypeCode;
+        productType.productTypeIsActive = updateProductTypeDTO.productTypeIsActive;
+        productType.productTypeUpdateDate = new Date();
         
-        await this.productTypeRepository.save(existingProductType);
+        await this.productTypeRepository.save(productType);
 
-        let productTypeDTO = this.getProductType(existingProductType.productTypeId);
-
+        let productTypeDTO = this.getProductTypeById(productType.productTypeId);
+        
         return productTypeDTO;
     
     }

@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuard
 import { CreateProductTypeDTO, UpdateProductTypeDTO, ProductTypeDTO } from './dto/product.type.dto';
 import { ProductTypeService } from './product.type.service';
 
-
-
 @Controller('product/type')
 export class ProductTypeController {
 
@@ -13,16 +11,16 @@ export class ProductTypeController {
     
     
     @Get('/id/:productTypeId')
-    async getProductType(@Param('productTypeId') productTypeId: string) {
-        return await this.productTypeService.getProductType(productTypeId);
+    async getProductTypeById(@Param('productTypeId') productTypeId: string) {
+        return await this.productTypeService.getProductTypeById(productTypeId);
     }
 
-    @Get('/vendorId/:productVendorId/lineId/:productLineId')
+    @Get('/pvid/:productVendorId/plid/:productLineId')
     async getProductTypesByProductVendorIdAndProductLineId(@Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string) {
         return await this.productTypeService.getProductTypesByProductVendorIdAndProductLineId(productVendorId, productLineId);
     }
 
-    @Get('/all')
+    @Get()
     async getProductTypes() {
         return await this.productTypeService.getProductTypes();
     }
@@ -33,7 +31,7 @@ export class ProductTypeController {
         return await this.productTypeService.createProductType(createProductTypeDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductType(@Body() updateProductTypeDTO: UpdateProductTypeDTO) {
         return await this.productTypeService.updateProductType(updateProductTypeDTO);

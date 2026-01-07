@@ -13,7 +13,7 @@ export class ProductLineService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductLine(productLineId: string) {
+    async getProductLineById(productLineId: string) {
         let productLine = await this.productLineRepository.findOne({ 
             where: { 
                 productLineId: productLineId 
@@ -70,7 +70,7 @@ export class ProductLineService {
         let productLineDTOs: ProductLineDTO[] = [];
         
         if (productLines == null) {
-            productLineDTOs ;
+            productLineDTOs;
         }
 
         for(let i = 0; i < productLines.length; i++) {
@@ -84,10 +84,10 @@ export class ProductLineService {
         
     }
     
-    async getProductLineByName(name: string) {
+    async getProductLineByName(productLineName: string) {
         let productLine = await this.productLineRepository.findOne({ 
             where: { 
-                productLineName: name 
+                productLineName: productLineName 
             } 
         });
         
@@ -101,10 +101,10 @@ export class ProductLineService {
         
     }
 
-    async getProductLineByCode(code: string) {
+    async getProductLineByCode(productLineCode: string) {
         let productLine = await this.productLineRepository.findOne({ 
             where: { 
-                productLineCode: code 
+                productLineCode: productLineCode 
             } 
         });
         
@@ -131,10 +131,10 @@ export class ProductLineService {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_ALREADY_EXISTS', 'Product line already exists');
         }
         
-        let newProductLine = this.productLineRepository.create({ ...createProductLineDTO });
-        newProductLine = await this.productLineRepository.save(newProductLine);
+        productLine = this.productLineRepository.create({ ...createProductLineDTO });
+        productLine = await this.productLineRepository.save(productLine);
 
-        let productLineDTO = this.getProductLine(newProductLine.productLineId);
+        let productLineDTO = this.getProductLineById(productLine.productLineId);
 
         return productLineDTO;
         
@@ -142,25 +142,25 @@ export class ProductLineService {
 
     async updateProductLine(updateProductLineDTO: UpdateProductLineDTO) {
                 
-        let existingProductLine = await this.productLineRepository.findOne({ 
+        let productLine = await this.productLineRepository.findOne({ 
             where: { 
                 productLineId: updateProductLineDTO.productLineId
             } 
         });
 
-        if (!existingProductLine) {
+        if (!productLine) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
         }
 
-        existingProductLine.productLineName = updateProductLineDTO.productLineName;
-        existingProductLine.productLineCode = updateProductLineDTO.productLineCode;
-        existingProductLine.productLineIsActive = updateProductLineDTO.productLineIsActive;
-        existingProductLine.productLineUpdateDate = new Date();
+        productLine.productLineName = updateProductLineDTO.productLineName;
+        productLine.productLineCode = updateProductLineDTO.productLineCode;
+        productLine.productLineIsActive = updateProductLineDTO.productLineIsActive;
+        productLine.productLineUpdateDate = new Date();
         
-        await this.productLineRepository.save(existingProductLine);
+        await this.productLineRepository.save(productLine);
 
-        let productLineDTO = this.getProductLine(existingProductLine.productLineId);
-
+        let productLineDTO = this.getProductLineById(productLine.productLineId);
+        
         return productLineDTO;
     
     }
