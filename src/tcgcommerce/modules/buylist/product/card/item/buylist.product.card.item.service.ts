@@ -102,23 +102,23 @@ export class BuylistProductCardItemService {
 
     async updateBuylistProductCardItem(updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO) {
                     
-        let existingBuylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
             where: { 
                 buylistProductCardItemId: updateBuylistProductCardItemDTO.buylistProductCardItemId 
             } 
         });   
         
-        if (!existingBuylistProductCardItem) {
+        if (!buylistProductCardItem) {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found'); 
         }
 
-        existingBuylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;
-        existingBuylistProductCardItem.productCardConditionId = updateBuylistProductCardItemDTO.productCardConditionId;
-        existingBuylistProductCardItem.buylistProductCardItemQty = updateBuylistProductCardItemDTO.buylistProductCardItemQty;
+        buylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;
+        buylistProductCardItem.productCardConditionId = updateBuylistProductCardItemDTO.productCardConditionId;
+        buylistProductCardItem.buylistProductCardItemQty = updateBuylistProductCardItemDTO.buylistProductCardItemQty;
         
-        await this.buylistProductCardItemRepository.save(existingBuylistProductCardItem);
+        await this.buylistProductCardItemRepository.save(buylistProductCardItem);
 
-        let buylistProductCardItemDTO = this.getBuylistProductCardItemById(existingBuylistProductCardItem.buylistProductCardItemId);
+        let buylistProductCardItemDTO = await this.getBuylistProductCardItemById(buylistProductCardItem.buylistProductCardItemId);
 
         return buylistProductCardItemDTO;
     

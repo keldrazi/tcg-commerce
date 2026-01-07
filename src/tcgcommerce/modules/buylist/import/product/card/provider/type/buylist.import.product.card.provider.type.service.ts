@@ -51,10 +51,10 @@ export class BuylistImportProductCardProviderTypeService {
         return buylistImportProductCardProviderTypeDTOs;
     }
 
-    async getBuylistImportProductCardProviderTypeByName(name: string) {
+    async getBuylistImportProductCardProviderTypeByName(buylistImportProductCardProviderTypeName: string) {
         let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
-                buylistImportProductCardProviderTypeName: name
+                buylistImportProductCardProviderTypeName: buylistImportProductCardProviderTypeName
             }
         });
 
@@ -68,10 +68,10 @@ export class BuylistImportProductCardProviderTypeService {
 
     }
 
-    async getBuylistImportProductCardProviderTypeByCode(code: string) {
+    async getBuylistImportProductCardProviderTypeByCode(buylistImportProductCardProviderTypeCode: string) {
         let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
-                buylistImportProductCardProviderTypeCode: code
+                buylistImportProductCardProviderTypeCode: buylistImportProductCardProviderTypeCode
             }
         });
 
@@ -107,17 +107,20 @@ export class BuylistImportProductCardProviderTypeService {
     async createBuylistImportProductCardProviderType(createBuylistImportProductCardProviderTypeDTO: CreateBuylistImportProductCardProviderTypeDTO) {
 
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
-        let buylistImportProductCardProviderType = await this.getBuylistImportProductCardProviderTypeByName(createBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName);
+        let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
+            where: {
+                buylistImportProductCardProviderTypeName: createBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName
+            }
+        });
 
-        //TO DO: RETURN AN ERROR FOR DUPLICATE CARD VARIANT;
         if (buylistImportProductCardProviderType != null) {
             return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_DUPLICATE', 'Buylist import product card provider type already exists');
         }
 
-        let newBuylistImportProductCardProviderType = this.buylistImportProductCardProviderTypeRepository.create({ ...createBuylistImportProductCardProviderTypeDTO });
-        newBuylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.save(newBuylistImportProductCardProviderType);
+        buylistImportProductCardProviderType = this.buylistImportProductCardProviderTypeRepository.create({ ...createBuylistImportProductCardProviderTypeDTO });
+        buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.save(buylistImportProductCardProviderType);
 
-        let buylistImportProductCardProviderTypeDTO = this.getBuylistImportProductCardProviderTypeById(newBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeId);
+        let buylistImportProductCardProviderTypeDTO = this.getBuylistImportProductCardProviderTypeById(buylistImportProductCardProviderType.buylistImportProductCardProviderTypeId);
 
         return buylistImportProductCardProviderTypeDTO;
 
@@ -125,31 +128,30 @@ export class BuylistImportProductCardProviderTypeService {
 
     async updateBuylistImportProductCardProviderType(updateBuylistImportProductCardProviderTypeDTO: UpdateBuylistImportProductCardProviderTypeDTO) {
 
-        let updateBuylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
+        let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
                 buylistImportProductCardProviderTypeId: updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId
             }
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!updateBuylistImportProductCardProviderType) {
+        if (!buylistImportProductCardProviderType) {
             return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
         }
 
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeName = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeCode = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCode;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeDescription = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeDescription;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileExtension = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileExtension;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileUploadPath = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileUploadPath;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileDataKey = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileConditionKey = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileConditionKey;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeFilePrintingKey = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFilePrintingKey;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeIsActive = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeIsActive;
-        updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeUpdateDate = new Date();
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeName = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeCode = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeCode;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeDescription = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeDescription;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileExtension = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileExtension;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileUploadPath = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileUploadPath;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileDataKey = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileDataKey;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFileConditionKey = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFileConditionKey;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeFilePrintingKey = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeFilePrintingKey;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeIsActive = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeIsActive;
+        buylistImportProductCardProviderType.buylistImportProductCardProviderTypeUpdateDate = new Date();
 
-        await this.buylistImportProductCardProviderTypeRepository.save(updateBuylistImportProductCardProviderType);
+        await this.buylistImportProductCardProviderTypeRepository.save(buylistImportProductCardProviderType);
 
-        let buylistImportProductCardProviderTypeDTO = this.getBuylistImportProductCardProviderTypeById(updateBuylistImportProductCardProviderType.buylistImportProductCardProviderTypeId);
+        let buylistImportProductCardProviderTypeDTO = this.getBuylistImportProductCardProviderTypeById(buylistImportProductCardProviderType.buylistImportProductCardProviderTypeId);
 
         return buylistImportProductCardProviderTypeDTO;
 

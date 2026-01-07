@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe, Delete } from '@nestjs/common';
 import { CreateBuylistHotlistProductCardItemDTO, UpdateBuylistHotlistProductCardItemDTO } from './dto/buylist.hotlist.product.card.item.dto';
 import { BuylistHotlistProductCardItemService } from './buylist.hotlist.product.card.item.service';
 
@@ -15,9 +15,9 @@ export class BuylistHotlistProductCardItemController {
         return await this.buylistHotlistProductCardItemService.getBuylistHotlistProductCardItemById(buylistHotlistProductCardItemId);
     }
 
-    @Get('/caid/:commerceAccountId')
-    async getBuylistHotlistProductCardItems(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.buylistHotlistProductCardItemService.getBuylistHotlistProductCardItemsByCommerceAccountId(commerceAccountId);
+    @Get('/blhlpcid/:buylistHotlistProductCardId')
+    async getBuylistHotlistProductCardItemsByBuyListHotlistProductCardId(@Param('buylistHotlistProductCardId') buylistHotlistProductCardId: string) {
+        return await this.buylistHotlistProductCardItemService.getBuylistHotlistProductCardItemsByBuylistHotlistProductCardId(buylistHotlistProductCardId);
     }
 
     @Post('/create')
@@ -30,6 +30,11 @@ export class BuylistHotlistProductCardItemController {
     @UsePipes(new ValidationPipe())
     async updateBuylistHotlistProductCardItem(@Body() updateBuylistHotlistProductCardItemDTO: UpdateBuylistHotlistProductCardItemDTO) {
         return await this.buylistHotlistProductCardItemService.updateBuylistHotlistProductCardItem(updateBuylistHotlistProductCardItemDTO);
+    }
+
+    @Delete('/delete/:buylistHotlistProductCardItemId')
+    async deleteBuylistHotlistProductCardItem(@Param('buylistHotlistProductCardItemId') buylistHotlistProductCardItemId: string) {
+        return await this.buylistHotlistProductCardItemService.deleteBuylistHotlistProductCardItem(buylistHotlistProductCardItemId);
     }
 
 }

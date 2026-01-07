@@ -70,27 +70,27 @@ export class BuylistProductCardService {
 
     async updateBuylistProductCard(updateBuylistProductCardDTO: UpdateBuylistProductCardDTO) {
                     
-        let existingBuylistProductCard = await this.buylistProductCardRepository.findOne({ 
+        let buylistProductCard = await this.buylistProductCardRepository.findOne({ 
             where: { 
                 buylistProductCardId: updateBuylistProductCardDTO.buylistProductCardId 
             } 
         });
             
-        if (!existingBuylistProductCard) {
+        if (!buylistProductCard) {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found'); 
         }
 
-        existingBuylistProductCard.customerAccountUserId = updateBuylistProductCardDTO.customerAccountUserId;
-        existingBuylistProductCard.buylistLocationId = updateBuylistProductCardDTO.buylistLocationId;
-        existingBuylistProductCard.buylistTypeId = updateBuylistProductCardDTO.buylistTypeId;
-        existingBuylistProductCard.buylistPaymentTypeId = updateBuylistProductCardDTO.buylistPaymentTypeId;
-        existingBuylistProductCard.buylistPaymentServiceId = updateBuylistProductCardDTO.buylistPaymentServiceId;
-        existingBuylistProductCard.buylistProductCardUpdateDate = new Date();
+        buylistProductCard.customerAccountUserId = updateBuylistProductCardDTO.customerAccountUserId;
+        buylistProductCard.buylistLocationId = updateBuylistProductCardDTO.buylistLocationId;
+        buylistProductCard.buylistTypeId = updateBuylistProductCardDTO.buylistTypeId;
+        buylistProductCard.buylistPaymentTypeId = updateBuylistProductCardDTO.buylistPaymentTypeId;
+        buylistProductCard.buylistPaymentServiceId = updateBuylistProductCardDTO.buylistPaymentServiceId;
+        buylistProductCard.buylistProductCardUpdateDate = new Date();
         
-        await this.buylistProductCardRepository.save(existingBuylistProductCard);
+        await this.buylistProductCardRepository.save(buylistProductCard);
 
-        let buylistProductCardDTO = this.getBuylistProductCardById(existingBuylistProductCard.buylistProductCardId);
-
+        let buylistProductCardDTO = await this.getBuylistProductCardById(buylistProductCard.buylistProductCardId);
+        
         return buylistProductCardDTO;
     
     }

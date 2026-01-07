@@ -15,7 +15,7 @@ export class BuylistImportProductCardProviderTypeController {
         return await this.buylistImportProductCardProviderTypeService.getBuylistImportProductCardProviderTypeById(buylistImportProductCardProviderTypeId);
     }
 
-    @Get('/all')
+    @Get()
     async getBuylistImportProductCardProviderTypes() {
         return await this.buylistImportProductCardProviderTypeService.getBuylistImportProductCardProviderTypes();
     }

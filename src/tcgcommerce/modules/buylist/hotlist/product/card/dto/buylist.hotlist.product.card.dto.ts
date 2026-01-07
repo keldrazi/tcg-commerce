@@ -33,6 +33,10 @@ export class CreateBuylistHotlistProductCardDTO {
     productTypeId: string;
     @IsString()
     productLanguageId: string;
+    @IsString()
+    productLanguageCode: string
+    @IsString()
+    buylistHotlistProductCardCode: string
     @IsDate()
     buylistHotlistProductCardStartDateTime: Date;
     @IsDate()

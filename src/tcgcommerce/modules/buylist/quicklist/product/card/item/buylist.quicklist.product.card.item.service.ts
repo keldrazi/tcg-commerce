@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateBuylistQuicklistProductCardItemDTO, BuylistQuicklistProductCardItemDTO } from './dto/buylist.quicklist.product.card.item.dto';
 import { BuylistQuicklistProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/quicklist/product/card/item/buylist.quicklist.product.card.item.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+
 
 @Injectable()
 export class BuylistQuicklistProductCardItemService {
@@ -31,19 +31,71 @@ export class BuylistQuicklistProductCardItemService {
         
     }
 
+    async getBuylistQuicklistProductCardItemsByBuyListQuicklistProductCardId(buylistQuicklistProductCardId: string) {
+        let buylistQuicklistProductCardItems = await this.buylistQuicklistProductCardItemRepository.find({ 
+            where: { 
+                buylistQuicklistProductCardId: buylistQuicklistProductCardId 
+            } 
+        });
+        
+        if (buylistQuicklistProductCardItems == null) {
+            return [];
+        }
+
+        let buylistQuicklistProductCardItemDTOs: BuylistQuicklistProductCardItemDTO[] = [];
+
+        for(let i = 0; i < buylistQuicklistProductCardItems.length; i++) {
+            let buylistQuicklistProductCardItem = buylistQuicklistProductCardItems[i];
+            let buylistQuicklistProductCardItemDTO: BuylistQuicklistProductCardItemDTO = ({ ...buylistQuicklistProductCardItem });
+
+            buylistQuicklistProductCardItemDTOs.push(buylistQuicklistProductCardItemDTO);
+        }
+
+        return buylistQuicklistProductCardItemDTOs;
+        
+    }
+
     
     async createBuylistQuicklistProductCardItem(createBuylistQuicklistProductCardItemDTO: CreateBuylistQuicklistProductCardItemDTO) {
 
-        //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
-        
-        let newBuylistQuicklistProductCardItem = this.buylistQuicklistProductCardItemRepository.create({ ...createBuylistQuicklistProductCardItemDTO });
-        newBuylistQuicklistProductCardItem = await this.buylistQuicklistProductCardItemRepository.save(newBuylistQuicklistProductCardItem);
+        let buylistQuicklistProductCardItem = await this.buylistQuicklistProductCardItemRepository.findOne({ 
+            where: { 
+                productCardId: createBuylistQuicklistProductCardItemDTO.productCardId,
+                productCardNumber: createBuylistQuicklistProductCardItemDTO.productCardNumber,
+                productSetId: createBuylistQuicklistProductCardItemDTO.productSetId,
+                productLanguageId: createBuylistQuicklistProductCardItemDTO.productLanguageId,
+                productCardPrintingId: createBuylistQuicklistProductCardItemDTO.productCardPrintingId
+            } 
+        });
 
-        let buylistQuicklistProductCardItemDTO = this.getBuylistQuicklistProductCardItemById(newBuylistQuicklistProductCardItem.buylistQuicklistProductCardItemId);
+        if (buylistQuicklistProductCardItem != null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_EXISTS', 'Buylist quicklist product card item exists');
+        }
+        
+        buylistQuicklistProductCardItem = this.buylistQuicklistProductCardItemRepository.create({ ...createBuylistQuicklistProductCardItemDTO });
+        buylistQuicklistProductCardItem = await this.buylistQuicklistProductCardItemRepository.save(buylistQuicklistProductCardItem);
+
+        let buylistQuicklistProductCardItemDTO = await this.getBuylistQuicklistProductCardItemById(buylistQuicklistProductCardItem.buylistQuicklistProductCardItemId);
         
         return buylistQuicklistProductCardItemDTO;
         
     }
 
-    //TO DO:DELETE METHOD;
+    async deleteBuylistQuicklistProductCardItem(buylistQuicklistProductCardItemId: string) {
+
+        let buylistQuicklistProductCardItem = await this.buylistQuicklistProductCardItemRepository.findOne({ 
+            where: { 
+                buylistQuicklistProductCardItemId: buylistQuicklistProductCardItemId 
+            } 
+        });
+
+        if (buylistQuicklistProductCardItem == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist quicklist product card item was not found');
+        }
+
+        await this.buylistQuicklistProductCardItemRepository.delete({ buylistQuicklistProductCardItemId: buylistQuicklistProductCardItemId });
+
+        return true;
+
+    }
 }

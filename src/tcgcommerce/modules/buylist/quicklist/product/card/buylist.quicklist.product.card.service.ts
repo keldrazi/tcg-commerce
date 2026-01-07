@@ -57,12 +57,27 @@ export class BuylistQuicklistProductCardService {
     
     async createBuylistQuicklistProductCard(createBuylistQuicklistProductCardDTO: CreateBuylistQuicklistProductCardDTO) {
 
-        //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
+        let buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.findOne({ 
+            where: { 
+                commerceAccountId: createBuylistQuicklistProductCardDTO.commerceAccountId,
+                buylistLocationId: createBuylistQuicklistProductCardDTO.buylistLocationId,
+                productVendorId: createBuylistQuicklistProductCardDTO.productVendorId,
+                productLineId: createBuylistQuicklistProductCardDTO.productLineId,
+                productTypeId: createBuylistQuicklistProductCardDTO.productTypeId,
+                productLanguageId: createBuylistQuicklistProductCardDTO.productLanguageId,
+                buylistQuicklistProductCardCode: createBuylistQuicklistProductCardDTO.buylistQuicklistProductCardCode 
+            } 
+        });
         
-        let newBuylistQuicklistProductCard = this.buylistQuicklistProductCardRepository.create({ ...createBuylistQuicklistProductCardDTO });
-        newBuylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.save(newBuylistQuicklistProductCard);
+        if (buylistQuicklistProductCard != null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_EXISTS', 'Buylist quicklist product card already exists');
+        }
+        
+        
+        buylistQuicklistProductCard = this.buylistQuicklistProductCardRepository.create({ ...createBuylistQuicklistProductCardDTO });
+        buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.save(buylistQuicklistProductCard);
 
-        let buylistQuicklistProductCardDTO = this.getBuylistQuicklistProductCardById(newBuylistQuicklistProductCard.buylistQuicklistProductCardId);
+        let buylistQuicklistProductCardDTO = this.getBuylistQuicklistProductCardById(buylistQuicklistProductCard.buylistQuicklistProductCardId);
         
         return buylistQuicklistProductCardDTO;
         
@@ -70,23 +85,42 @@ export class BuylistQuicklistProductCardService {
 
     async updateBuylistQuicklistProductCard(updateBuylistQuicklistProductCardDTO: UpdateBuylistQuicklistProductCardDTO) {
                     
-        let existingBuylistQuicklistProductCard = await this.getBuylistQuicklistProductCardById(updateBuylistQuicklistProductCardDTO.buylistQuicklistProductCardId);
-            
-        //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
-        if (existingBuylistQuicklistProductCard == null || existingBuylistQuicklistProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist quicklist product card was not found'); 
+        let buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.findOne({ 
+            where: { 
+                buylistQuicklistProductCardId: updateBuylistQuicklistProductCardDTO.buylistQuicklistProductCardId 
+            } 
+        });
+        
+        if (buylistQuicklistProductCard == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist quicklist product card was not found');
         }
 
-        existingBuylistQuicklistProductCard.commerceUserId = updateBuylistQuicklistProductCardDTO.commerceUserId;
-        existingBuylistQuicklistProductCard.buylistLocationId = updateBuylistQuicklistProductCardDTO.buylistLocationId;
-        existingBuylistQuicklistProductCard.buylistQuicklistProductCardIsActive = updateBuylistQuicklistProductCardDTO.buylistQuicklistProductCardIsActive;
+        buylistQuicklistProductCard.commerceUserId = updateBuylistQuicklistProductCardDTO.commerceUserId;
+        buylistQuicklistProductCard.buylistLocationId = updateBuylistQuicklistProductCardDTO.buylistLocationId;
+        buylistQuicklistProductCard.buylistQuicklistProductCardIsActive = updateBuylistQuicklistProductCardDTO.buylistQuicklistProductCardIsActive;
         
-        await this.buylistQuicklistProductCardRepository.save(existingBuylistQuicklistProductCard);
+        await this.buylistQuicklistProductCardRepository.save(buylistQuicklistProductCard);
 
-        let buylistQuicklistProductCardDTO = this.getBuylistQuicklistProductCardById(existingBuylistQuicklistProductCard.buylistQuicklistProductCardId);
+        let buylistQuicklistProductCardDTO = await this.getBuylistQuicklistProductCardById(buylistQuicklistProductCard.buylistQuicklistProductCardId);
 
         return buylistQuicklistProductCardDTO;
     
     }
- 
+    
+    async deleteBuylistQuicklistProductCard(buylistQuicklistProductCardId: string) {
+
+        let buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.findOne({ 
+            where: { 
+                buylistQuicklistProductCardId: buylistQuicklistProductCardId 
+            } 
+        });
+
+        if (buylistQuicklistProductCard == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist quicklist product card was not found');
+        }
+
+        await this.buylistQuicklistProductCardRepository.delete({ buylistQuicklistProductCardId: buylistQuicklistProductCardId });
+
+        return true;
+    }
 }

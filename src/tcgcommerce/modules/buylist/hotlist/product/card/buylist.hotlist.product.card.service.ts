@@ -57,12 +57,26 @@ export class BuylistHotlistProductCardService {
     
     async createBuylistHotlistProductCard(createBuylistHotlistProductCardDTO: CreateBuylistHotlistProductCardDTO) {
 
-        //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
+        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOne({ 
+            where: { 
+                commerceAccountId: createBuylistHotlistProductCardDTO.commerceAccountId,
+                buylistLocationId: createBuylistHotlistProductCardDTO.buylistLocationId,
+                productVendorId: createBuylistHotlistProductCardDTO.productVendorId,
+                productLineId: createBuylistHotlistProductCardDTO.productLineId,
+                productTypeId: createBuylistHotlistProductCardDTO.productTypeId,
+                productLanguageId: createBuylistHotlistProductCardDTO.productLanguageId,
+                buylistHotlistProductCardCode: createBuylistHotlistProductCardDTO.buylistHotlistProductCardCode 
+            } 
+        });
         
-        let newBuylistHotlistProductCard = this.buylistHotlistProductCardRepository.create({ ...createBuylistHotlistProductCardDTO });
-        newBuylistHotlistProductCard = await this.buylistHotlistProductCardRepository.save(newBuylistHotlistProductCard);
+        if(buylistHotlistProductCard != null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_HOTLIST_PRODUCT_CARD_ALREADY_EXISTS', 'Buylist hotlist product card already exists');
+        }
 
-        let buylistHotlistProductCardDTO = this.getBuylistHotlistProductCardById(newBuylistHotlistProductCard.buylistHotlistProductCardId);
+        buylistHotlistProductCard = this.buylistHotlistProductCardRepository.create({ ...createBuylistHotlistProductCardDTO });
+        buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.save(buylistHotlistProductCard);
+
+        let buylistHotlistProductCardDTO = this.getBuylistHotlistProductCardById(buylistHotlistProductCard.buylistHotlistProductCardId);
         
         return buylistHotlistProductCardDTO;
         
@@ -70,25 +84,45 @@ export class BuylistHotlistProductCardService {
 
     async updateBuylistHotlistProductCard(updateBuylistHotlistProductCardDTO: UpdateBuylistHotlistProductCardDTO) {
                     
-        let existingBuylistHotlistProductCard = await this.getBuylistHotlistProductCardById(updateBuylistHotlistProductCardDTO.buylistHotlistProductCardId);
-            
-        //TO DO: RETUNR AN ERROR IF BUYLIST TYPE NOT FOUND;
-        if(existingBuylistHotlistProductCard == null || existingBuylistHotlistProductCard instanceof ErrorMessageDTO) {
+        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOne({ 
+            where: { 
+                buylistHotlistProductCardId: updateBuylistHotlistProductCardDTO.buylistHotlistProductCardId 
+            } 
+        });
+        
+        if(buylistHotlistProductCard == null) {
             return this.errorMessageService.createErrorMessage('BUYLIST_HOTLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist hotlist product card was not found');
         }
 
-        existingBuylistHotlistProductCard.commerceUserId = updateBuylistHotlistProductCardDTO.commerceUserId;
-        existingBuylistHotlistProductCard.buylistLocationId = updateBuylistHotlistProductCardDTO.buylistLocationId;
-        existingBuylistHotlistProductCard.buylistHotlistProductCardStartDateTime = updateBuylistHotlistProductCardDTO.buylistHotlistProductCardStartDateTime;
-        existingBuylistHotlistProductCard.buylistHotlistProductCardEndDateTime = updateBuylistHotlistProductCardDTO.buylistHotlistProductCardEndDateTime;
-        existingBuylistHotlistProductCard.buylistHotlistProductCardIsExternal = updateBuylistHotlistProductCardDTO.buylistHotlistProductCardIsExternal;
+        buylistHotlistProductCard.commerceUserId = updateBuylistHotlistProductCardDTO.commerceUserId;
+        buylistHotlistProductCard.buylistLocationId = updateBuylistHotlistProductCardDTO.buylistLocationId;
+        buylistHotlistProductCard.buylistHotlistProductCardStartDateTime = updateBuylistHotlistProductCardDTO.buylistHotlistProductCardStartDateTime;
+        buylistHotlistProductCard.buylistHotlistProductCardEndDateTime = updateBuylistHotlistProductCardDTO.buylistHotlistProductCardEndDateTime;
+        buylistHotlistProductCard.buylistHotlistProductCardIsExternal = updateBuylistHotlistProductCardDTO.buylistHotlistProductCardIsExternal;
         
-        await this.buylistHotlistProductCardRepository.save(existingBuylistHotlistProductCard);
+        await this.buylistHotlistProductCardRepository.save(buylistHotlistProductCard);
 
-        let buylistHotlistProductCardDTO = this.getBuylistHotlistProductCardById(existingBuylistHotlistProductCard.buylistHotlistProductCardId);
-
+        let buylistHotlistProductCardDTO = await this.getBuylistHotlistProductCardById(buylistHotlistProductCard.buylistHotlistProductCardId);
+        
         return buylistHotlistProductCardDTO;
     
+    }
+
+    async deleteBuylistHotlistProductCard(buylistHotlistProductCardId: string) {
+
+        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOne({ 
+            where: { 
+                buylistHotlistProductCardId: buylistHotlistProductCardId 
+            } 
+        });
+
+        if (buylistHotlistProductCard == null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_HOTLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist hotlist product card was not found');
+        }
+
+        await this.buylistHotlistProductCardRepository.delete({buylistHotlistProductCardId: buylistHotlistProductCardId});
+
+        return true;
     }
  
 }

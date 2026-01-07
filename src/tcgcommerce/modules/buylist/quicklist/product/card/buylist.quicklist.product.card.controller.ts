@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe, Delete } from '@nestjs/common';
 import { CreateBuylistQuicklistProductCardDTO, UpdateBuylistQuicklistProductCardDTO } from './dto/buylist.quicklist.product.card.dto';
 import { BuylistQuicklistProductCardService } from './buylist.quicklist.product.card.service';
 
@@ -30,6 +30,11 @@ export class BuylistQuicklistProductCardController {
     @UsePipes(new ValidationPipe())
     async updateBuylistQuicklistProductCard(@Body() updateBuylistQuicklistProductCardDTO: UpdateBuylistQuicklistProductCardDTO) {
         return await this.buylistQuicklistProductCardService.updateBuylistQuicklistProductCard(updateBuylistQuicklistProductCardDTO);
+    }
+
+    @Delete('/delete/:buylistQuicklistProductCardId')
+    async deleteBuylistQuicklistProductCard(@Param('buylistQuicklistProductCardId') buylistQuicklistProductCardId: string) {
+        return await this.buylistQuicklistProductCardService.deleteBuylistQuicklistProductCard(buylistQuicklistProductCardId);
     }
 
 }

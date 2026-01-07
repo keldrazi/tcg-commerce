@@ -31,6 +31,10 @@ export class CreateBuylistQuicklistProductCardDTO {
     productTypeId: string;
     @IsString()
     productLanguageId: string;
+    @IsString()
+    productLanguageCode: string;
+    @IsString()
+    buylistQuicklistProductCardCode: string
     @IsBoolean()
     buylistQuicklistProductCardIsActive: boolean;
 }

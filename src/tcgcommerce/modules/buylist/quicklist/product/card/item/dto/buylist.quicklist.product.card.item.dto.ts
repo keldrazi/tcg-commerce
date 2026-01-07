@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 export class BuylistQuicklistProductCardItemDTO {
     buylistQuicklistProductCardItemId: string;
@@ -26,11 +26,29 @@ export class CreateBuylistQuicklistProductCardItemDTO {
     @IsString()
     productCardId: string;
     @IsString()
+    productCardTCGdbId: string;
+    @IsNumber()
+    productCardTCGPlayerId: number
+    @IsString()
+    productCardName: string
+    @IsString()
+    productCardNumber: string;
+    @IsString()
+    productCardRarityId: string;
+    @IsString()
+    productCardRarityCode: string;
+    @IsString()
     productSetId: string;
+    @IsString()
+    productSetCode: string;
     @IsString()
     productLanguageId: string
     @IsString()
-    productCardPrintingId: string
+    productLanguageCode: string
+    @IsString()
+    productCardPrintingId: string;
+    @IsString()
+    productCardPrintingName: string;  
 }
 
 

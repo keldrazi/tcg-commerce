@@ -3,12 +3,6 @@ import { IsString, IsBoolean, IsNumber } from "class-validator";
 export class BuylistHotlistProductCardItemDTO {
     buylistHotlistProductCardItemId: string;
     buylistHotlistProductCardId: string;
-    commerceAccountId: string;
-    commerceUserId: string;
-    commerceUserName: string;
-    productVendorId: string;
-    productLineId: string;
-    productTypeId: string;
     productCardId: string;
     productCardTCGdbId: string;
     productCardTCGPlayerId: number
@@ -35,11 +29,29 @@ export class CreateBuylistHotlistProductCardItemDTO {
     @IsString()
     productCardId: string;
     @IsString()
+    productCardTCGdbId: string;
+    @IsNumber()
+    productCardTCGPlayerId: number
+    @IsString()
+    productCardName: string
+    @IsString()
+    productCardNumber: string;
+    @IsString()
+    productCardRarityId: string;
+    @IsString()
+    productCardRarityCode: string;
+    @IsString()
     productSetId: string;
+    @IsString()
+    productSetCode: string;
     @IsString()
     productLanguageId: string
     @IsString()
-    productCardPrintingId: string
+    productLanguageCode: string
+    @IsString()
+    productCardPrintingId: string;
+    @IsString()
+    productCardPrintingName: string; 
     @IsNumber()
     buylistHotlistProductCardItemQty: number
     @IsBoolean()
