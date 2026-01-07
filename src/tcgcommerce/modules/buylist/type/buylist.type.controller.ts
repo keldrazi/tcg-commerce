@@ -17,7 +17,7 @@ export class BuylistTypeController {
         return await this.buylistTypeService.getBuylistTypeById(buylistTypeId);
     }
 
-    @Get('/all')
+    @Get()
     async getBuylistTypes() {
         return await this.buylistTypeService.getBuylistTypes();
     }

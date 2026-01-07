@@ -129,7 +129,7 @@ export class BuylistImportProductCardService {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found');
         }
 
-        let productLineDTO = await this.productLineService.getProductLine(buylistProductCardDTO.productLineId);
+        let productLineDTO = await this.productLineService.getProductLineById(buylistProductCardDTO.productLineId);
 
         if(productLineDTO == null || productLineDTO instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line not found');

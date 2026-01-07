@@ -10,18 +10,23 @@ export class BuylistPriceProductCardRuleHotlistController {
     ) { }
 
 
-    @Get('id/:buylistPriceProductCardRuleHotlistId')
+    @Get('/id/:buylistPriceProductCardRuleHotlistId')
     async getBuylistPriceProductCardRuleHotlist(@Param('buylistPriceProductCardRuleHotlistId') buylistPriceProductCardRuleHotlistId: string) {
         return await this.buylistPriceProductCardRuleHotlistService.getBuylistPriceProductCardRuleHotlistById(buylistPriceProductCardRuleHotlistId);
     }
 
-    @Post()
+    @Get('/caid/:commerceAccountId/pvid/:productVendorId/plid/:productLineId/ptid/:productTypeId')
+    async getBuylistPriceProductCardRuleHotlistByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string, @Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string, @Param('productTypeId') productTypeId: string) {
+        return await this.buylistPriceProductCardRuleHotlistService.getBuylistPriceProductCardRuleHotlistByCommerceAccountId(commerceAccountId, productVendorId, productLineId, productTypeId);
+    }
+
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createBuylistPriceProductCardRuleHotlist(@Body() createBuylistPriceProductCardRuleHotlistDTO: CreateBuylistPriceProductCardRuleHotlistDTO) {
         return await this.buylistPriceProductCardRuleHotlistService.createBuylistPriceProductCardRuleHotlist(createBuylistPriceProductCardRuleHotlistDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateBuylistPriceProductCardRuleHotlist(@Body() updateBuylistPriceProductCardRuleHotlistDTO: UpdateBuylistPriceProductCardRuleHotlistDTO) {
         return await this.buylistPriceProductCardRuleHotlistService.updateBuylistPriceProductCardRuleHotlist(updateBuylistPriceProductCardRuleHotlistDTO);

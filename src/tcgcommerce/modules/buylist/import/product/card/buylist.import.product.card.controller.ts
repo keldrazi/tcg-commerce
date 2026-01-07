@@ -10,7 +10,7 @@ export class BuylistImportProductCardController {
     ) { }
     
     
-    @Post()
+    @Post('/create')
     @UseInterceptors(FileInterceptor('file'))
     async createBuylistImportProductCard(
         @Body() body: any,
@@ -30,21 +30,21 @@ export class BuylistImportProductCardController {
         return buylistImportProductCardCode;
     }
     
-    @Get('review/:buylistImportProductCardId')
+    @Get('/review/:buylistImportProductCardId')
     async reviewBuylistImportProductCardById(@Param('buylistImportProductCardId') buylistImportProductCardId: string) {
         let buylistImportProductCardDTO = await this.buylistImportProductCardService.getBuylistImportProductCardDetailsById(buylistImportProductCardId);
 
         return buylistImportProductCardDTO;
     }
 
-    @Get('approve/:buylistImportProductCardId')
+    @Get('/approve/:buylistImportProductCardId')
     async approveBuylistImportProductCardById(@Param('buylistImportProductCardId') buylistImportProductCardId: string) {
         let buylistImportProductCardDTO = await this.buylistImportProductCardService.approveBuylistImportProductCardById(buylistImportProductCardId);
         
         return buylistImportProductCardDTO;
     }
 
-    @Get('delete/:buylistImportProductCardId')
+    @Get('/delete/:buylistImportProductCardId')
     async deleteBuylistImportProductCardById(@Param('buylistImportProductCardId') buylistImportProductCardId: string) {
         let buylistImportProductCardDTO = await this.buylistImportProductCardService.deleteBuylistImportProductCardById(buylistImportProductCardId);
         

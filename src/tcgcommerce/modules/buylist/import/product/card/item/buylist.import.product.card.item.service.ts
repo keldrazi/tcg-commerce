@@ -80,7 +80,7 @@ export class BuylistImportProductCardItemService {
                 continue;
             }
 
-            let productSet = await this.productSetService.getProductSet(productCard.productSetId);
+            let productSet = await this.productSetService.getProductSetById(productCard.productSetId);
 
             if(productSet == null || productSet instanceof ErrorMessageDTO) {
                 continue;

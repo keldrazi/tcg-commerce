@@ -17,7 +17,7 @@ export class BuylistHotlistProductCardController {
         return await this.buylistHotlistProductCardService.getBuylistHotlistProductCardById(buylistHotlistProductCardId);
     }
 
-    @Get('/all/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getBuylistHotlistProductCards(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.buylistHotlistProductCardService.getBuylistHotlistProductCardsByCommerceAccountId(commerceAccountId);
     }

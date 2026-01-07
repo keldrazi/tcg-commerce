@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Param, UsePipes, ValidationPipe } from '@n
 import { CreateBuylistQuicklistProductCardItemDTO } from './dto/buylist.quicklist.product.card.item.dto';
 import { BuylistQuicklistProductCardItemService } from './buylist.quicklist.product.card.item.service';
 
-
-
 @Controller('buylist/quicklist/product/card/item')
 export class BuylistQuicklistProductCardItemController {
 

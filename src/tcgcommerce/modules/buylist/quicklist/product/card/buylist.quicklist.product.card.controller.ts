@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } fro
 import { CreateBuylistQuicklistProductCardDTO, UpdateBuylistQuicklistProductCardDTO } from './dto/buylist.quicklist.product.card.dto';
 import { BuylistQuicklistProductCardService } from './buylist.quicklist.product.card.service';
 
-
-
 @Controller('buylist/quicklist/product/card')
 export class BuylistQuicklistProductCardController {
 
@@ -17,7 +15,7 @@ export class BuylistQuicklistProductCardController {
         return await this.buylistQuicklistProductCardService.getBuylistQuicklistProductCardById(buylistQuicklistProductCardId);
     }
 
-    @Get('/all/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getBuylistQuicklistProductCards(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.buylistQuicklistProductCardService.getBuylistQuicklistProductCardsByCommerceAccountId(commerceAccountId);
     }
