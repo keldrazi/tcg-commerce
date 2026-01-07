@@ -38,6 +38,29 @@ export class BuylistProductCardItemService {
         
     }
 
+    async getBuylistProductCardItemsByBuylistProductCardId(buylistProductCardId: string) {
+        let buylistProductCardItems = await this.buylistProductCardItemRepository.find({ 
+            where: { 
+                buylistProductCardId: buylistProductCardId 
+            } 
+        });
+        
+        if (buylistProductCardItems == null) {
+            return [];
+        }
+
+        let buylistProductCardItemDTOs: BuylistProductCardItemDTO[] = [];
+
+        for(let i = 0; i < buylistProductCardItems.length; i++) {
+            let buylistProductCardItem = buylistProductCardItems[i];
+            let buylistProductCardItemDTO: BuylistProductCardItemDTO = ({ ...buylistProductCardItem });
+            buylistProductCardItemDTOs.push(buylistProductCardItemDTO);
+        }
+
+        return buylistProductCardItemDTOs;
+        
+    }
+
     async createBuylistProductCardItem(createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO) {
 
         //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
@@ -49,6 +72,32 @@ export class BuylistProductCardItemService {
         
         return buylistProductCardItemDTO;
         
+    }
+
+    async updateBuylistProductCardItem(updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO) {
+                    
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
+            where: { 
+                buylistProductCardItemId: updateBuylistProductCardItemDTO.buylistProductCardItemId 
+            } 
+        });   
+        
+        if (!buylistProductCardItem) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found'); 
+        }
+
+        buylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;
+        buylistProductCardItem.productCardConditionId = updateBuylistProductCardItemDTO.productCardConditionId;
+        buylistProductCardItem.buylistProductCardItemQty = updateBuylistProductCardItemDTO.buylistProductCardItemQty;
+        
+        //NEED TO EMIT EVENT TO UPDATE THE BUYLIST QTY COUNT
+
+        await this.buylistProductCardItemRepository.save(buylistProductCardItem);
+
+        let buylistProductCardItemDTO = await this.getBuylistProductCardItemById(buylistProductCardItem.buylistProductCardItemId);
+
+        return buylistProductCardItemDTO;
+    
     }
 
     @OnEvent('buylist.import.product.card.approved')
@@ -66,7 +115,7 @@ export class BuylistProductCardItemService {
         for(let i = 0; i < buylistImportProductCardItemDTOs.length; i++) {
             let buylistImportProductCardItemDTO = buylistImportProductCardItemDTOs[i];
             
-            let newBuylistProductCardItem = this.buylistProductCardItemRepository.create({
+            let buylistProductCardItem = this.buylistProductCardItemRepository.create({
                 buylistProductCardId: buylistImportProductCardDTO.buylistProductCardId,
                 productCardId: buylistImportProductCardItemDTO.productCardId,
                 productCardTCGdbId: buylistImportProductCardItemDTO.productCardTCGdbId,
@@ -87,7 +136,7 @@ export class BuylistProductCardItemService {
                 buylistProductCardItemQty: buylistImportProductCardItemDTO.buylistImportProductCardItemQty,
             });
 
-            newBuylistProductCardItem = await this.buylistProductCardItemRepository.save(newBuylistProductCardItem);
+            buylistProductCardItem = await this.buylistProductCardItemRepository.save(buylistProductCardItem);
 
             buylistProductCardItemCount = buylistProductCardItemCount + 1;
             buylistProductCardItemQtyCount = buylistProductCardItemQtyCount + buylistImportProductCardItemDTO.buylistImportProductCardItemQty;
@@ -98,30 +147,6 @@ export class BuylistProductCardItemService {
             buylistProductCardItemCount: buylistProductCardItemCount,
             buylistProductCardItemQtyCount: buylistProductCardItemQtyCount,
         });
-    }
-
-    async updateBuylistProductCardItem(updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO) {
-                    
-        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
-            where: { 
-                buylistProductCardItemId: updateBuylistProductCardItemDTO.buylistProductCardItemId 
-            } 
-        });   
-        
-        if (!buylistProductCardItem) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found'); 
-        }
-
-        buylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;
-        buylistProductCardItem.productCardConditionId = updateBuylistProductCardItemDTO.productCardConditionId;
-        buylistProductCardItem.buylistProductCardItemQty = updateBuylistProductCardItemDTO.buylistProductCardItemQty;
-        
-        await this.buylistProductCardItemRepository.save(buylistProductCardItem);
-
-        let buylistProductCardItemDTO = await this.getBuylistProductCardItemById(buylistProductCardItem.buylistProductCardItemId);
-
-        return buylistProductCardItemDTO;
-    
-    }
+    } 
  
 }

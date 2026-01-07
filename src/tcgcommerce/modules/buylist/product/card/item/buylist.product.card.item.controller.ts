@@ -15,6 +15,11 @@ export class BuylistProductCardItemController {
         return await this.buylistProductCardItemService.getBuylistProductCardItemById(buylistProductCardItemId);
     }
 
+    @Get('/blpcid/:buylistProductCardId')
+    async getBuylistProductCardItemsByBuylistProductCardId(@Param('buylistProductCardId') buylistProductCardId: string) {
+        return await this.buylistProductCardItemService.getBuylistProductCardItemsByBuylistProductCardId(buylistProductCardId);
+    }
+
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createBuylistProductCardItem(@Body() createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO) {
