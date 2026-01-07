@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceRuleProductCardUpdateDailyDTO, CreatePriceRuleProductCardUpdateDailyDTO, UpdatePriceRuleProductCardUpdateDailyDTO} from './dto/price.rule.product.card.update.daily.dto';
 import { PriceRuleProductCardUpdateDaily } from 'src/typeorm/entities/tcgcommerce/modules/price/rule/product/card/update/daily/price.rule.product.card.update.daily.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class PriceRuleProductCardUpdateDailyService {
 
     constructor(
         @InjectRepository(PriceRuleProductCardUpdateDaily) private priceRuleProductCardUpdateDailyRepository: Repository<PriceRuleProductCardUpdateDaily>,
+        private errorMessageService: ErrorMessageService
     ) { }
 
 
@@ -19,9 +21,8 @@ export class PriceRuleProductCardUpdateDailyService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(priceRuleProductCardUpdateDaily == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_UPDATE_DAILY_NOT_FOUND', 'Price rule product card update daily was not found');
         }
 
         let priceRuleProductCardUpdateDailyDTO: PriceRuleProductCardUpdateDailyDTO = ({ ...priceRuleProductCardUpdateDaily});
@@ -37,12 +38,12 @@ export class PriceRuleProductCardUpdateDailyService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(priceRuleProductCardUpdateDaily == null) {
-            return null;
+            [];
         }
 
         let priceRuleProductCardUpdateDailyDTOs: PriceRuleProductCardUpdateDailyDTO[] = [];
+        
         for(let i=0; i < priceRuleProductCardUpdateDaily.length; i++) {
             let priceRuleProductCardUpdateDailyDTO: PriceRuleProductCardUpdateDailyDTO = ({ ...priceRuleProductCardUpdateDaily[i]})
             priceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyCommerceLocationIds = JSON.parse(priceRuleProductCardUpdateDaily[i].priceRuleProductCardUpdateDailyCommerceLocationIds);
@@ -62,9 +63,8 @@ export class PriceRuleProductCardUpdateDailyService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(priceRuleProductCardUpdateDaily == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_UPDATE_DAILY_NOT_FOUND', 'Price rule product card update daily was not found');
         }
 
         let priceRuleProductCardUpdateDailyDTO: PriceRuleProductCardUpdateDailyDTO = ({ ...priceRuleProductCardUpdateDaily})
@@ -75,31 +75,37 @@ export class PriceRuleProductCardUpdateDailyService {
 
     async createPriceRuleProductCardUpdateDaily(createPriceRuleProductCardUpdateDailyDTO: CreatePriceRuleProductCardUpdateDailyDTO) {
         
-        //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
-        let priceRuleProductCardUpdateDaily = await this.getPriceRuleProductCardUpdateDailyByCommerceAccountIdAndVendorId(createPriceRuleProductCardUpdateDailyDTO.commerceAccountId, createPriceRuleProductCardUpdateDailyDTO.productVendorId, createPriceRuleProductCardUpdateDailyDTO.productLineId, createPriceRuleProductCardUpdateDailyDTO.productTypeId);
+        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOne({
+            where: {
+                commerceAccountId: createPriceRuleProductCardUpdateDailyDTO.commerceAccountId,
+                productVendorId: createPriceRuleProductCardUpdateDailyDTO.productVendorId,
+                productLineId: createPriceRuleProductCardUpdateDailyDTO.productLineId,
+                productTypeId: createPriceRuleProductCardUpdateDailyDTO.productTypeId
+            }
+        });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
         if (priceRuleProductCardUpdateDaily != null) {
-            console.log('Price Rule Product Card Base already exists for the Commerce Account / Vendor / Line / Type combination.');
-            return null;
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_UPDATE_DAILY_ALREADY_EXISTS', 'Price rule product card update daily already exists for this commerce account and product');
         }
 
-        let newPriceRuleProductCardUpdateDaily = this.priceRuleProductCardUpdateDailyRepository.create({ ...createPriceRuleProductCardUpdateDailyDTO });
-        newPriceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.save(newPriceRuleProductCardUpdateDaily);
+        priceRuleProductCardUpdateDaily = this.priceRuleProductCardUpdateDailyRepository.create({ ...createPriceRuleProductCardUpdateDailyDTO });
+        priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.save(priceRuleProductCardUpdateDaily);
 
-        let priceRuleProductCardUpdateDailyDTO = await this.getPriceRuleProductCardUpdateDailyById(newPriceRuleProductCardUpdateDaily.priceRuleProductCardUpdateDailyId);
+        let priceRuleProductCardUpdateDailyDTO = await this.getPriceRuleProductCardUpdateDailyById(priceRuleProductCardUpdateDaily.priceRuleProductCardUpdateDailyId);
 
         return priceRuleProductCardUpdateDailyDTO;
     }   
 
     async updatePriceRuleProductCardUpdateDaily(updatePriceRuleProductCardUpdateDailyDTO: UpdatePriceRuleProductCardUpdateDailyDTO) {
 
-        //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
-        let priceRuleProductCardUpdateDaily = await this.getPriceRuleProductCardUpdateDailyById(updatePriceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyId);
-        
-        //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
-        if (priceRuleProductCardUpdateDaily == null) {
-            return null;
+        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOne({
+            where: {
+                priceRuleProductCardUpdateDailyId: updatePriceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyId,
+            }
+        });
+
+        if(priceRuleProductCardUpdateDaily == null) {
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_UPDATE_DAILY_NOT_FOUND', 'Price rule product card update daily was not found');
         }
 
         priceRuleProductCardUpdateDaily.priceRuleProductCardUpdateDailyCommerceLocationIds = updatePriceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyCommerceLocationIds;

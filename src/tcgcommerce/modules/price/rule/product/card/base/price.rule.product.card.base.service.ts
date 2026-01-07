@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceRuleProductCardBaseDTO, CreatePriceRuleProductCardBaseDTO, UpdatePriceRuleProductCardBaseDTO} from './dto/price.rule.product.card.base.dto';
 import { PriceRuleProductCardBase } from 'src/typeorm/entities/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.entity';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class PriceRuleProductCardBaseService {
 
     constructor(
         @InjectRepository(PriceRuleProductCardBase) private priceRuleProductCardBaseRepository: Repository<PriceRuleProductCardBase>,
+        private errorMessageService: ErrorMessageService
     ) { }
 
 
@@ -19,9 +21,8 @@ export class PriceRuleProductCardBaseService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(priceRuleProductCardBase == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_NOT_FOUND', 'Price rule product card base was not found');
         }
 
         let priceRuleProductCardBaseDTO: PriceRuleProductCardBaseDTO = ({ ...priceRuleProductCardBase})
@@ -39,9 +40,8 @@ export class PriceRuleProductCardBaseService {
             }
         });
         
-        //TO DO: CREATE AN ERROR TO RETURN;
         if(priceRuleProductCardBase == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_NOT_FOUND', 'Price rule product card base was not found');
         }
 
         let priceRuleProductCardBaseDTO: PriceRuleProductCardBaseDTO = ({ ...priceRuleProductCardBase})
@@ -54,18 +54,23 @@ export class PriceRuleProductCardBaseService {
     async createPriceRuleProductCardBase(createPriceRuleProductCardBaseDTO: CreatePriceRuleProductCardBaseDTO) {
         
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
-        let priceRuleProductCardBase = await this.getPriceRuleProductCardBaseByCommerceAccountId(createPriceRuleProductCardBaseDTO.commerceAccountId, createPriceRuleProductCardBaseDTO.productVendorId, createPriceRuleProductCardBaseDTO.productLineId, createPriceRuleProductCardBaseDTO.productTypeId);
-        
-        //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
+        let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
+            where: {
+                commerceAccountId: createPriceRuleProductCardBaseDTO.commerceAccountId,
+                productVendorId: createPriceRuleProductCardBaseDTO.productVendorId,
+                productLineId: createPriceRuleProductCardBaseDTO.productLineId,
+                productTypeId: createPriceRuleProductCardBaseDTO.productTypeId
+            }
+        });
+
         if (priceRuleProductCardBase != null) {
-            console.log('Price Rule Product Card Base already exists for the Commerce Account / Vendor / Line / Type combination.');
-            return null;
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_ALREADY_EXISTS', 'Price rule product card base already exists for this commerce account and product');
         }
 
-        let newPriceRuleProductCardBase = this.priceRuleProductCardBaseRepository.create({ ...createPriceRuleProductCardBaseDTO });
-        newPriceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.save(newPriceRuleProductCardBase);
+        priceRuleProductCardBase = this.priceRuleProductCardBaseRepository.create({ ...createPriceRuleProductCardBaseDTO });
+        priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.save(priceRuleProductCardBase);
 
-        let priceRuleProductCardBaseDTO = await this.getPriceRuleProductCardBaseById(newPriceRuleProductCardBase.priceRuleProductCardBaseId);
+        let priceRuleProductCardBaseDTO = await this.getPriceRuleProductCardBaseById(priceRuleProductCardBase.priceRuleProductCardBaseId);
 
         return priceRuleProductCardBaseDTO;
     }   
@@ -79,9 +84,8 @@ export class PriceRuleProductCardBaseService {
             }
         });
         
-        //TO DO: RETURN AN ERROR FOR DUPLICATE PRICING PRODUCT CARD;
         if (priceRuleProductCardBase == null) {
-            return null;
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_NOT_FOUND', 'Price rule product card base was not found');
         }
 
         priceRuleProductCardBase.priceRuleProductCardBaseId = updatePriceRuleProductCardBaseDTO.priceRuleProductCardBaseId;

@@ -11,28 +11,28 @@ export class PriceModuleController {
         private priceModuleService: PriceModuleService,
     ) { }
     
-    @Get('/all')
+    @Get()
     async getPriceModules() {
         return await this.priceModuleService.getPriceModules();
     }
 
-    @Get('/:moduleId')
-    async getPriceModule(@Param('priceModuleId') applicatioModuleId: string) {
-        return await this.priceModuleService.getPriceModule(applicatioModuleId);
+    @Get('id/:priceModuleId')
+    async getPriceModuleById(@Param('priceModuleId') priceModuleId: string) {
+        return await this.priceModuleService.getPriceModuleById(priceModuleId);
     }
 
-    @Get('/commerceAccount/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getPriceModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.priceModuleService.getPriceModuleByCommerceAccountId(commerceAccountId);
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createPriceModule(@Body() createPriceModuleDTO: CreatePriceModuleDTO) {
         return this.priceModuleService.createPriceModule(createPriceModuleDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updatePriceModule(@Body() updatePriceModuleDTO: UpdatePriceModuleDTO) {
         return this.priceModuleService.updatePriceModule(updatePriceModuleDTO);

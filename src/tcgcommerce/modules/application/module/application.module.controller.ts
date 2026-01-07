@@ -14,7 +14,7 @@ export class ApplicationModuleController {
         return await this.applicationModuleService.getApplicationModules();
     }
 
-    @Get('id/:applicationModuleId')
+    @Get('/id/:applicationModuleId')
     async getApplicationModuleById(@Param('applicationModuleId') applicationModuleId: string) {
         return await this.applicationModuleService.getApplicationModuleById(applicationModuleId);
     }

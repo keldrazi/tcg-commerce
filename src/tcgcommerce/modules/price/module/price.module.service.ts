@@ -3,23 +3,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceModule } from 'src/typeorm/entities/tcgcommerce/modules/price/module/price.module.entity';
 import { CreatePriceModuleDTO, UpdatePriceModuleDTO, PriceModuleDTO } from './dto/price.module.dto';
+import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class PriceModuleService {
 
     constructor(
         @InjectRepository(PriceModule) private priceModuleRepository: Repository<PriceModule>,
+        private errorMessageService: ErrorMessageService
     ) { }
 
-    async getPriceModule(priceModuleId: string) {
+    async getPriceModuleById(priceModuleId: string) {
         let priceModule = await this.priceModuleRepository.findOne({ 
             where: { 
                 priceModuleId : priceModuleId
             } 
         });
         
-        if (!priceModule) {
-            return null;
+        if (priceModule == null) {
+            return this.errorMessageService.createErrorMessage('PRICE_MODULE_NOT_FOUND', 'Price module was not found');
         }
 
         let priceModuleDTO: PriceModuleDTO = ({ ...priceModule });
@@ -35,8 +37,8 @@ export class PriceModuleService {
             } 
         });
         
-        if (!priceModule) {
-            return null;
+        if (priceModule == null) {
+            return this.errorMessageService.createErrorMessage('PRICE_MODULE_NOT_FOUND', 'Price module was not found');
         }
 
         let priceModuleDTO: PriceModuleDTO = ({ ...priceModule });
@@ -67,10 +69,20 @@ export class PriceModuleService {
     }
 
     async createPriceModule(createPriceModuleDTO: CreatePriceModuleDTO) {
-        let priceModule = this.priceModuleRepository.create({ ...createPriceModuleDTO });
+        let priceModule = await this.priceModuleRepository.findOne({ 
+            where: { 
+                commerceAccountId : createPriceModuleDTO.commerceAccountId
+            } 
+        });
+
+        if (priceModule != null) {
+            return this.errorMessageService.createErrorMessage('PRICE_MODULE_ALREADY_EXISTS', 'Price module already exists');
+        }
+        
+        priceModule = this.priceModuleRepository.create({ ...createPriceModuleDTO });
         priceModule = await this.priceModuleRepository.save(priceModule);
 
-        let priceModuleDTO = await this.getPriceModule(priceModule.priceModuleId);
+        let priceModuleDTO = await this.getPriceModuleById(priceModule.priceModuleId);
 
         return priceModuleDTO;
     }
@@ -83,9 +95,8 @@ export class PriceModuleService {
             } 
         });
 
-        //TO DO: RETURN AN ERROR IF PRODUCT MODULE NOT FOUND;
-        if (!priceModule) {
-            return null; 
+        if (priceModule == null) {
+            return this.errorMessageService.createErrorMessage('PRICE_MODULE_NOT_FOUND', 'Price module was not found');
         }
 
         priceModule.priceModuleSettings = updatePriceModuleDTO.priceModuleSettings;
@@ -95,7 +106,7 @@ export class PriceModuleService {
         
         await this.priceModuleRepository.save(priceModule);
 
-        let priceModuleDTO = await this.getPriceModule(priceModule.priceModuleId);
+        let priceModuleDTO = await this.getPriceModuleById(priceModule.priceModuleId);
         
         return priceModuleDTO;
     }

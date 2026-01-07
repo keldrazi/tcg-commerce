@@ -16,12 +16,12 @@ export class CommerceModuleController {
         return await this.commerceModuleService.getCommerceModules();
     }
 
-    @Get('id/:commerceModuleId')
+    @Get('/id/:commerceModuleId')
     async getCommerceModuleById(@Param('commerceModuleId') commerceModuleId: string) {
         return await this.commerceModuleService.getCommerceModuleById(commerceModuleId);
     }
 
-    @Get('caid/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getCommerceModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.commerceModuleService.getCommerceModuleByCommerceAccountId(commerceAccountId);
     }

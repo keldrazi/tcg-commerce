@@ -14,7 +14,7 @@ export class CommerceLocationController {
         return await this.commerceLocationService.getCommerceLocationsByCommerceAccountId(commerceAccountId);
     }
 
-    @Get('id/:commerceLocationId')
+    @Get('/id/:commerceLocationId')
     async getCommerceLocation(@Param('commerceLocationId') commerceLocationId: string) {
         return await this.commerceLocationService.getCommerceLocationById(commerceLocationId);
     }

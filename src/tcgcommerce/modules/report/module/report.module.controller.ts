@@ -16,7 +16,7 @@ export class ReportModuleController {
         return await this.reportModuleService.getReportModules();
     }
 
-    @Get('id/:reportModuleId')
+    @Get('/id/:reportModuleId')
     async getReportModuleById(@Param('reportModuleId') reportModuleId: string) {
         return await this.reportModuleService.getReportModuleById(reportModuleId);
     }
@@ -26,13 +26,13 @@ export class ReportModuleController {
         return await this.reportModuleService.getReportModuleByCommerceAccountId(commerceAccountId);
     }
 
-    @Post()
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createReportModule(@Body() createReportModuleDTO: CreateReportModuleDTO) {
         return this.reportModuleService.createReportModule(createReportModuleDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateReportModule(@Body() updateReportModuleDTO: UpdateReportModuleDTO) {
         return this.reportModuleService.updateReportModule(updateReportModuleDTO);

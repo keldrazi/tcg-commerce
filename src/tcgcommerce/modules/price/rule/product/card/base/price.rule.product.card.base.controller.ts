@@ -12,18 +12,23 @@ export class PriceRuleProductCardBaseController {
     ) { }
 
 
-    @Get('id/:priceRuleProductCardBaseId')
-    async getPriceRuleProductCardBase(@Param('priceRuleProductCardBaseId') priceRuleProductCardBaseId: string) {
+    @Get('/id/:priceRuleProductCardBaseId')
+    async getPriceRuleProductCardBaseById(@Param('priceRuleProductCardBaseId') priceRuleProductCardBaseId: string) {
         return await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseById(priceRuleProductCardBaseId);
     }
 
-    @Post()
+    @Get('/caid/:commerceAccountId/pvid/:productVendorId/plid/:productLineId/ptid/:productTypeId')
+    async getPriceRuleProductCardBaseByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string, @Param('productVendorId') productVendorId: string, @Param('productLineId') productLineId: string, @Param('productTypeId') productTypeId: string) {
+        return await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(commerceAccountId, productVendorId, productLineId, productTypeId);
+    }
+
+    @Post('/create')
     @UsePipes(new ValidationPipe())
     async createPriceRuleProductCardBase(@Body() createPriceRuleProductCardBaseDTO: CreatePriceRuleProductCardBaseDTO) {
         return await this.priceRuleProductCardBaseService.createPriceRuleProductCardBase(createPriceRuleProductCardBaseDTO);
     }
 
-    @Put()
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updatePriceRuleProductCardBase(@Body() updatePriceRuleProductCardBaseDTO: UpdatePriceRuleProductCardBaseDTO) {
         return await this.priceRuleProductCardBaseService.updatePriceRuleProductCardBase(updatePriceRuleProductCardBaseDTO);
