@@ -56,13 +56,19 @@ export class BuylistProductCardService {
     }
     
     async createBuylistProductCard(createBuylistProductCardDTO: CreateBuylistProductCardDTO) {
-
-        //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
         
-        let newBuylistProductCard = this.buylistProductCardRepository.create({ ...createBuylistProductCardDTO });
-        newBuylistProductCard = await this.buylistProductCardRepository.save(newBuylistProductCard);
+        let buylistProductCard = this.buylistProductCardRepository.create({ ...createBuylistProductCardDTO });
+        //CREATE BUYLIST PRODUCT CARD CODE
+        buylistProductCard.buylistProductCardCode = await this.createBuylistProductCardCode(
+            createBuylistProductCardDTO.productVendorCode,
+            createBuylistProductCardDTO.productLineCode,
+            createBuylistProductCardDTO.productTypeCode,
+            createBuylistProductCardDTO.productLanguageCode
+        );
 
-        let buylistProductCardDTO = this.getBuylistProductCardById(newBuylistProductCard.buylistProductCardId);
+        buylistProductCard = await this.buylistProductCardRepository.save(buylistProductCard);
+
+        let buylistProductCardDTO = this.getBuylistProductCardById(buylistProductCard.buylistProductCardId);
         
         return buylistProductCardDTO;
         
@@ -101,16 +107,28 @@ export class BuylistProductCardService {
     
     }
 
+    async createBuylistProductCardCode(productVendorCode: string, productLineCode: string, productTypeCode: string, productLanguageCode: string) {
+        return `BPC-${productVendorCode}-${productLineCode}-${productTypeCode}-${productLanguageCode}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    }
+
+    //DELETE BUYLIST PRODUCT CARD, ONLY IF IT HASN'T BEEN SUBMITTED;
+
     @OnEvent('buylist.product.card.update.count')
     async updateBuylistProductCardCount(payload: any) {
         let buylistProductCard = await this.getBuylistProductCardById(payload.buylistProductCardId);
-        
+        let countType = payload.countType;
         if(buylistProductCard == null || buylistProductCard instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found'); 
         }
-
-        buylistProductCard.buylistProductCardTotalCount = buylistProductCard.buylistProductCardTotalCount + payload.buylistProductCardItemCount;
-        buylistProductCard.buylistProductCardTotalQtyCount = buylistProductCard.buylistProductCardTotalQtyCount + payload.buylistProductCardItemQtyCount;
+        if(countType == "ADD") {
+            buylistProductCard.buylistProductCardTotalCount = buylistProductCard.buylistProductCardTotalCount + payload.buylistProductCardItemCount;
+            buylistProductCard.buylistProductCardTotalQtyCount = buylistProductCard.buylistProductCardTotalQtyCount + payload.buylistProductCardItemQtyCount;
+        }
+        else if(countType == "REMOVE") {
+            buylistProductCard.buylistProductCardTotalCount = buylistProductCard.buylistProductCardTotalCount - payload.buylistProductCardItemCount;
+            buylistProductCard.buylistProductCardTotalQtyCount = buylistProductCard.buylistProductCardTotalQtyCount - payload.buylistProductCardItemQtyCount;
+        }
+        
         buylistProductCard.buylistProductCardUpdateDate = new Date();
 
         await this.buylistProductCardRepository.save({ ...buylistProductCard });

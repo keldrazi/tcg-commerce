@@ -9,6 +9,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BuylistImportProductCardItemService } from 'src/tcgcommerce/modules/buylist/import/product/card/item/buylist.import.product.card.item.service';
 import { BuylistImportProductCardService } from 'src/tcgcommerce/modules/buylist/import/product/card/buylist.import.product.card.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
+import { count } from 'console';
 
 @Injectable()
 export class BuylistProductCardItemService {
@@ -63,12 +64,24 @@ export class BuylistProductCardItemService {
 
     async createBuylistProductCardItem(createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO) {
 
-        //ADD SOME VALIDATION TO PREVENT DUPLICATE ENTRIES;
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
+            where: { 
+                productCardId: createBuylistProductCardItemDTO.productCardId,
+                productCardPrintingId: createBuylistProductCardItemDTO.productCardPrintingId,
+                productCardConditionId: createBuylistProductCardItemDTO.productCardConditionId, 
+            } 
+        });
         
-        let newBuylistProductCardItem = this.buylistProductCardItemRepository.create({ ...createBuylistProductCardItemDTO });
-        newBuylistProductCardItem = await this.buylistProductCardItemRepository.save(newBuylistProductCardItem);
+        if (buylistProductCardItem != null) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_EXISTS', 'Buylist product card item exists');
+        }
+        
+        buylistProductCardItem = this.buylistProductCardItemRepository.create({ ...createBuylistProductCardItemDTO });
+        buylistProductCardItem = await this.buylistProductCardItemRepository.save(buylistProductCardItem);
 
-        let buylistProductCardItemDTO = this.getBuylistProductCardItemById(newBuylistProductCardItem.buylistProductCardItemId);
+        //NEED TO EMIT EVENT TO UPDATE THE BUYLIST QTY COUNT;
+
+        let buylistProductCardItemDTO = this.getBuylistProductCardItemById(buylistProductCardItem.buylistProductCardItemId);
         
         return buylistProductCardItemDTO;
         
@@ -85,19 +98,59 @@ export class BuylistProductCardItemService {
         if (!buylistProductCardItem) {
             return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found'); 
         }
+        let buylistProductCardItemQtyUpdateCount = 0;
+        let countType = "";
+        if(buylistProductCardItem.buylistProductCardItemQty > updateBuylistProductCardItemDTO.buylistProductCardItemQty) {
+            buylistProductCardItemQtyUpdateCount = buylistProductCardItem.buylistProductCardItemQty - updateBuylistProductCardItemDTO.buylistProductCardItemQty;
+            countType = "REMOVE";
+        }
+        else if(buylistProductCardItem.buylistProductCardItemQty < updateBuylistProductCardItemDTO.buylistProductCardItemQty) {
+            buylistProductCardItemQtyUpdateCount = updateBuylistProductCardItemDTO.buylistProductCardItemQty - buylistProductCardItem.buylistProductCardItemQty;
+            countType = "ADD";
+        }
 
         buylistProductCardItem.productCardPrintingId = updateBuylistProductCardItemDTO.productCardPrintingId;
         buylistProductCardItem.productCardConditionId = updateBuylistProductCardItemDTO.productCardConditionId;
         buylistProductCardItem.buylistProductCardItemQty = updateBuylistProductCardItemDTO.buylistProductCardItemQty;
-        
-        //NEED TO EMIT EVENT TO UPDATE THE BUYLIST QTY COUNT
 
         await this.buylistProductCardItemRepository.save(buylistProductCardItem);
+
+        this.eventEmitter.emit('buylist.product.card.update.count', {
+            countType: countType,
+            buylistProductCardId: buylistProductCardItem.buylistProductCardId,
+            buylistProductCardItemCount: 0,
+            buylistProductCardItemQtyCount: buylistProductCardItemQtyUpdateCount,
+        });
 
         let buylistProductCardItemDTO = await this.getBuylistProductCardItemById(buylistProductCardItem.buylistProductCardItemId);
 
         return buylistProductCardItemDTO;
     
+    }
+
+    async deleteBuylistProductCardItemById(buylistProductCardItemId: string) {
+
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({
+            where: {
+                buylistProductCardItemId: buylistProductCardItemId
+            }
+        });
+
+        if (!buylistProductCardItem) {
+            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found');
+        }
+
+        //NEED TO EMIT EVENT TO UPDATE THE BUYLIST QTY COUNT;
+        this.eventEmitter.emit('buylist.product.card.update.count', {
+            countType: "REMOVE",
+            buylistProductCardId: buylistProductCardItem.buylistProductCardId,
+            buylistProductCardItemCount: 1,
+            buylistProductCardItemQtyCount: buylistProductCardItem.buylistProductCardItemQty,
+        });
+
+        await this.buylistProductCardItemRepository.delete({ buylistProductCardItemId: buylistProductCardItemId });
+
+        return true;
     }
 
     @OnEvent('buylist.import.product.card.approved')
@@ -113,6 +166,8 @@ export class BuylistProductCardItemService {
         let buylistProductCardItemQtyCount = 0;
 
         for(let i = 0; i < buylistImportProductCardItemDTOs.length; i++) {
+            //NEED TO CHECK IF AN ITEM IS ALREADY THERE AND UPDATE VS CREATE;
+            
             let buylistImportProductCardItemDTO = buylistImportProductCardItemDTOs[i];
             
             let buylistProductCardItem = this.buylistProductCardItemRepository.create({
@@ -143,6 +198,7 @@ export class BuylistProductCardItemService {
         }
 
         this.eventEmitter.emit('buylist.product.card.update.count', {
+            countType: "ADD",
             buylistProductCardId: buylistImportProductCardDTO.buylistProductCardId,
             buylistProductCardItemCount: buylistProductCardItemCount,
             buylistProductCardItemQtyCount: buylistProductCardItemQtyCount,
