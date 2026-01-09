@@ -2,8 +2,6 @@ import { IsBoolean, IsDecimal, IsEmail, IsNumber, IsString } from 'class-validat
 import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
 import { ProductCardDTO } from 'src/tcgcommerce/modules/product/card/dto/product.card.dto';
 
-
-
 export class InventoryProductCardDTO {
     inventoryProductCardId: string;
     productCardId: string;

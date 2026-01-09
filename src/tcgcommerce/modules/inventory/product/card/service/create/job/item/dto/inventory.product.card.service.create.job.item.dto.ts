@@ -1,7 +1,5 @@
 import { InventoryProductCardServiceCreateJobItemDetail } from '../interface/inventory.product.card.service.create.job.item.detail.interface';
 
-
-
 export class InventoryProductCardServiceCreateJobItemDTO {
     inventoryProductCardServiceCreateJobItemId: string;
     inventoryProductCardServiceCreateJobId: string;

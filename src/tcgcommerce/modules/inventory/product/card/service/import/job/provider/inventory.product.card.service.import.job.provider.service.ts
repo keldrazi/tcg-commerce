@@ -28,7 +28,7 @@ export class InventoryProductCardServiceImportJobProviderService {
         let inventoryProductCardServiceImportJobProviderTypeDTO = await this.inventoryProductCardServiceImportJobProviderTypeService.getInventoryProductCardServiceImportJobProviderTypeByCode(inventoryProductCardServiceImportJobProviderTypeCode);
 
         if(inventoryProductCardServiceImportJobProviderTypeDTO == null || inventoryProductCardServiceImportJobProviderTypeDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found for code: ' + inventoryProductCardServiceImportJobProviderTypeCode);
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_PROVIDER_TYPE_NOT_FOUND', 'Inventory product card service import job provider type not found');
         }
 
         let inventoryProductCardServiceImportJobProviderTypeDataKey: InventoryProductCardServiceImportJobProviderTypeDataKey = inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileDataKey;
@@ -49,13 +49,12 @@ export class InventoryProductCardServiceImportJobProviderService {
             {
                 inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
                 inventoryProductCardServiceImportJobCount: inventoryProductCardServiceImportJobData.inventoryProductCardServiceImportJobCardData.length,
-                inventoryProductCardServiceImportJobQtyCount: inventoryProductCardServiceImportJobData.totalinventoryProductCardServiceImportJobCardQty,
+                inventoryProductCardServiceImportJobQtyCount: inventoryProductCardServiceImportJobData.totalInventoryProductCardServiceImportJobCardQty,
                 inventoryProductCardServiceImportJobStatus: INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_UPDATE_JOB_COUNT,
 
             }
         )
-
-
+        
         let inventoryProductCardServiceImportJobProviderDTOs: InventoryProductCardServiceImportJobProviderDTO[] = [];
 
         for(let i = 0; i < inventoryProductCardServiceImportJobData.inventoryProductCardServiceImportJobCardData.length; i++) {
@@ -84,7 +83,7 @@ export class InventoryProductCardServiceImportJobProviderService {
 
     async processInventoryProductCardServiceImportJobCSVData(inventoryProductCardServiceImportJobCSVData: any, inventoryProductCardServiceImportJobProviderTypeDataKeyQty: string) {
        
-        let totalinventoryProductCardServiceImportJobCardQty = 0;
+        let totalInventoryProductCardServiceImportJobCardQty = 0;
         
         let inventoryProductCardServiceImportJobCardData: any[] = [];
         
@@ -92,13 +91,13 @@ export class InventoryProductCardServiceImportJobProviderService {
             let inventoryProductCardServiceImportJobCard = inventoryProductCardServiceImportJobCSVData[i];
             let inventoryProductCardServiceImportJobQty = parseInt(inventoryProductCardServiceImportJobCard[inventoryProductCardServiceImportJobProviderTypeDataKeyQty]);
 
-            totalinventoryProductCardServiceImportJobCardQty = totalinventoryProductCardServiceImportJobCardQty + inventoryProductCardServiceImportJobQty;
+            totalInventoryProductCardServiceImportJobCardQty = totalInventoryProductCardServiceImportJobCardQty + inventoryProductCardServiceImportJobQty;
 
             inventoryProductCardServiceImportJobCardData.push(inventoryProductCardServiceImportJobCard);
         }
 
         let inventoryProductCardServiceImportJobData = {
-            totalinventoryProductCardServiceImportJobCardQty: totalinventoryProductCardServiceImportJobCardQty,
+            totalInventoryProductCardServiceImportJobCardQty: totalInventoryProductCardServiceImportJobCardQty,
             inventoryProductCardServiceImportJobCardData: inventoryProductCardServiceImportJobCardData,
         }
 

@@ -12,17 +12,17 @@ export class InventoryProductCardController {
     ) { }
     
     
-    @Get('/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getInventoryProductCardsByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         return await this.inventoryProductCardService.getInventoryProductCardsByCommerceAccountId(commerceAccountId);
     }
 
-    @Get('/:commerceAccountId/:commerceLocationId/:productSetId/:productLanguageId')
+    @Get('/caid/:commerceAccountId/clid/:commerceLocationId/psid/:productSetId/plid/:productLanguageId')
     async getInventoryProductCardsByProductSetId(@Param('commerceAccountId') commerceAccountId: string, @Param('commerceLocationId') commerceLocationId: string, @Param('productSetId') productSetId: string, @Param('productLanguageId') productLanguageId: string) {
         return await this.inventoryProductCardService.getInventoryProductCardsByProductSetId(commerceAccountId, commerceLocationId, productSetId, productLanguageId);
     }
 
-    @Put()
+    @Put('/update')
     async updateInventoryProductCards(@Body() inventoryProductCards: InventoryProductCardDTO[]) {
         let inventoryProductCardUpdateRecordCount = await this.inventoryProductCardService.updateInventoryProductCards(inventoryProductCards);
 

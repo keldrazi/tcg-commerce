@@ -17,7 +17,7 @@ export class InventoryProductCardServiceImportJobProviderTypeController {
         return await this.inventoryProductCardServiceImportJobProviderTypeService.getInventoryProductCardServiceImportJobProviderTypeById(inventoryProductCardServiceImportJobProviderTypeId);
     }
 
-    @Get('/all')
+    @Get()
     async getInventoryProductCardServiceImportJobProviderTypes() {
         return await this.inventoryProductCardServiceImportJobProviderTypeService.getInventoryProductCardServiceImportJobProviderTypes();
     }

@@ -27,7 +27,7 @@ export class InventoryProductCardServiceImportJobItemService {
         private productCardPrintingService: ProductCardPrintingService,
         private inventoryProductCardService: InventoryProductCardService,
         private eventEmitter: EventEmitter2,
-        private inventoryProductCardServiceImportJobProviderRocaService: InventoryProductCardServiceImportJobProviderService,
+        private inventoryProductCardServiceImportJobProviderService: InventoryProductCardServiceImportJobProviderService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -40,6 +40,10 @@ export class InventoryProductCardServiceImportJobItemService {
                     inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId,
                 }
             });
+
+            if(inventoryProductCardServiceImportJobItems == null || inventoryProductCardServiceImportJobItems.length == 0) {
+                return [];
+            }
     
             for(let i = 0; i < inventoryProductCardServiceImportJobItems.length; i++) {
                 let inventoryProductCardServiceImportJobItem = inventoryProductCardServiceImportJobItems[i];
@@ -55,7 +59,7 @@ export class InventoryProductCardServiceImportJobItemService {
 
     async createInventoryProductCardServiceImportJobItems(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
 
-        let inventoryProductCardServiceImportJobProviderDTOs = await this.inventoryProductCardServiceImportJobProviderRocaService.processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeCode);
+        let inventoryProductCardServiceImportJobProviderDTOs = await this.inventoryProductCardServiceImportJobProviderService.processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeCode);
         
         if(inventoryProductCardServiceImportJobProviderDTOs == null || inventoryProductCardServiceImportJobProviderDTOs instanceof ErrorMessageDTO) {
             return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_ITEM_DATA_INVALID', 'No valid inventory product card service import job items found in the import file.');
@@ -72,7 +76,7 @@ export class InventoryProductCardServiceImportJobItemService {
                 continue;
             }
 
-            let productSet = await this.productSetService.getProductSet(productCard.productSetId);
+            let productSet = await this.productSetService.getProductSetById(productCard.productSetId);
 
             if(productSet == null || productSet instanceof ErrorMessageDTO) {
                 continue;
@@ -170,7 +174,7 @@ export class InventoryProductCardServiceImportJobItemService {
             inventoryProductCardItem.inventoryProductCardItemQty = inventoryProductCardItem.inventoryProductCardItemQty + inventoryProductCardServiceImportJobItemDTO.inventoryProductCardServiceImportJobItemQty;
             
             await this.inventoryProductCardService.updateInventoryProductCard(inventoryProductCardDTO);
-    }
+        }
 
         this.eventEmitter.emit(
             'inventory.product.card.service.create.job.update.status',
@@ -194,7 +198,5 @@ export class InventoryProductCardServiceImportJobItemService {
 
     }
 
-
-    
 }
 

@@ -11,7 +11,7 @@ export class InventoryProductCardServiceImportJobController {
     ) { }
     
     
-    @Post()
+    @Post('/create')
     @UseInterceptors(FileInterceptor('file'))
     async createInventoryProductCardServiceImportJob(
         @Body() body: any,
