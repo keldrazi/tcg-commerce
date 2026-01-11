@@ -12,6 +12,7 @@ export class CommerceAccountDTO {
     commerceAccountAPIClientId: string;
     commerceAccountAPIClientToken: string;
     commerceAccountIsActive: boolean;
+    commerceAccountIsAdmin: boolean;
     commerceAccountCreateDate: Date;
     commerceAccountUpdateDate: Date; 
 }

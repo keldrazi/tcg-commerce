@@ -36,6 +36,7 @@ export class CommerceAccountService {
                 commerceAccountAPIClientId: commerceAccount.commerceAccountAPIClientId,
                 commerceAccountAPIClientToken: commerceAccount.commerceAccountAPIClientToken,
                 commerceAccountIsActive: commerceAccount.commerceAccountIsActive,
+                commerceAccountIsAdmin: commerceAccount.commerceAccountIsAdmin,
                 commerceAccountCreateDate: commerceAccount.commerceAccountCreateDate,
                 commerceAccountUpdateDate: commerceAccount.commerceAccountUpdateDate,
             }
@@ -68,6 +69,7 @@ export class CommerceAccountService {
             commerceAccountAPIClientId: commerceAccount.commerceAccountAPIClientId,
             commerceAccountAPIClientToken: commerceAccount.commerceAccountAPIClientToken,
             commerceAccountIsActive: commerceAccount.commerceAccountIsActive,
+            commerceAccountIsAdmin: commerceAccount.commerceAccountIsAdmin,
             commerceAccountCreateDate: commerceAccount.commerceAccountCreateDate,
             commerceAccountUpdateDate: commerceAccount.commerceAccountUpdateDate,
          };

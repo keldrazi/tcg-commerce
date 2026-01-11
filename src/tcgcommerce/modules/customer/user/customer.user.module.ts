@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CustomerAccountUserService } from './customer.account.user.service';
-import { CustomerAccountUserController } from './customer.user.controller';
-import { CustomerAccountUser } from 'src/typeorm/entities/tcgcommerce/modules/customer/account/user/customer.account.user.entity';
+import { CustomerUserService } from './customer.user.service';
+import { CustomerUserController } from './customer.user.controller';
+import { CustomerUser } from 'src/typeorm/entities/tcgcommerce/modules/customer/user/customer.user.entity';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
-import { CustomerAccountVerificationModule } from 'src/tcgcommerce/modules/customer/account/verification/customer.account.verification.module';
+import { CustomerUserVerificationModule } from 'src/tcgcommerce/modules/customer/user/verification/customer.user.verification.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([CustomerAccountUser]),
+        TypeOrmModule.forFeature([CustomerUser]),
         ErrorMessageModule,
-        CustomerAccountVerificationModule
+        CustomerUserVerificationModule
     ],
-    controllers: [CustomerAccountUserController],
-    providers: [CustomerAccountUserService],
-    exports: [CustomerAccountUserService]
+    controllers: [CustomerUserController],
+    providers: [CustomerUserService],
+    exports: [CustomerUserService]
 })
-export class CustomerAccountUserModule {}
+export class CustomerUserModule {}

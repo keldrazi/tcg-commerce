@@ -51,6 +51,10 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
             }
         });
 
+        if(inventoryProductCardServiceUpdatePriceJobItems == null) {
+            return inventoryProductCardServiceUpdatePriceJobItemDTOs;
+        }
+
         for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobItems.length; i++) {
             let inventoryProductCardServiceUpdatePriceJobItem = inventoryProductCardServiceUpdatePriceJobItems[i];
             let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = await this.createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem);
@@ -77,6 +81,10 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
             }
         });
 
+        if(inventoryProductCardServiceUpdatePriceJobItems == null) {
+            return inventoryProductCardServiceUpdatePriceJobItemDTOs;
+        }
+
         for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobItems.length; i++) {
             let inventoryProductCardServiceUpdatePriceJobItem = inventoryProductCardServiceUpdatePriceJobItems[i];
             let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = await this.createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem);
@@ -97,7 +105,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         });
 
         if(inventoryProductCardServiceUpdatePriceJobItem == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_ITEM_NOT_FOUND', 'Inventory Product Card Service Update Price Job Item not found for Job ID: ' + inventoryProductCardServiceUpdatePriceJobId + ' and Product Card ID: ' + productCardId);
+            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_ITEM_NOT_FOUND', 'Inventory Product Card Service Update Price Job Item not found');
         }
 
         let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = await this.createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem);
@@ -113,7 +121,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         });
 
         if(inventoryProductCardServiceUpdatePriceJobItem == null) {
-           return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_ITEM_NOT_FOUND', 'Inventory Product Card Service Update Price Job Item not found for ID: ' + inventoryProductCardServiceUpdatePriceJobItemId);
+           return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_UPDATE_PRICE_JOB_ITEM_NOT_FOUND', 'Inventory Product Card Service Update Price Job Item not found');
         }
 
         let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = await this.createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem);
@@ -202,7 +210,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         let productCardConditionDTOs = await this.productCardConditionService.getProductCardConditionsByProductLineId(inventoryProductCardServiceUpdatePriceJobDTO.productLineId);
 
         if((priceRuleProductCardBaseDTO == null || priceRuleProductCardBaseDTO instanceof ErrorMessageDTO) || (productCardConditionDTOs == null || productCardConditionDTOs instanceof ErrorMessageDTO)) {
-            return this.errorMessageService.createErrorMessage('PRICE_RULE_OR_PRODUCT_CARD_CONDITIONS_NOT_FOUND', 'Price Rule or Product Card Conditions not found for Commerce Account ID: ' + inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId);
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_OR_PRODUCT_CARD_CONDITIONS_NOT_FOUND', 'Price Rule or Product Card Conditions not found');
         }
 
         let tcgdbPriceChangeDailyDTOs: TCGdbMTGPriceChangeDailyDTO[] = [];
@@ -217,7 +225,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         }
 
         if(tcgdbPriceChangeDailyDTOs == null || tcgdbPriceChangeDailyDTOs instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('TCGDB_PRICE_CHANGES_NOT_FOUND', 'No TCGdb Price Changes found for Set Code: ' + inventoryProductCardServiceUpdatePriceJobDTO.productSetCode);
+            return this.errorMessageService.createErrorMessage('TCGDB_PRICE_CHANGES_NOT_FOUND', 'No TCGdb Price Changes found');
         }
 
         let inventoryProductCardServiceUpdatePriceJobItemRecordcount = 0;
@@ -230,7 +238,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
             let productCardTCGdbId = tcgdbPriceChangeDailyDTO.tcgdbMTGCardId;
             let productCardDTO = await this.productCardService.getProductCardByTCGdbId(productCardTCGdbId);
             let productCardPrintingDTO = await this.productCardPrintingService.getProductCardPrintingByName(tcgdbPriceChangeDailyDTO.tcgdbMTGPriceChangeDailySubTypeName);
-            let productLanguageDTO = await this.productLanguageService.getProductLanguage(inventoryProductCardServiceUpdatePriceJobDTO.productLanguageId);
+            let productLanguageDTO = await this.productLanguageService.getProductLanguageById(inventoryProductCardServiceUpdatePriceJobDTO.productLanguageId);
             
             if((productCardDTO == null || productCardDTO instanceof ErrorMessageDTO) || (productCardPrintingDTO == null || productCardPrintingDTO instanceof ErrorMessageDTO) || (productLanguageDTO == null || productLanguageDTO instanceof ErrorMessageDTO)) {
                 continue;
@@ -321,7 +329,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         let priceRuleProductCardBaseDTO = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId, inventoryProductCardServiceUpdatePriceJobDTO.productVendorId, inventoryProductCardServiceUpdatePriceJobDTO.productLineId, inventoryProductCardServiceUpdatePriceJobDTO.productTypeId);
         
         if(priceRuleProductCardBaseDTO == null || productCardConditionDTOs == null || priceRuleProductCardBaseDTO instanceof ErrorMessageDTO || productCardConditionDTOs instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRICE_RULE_OR_PRODUCT_CARD_CONDITIONS_NOT_FOUND', 'Price Rule or Product Card Conditions not found for Commerce Account ID: ' + inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId);
+            return this.errorMessageService.createErrorMessage('PRICE_RULE_OR_PRODUCT_CARD_CONDITIONS_NOT_FOUND', 'Price Rule or Product Card Conditions not found');
         }
 
         let inventoryProductCardServiceUpdatePriceJobItemDTOs = await this.getInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobDTO.inventoryProductCardServiceUpdatePriceJobId);

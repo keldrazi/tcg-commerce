@@ -24,6 +24,8 @@ export class CommerceAccount {
     commerceAccountAPIClientToken: string;
     @Column({type: 'boolean', default: true})
     commerceAccountIsActive: boolean;
+    @Column({type: 'boolean', default: false})
+    commerceAccountIsAdmin: boolean;
     @CreateDateColumn()
     commerceAccountCreateDate: Date;
     @UpdateDateColumn()
