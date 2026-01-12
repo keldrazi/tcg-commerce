@@ -92,6 +92,21 @@ export class CommerceLocationService {
             return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_EXISTS', 'Commerce location already exists');
         }
 
+        //CHECK FOR DEFAULT LOCATION;
+        if(createCommerceLocationDTO.commerceLocationIsDefault) {
+            let defaultCommerceLocation = await this.commerceLocationRepository.findOne({ 
+                where: {
+                    commerceAccountId : createCommerceLocationDTO.commerceAccountId, 
+                    commerceLocationIsDefault : true
+                } 
+            });
+
+            if(defaultCommerceLocation != null) {
+                defaultCommerceLocation.commerceLocationIsDefault = false;
+                await this.commerceLocationRepository.save(defaultCommerceLocation);
+            }
+        }
+
         commerceLocation = this.commerceLocationRepository.create({ ...createCommerceLocationDTO });
         commerceLocation = await this.commerceLocationRepository.save(commerceLocation);
 
@@ -111,12 +126,28 @@ export class CommerceLocationService {
             return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_NOT_FOUND', 'Commerce location was not found');
         }
 
+        //CHECK FOR DEFAULT LOCATION;
+        if(updateCommerceLocationDTO.commerceLocationIsDefault) {
+            let defaultCommerceLocation = await this.commerceLocationRepository.findOne({ 
+                where: {
+                    commerceAccountId : updateCommerceLocationDTO.commerceAccountId, 
+                    commerceLocationIsDefault : true
+                } 
+            });
+
+            if(defaultCommerceLocation != null) {
+                defaultCommerceLocation.commerceLocationIsDefault = false;
+                await this.commerceLocationRepository.save(defaultCommerceLocation);
+            }
+        }
+
         commerceLocation.commerceLocationName = updateCommerceLocationDTO.commerceLocationName;
         commerceLocation.commerceLocationAddress = updateCommerceLocationDTO.commerceLocationAddress;
         commerceLocation.commerceLocationCity = updateCommerceLocationDTO.commerceLocationCity;
         commerceLocation.commerceLocationState = updateCommerceLocationDTO.commerceLocationState;
         commerceLocation.commerceLocationZip = updateCommerceLocationDTO.commerceLocationZip;
         commerceLocation.commerceLocationPhoneNumber = updateCommerceLocationDTO.commerceLocationPhoneNumber;
+        commerceLocation.commerceLocationIsDefault = updateCommerceLocationDTO.commerceLocationIsDefault;
         commerceLocation.commerceLocationIsActive = updateCommerceLocationDTO.commerceLocationIsActive;
         commerceLocation.commerceLocationUpdateDate = new Date();
 
