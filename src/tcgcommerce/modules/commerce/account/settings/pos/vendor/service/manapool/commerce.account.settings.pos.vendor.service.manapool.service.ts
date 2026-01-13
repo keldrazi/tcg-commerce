@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccountSettingsPOSVendorServiceManaPool } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.entity';
 import { CreateCommerceAccountSettingsPOSVendorServiceManaPoolDTO, CommerceAccountSettingsPOSVendorServiceManaPoolDTO, UpdateCommerceAccountSettingsPOSVendorServiceManaPoolDTO } from './dto/commerce.account.settings.pos.vendor.service.manapool.dto';
-import { POSVendorServiceManaPoolRestV1Service } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/rest/v1/pos.vendor.service.manapool.rest.v1.service';
+import { POSVendorServiceManaPoolAPIRestV1Service } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/api/rest/v1/pos.vendor.service.manapool.api.rest.v1.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
 
     constructor(
         @InjectRepository(CommerceAccountSettingsPOSVendorServiceManaPool) private commerceAccountSettingsPOSVendorServiceManaPoolRepository: Repository<CommerceAccountSettingsPOSVendorServiceManaPool>,
-        private posVendorServiceManaPoolRestV1Service: POSVendorServiceManaPoolRestV1Service,
+        private posVendorServiceManaPoolAPIRestV1Service: POSVendorServiceManaPoolAPIRestV1Service,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -27,6 +27,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         }
 
         let commerceAccountSettingsPOSVendorServiceManaPoolDTO: CommerceAccountSettingsPOSVendorServiceManaPoolDTO = ({ ...commerceAccountSettingsPOSVendorServiceManaPool });  
+        
         return commerceAccountSettingsPOSVendorServiceManaPoolDTO;
         
     }
@@ -103,7 +104,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         }
 
         try {
-            let manaPoolAccount = await this.posVendorServiceManaPoolRestV1Service.getManaPoolAccount(
+            let manaPoolAccount = await this.posVendorServiceManaPoolAPIRestV1Service.getManaPoolAccount(
                 commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail, 
                 commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken
             );
