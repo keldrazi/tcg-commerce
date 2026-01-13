@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
-import { POSVendorServiceManaPoolAdminService } from './pos.vendor.service.manapool.admin.service';
+import { POSVendorServiceShopifyAdminRestService } from './pos.vendor.service.shopify.admin.rest.service';
 
-@Controller('pos/vendor/service/manapool')
-export class POSVendorServiceManaPoolAdminController {
+@Controller('pos/vendor/service/shopify/rest/admin')
+export class POSVendorServiceShopifyAdminRestController {
 
     constructor(
-        private posVendorServiceManaPoolAdminService: POSVendorServiceManaPoolAdminService,
+        private posVendorServiceShopifyAdminRestService: POSVendorServiceShopifyAdminRestService,
     ) { }
     
     

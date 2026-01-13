@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccountSettingsPOSVendorServiceManaPool } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.entity';
 import { CreateCommerceAccountSettingsPOSVendorServiceManaPoolDTO, CommerceAccountSettingsPOSVendorServiceManaPoolDTO, UpdateCommerceAccountSettingsPOSVendorServiceManaPoolDTO } from './dto/commerce.account.settings.pos.vendor.service.manapool.dto';
-import { POSVendorServiceManaPoolAPIRestV1Service } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/api/rest/v1/admin/pos.vendor.service.manapool.api.rest.v1.admin.service';
+import { POSVendorServiceManaPoolAdminService } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/admin/pos.vendor.service.manapool.admin.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
 
     constructor(
         @InjectRepository(CommerceAccountSettingsPOSVendorServiceManaPool) private commerceAccountSettingsPOSVendorServiceManaPoolRepository: Repository<CommerceAccountSettingsPOSVendorServiceManaPool>,
-        private posVendorServiceManaPoolAPIRestV1Service: POSVendorServiceManaPoolAPIRestV1Service,
+        private POSVendorServiceManaPoolAdminService: POSVendorServiceManaPoolAdminService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -92,22 +92,20 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         return commerceAccountSettingsPOSVendorServiceManaPoolDTO;
     }
 
-    async verifyCommerceAccountSettingsPOSVendorServiceManaPoolById(commerceAccountSettingsPOSVendorServiceManaPoolId: string) {
+    async verifyCommerceAccountSettingsPOSVendorServiceManaPoolById(commerceAccountId: string) {
+
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.commerceAccountSettingsPOSVendorServiceManaPoolRepository.findOne({
             where: {
-                commerceAccountSettingsPOSVendorServiceManaPoolId: commerceAccountSettingsPOSVendorServiceManaPoolId
+                commerceAccountId: commerceAccountId
             }
         });
 
         if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
             return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_MANAPOOL_NOT_FOUND', 'Commerce account settings POS vendor service Manapool was not found');
         }
-
+        
         try {
-            let manaPoolAccount = await this.posVendorServiceManaPoolAPIRestV1Service.getManaPoolAccount(
-                commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail, 
-                commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken
-            );
+            let manaPoolAccount = await this.POSVendorServiceManaPoolAdminService.getManaPoolAccount(commerceAccountId);
 
             commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolIsVerified = true;
             commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolUpdateDate = new Date();

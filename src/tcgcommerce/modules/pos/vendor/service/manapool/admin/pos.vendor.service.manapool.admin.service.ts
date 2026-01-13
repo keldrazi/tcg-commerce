@@ -18,6 +18,19 @@ export class POSVendorServiceManaPoolAdminService {
 
     private manaPoolWebhookURL = this.configService.get('MANAPOOL_WEBHOOK_URL');
 
+    async getManaPoolAccount(commerceAccountId: string) {
+        let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
+        
+        if(commerceAccountSettingsPOSVendorServiceManaPool == null || commerceAccountSettingsPOSVendorServiceManaPool instanceof ErrorMessageDTO) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_MANAPOOL_NOT_FOUND', 'Commerce account settings POS vendor service Manapool was not found');
+        }
+
+        let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
+        let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
+
+        return await this.posVendorServiceManaPoolAPIRestV1AdminService.getManaPoolAccount(email, accessToken);
+    }
+
     async updateManaPoolSellerInventoriesByTCGPlayerSku(commerceAccountId: string, inventoryProductCardDTOs: InventoryProductCardDTO[]) {
 
     }

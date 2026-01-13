@@ -8,6 +8,7 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
 
 @Module({
     imports: [
+        ConfigModule,
         CommerceAccountSettingsPOSVendorServiceManaPoolService,
         POSVendorServiceManaPoolAPIRestV1WebhookModule,
         ErrorMessageModule
