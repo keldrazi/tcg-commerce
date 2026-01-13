@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccountSettingsPOSVendorServiceManaPool } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.entity';
 import { CreateCommerceAccountSettingsPOSVendorServiceManaPoolDTO, CommerceAccountSettingsPOSVendorServiceManaPoolDTO, UpdateCommerceAccountSettingsPOSVendorServiceManaPoolDTO } from './dto/commerce.account.settings.pos.vendor.service.manapool.dto';
-import { POSVendorServiceManaPoolAPIRestV1Service } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/api/rest/v1/pos.vendor.service.manapool.api.rest.v1.service';
+import { POSVendorServiceManaPoolAPIRestV1Service } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/api/rest/v1/admin/pos.vendor.service.manapool.api.rest.v1.admin.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
