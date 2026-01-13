@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { POSVendorServiceManaPoolAPIRestV1Service } from '../pos.vendor.service.manapool.api.rest.v1.service';
+import { POSVendorServiceManaPoolAPIRestV1AdminService } from './pos.vendor.service.manapool.api.rest.v1.admin.service';
 
 @Module({
     imports: [
@@ -9,8 +9,8 @@ import { POSVendorServiceManaPoolAPIRestV1Service } from '../pos.vendor.service.
         HttpModule,
     ], 
     controllers: [],
-    providers: [POSVendorServiceManaPoolAPIRestV1Service],
-    exports: [POSVendorServiceManaPoolAPIRestV1Service],
+    providers: [POSVendorServiceManaPoolAPIRestV1AdminService],
+    exports: [POSVendorServiceManaPoolAPIRestV1AdminService],
 })
 
-export class POSVendorServiceManaPoolAPIRestV1Module {}
+export class POSVendorServiceManaPoolAPIRestV1AdminModule {}

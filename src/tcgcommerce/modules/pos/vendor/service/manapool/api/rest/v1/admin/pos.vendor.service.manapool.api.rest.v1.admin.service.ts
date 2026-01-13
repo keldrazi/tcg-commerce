@@ -5,7 +5,7 @@ import { map, catchError, lastValueFrom } from 'rxjs';
 import { ForbiddenException } from '@nestjs/common';
 
 @Injectable()
-export class POSVendorServiceManaPoolAPIRestV1Service {
+export class POSVendorServiceManaPoolAPIRestV1AdminService {
 
     constructor(
         private configService: ConfigService,

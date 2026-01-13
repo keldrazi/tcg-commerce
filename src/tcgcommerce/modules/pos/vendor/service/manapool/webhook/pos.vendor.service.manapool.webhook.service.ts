@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommerceAccountSettingsPOSVendorServiceManaPoolService } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.service';
-import { POSVendorServiceManaPoolAPIWebhookV1Service } from '../api/rest/v1/webhook/pos.vendor.service.manapool.api.rest.v1.webhook.service';
+import { POSVendorServiceManaPoolAPIRestV1WebhookService } from '../api/rest/v1/webhook/pos.vendor.service.manapool.api.rest.v1.webhook.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -11,7 +11,7 @@ export class POSVendorServiceManaPoolWebhookService {
     constructor(
         private configService: ConfigService,
         private commerceAccountSettingsPOSVendorServiceManaPoolService: CommerceAccountSettingsPOSVendorServiceManaPoolService,
-        private posVendorServiceManaPoolAPIWebhookV1Service: POSVendorServiceManaPoolAPIWebhookV1Service,
+        private posVendorServiceManaPoolAPIRestV1WebhookService: POSVendorServiceManaPoolAPIRestV1WebhookService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -27,7 +27,7 @@ export class POSVendorServiceManaPoolWebhookService {
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
 
-        return await this.posVendorServiceManaPoolAPIWebhookV1Service.getManaPoolWebhooks(email, accessToken);
+        return await this.posVendorServiceManaPoolAPIRestV1WebhookService.getManaPoolWebhooks(email, accessToken);
 
     }
 
@@ -41,7 +41,7 @@ export class POSVendorServiceManaPoolWebhookService {
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
         
-        return await this.posVendorServiceManaPoolAPIWebhookV1Service.getManaPoolWebhookById(email, accessToken, webhookId);
+        return await this.posVendorServiceManaPoolAPIRestV1WebhookService.getManaPoolWebhookById(email, accessToken, webhookId);
     
     }
 
@@ -68,7 +68,7 @@ export class POSVendorServiceManaPoolWebhookService {
             url: webhookURL
         };
 
-        return await this.posVendorServiceManaPoolAPIWebhookV1Service.createManaPoolWebhook(email, accessToken, webhook);
+        return await this.posVendorServiceManaPoolAPIRestV1WebhookService.createManaPoolWebhook(email, accessToken, webhook);
 
     }
 

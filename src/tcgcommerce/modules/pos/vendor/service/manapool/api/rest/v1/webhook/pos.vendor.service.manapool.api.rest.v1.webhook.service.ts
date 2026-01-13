@@ -5,7 +5,7 @@ import { map, catchError, lastValueFrom } from 'rxjs';
 import { ForbiddenException } from '@nestjs/common';
 
 @Injectable()
-export class POSVendorServiceManaPoolAPIWebhookV1Service {
+export class POSVendorServiceManaPoolAPIRestV1WebhookService {
 
     constructor(
         private configService: ConfigService,

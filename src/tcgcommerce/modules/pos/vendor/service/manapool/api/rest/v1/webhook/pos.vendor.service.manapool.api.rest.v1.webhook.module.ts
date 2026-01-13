@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { POSVendorServiceManaPoolAPIWebhookV1Service } from './pos.vendor.service.manapool.api.rest.v1.webhook.service';
+import { POSVendorServiceManaPoolAPIRestV1WebhookService } from './pos.vendor.service.manapool.api.rest.v1.webhook.service';
 
 @Module({
     imports: [
@@ -9,8 +9,8 @@ import { POSVendorServiceManaPoolAPIWebhookV1Service } from './pos.vendor.servic
         HttpModule,
     ], 
     controllers: [],
-    providers: [POSVendorServiceManaPoolAPIWebhookV1Service],
-    exports: [POSVendorServiceManaPoolAPIWebhookV1Service],
+    providers: [POSVendorServiceManaPoolAPIRestV1WebhookService],
+    exports: [POSVendorServiceManaPoolAPIRestV1WebhookService],
 })
 
-export class POSVendorServiceManaPoolAPIWebhookV1Module {}
+export class POSVendorServiceManaPoolAPIRestV1WebhookModule {}

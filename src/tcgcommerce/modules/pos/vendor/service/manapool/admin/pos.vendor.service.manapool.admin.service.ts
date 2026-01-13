@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommerceAccountSettingsPOSVendorServiceManaPoolService } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.service';
-import { POSVendorServiceManaPoolAPIRestV1Service } from '../api/rest/v1/admin/pos.vendor.service.manapool.api.rest.v1.admin.service';
+import { POSVendorServiceManaPoolAPIRestV1AdminService } from '../api/rest/v1/admin/pos.vendor.service.manapool.api.rest.v1.admin.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 import { InventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
@@ -12,7 +12,7 @@ export class POSVendorServiceManaPoolAdminService {
     constructor(
         private configService: ConfigService,
         private commerceAccountSettingsPOSVendorServiceManaPoolService: CommerceAccountSettingsPOSVendorServiceManaPoolService,
-        private posVendorServiceManaPoolAPIRestV1Service: POSVendorServiceManaPoolAPIRestV1Service,
+        private posVendorServiceManaPoolAPIRestV1AdminService: POSVendorServiceManaPoolAPIRestV1AdminService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -36,7 +36,7 @@ export class POSVendorServiceManaPoolAdminService {
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
 
-        return await this.posVendorServiceManaPoolAPIRestV1Service.getManaPoolSellerOrders(email, accessToken);
+        return await this.posVendorServiceManaPoolAPIRestV1AdminService.getManaPoolSellerOrders(email, accessToken);
     }
 
     async getManaPoolSellerOrderById(commerceAccountId: string, orderId: string) {
@@ -49,7 +49,7 @@ export class POSVendorServiceManaPoolAdminService {
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
 
-        return await this.posVendorServiceManaPoolAPIRestV1Service.getManaPoolSellerOrderById(email, accessToken, orderId);
+        return await this.posVendorServiceManaPoolAPIRestV1AdminService.getManaPoolSellerOrderById(email, accessToken, orderId);
     }
 
     //UTILITY METHODS;
