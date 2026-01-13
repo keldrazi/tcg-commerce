@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { POSVendorServiceShopifyAPIGraphQlAdminService } from './pos.vendor.service.shopify.api.graphql.admin.service';
+import { POSVendorServiceShopifyAPIGraphQLAdminService } from './pos.vendor.service.shopify.api.graphql.admin.service';
 
 @Module({
     imports: [
@@ -9,8 +9,8 @@ import { POSVendorServiceShopifyAPIGraphQlAdminService } from './pos.vendor.serv
         HttpModule,
     ], 
     controllers: [],
-    providers: [POSVendorServiceShopifyAPIGraphQlAdminService],
-    exports: [POSVendorServiceShopifyAPIGraphQlAdminService],
+    providers: [POSVendorServiceShopifyAPIGraphQLAdminService],
+    exports: [POSVendorServiceShopifyAPIGraphQLAdminService],
 })
 
-export class POSVendorServiceShopifyAPIGraphQlAdminModule {}
+export class POSVendorServiceShopifyAPIGraphQLAdminModule {}
