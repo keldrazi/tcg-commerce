@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { POSVendorServiceManaPoolAPIWebhookV1Service } from '../../../webhook/v1/pos.vendor.service.manapool.api.webhook.v1.service';
+import { POSVendorServiceManaPoolAPIWebhookV1Service } from './pos.vendor.service.manapool.api.rest.v1.webhook.service';
 
 @Module({
     imports: [
