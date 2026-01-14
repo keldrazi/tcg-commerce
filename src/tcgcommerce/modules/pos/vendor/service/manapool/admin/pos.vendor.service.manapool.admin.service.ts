@@ -16,7 +16,6 @@ export class POSVendorServiceManaPoolAdminService {
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    private manaPoolWebhookURL = this.configService.get('MANAPOOL_WEBHOOK_URL');
 
     async getManaPoolAccount(commerceAccountId: string) {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
