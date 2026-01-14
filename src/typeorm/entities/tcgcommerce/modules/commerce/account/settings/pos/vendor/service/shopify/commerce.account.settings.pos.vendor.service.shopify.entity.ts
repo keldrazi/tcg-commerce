@@ -10,6 +10,8 @@ export class CommerceAccountSettingsPOSVendorServiceShopify {
     commerceAccountSettingsPOSVendorServiceShopifyStoreName: string;
     @Column()
     commerceAccountSettingsPOSVendorServiceShopifyAccessToken: string;
+    @Column({type: 'jsonb', nullable: false, default: () => "'[]'"})
+    commerceAccountSettingsPOSVendorServiceShopifyLocations: string;
     @Column({type: 'boolean', default: false})
     commerceAccountSettingsPOSVendorServiceShopifyIsVerified: boolean;
     @CreateDateColumn()

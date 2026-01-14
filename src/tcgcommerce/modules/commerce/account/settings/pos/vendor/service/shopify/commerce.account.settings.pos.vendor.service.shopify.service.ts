@@ -1,8 +1,9 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CommerceAccountSettingsPOSVendorServiceShopify } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/shopify/commerce.account.settings.pos.vendor.service.manapool.entity';
+import { CommerceAccountSettingsPOSVendorServiceShopify } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/shopify/commerce.account.settings.pos.vendor.service.shopify.entity';
 import { CreateCommerceAccountSettingsPOSVendorServiceShopifyDTO, CommerceAccountSettingsPOSVendorServiceShopifyDTO, UpdateCommerceAccountSettingsPOSVendorServiceShopifyDTO } from './dto/commerce.account.settings.pos.vendor.service.shopify.dto';
+import { CommerceAccountSettingsPOSVendorServiceShopifyLocation } from './interface/commerce.account.settings.pos.vendor.service.shopify.interface';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
@@ -88,6 +89,21 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
         let commerceAccountSettingsPOSVendorServiceShopifyDTO = await this.getCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopify.commerceAccountSettingsPOSVendorServiceShopifyId);
         
         return commerceAccountSettingsPOSVendorServiceShopifyDTO;
+    }
+
+    async updateCommerceAccountSettingsPOSVendorServiceShopifyLocation(commerceAccountSettingsPOSVendorServiceShopifyId: string, location: any) {
+        let commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.findOne({
+            where: {
+                commerceAccountSettingsPOSVendorServiceShopifyId: commerceAccountSettingsPOSVendorServiceShopifyId
+            }
+        });
+
+        if(commerceAccountSettingsPOSVendorServiceShopify == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service Shopify was not found');
+        }
+
+        //UPDATE LOCATION;
+
     }
 
     async verifyCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId: string) {
