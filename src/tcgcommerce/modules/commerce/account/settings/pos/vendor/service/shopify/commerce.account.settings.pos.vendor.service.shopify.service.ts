@@ -106,34 +106,7 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
 
     }
 
-    async verifyCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId: string) {
-        let commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.findOne({
-            where: {
-                commerceAccountSettingsPOSVendorServiceShopifyId: commerceAccountSettingsPOSVendorServiceShopifyId
-            }
-        });
-
-        if(commerceAccountSettingsPOSVendorServiceShopify == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service Shopify was not found');
-        }
-
-        /*try {
-            let manaPoolAccount = await this.posVendorServiceShopifyAPIRestV1Service.getShopifyAccount(
-                commerceAccountSettingsPOSVendorServiceShopify.commerceAccountSettingsPOSVendorServiceShopifyStoreName, 
-                commerceAccountSettingsPOSVendorServiceShopify.commerceAccountSettingsPOSVendorServiceShopifyAccessToken
-            );
-
-            commerceAccountSettingsPOSVendorServiceShopify.commerceAccountSettingsPOSVendorServiceShopifyIsVerified = true;
-            commerceAccountSettingsPOSVendorServiceShopify.commerceAccountSettingsPOSVendorServiceShopifyUpdateDate = new Date();
-            commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.save(commerceAccountSettingsPOSVendorServiceShopify);
-
-            let commerceAccountSettingsPOSVendorServiceShopifyDTO = await this.getCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopify.commerceAccountSettingsPOSVendorServiceShopifyId);
-            
-            return commerceAccountSettingsPOSVendorServiceShopifyDTO;
-
-        } catch (error) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_MANAPOOL_VERIFICATION_FAILED', error.message);
-        }
-            */
+    async verifyCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountId: string) {
+        
     }
 }
