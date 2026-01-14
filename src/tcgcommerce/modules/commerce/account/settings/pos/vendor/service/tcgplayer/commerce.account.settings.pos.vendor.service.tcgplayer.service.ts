@@ -2,7 +2,7 @@ import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccountSettingsPOSVendorServiceTCGPlayer } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/tcgplayer/commerce.account.settings.pos.vendor.service.tcgplayer.entity';
-import { CreateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO, CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO, UpdateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO } from './dto/commerce.account.settings.pos.vendor.service.tcgplayer.dto';
+import { CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO } from './dto/commerce.account.settings.pos.vendor.service.tcgplayer.dto';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
         
     }
 
-    async createCommerceAccountSettingsPOSVendorServiceTCGPlayer(createCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO: CreateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO) {   
+    /*async createCommerceAccountSettingsPOSVendorServiceTCGPlayer(createCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO: CreateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO) {   
         let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
             where: {
                 commerceAccountId : createCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO.commerceAccountId, 
@@ -78,8 +78,8 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
         }
 
 
-        commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerUsername = updateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO.commerceAccountSettingsPOSVendorServiceTCGPlayerUsername;
-        commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerStoreKey = updateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO.commerceAccountSettingsPOSVendorServiceTCGPlayerStoreKey;
+        commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerDisplayName = updateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO.commerceAccountSettingsPOSVendorServiceTCGPlayerDisplayName;
+        commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerSellerKey = updateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO.commerceAccountSettingsPOSVendorServiceTCGPlayerSellerKey;
         commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerIsVerified = updateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO.commerceAccountSettingsPOSVendorServiceTCGPlayerIsVerified;
         commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerUpdateDate = new Date();
 
@@ -90,22 +90,8 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
         return commerceAccountSettingsPOSVendorServiceTCGPlayerDTO;
     }
 
-    async updateCommerceAccountSettingsPOSVendorServiceTCGPlayerLocation(commerceAccountSettingsPOSVendorServiceTCGPlayerId: string, location: any) {
-        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({
-            where: {
-                commerceAccountSettingsPOSVendorServiceTCGPlayerId: commerceAccountSettingsPOSVendorServiceTCGPlayerId
-            }
-        });
-
-        if(commerceAccountSettingsPOSVendorServiceTCGPlayer == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service TCGPlayer was not found');
-        }
-
-        //UPDATE LOCATION;
-
-    }
-
     async verifyCommerceAccountSettingsPOSVendorServiceTCGPlayerById(commerceAccountId: string) {
         
     }
+    */
 }

@@ -3,8 +3,13 @@ import { IsBoolean, IsEmail, IsString } from 'class-validator';
 export class CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO {
     commerceAccountSettingsPOSVendorServiceTCGPlayerId: string;
     commerceAccountId: string;
-    commerceAccountSettingsPOSVendorServiceTCGPlayerUsername: string;
-    commerceAccountSettingsPOSVendorServiceTCGPlayerStoreKey: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerAuthorizationCode: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerAccessToken: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerDisplayName: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerSellerKey: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerBearerToken: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerBearerTokenIssued: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerBearerTokenExpires: string;
     commerceAccountSettingsPOSVendorServiceTCGPlayerIsVerified: boolean;
     commerceAccountSettingsPOSVendorServiceTCGPlayerCreateDate: Date;
     commerceAccountSettingsPOSVendorServiceTCGPlayerUpdateDate: Date; 

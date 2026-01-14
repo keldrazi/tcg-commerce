@@ -7,14 +7,23 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayer {
     @Column()
     commerceAccountId: string;
     @Column()
-    commerceAccountSettingsPOSVendorServiceTCGPlayerUsername: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerAuthorizationCode: string;
     @Column({ nullable: true})
-    commerceAccountSettingsPOSVendorServiceTCGPlayerStoreKey: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerAccessToken: string;
+    @Column({ nullable: true})
+    commerceAccountSettingsPOSVendorServiceTCGPlayerDisplayName: string;
+    @Column({ nullable: true})
+    commerceAccountSettingsPOSVendorServiceTCGPlayerSellerKey: string;
+    @Column({ nullable: true})
+    commerceAccountSettingsPOSVendorServiceTCGPlayerBearerToken: string;
+    @Column({ nullable: true})
+    commerceAccountSettingsPOSVendorServiceTCGPlayerBearerTokenIssued: string;
+    @Column({ nullable: true})
+    commerceAccountSettingsPOSVendorServiceTCGPlayerBearerTokenExpires: string;
     @Column({type: 'boolean', default: false})
     commerceAccountSettingsPOSVendorServiceTCGPlayerIsVerified: boolean;
     @CreateDateColumn()
     commerceAccountSettingsPOSVendorServiceTCGPlayerCreateDate: Date;
     @UpdateDateColumn()
     commerceAccountSettingsPOSVendorServiceTCGPlayerUpdateDate: Date; 
-
 } 
