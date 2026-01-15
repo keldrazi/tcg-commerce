@@ -94,8 +94,6 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
             throw new ForbiddenException(error.response.data);
         }
 
-        let commerceAccountSettingsPOSVendorServiceTCGPlayerStoreInfo 
-
         let newCommerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -110,6 +108,41 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
 
         return commerceAccountSettingsPOSVendorServiceTCGPlayerDTO;
 
+    }
+
+    async updateCommerceAccountSettingsPOSVendorServiceTCGPlayerStoreInfo(commerceAccountId:string) {
+        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
+            where: { 
+                commerceAccountId : commerceAccountId
+            } 
+        });
+
+        if (commerceAccountSettingsPOSVendorServiceTCGPlayer == null) {
+            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service TCGPlayer was not found');
+        }
+
+        let bearerToken = await this.getCommerceAccountSettingsPOSVendorServiceTCGPlayerAPIBearerToken(commerceAccountId);
+
+        const url = this.tcgPlayerAPIURL + '/stores/self';
+        const headers = { 'Authorization': 'Bearer ' + bearerToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
+
+        let data = await lastValueFrom(response);
+
+        commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerName = data.results[0].name;
+        commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerStoreKey = data.results[0].storeKey;
+        commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerIsVerified = true;
+
+        await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.save(commerceAccountSettingsPOSVendorServiceTCGPlayer);
+
+        let commerceAccountSettingsPOSVendorServiceTCGPlayerDTO: CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO = ({ ...commerceAccountSettingsPOSVendorServiceTCGPlayer });
+
+        return commerceAccountSettingsPOSVendorServiceTCGPlayerDTO;
     }
 
     async getCommerceAccountSettingsPOSVendorServiceTCGPlayerAPIBearerToken(commerceAccountId: string) {

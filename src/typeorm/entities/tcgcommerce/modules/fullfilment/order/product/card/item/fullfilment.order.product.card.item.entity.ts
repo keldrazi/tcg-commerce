@@ -3,7 +3,7 @@ import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateCol
 @Entity('fulfillmentOrderProductCardItem')
 export class FullfillmentOrderProductCardItem {
     @PrimaryGeneratedColumn('uuid')
-    fullfillmentOrderItemId: string;
+    fullfillmentOrderProductCardItemId: string;
     @Column()
     fullfillmentOrderId: string;
     @Column()
