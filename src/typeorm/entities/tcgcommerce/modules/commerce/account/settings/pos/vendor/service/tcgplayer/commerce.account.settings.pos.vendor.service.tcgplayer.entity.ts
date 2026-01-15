@@ -11,9 +11,9 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayer {
     @Column({ nullable: true})
     commerceAccountSettingsPOSVendorServiceTCGPlayerAccessToken: string;
     @Column({ nullable: true})
-    commerceAccountSettingsPOSVendorServiceTCGPlayerDisplayName: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerName: string;
     @Column({ nullable: true})
-    commerceAccountSettingsPOSVendorServiceTCGPlayerSellerKey: string;
+    commerceAccountSettingsPOSVendorServiceTCGPlayerStoreKey: string;
     @Column({ nullable: true})
     commerceAccountSettingsPOSVendorServiceTCGPlayerBearerToken: string;
     @Column({ nullable: true})
