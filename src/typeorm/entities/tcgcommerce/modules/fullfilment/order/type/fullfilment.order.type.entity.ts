@@ -6,8 +6,10 @@ export class FullfilmentOrderType {
     fullfilmentOrderTypeId: string;
     @Column()
     fullfilmentOrderTypeName: string;
+     @Column()
+    fullfilmentOrderTypeCode: string;
     @Column()
-    fullfilmentOrderTypeNDescription: string;
+    fullfilmentOrderTypeDescription: string;
     @Column({type: 'boolean', default: false})
     fullfilmentOrderTypeIsActive: boolean;
     @CreateDateColumn()

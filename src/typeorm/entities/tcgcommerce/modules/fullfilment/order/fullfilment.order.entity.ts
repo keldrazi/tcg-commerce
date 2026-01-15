@@ -7,7 +7,11 @@ export class FullfilmentOrder {
     @Column()
     commerceAccountId: string;
     @Column()
+    commerceLocationId: string;
+    @Column()
     fullfilmentOrderTypeId: string;
+    @Column()
+    fullfilmentOrderTypeName: string;
     @Column()
     posVendorId: string;
     @Column()
@@ -20,12 +24,12 @@ export class FullfilmentOrder {
     fullfilmentOrderDetails: string;
     @Column({type: 'jsonb'})
     fullfilmentOrderItemDetails: string;
-    @Column()
+    @Column({default: 0})
     fullfilmentOrderItemTotal: number;
-    @Column()
+    @Column({type: 'decimal', default: 0})
     fullfilmentOrderPriceTotal: number;
     @CreateDateColumn()
-    fullfilmentModuleCreateDate: Date;
+    fullfilmentOrderCreateDate: Date;
     @UpdateDateColumn()
-    fullfilmentModuleUpdateDate: Date; 
+    fullfilmentOrderUpdateDate: Date; 
 } 
