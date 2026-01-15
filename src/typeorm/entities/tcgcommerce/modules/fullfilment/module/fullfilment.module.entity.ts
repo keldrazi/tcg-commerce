@@ -1,21 +1,21 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('orderModule')
-export class OrderModule {
+@Entity('fullfilmentModule')
+export class FullfilmentModule {
     @PrimaryGeneratedColumn('uuid')
-    orderModuleId: string;
+    fullfilmentModuleId: string;
     @Column()
     applicationModuleId: string;
     @Column()
-    orderAccountId: string;
+    fullfilmentAccountId: string;
     @Column('jsonb')
-    orderModuleSettings: string;
+    fullfilmentModuleSettings: string;
     @Column('jsonb')
-    orderModuleRoles: string;
+    fullfilmentModuleRoles: string;
     @Column({type: 'boolean', default: false})
-    orderModuleIsActive: boolean;
+    fullfilmentModuleIsActive: boolean;
     @CreateDateColumn()
-    orderModuleCreateDate: Date;
+    fullfilmentModuleCreateDate: Date;
     @UpdateDateColumn()
-    orderModuleUpdateDate: Date; 
+    fullfilmentModuleUpdateDate: Date; 
 } 
