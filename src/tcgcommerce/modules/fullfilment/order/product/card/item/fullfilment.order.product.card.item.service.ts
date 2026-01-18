@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FullfilmentOrderDTO } from './dto/fullfilment.order.dto';
-import { FullfilmentOrder } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/fullfilment.order.entity';
+import { FullfilmentOrderProductCardDetailDTO } from './dto/fullfilment.order.product.card.item.dto';
+import { FullfilmentOrderProductCardDetail } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/product/card/detail/fullfilment.order.product.card.detail.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
-export class FullfilmentOrderService {
+export class FullfilmentOrderProductCardDetailService {
 
     constructor(
         @InjectRepository(FullfilmentOrder) private fullfilmentOrderRepository: Repository<FullfilmentOrder>,
