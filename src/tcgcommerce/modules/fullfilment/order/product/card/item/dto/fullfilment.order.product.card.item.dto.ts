@@ -1,9 +1,9 @@
-export class FullfilmentOrderProductCardDetailDTO {
-    fullfilmentOrderProductCardDetailId: string;
+export class FullfilmentOrderProductCardItemDTO {
+    fullfilmentOrderProductCardItemId: string;
     fullfilmentOrderId: string;
     productCardId: string;
     productCardTCGdbId: string;
-    productCardTCGPlayerId: string;
+    productCardTCGPlayerId: number;
     productCardName: string;
     productCardNumber: string;
     productCardRarityId: string
@@ -17,8 +17,8 @@ export class FullfilmentOrderProductCardDetailDTO {
     productCardConditionId: string;
     productCardConditionCode: string;
     productCardConditionName: string;   
-    fullfillmentOrderProductCardItemQty: number;
-    fullfillmentOrderProductCardItemPrice: number;
-    fullfillmentOrderProductCardDetailCreateDate: Date;
-    fullfillmentOrderProductCardDetailUpdateDate: Date; 
+    fullfilmentOrderProductCardItemQty: number;
+    fullfilmentOrderProductCardItemPrice: number;
+    fullfilmentOrderProductCardItemCreateDate: Date;
+    fullfilmentOrderProductCardItemUpdateDate: Date; 
 }

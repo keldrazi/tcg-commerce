@@ -1,19 +1,22 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { POSVendorServiceManaPoolWebhookService } from './pos.vendor.service.manapool.webhook.service';
-import { POSVendorServiceManaPoolWebhookController } from './pos.vendor.service.manapool.webhook.controller';
-import { CommerceAccountSettingsPOSVendorServiceManaPoolService } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.service';
-import { POSVendorServiceManaPoolAPIRestV1WebhookModule } from '../api/rest/v1/webhook/pos.vendor.service.manapool.api.rest.v1.webhook.module';
+import { POSVendorServiceShopifyWebhookRestService } from './pos.vendor.service.shopify.webhook.rest.service';
+import { POSVendorServiceShopifyWebhookRestController } from './pos.vendor.service.shopify.webhook.rest.controller';
+import { CommerceAccountSettingsPOSVendorServiceShopifyModule } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/shopify/commerce.account.settings.pos.vendor.service.shopify.module';
+import { POSVendorServiceShopifyAPIRestWebhookModule } from 'src/tcgcommerce/modules/pos/vendor/service/shopify/api/rest/webhook/pos.vendor.service.shopify.api.rest.webhook.module';
+import { POSVendorServiceShopifyWebhookRestProcessModule } from './process/pos.vendor.service.shopify.webhook.rest.process.module';
 import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
-        CommerceAccountSettingsPOSVendorServiceManaPoolService,
-        POSVendorServiceManaPoolAPIRestV1WebhookModule,
+        ConfigModule,
+        CommerceAccountSettingsPOSVendorServiceShopifyModule,
+        POSVendorServiceShopifyAPIRestWebhookModule,
+        POSVendorServiceShopifyWebhookRestProcessModule,
         ErrorMessageModule
     ],
-    controllers: [POSVendorServiceManaPoolWebhookController],
-    providers: [POSVendorServiceManaPoolWebhookService],
-    exports: [POSVendorServiceManaPoolWebhookService]
+    controllers: [POSVendorServiceShopifyWebhookRestController],
+    providers: [POSVendorServiceShopifyWebhookRestService],
+    exports: [POSVendorServiceShopifyWebhookRestService]
 })
-export class POSVendorServiceManaPoolWebhookModule {}
+export class POSVendorServiceShopifyWebhookRestModule {}

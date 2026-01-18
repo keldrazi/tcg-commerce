@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
-import { POSVendorServiceManaPoolWebhookService } from './pos.vendor.service.manapool.webhook.service';
+import { POSVendorServiceShopifyWebhookRestService } from './pos.vendor.service.shopify.webhook.rest.service';
 
-@Controller('pos/vendor/service/manapool/webhook')
-export class POSVendorServiceManaPoolWebhookController {
+@Controller('pos/vendor/service/shopify/rest/webhook')
+export class POSVendorServiceShopifyWebhookRestController {
 
     constructor(
-        private posVendorServiceManaPoolWebhookService: POSVendorServiceManaPoolWebhookService,
+        private posVendorServiceShopifyWebhookRestService: POSVendorServiceShopifyWebhookRestService,
     ) { }
     
     

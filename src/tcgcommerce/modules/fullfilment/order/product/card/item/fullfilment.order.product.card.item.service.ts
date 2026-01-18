@@ -1,55 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FullfilmentOrderProductCardDetailDTO } from './dto/fullfilment.order.product.card.item.dto';
-import { FullfilmentOrderProductCardDetail } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/product/card/detail/fullfilment.order.product.card.detail.entity';
+import { FullfilmentOrderProductCardItemDTO } from './dto/fullfilment.order.product.card.item.dto';
+import { FullfilmentOrderProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/product/card/item/fullfilment.order.product.card.item.entity';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
-export class FullfilmentOrderProductCardDetailService {
+export class FullfilmentOrderProductCardItemService {
 
     constructor(
-        @InjectRepository(FullfilmentOrder) private fullfilmentOrderRepository: Repository<FullfilmentOrder>,
+        @InjectRepository(FullfilmentOrderProductCardItem) private fullfilmentOrderProductCardItemRepository: Repository<FullfilmentOrderProductCardItem>,
         private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getFullfilmentOrderById(fullfilmentOrderId: string) {
-        let fullfilmentOrder = await this.fullfilmentOrderRepository.findOne({ 
+    async getFullfilmentOrderProductCardItemById(fullfilmentOrderProductCardItemId: string) {
+        let fullfilmentOrderProductCardItem = await this.fullfilmentOrderProductCardItemRepository.findOne({ 
             where: { 
-                fullfilmentOrderId: fullfilmentOrderId 
+                fullfilmentOrderProductCardItemId: fullfilmentOrderProductCardItemId 
             } 
         });
         
-        if (fullfilmentOrder == null) {
-            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_TYPE_NOT_FOUND', 'Fullfilment order type was not found');
+        if (fullfilmentOrderProductCardItem == null) {
+            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_PRODUCT_CARD_ITEM_NOT_FOUND', 'Fullfilment order product card item was not found');
         }
 
-        let fullfilmentOrderDTO: FullfilmentOrderDTO = ({ ...fullfilmentOrder });
-
-        return fullfilmentOrderDTO;
+        let fullfilmentOrderProductCardItemDTO: FullfilmentOrderProductCardItemDTO = ({ ...fullfilmentOrderProductCardItem });
+        
+        return fullfilmentOrderProductCardItemDTO;
         
     }
 
-    async getFullfilmentOrdersByCommerceAccountId(commerceAccountId: string) {
-        let fullfilmentOrders = await this.fullfilmentOrderRepository.find({
+    async getFullfilmentOrderProductCardItemsByFullfilmentOrderId(fullfilmentOrderId: string) {
+        let fullfilmentOrderProductCardItems = await this.fullfilmentOrderProductCardItemRepository.find({
             where: {
-                commerceAccountId: commerceAccountId
+                fullfilmentOrderId: fullfilmentOrderId
             }
         });
         
-        let fullfilmentOrderDTOs: FullfilmentOrderDTO[] = [];
+        let fullfilmentOrderProductCardItemDTOs: FullfilmentOrderProductCardItemDTO[] = [];
 
-        if(fullfilmentOrders == null) {
-            return fullfilmentOrderDTOs;
+        if(fullfilmentOrderProductCardItems == null) {
+            return fullfilmentOrderProductCardItemDTOs;
         }
         
-        for(let i = 0; i < fullfilmentOrders.length; i++) {
-            let fullfilmentOrder = fullfilmentOrders[i];
-            let fullfilmentOrderDTO: FullfilmentOrderDTO = ({ ...fullfilmentOrder });
+        for(let i = 0; i < fullfilmentOrderProductCardItems.length; i++) {
+            let fullfilmentOrderProductCardItem = fullfilmentOrderProductCardItems[i];
+            let fullfilmentOrderProductCardItemDTO: FullfilmentOrderProductCardItemDTO = ({ ...fullfilmentOrderProductCardItem });
 
-            fullfilmentOrderDTOs.push(fullfilmentOrderDTO);
+            fullfilmentOrderProductCardItemDTOs.push(fullfilmentOrderProductCardItemDTO);
         }
 
-        return fullfilmentOrderDTOs;
+        return fullfilmentOrderProductCardItemDTOs;
     }
 }

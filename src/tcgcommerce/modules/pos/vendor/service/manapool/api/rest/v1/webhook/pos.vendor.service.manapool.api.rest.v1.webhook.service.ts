@@ -51,7 +51,12 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
         return data;
     }
 
-    async createManaPoolWebhook(email: string, accessToken: string, webhook: any) {
+    async createManaPoolWebhook(email: string, accessToken: string, webhookTopic: string, webhookCallbackURL: string) {
+        let webhook = {
+            "topic": webhookTopic,
+            "callback_url": webhookCallbackURL
+        };
+        
         const url = this.manaPoolAPIURL + '/webhooks/register';
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
         const response = this.httpService.put(url, webhook, { headers }).pipe(

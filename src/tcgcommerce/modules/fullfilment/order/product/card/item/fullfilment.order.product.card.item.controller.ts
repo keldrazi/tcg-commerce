@@ -14,9 +14,9 @@ export class FullfilmentOrderProductCardItemController {
         return await this.fullfilmentOrderProductCardItemService.getFullfilmentOrderProductCardItemById(fullfilmentOrderProductCardItemId);
     }
 
-    @Get('/caid/:commerceAccountId')
-    async getFullfilmentOrderProductCardItemsByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.fullfilmentOrderProductCardItemService.getFullfilmentOrderProductCardItemsByCommerceAccountId(commerceAccountId);
+    @Get('/foid/:fullfilmentOrderId')
+    async getFullfilmentOrderProductCardItemsByFullfilmentOrderId(@Param('fullfilmentOrderId') fullfilmentOrderId: string) {
+        return await this.fullfilmentOrderProductCardItemService.getFullfilmentOrderProductCardItemsByFullfilmentOrderId(fullfilmentOrderId);
     }
 
 }

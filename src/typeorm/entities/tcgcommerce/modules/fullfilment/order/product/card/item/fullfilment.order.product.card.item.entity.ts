@@ -1,11 +1,11 @@
 import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('fulfillmentOrderProductCardItem')
-export class FullfillmentOrderProductCardItem {
+@Entity('fullfilmentOrderProductCardItem')
+export class FullfilmentOrderProductCardItem {
     @PrimaryGeneratedColumn('uuid')
-    fullfillmentOrderProductCardItemId: string;
+    fullfilmentOrderProductCardItemId: string;
     @Column()
-    fullfillmentOrderId: string;
+    fullfilmentOrderId: string;
     @Column()
     productCardId: string;
     @Column()
@@ -39,11 +39,11 @@ export class FullfillmentOrderProductCardItem {
     @Column()
     productCardConditionName: string;
     @Column({default: 0})
-    fullfillmentOrderProductCardItemQty: number;
+    fullfilmentOrderProductCardItemQty: number;
     @Column({type: 'decimal', default: 0})
-    fullfillmentOrderProductCardItemPrice: number;
+    fullfilmentOrderProductCardItemPrice: number;
     @CreateDateColumn()
-    fullfillmentOrderProductCardItemCreateDate: Date;
+    fullfilmentOrderProductCardItemCreateDate: Date;
     @UpdateDateColumn()
-    fullfillmentOrderProductCardItemUpdateDate: Date;
+    fullfilmentOrderProductCardItemUpdateDate: Date;
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommerceAccountSettingsPOSVendorServiceManaPoolService } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.service';
 import { POSVendorServiceManaPoolAPIRestV1WebhookService } from '../api/rest/v1/webhook/pos.vendor.service.manapool.api.rest.v1.webhook.service';
+import { POSVendorServiceManaPoolWebhookProcessService } from './process/pos.vendor.service.manapool.webhook.process.service';
 import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
@@ -12,6 +13,7 @@ export class POSVendorServiceManaPoolWebhookService {
         private configService: ConfigService,
         private commerceAccountSettingsPOSVendorServiceManaPoolService: CommerceAccountSettingsPOSVendorServiceManaPoolService,
         private posVendorServiceManaPoolAPIRestV1WebhookService: POSVendorServiceManaPoolAPIRestV1WebhookService,
+        private posVendorServiceManaPoolWebhookProcessService: POSVendorServiceManaPoolWebhookProcessService,
         private errorMessageService: ErrorMessageService,
     ) { }
 
@@ -54,21 +56,16 @@ export class POSVendorServiceManaPoolWebhookService {
 
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
-        let topic = '';
-        let webhookURL = await this.createWebhookURL(commerceAccountId);
+        let webhookTopic = '';
+        let webhookCallbackURL = await this.createWebhookURL(commerceAccountId);
 
         switch(webhookType) {
             case 'order_created':
-                topic = 'order_created';
+                webhookTopic = 'order_created';
                 break;
         }
 
-        let webhook = {
-            topic: topic,
-            url: webhookURL
-        };
-
-        return await this.posVendorServiceManaPoolAPIRestV1WebhookService.createManaPoolWebhook(email, accessToken, webhook);
+        return await this.posVendorServiceManaPoolAPIRestV1WebhookService.createManaPoolWebhook(email, accessToken, webhookTopic, webhookCallbackURL);
 
     }
 

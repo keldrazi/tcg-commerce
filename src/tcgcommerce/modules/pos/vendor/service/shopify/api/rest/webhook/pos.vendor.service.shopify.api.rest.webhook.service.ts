@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
 import { ForbiddenException } from '@nestjs/common';
+import { ShopifyWebhook, ShopifyWebhookObject } from './types/pos.vendor.service.shopify.api.rest.webhook.types';
 
 
 @Injectable()
@@ -14,9 +15,51 @@ export class POSVendorServiceShopifyAPIRestWebhookService {
     ) {}
 
 
+    private shopifyRestURLPrefix = this.configService.get('SHOPIFY_REST_URL_PREFIX') 
+    private shopifyRestURL = this.configService.get('SHOPIFY_REST_URL')
     private shopifyAPIVersion = this.configService.get('SHOPIFY_API_VERSION');
     
-    
+    async createShopifyWebhook(storeName:string, accessToken:string, webhookTopic: string, webhookAddress: string) {
+
+        let shopifyWebhook: ShopifyWebhook = {
+            address: webhookAddress,
+            topic: webhookTopic,
+            format: 'json'
+        };
+        
+        let shopifyWebhookObject: ShopifyWebhookObject = {
+            webhook: shopifyWebhook
+        };
+
+        let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
+
+        const shopifyShopURI = shopifyRestURI + 'webhooks.json';
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': accessToken
+        }
+
+        const request = this.httpService.post(shopifyShopURI, shopifyWebhookObject, {headers: headers})
+            .pipe(map((response) => response.data))
+            .pipe(
+                catchError(e => {
+                  throw new ForbiddenException('API not available: ' + shopifyShopURI + 'Error: ' + e);
+                }),
+              );
+
+        const data = await lastValueFrom(request);
+
+        return data;
+        
+    }
+
+    /*******************************************************************************/
+    /* UTILITY METHODS
+    /******************************************************************************/
+    async getShopifyRestURIByStoreName(storeName:string) {
+        return this.shopifyRestURLPrefix + storeName + this.shopifyRestURL + this.shopifyAPIVersion + '/';
+    }
+
 
     
 
