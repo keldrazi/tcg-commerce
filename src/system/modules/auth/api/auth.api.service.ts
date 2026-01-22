@@ -26,7 +26,7 @@ export class AuthAPIService {
   }
     
   async loginCommerceAccount(commerceAccount: CommerceAccount): Promise<any> {
-    const payload = { commerceAccountId: commerceAccount.commerceAccountId, commerceAccountAPIClientId: commerceAccount.commerceAccountAPIClientId };
+    const payload = { commerceAccountId: commerceAccount.commerceAccountId, commerceAccountAPIClientId: commerceAccount.commerceAccountAPIClientId, commerceAccountIsAdmin: commerceAccount.commerceAccountIsAdmin };
     const access_token_issued = new Date();
     const access_token_expires = new Date(access_token_issued);
     access_token_expires.setDate(access_token_expires.getDate() + 7); 
