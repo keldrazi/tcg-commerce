@@ -1,30 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateReportPriceChangeDailyDTO, UpdateReportPriceChangeDailyDTO, ReportPriceChangeDailyDTO } from './dto/report.price.change.daily.dto';
 import { ReportPriceChangeDailyDefaultSettings, ReportPriceChangeDailyCategory } from './interface/report.price.change.daily.interface';
 import { ReportPriceChangeDaily } from 'src/typeorm/entities/tcgcommerce/modules/report/price/change/daily/report.price.change.daily.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-
 
 @Injectable()
 export class ReportPriceChangeDailyService {
 
     constructor(
         @InjectRepository(ReportPriceChangeDaily) private reportPriceChangeDailyRepository: Repository<ReportPriceChangeDaily>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeDailyById(reportPriceChangeDailyId: string) {
-        let reportPriceChangeDaily = await this.reportPriceChangeDailyRepository.findOne({ 
+    async getReportPriceChangeDailyById(reportPriceChangeDailyId: string): Promise<ReportPriceChangeDailyDTO> {
+        let reportPriceChangeDaily = await this.reportPriceChangeDailyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeDailyId: reportPriceChangeDailyId
             } 
         });
-
-        if (reportPriceChangeDaily == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_DAILY_NOT_FOUND', 'Report price change daily was not found');
-        }
 
         let reportPriceChangeDailyDTO: ReportPriceChangeDailyDTO = new ReportPriceChangeDailyDTO();
         reportPriceChangeDailyDTO.productLineId = reportPriceChangeDaily.productLineId;
@@ -40,7 +33,7 @@ export class ReportPriceChangeDailyService {
         return reportPriceChangeDailyDTO;
     }
     
-    async createReportPriceChangeDaily(createReportPriceChangeDailyDTO: CreateReportPriceChangeDailyDTO) {
+    async createReportPriceChangeDaily(createReportPriceChangeDailyDTO: CreateReportPriceChangeDailyDTO): Promise<ReportPriceChangeDailyDTO> {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let reportPriceChangeDaily = await this.reportPriceChangeDailyRepository.findOne({ 
@@ -52,8 +45,8 @@ export class ReportPriceChangeDailyService {
             } 
         });
         
-        if (reportPriceChangeDaily != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_DAILY_ALREADY_EXISTS', 'Report price change daily already exists');
+        if (reportPriceChangeDaily) {
+            throw new ConflictException('Report price change daily already exists');
         }
         
         reportPriceChangeDaily = this.reportPriceChangeDailyRepository.create({ ...createReportPriceChangeDailyDTO });
@@ -67,17 +60,14 @@ export class ReportPriceChangeDailyService {
         
     }
 
-    async updateReportPriceChangeDaily(updateReportPriceChangeDailyDTO: UpdateReportPriceChangeDailyDTO) {
+    async updateReportPriceChangeDaily(updateReportPriceChangeDailyDTO: UpdateReportPriceChangeDailyDTO): Promise<ReportPriceChangeDailyDTO> {
                     
-        let reportPriceChangeDaily = await this.reportPriceChangeDailyRepository.findOne({ 
+        let reportPriceChangeDaily = await this.reportPriceChangeDailyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeDailyId: updateReportPriceChangeDailyDTO.reportPriceChangeDailyId
             } 
         });
-
-        if (!reportPriceChangeDaily) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_DAILY_NOT_FOUND', 'Report price change daily was not found'); 
-        }
+    
         reportPriceChangeDaily.reportTypeId = updateReportPriceChangeDailyDTO.reportTypeId;
         reportPriceChangeDaily.reportPriceChangeDailyName = updateReportPriceChangeDailyDTO.reportPriceChangeDailyName;
         reportPriceChangeDaily.reportPriceChangeDailyDescription = updateReportPriceChangeDailyDTO.reportPriceChangeDailyDescription;

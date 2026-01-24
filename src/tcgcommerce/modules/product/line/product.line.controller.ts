@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, InternalServerErrorException, ConflictException } from '@nestjs/common';
 import { CreateProductLineDTO, UpdateProductLineDTO, ProductLineDTO } from './dto/product.line.dto';
 import { ProductLineService } from './product.line.service';
+import { EntityNotFoundError } from 'typeorm';
 
 @Controller('product/line')
 export class ProductLineController {
@@ -12,29 +13,58 @@ export class ProductLineController {
     
     @Get('/id/:productLineId')
     async getProductLineById(@Param('productLineId') productLineId: string) {
-        return await this.productLineService.getProductLineById(productLineId);
+        try {
+            return await this.productLineService.getProductLineById(productLineId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Product line not found');
+            }
+            throw new InternalServerErrorException('Failed to get product line by ID');
+        }
     }
 
     @Get('/pvid/:productVendorId')
     async getProductLinesByVendor(@Param('productVendorId') productVendorId: string) {
-        return await this.productLineService.getProductLinesByVendor(productVendorId);
+        try {
+            return await this.productLineService.getProductLinesByVendor(productVendorId);
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get product lines by vendor');
+        }
     }
 
     @Get()
     async getProductLines() {
-        return await this.productLineService.getProductLines();
+        try {
+            return await this.productLineService.getProductLines();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get product lines');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductLine(@Body() createProductLineDTO: CreateProductLineDTO) {
-        return await this.productLineService.createProductLine(createProductLineDTO);
+        try {
+            return await this.productLineService.createProductLine(createProductLineDTO);
+        } catch (e) {
+            if(e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create product line');
+        }
     }
 
-    @Post('/update')
+    @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductLine(@Body() updateProductLineDTO: UpdateProductLineDTO) {
-        return await this.productLineService.updateProductLine(updateProductLineDTO);
+        try {
+            return await this.productLineService.updateProductLine(updateProductLineDTO);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Product line not found');
+            }
+            throw new InternalServerErrorException('Failed to get product line by ID');
+        }
     }
 
     

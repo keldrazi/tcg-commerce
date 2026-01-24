@@ -6,8 +6,6 @@ import { ProductLanguage } from 'src/typeorm/entities/tcgcommerce/modules/produc
 import { TCGdbMTGLanguageModule } from 'src/tcgdb/modules/tcgdb/api/mtg/language/tcgdb.mtg.language.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
-
 
 @Module({
     imports: [
@@ -15,7 +13,6 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         TCGdbMTGLanguageModule,
         ProductLineModule,
         ProductVendorModule,
-        ErrorMessageModule
     ],
     controllers: [ProductLanguageController],
     providers: [ProductLanguageService],

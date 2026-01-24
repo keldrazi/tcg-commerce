@@ -6,8 +6,6 @@ import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { TCGdbMTGSetModule } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
-
 
 @Module({
     imports: [
@@ -15,7 +13,6 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         TCGdbMTGSetModule,
         ProductVendorModule,
         ProductLineModule,
-        ErrorMessageModule
     ],
     controllers: [ProductSetController],
     providers: [ProductSetService],

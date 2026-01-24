@@ -1,36 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductLineDTO, UpdateProductLineDTO, ProductLineDTO } from './dto/product.line.dto';
 import { ProductLine } from 'src/typeorm/entities/tcgcommerce/modules/product/line/product.line.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductLineService {
 
     constructor(
         @InjectRepository(ProductLine) private productLineRepository: Repository<ProductLine>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductLineById(productLineId: string) {
-        let productLine = await this.productLineRepository.findOne({ 
+    async getProductLineById(productLineId: string): Promise<ProductLineDTO> {
+        let productLine = await this.productLineRepository.findOneOrFail({ 
             where: { 
                 productLineId: productLineId 
             } 
         });
         
-        if (productLine == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
-        }
-
         let productLineDTO: ProductLineDTO = ({ ...productLine });
         
         return productLineDTO;
         
     }
 
-    async getProductLines() {
+    async getProductLines(): Promise<ProductLineDTO[]> {
         let productLines = await this.productLineRepository.find({
             where: {
                 productLineIsActive: true
@@ -42,7 +36,7 @@ export class ProductLineService {
         
         let productLineDTOs: ProductLineDTO[] = [];
 
-        if(productLines == null) {
+        if(!productLines) {
             return productLineDTOs;
         }
         
@@ -56,7 +50,7 @@ export class ProductLineService {
         return productLineDTOs;
     }
 
-    async getProductLinesByVendor(productVendorId: string) {
+    async getProductLinesByVendor(productVendorId: string): Promise<ProductLineDTO[]> {
         let productLines = await this.productLineRepository.find({ 
             where: { 
                 productVendorId: productVendorId,
@@ -69,8 +63,8 @@ export class ProductLineService {
 
         let productLineDTOs: ProductLineDTO[] = [];
         
-        if (productLines == null) {
-            productLineDTOs;
+        if (!productLines) {
+            return productLineDTOs;
         }
 
         for(let i = 0; i < productLines.length; i++) {
@@ -84,41 +78,33 @@ export class ProductLineService {
         
     }
     
-    async getProductLineByName(productLineName: string) {
-        let productLine = await this.productLineRepository.findOne({ 
+    async getProductLineByName(productLineName: string): Promise<ProductLineDTO> {
+        let productLine = await this.productLineRepository.findOneOrFail({ 
             where: { 
                 productLineName: productLineName 
             } 
         });
         
-        if (productLine == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
-        }
-
         let productLineDTO: ProductLineDTO = ({ ...productLine });
         
         return productLineDTO;
         
     }
 
-    async getProductLineByCode(productLineCode: string) {
-        let productLine = await this.productLineRepository.findOne({ 
+    async getProductLineByCode(productLineCode: string): Promise<ProductLineDTO> {
+        let productLine = await this.productLineRepository.findOneOrFail({ 
             where: { 
                 productLineCode: productLineCode 
             } 
         });
         
-        if (productLine == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
-        }
-
         let productLineDTO: ProductLineDTO = ({ ...productLine });
         
         return productLineDTO;
         
     }
     
-    async createProductLine(createProductLineDTO: CreateProductLineDTO) {
+    async createProductLine(createProductLineDTO: CreateProductLineDTO): Promise<ProductLineDTO> {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let productLine = await this.productLineRepository.findOne({ 
@@ -127,30 +113,26 @@ export class ProductLineService {
             } 
         });
         
-        if (productLine != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_ALREADY_EXISTS', 'Product line already exists');
+        if (productLine) {
+            throw new ConflictException('Product line already exists');
         }
         
         productLine = this.productLineRepository.create({ ...createProductLineDTO });
         productLine = await this.productLineRepository.save(productLine);
 
-        let productLineDTO = this.getProductLineById(productLine.productLineId);
+        let productLineDTO = await this.getProductLineById(productLine.productLineId);
 
         return productLineDTO;
         
     }
 
-    async updateProductLine(updateProductLineDTO: UpdateProductLineDTO) {
+    async updateProductLine(updateProductLineDTO: UpdateProductLineDTO): Promise<ProductLineDTO> {
                 
-        let productLine = await this.productLineRepository.findOne({ 
+        let productLine = await this.productLineRepository.findOneOrFail({ 
             where: { 
                 productLineId: updateProductLineDTO.productLineId
             } 
         });
-
-        if (!productLine) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
-        }
 
         productLine.productLineName = updateProductLineDTO.productLineName;
         productLine.productLineCode = updateProductLineDTO.productLineCode;
@@ -159,7 +141,7 @@ export class ProductLineService {
         
         await this.productLineRepository.save(productLine);
 
-        let productLineDTO = this.getProductLineById(productLine.productLineId);
+        let productLineDTO = await this.getProductLineById(productLine.productLineId);
         
         return productLineDTO;
     

@@ -1,36 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductVendorDTO, UpdateProductVendorDTO, ProductVendorDTO } from './dto/product.vendor.dto';
 import { ProductVendor } from 'src/typeorm/entities/tcgcommerce/modules/product/vendor/product.vendor.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductVendorService {
 
     constructor(
         @InjectRepository(ProductVendor) private productVendorRepository: Repository<ProductVendor>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductVendorById(productVendorId: string) {
-        let productVendor = await this.productVendorRepository.findOne({ 
+    async getProductVendorById(productVendorId: string): Promise<ProductVendorDTO> {
+        let productVendor = await this.productVendorRepository.findOneOrFail({ 
             where: { 
                 productVendorId: productVendorId
             } 
         });
         
-        if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
-        }
-
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });        
         
         return productVendorDTO;
         
     }
 
-    async getProductVendors() {
+    async getProductVendors(): Promise<ProductVendorDTO[]> {
         let productVendors = await this.productVendorRepository.find({
             where: {
                 productVendorIsActive: true
@@ -56,41 +50,33 @@ export class ProductVendorService {
         return productVendorDTOs;
     }
     
-    async getProductVendorByName(productVendorName: string) {
-        let productVendor = await this.productVendorRepository.findOne({ 
+    async getProductVendorByName(productVendorName: string): Promise<ProductVendorDTO> {
+        let productVendor = await this.productVendorRepository.findOneOrFail({ 
             where: { 
                 productVendorName: productVendorName 
             } 
         });
         
-        if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
-        }
-
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
         
         return productVendorDTO;
         
     }
 
-    async getProductVendorByCode(productVendorCode: string) {
-        let productVendor = await this.productVendorRepository.findOne({ 
+    async getProductVendorByCode(productVendorCode: string): Promise<ProductVendorDTO> {
+        let productVendor = await this.productVendorRepository.findOneOrFail({ 
             where: { 
                 productVendorCode: productVendorCode 
             } 
         });
         
-        if (productVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
-        }
-
         let productVendorDTO:ProductVendorDTO = ({ ...productVendor });   
         
         return productVendorDTO;
         
     }
     
-    async createProductVendor(createProductVendorDTO: CreateProductVendorDTO) {
+    async createProductVendor(createProductVendorDTO: CreateProductVendorDTO): Promise<ProductVendorDTO> {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let productVendor = await this.productVendorRepository.findOne({ 
@@ -99,30 +85,26 @@ export class ProductVendorService {
             } 
         });
         
-        if (productVendor != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'Product vendor already exists');
+        if (productVendor) {
+            throw new ConflictException('Product vendor already exists');
         }
         
         productVendor = this.productVendorRepository.create({ ...createProductVendorDTO });
         productVendor = await this.productVendorRepository.save(productVendor);
 
-        let productVendorDTO = this.getProductVendorById(productVendor.productVendorId);
+        let productVendorDTO = await this.getProductVendorById(productVendor.productVendorId);
 
         return productVendorDTO;
         
     }
 
-    async updateProductVendor(updateProductVendorDTO: UpdateProductVendorDTO) {
+    async updateProductVendor(updateProductVendorDTO: UpdateProductVendorDTO): Promise<ProductVendorDTO> {
                 
-        let productVendor = await this.productVendorRepository.findOne({ 
+        let productVendor = await this.productVendorRepository.findOneOrFail({ 
             where: { 
                 productVendorId: updateProductVendorDTO.productVendorId
             } 
         });
-
-        if (!productVendor) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
-        }
 
         productVendor.productVendorName = updateProductVendorDTO.productVendorName;
         productVendor.productVendorCode = updateProductVendorDTO.productVendorCode;
@@ -131,7 +113,7 @@ export class ProductVendorService {
         
         await this.productVendorRepository.save(productVendor);
 
-        let productVendorDTO = this.getProductVendorById(productVendor.productVendorId);
+        let productVendorDTO = await this.getProductVendorById(productVendor.productVendorId);
         
         return productVendorDTO;
     

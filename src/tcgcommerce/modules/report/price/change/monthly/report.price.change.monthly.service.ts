@@ -1,29 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateReportPriceChangeMonthlyDTO, UpdateReportPriceChangeMonthlyDTO, ReportPriceChangeMonthlyDTO } from './dto/report.price.change.monthly.dto';
 import { ReportPriceChangeMonthlyDefaultSettings, ReportPriceChangeMonthlyCategory } from './interface/report.price.change.monthly.interface';
 import { ReportPriceChangeMonthly } from 'src/typeorm/entities/tcgcommerce/modules/report/price/change/monthly/report.price.change.monthly.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ReportPriceChangeMonthlyService {
 
     constructor(
         @InjectRepository(ReportPriceChangeMonthly) private reportPriceChangeMonthlyRepository: Repository<ReportPriceChangeMonthly>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeMonthlyById(reportPriceChangeMonthlyId: string) {
-        let reportPriceChangeMonthly = await this.reportPriceChangeMonthlyRepository.findOne({ 
+    async getReportPriceChangeMonthlyById(reportPriceChangeMonthlyId: string): Promise<ReportPriceChangeMonthlyDTO> {
+        let reportPriceChangeMonthly = await this.reportPriceChangeMonthlyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeMonthlyId: reportPriceChangeMonthlyId
             } 
         });
-
-        if (reportPriceChangeMonthly == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_MONTHLY_NOT_FOUND', 'Report price change monthly was not found');
-        }
 
         let reportPriceChangeMonthlyDTO: ReportPriceChangeMonthlyDTO = new ReportPriceChangeMonthlyDTO();
         reportPriceChangeMonthlyDTO.productLineId = reportPriceChangeMonthly.productLineId;
@@ -39,9 +33,8 @@ export class ReportPriceChangeMonthlyService {
         return reportPriceChangeMonthlyDTO;
     }
     
-    async createReportPriceChangeMonthly(createReportPriceChangeMonthlyDTO: CreateReportPriceChangeMonthlyDTO) {
+    async createReportPriceChangeMonthly(createReportPriceChangeMonthlyDTO: CreateReportPriceChangeMonthlyDTO): Promise<ReportPriceChangeMonthlyDTO> {
     
-        //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let reportPriceChangeMonthly = await this.reportPriceChangeMonthlyRepository.findOne({ 
             where: { 
                 productVendorId: createReportPriceChangeMonthlyDTO.productVendorId,
@@ -51,8 +44,8 @@ export class ReportPriceChangeMonthlyService {
             } 
         });
         
-        if (reportPriceChangeMonthly != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_MONTHLY_ALREADY_EXISTS', 'Report price change monthly already exists');
+        if (reportPriceChangeMonthly) {
+            throw new ConflictException('Report price change monthly already exists');
         }
         
         reportPriceChangeMonthly = this.reportPriceChangeMonthlyRepository.create({ ...createReportPriceChangeMonthlyDTO });
@@ -66,17 +59,13 @@ export class ReportPriceChangeMonthlyService {
         
     }
 
-    async updateReportPriceChangeMonthly(updateReportPriceChangeMonthlyDTO: UpdateReportPriceChangeMonthlyDTO) {
+    async updateReportPriceChangeMonthly(updateReportPriceChangeMonthlyDTO: UpdateReportPriceChangeMonthlyDTO): Promise<ReportPriceChangeMonthlyDTO> {
                     
-        let reportPriceChangeMonthly = await this.reportPriceChangeMonthlyRepository.findOne({ 
+        let reportPriceChangeMonthly = await this.reportPriceChangeMonthlyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeMonthlyId: updateReportPriceChangeMonthlyDTO.reportPriceChangeMonthlyId
             } 
         });
-
-        if (!reportPriceChangeMonthly) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_MONTHLY_NOT_FOUND', 'Report price change monthly was not found'); 
-        }
 
         reportPriceChangeMonthly.reportPriceChangeMonthlyName = updateReportPriceChangeMonthlyDTO.reportPriceChangeMonthlyName;
         reportPriceChangeMonthly.reportPriceChangeMonthlyDescription = updateReportPriceChangeMonthlyDTO.reportPriceChangeMonthlyDescription;

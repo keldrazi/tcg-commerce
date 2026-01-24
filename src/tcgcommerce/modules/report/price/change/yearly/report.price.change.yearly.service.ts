@@ -1,30 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateReportPriceChangeYearlyDTO, UpdateReportPriceChangeYearlyDTO, ReportPriceChangeYearlyDTO } from './dto/report.price.change.yearly.dto';
 import { ReportPriceChangeYearlyDefaultSettings, ReportPriceChangeYearlyCategory } from './interface/report.price.change.yearly.interface';
 import { ReportPriceChangeYearly } from 'src/typeorm/entities/tcgcommerce/modules/report/price/change/yearly/report.price.change.yearly.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-
 
 @Injectable()
 export class ReportPriceChangeYearlyService {
 
     constructor(
         @InjectRepository(ReportPriceChangeYearly) private reportPriceChangeYearlyRepository: Repository<ReportPriceChangeYearly>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeYearlyById(reportPriceChangeYearlyId: string) {
-        let reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.findOne({ 
+    async getReportPriceChangeYearlyById(reportPriceChangeYearlyId: string): Promise<ReportPriceChangeYearlyDTO> {
+        let reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeYearlyId: reportPriceChangeYearlyId
             } 
         });
-
-        if (reportPriceChangeYearly == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_YEARLY_NOT_FOUND', 'Report price change yearly was not found');
-        }
 
         let reportPriceChangeYearlyDTO: ReportPriceChangeYearlyDTO = new ReportPriceChangeYearlyDTO();
         reportPriceChangeYearlyDTO.productLineId = reportPriceChangeYearly.productLineId;
@@ -40,7 +33,7 @@ export class ReportPriceChangeYearlyService {
         return reportPriceChangeYearlyDTO;
     }
     
-    async createReportPriceChangeYearly(createReportPriceChangeYearlyDTO: CreateReportPriceChangeYearlyDTO) {
+    async createReportPriceChangeYearly(createReportPriceChangeYearlyDTO: CreateReportPriceChangeYearlyDTO): Promise<ReportPriceChangeYearlyDTO> {
     
         let reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.findOne({ 
             where: { 
@@ -51,8 +44,8 @@ export class ReportPriceChangeYearlyService {
             } 
         });
         
-        if (reportPriceChangeYearly != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_YEARLY_ALREADY_EXISTS', 'Report price change yearly already exists');
+        if (reportPriceChangeYearly) {
+            throw new ConflictException('Report price change yearly already exists');
         }
         
         reportPriceChangeYearly = this.reportPriceChangeYearlyRepository.create({ ...createReportPriceChangeYearlyDTO });
@@ -66,17 +59,13 @@ export class ReportPriceChangeYearlyService {
         
     }
 
-    async updateReportPriceChangeYearly(updateReportPriceChangeYearlyDTO: UpdateReportPriceChangeYearlyDTO) {
+    async updateReportPriceChangeYearly(updateReportPriceChangeYearlyDTO: UpdateReportPriceChangeYearlyDTO): Promise<ReportPriceChangeYearlyDTO> {
                     
-        let reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.findOne({ 
+        let reportPriceChangeYearly = await this.reportPriceChangeYearlyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeYearlyId: updateReportPriceChangeYearlyDTO.reportPriceChangeYearlyId
             } 
         });
-
-        if (!reportPriceChangeYearly) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_YEARLY_NOT_FOUND', 'Report price change yearly was not found'); 
-        }
 
         reportPriceChangeYearly.reportTypeId = updateReportPriceChangeYearlyDTO.reportTypeId;
         reportPriceChangeYearly.reportPriceChangeYearlyName = updateReportPriceChangeYearlyDTO.reportPriceChangeYearlyName;

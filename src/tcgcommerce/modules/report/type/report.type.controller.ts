@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe, NotFoundException, InternalServerErrorException, ConflictException } from '@nestjs/common';
 import { CreateReportTypeDTO, UpdateReportTypeDTO } from './dto/report.type.dto';
 import { ReportTypeService } from './report.type.service';
+import { EntityNotFoundError } from 'typeorm';
 
 @Controller('report/type')
 export class ReportTypeController {
@@ -9,27 +10,51 @@ export class ReportTypeController {
         private reportTypeService: ReportTypeService,
     ) { }
     
-    
     @Get('/id/:reportTypeId')
     async getReportType(@Param('reportTypeId') reportTypeId: string) {
-        return await this.reportTypeService.getReportTypeById(reportTypeId);
+        try {
+            return await this.reportTypeService.getReportTypeById(reportTypeId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Report type not found');
+            }
+            throw new InternalServerErrorException('Failed to get report type by ID');
+        }
     }
 
     @Get()
     async getReportTypes() {
-        return await this.reportTypeService.getReportTypes();
+        try {
+            return await this.reportTypeService.getReportTypes();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get report types');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createReportType(@Body() createReportTypeDTO: CreateReportTypeDTO) {
-        return await this.reportTypeService.createReportType(createReportTypeDTO);
+        try {
+            return await this.reportTypeService.createReportType(createReportTypeDTO);
+        } catch (e) {
+            if(e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create report type');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateReportType(@Body() updateReportTypeDTO: UpdateReportTypeDTO) {
-        return await this.reportTypeService.updateReportType(updateReportTypeDTO);
+        try {
+            return await this.reportTypeService.updateReportType(updateReportTypeDTO);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Report type not found');
+            }
+            throw new InternalServerErrorException('Failed to update report type');
+        }
     }
 
 }

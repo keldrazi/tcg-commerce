@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateReportPriceCurrentDTO, UpdateReportPriceCurrentDTO, ReportPriceCurrentDTO } from './dto/report.price.current.dto';
 import { ReportPriceCurrentDefaultSettings, ReportPriceCurrentCategory } from './interface/report.price.current.interface';
 import { ReportPriceCurrent } from 'src/typeorm/entities/tcgcommerce/modules/report/price/current/report.price.current.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 
 @Injectable()
@@ -12,19 +11,14 @@ export class ReportPriceCurrentService {
 
     constructor(
         @InjectRepository(ReportPriceCurrent) private reportPriceCurrentRepository: Repository<ReportPriceCurrent>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceCurrentById(reportPriceCurrentId: string) {
-        let reportPriceCurrent = await this.reportPriceCurrentRepository.findOne({ 
+    async getReportPriceCurrentById(reportPriceCurrentId: string): Promise<ReportPriceCurrentDTO> {
+        let reportPriceCurrent = await this.reportPriceCurrentRepository.findOneOrFail({ 
             where: { 
                 reportPriceCurrentId: reportPriceCurrentId
             } 
         });
-
-        if (reportPriceCurrent == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CURRENT_NOT_FOUND', 'Report price current was not found');
-        }
 
         let reportPriceCurrentDTO: ReportPriceCurrentDTO = new ReportPriceCurrentDTO();
         reportPriceCurrentDTO.productLineId = reportPriceCurrent.productLineId;
@@ -40,7 +34,7 @@ export class ReportPriceCurrentService {
         return reportPriceCurrentDTO;
     }
     
-    async createReportPriceCurrent(createReportPriceCurrentDTO: CreateReportPriceCurrentDTO) {
+    async createReportPriceCurrent(createReportPriceCurrentDTO: CreateReportPriceCurrentDTO): Promise<ReportPriceCurrentDTO> {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let reportPriceCurrent = await this.reportPriceCurrentRepository.findOne({ 
@@ -51,9 +45,9 @@ export class ReportPriceCurrentService {
                 reportPriceCurrentName: createReportPriceCurrentDTO.reportPriceCurrentName, 
             } 
         });
-        
-        if (reportPriceCurrent != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CURRENT_ALREADY_EXISTS', 'Report price current already exists');
+
+        if(reportPriceCurrent) {
+            throw new ConflictException('Report price current already exists');
         }
         
         reportPriceCurrent = this.reportPriceCurrentRepository.create({ ...createReportPriceCurrentDTO });
@@ -67,17 +61,14 @@ export class ReportPriceCurrentService {
         
     }
 
-    async updateReportPriceCurrent(updateReportPriceCurrentDTO: UpdateReportPriceCurrentDTO) {
+    async updateReportPriceCurrent(updateReportPriceCurrentDTO: UpdateReportPriceCurrentDTO): Promise<ReportPriceCurrentDTO> {
                     
-        let reportPriceCurrent = await this.reportPriceCurrentRepository.findOne({ 
+        let reportPriceCurrent = await this.reportPriceCurrentRepository.findOneOrFail({ 
             where: { 
                 reportPriceCurrentId: updateReportPriceCurrentDTO.reportPriceCurrentId
             } 
         });
 
-        if (!reportPriceCurrent) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CURRENT_NOT_FOUND', 'Report price current was not found'); 
-        }
         reportPriceCurrent.reportTypeId = updateReportPriceCurrentDTO.reportTypeId;
         reportPriceCurrent.reportPriceCurrentName = updateReportPriceCurrentDTO.reportPriceCurrentName;
         reportPriceCurrent.reportPriceCurrentDescription = updateReportPriceCurrentDTO.reportPriceCurrentDescription;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThanOrEqual, Not, Repository } from 'typeorm';
 import { ProductSetDTO, CreateProductSetDTO, UpdateProductSetDTO } from './dto/product.set.dto';
@@ -6,8 +6,6 @@ import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set
 import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
@@ -18,60 +16,46 @@ export class ProductSetService {
         private tcgdbMTGSetService: TCGdbMTGSetService,
         private productVendorService: ProductVendorService,
         private productLineService: ProductLineService,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductSetById(productSetId: string) {
-        let productSet = await this.productSetRepository.findOne({
+    async getProductSetById(productSetId: string): Promise<ProductSetDTO> {
+        let productSet = await this.productSetRepository.findOneOrFail({
             where: { 
                 productSetId: productSetId 
             } 
         });
 
-        if(productSet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
-        }
-
         let productSetDTO: ProductSetDTO = ({ ...productSet });
 
         return productSetDTO;
 
     }
 
-    async getProductSetByTCGdbId(productSetTCGdbId: string) {
-        let productSet = await this.productSetRepository.findOne({
+    async getProductSetByTCGdbId(productSetTCGdbId: string): Promise<ProductSetDTO> {
+        let productSet = await this.productSetRepository.findOneOrFail({
             where: { 
                 productSetTCGdbId: productSetTCGdbId 
             } 
         });
 
-        if(productSet == null) {
-            let errorMessage: ErrorMessageDTO = await this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
-            return errorMessage;
-        }
-
         let productSetDTO: ProductSetDTO = ({ ...productSet });
 
         return productSetDTO;
 
     }
 
-    async getProductSetsByProductVendorCodeAndProductLineCode(productVendorCode: string, productLineCode: string) {
+    async getProductSetsByProductVendorCodeAndProductLineCode(productVendorCode: string, productLineCode: string): Promise<ProductSetDTO[]> {
         
         let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
         
-
-        if((productVendor != null && productVendor instanceof ErrorMessageDTO) || (productLine != null && productLine instanceof ErrorMessageDTO)) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_OR_PRODUCT_LINE_NOT_FOUND', 'Product vendor or product line was not found');
-        }
 
         let productSetsDTOs = await this.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
 
         return productSetsDTOs;
     }
 
-    async getProductSetsByProductVendorIdAndProductLineId(productVendorId: string, productLineId: string) {
+    async getProductSetsByProductVendorIdAndProductLineId(productVendorId: string, productLineId: string): Promise<ProductSetDTO[]> {
         let today = new Date();
 
         let productSets = await this.productSetRepository.find({
@@ -83,12 +67,11 @@ export class ProductSetService {
             }
         });
         
+        let productSetDTOs: ProductSetDTO[] = [];
         if(productSets == null) {
-            return [];    
+            return productSetDTOs;    
         }
         
-        let productSetDTOs: ProductSetDTO[] = [];
-
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
             let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -99,7 +82,7 @@ export class ProductSetService {
         return productSetDTOs;
     }
 
-    async getProductSetsByProductLineId(productLineId: string) {
+    async getProductSetsByProductLineId(productLineId: string): Promise<ProductSetDTO[]> {
         let today = new Date();
         
         let productSets = await this.productSetRepository.find({
@@ -110,12 +93,12 @@ export class ProductSetService {
             }
         });
         
+         let productSetDTOs: ProductSetDTO[] = [];
+
         if(productSets == null) {
-            []
+            return productSetDTOs;
         }
         
-        let productSetDTOs: ProductSetDTO[] = [];
-
         for(let i = 0; i < productSets.length; i++) {
             let productSet = productSets[i];
             let productSetDTO: ProductSetDTO = ({ ...productSet });
@@ -126,10 +109,10 @@ export class ProductSetService {
         return productSetDTOs;
     }
 
-    async getProductSetByCode(productVendorId: string, productLineId: string, productSetCode: string) {
+    async getProductSetByCode(productVendorId: string, productLineId: string, productSetCode: string): Promise<ProductSetDTO> {
         let today = new Date();
         
-        let productSet = await this.productSetRepository.findOne({
+        let productSet = await this.productSetRepository.findOneOrFail({
             where: {
                 productVendorId: productVendorId,
                 productLineId: productLineId,
@@ -138,19 +121,15 @@ export class ProductSetService {
             }
         });
         
-        if(productSet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
-        }
-        
         let productSetDTO: ProductSetDTO = ({ ...productSet });
             
         return productSetDTO;
     }
 
-    async getProductSetByProductSetCode(productLineId: string, productSetCode: string) {
+    async getProductSetByProductSetCode(productLineId: string, productSetCode: string): Promise<ProductSetDTO> {
         let today = new Date();
         
-        let productSet = await this.productSetRepository.findOne({
+        let productSet = await this.productSetRepository.findOneOrFail({
             where: {
                 productLineId: productLineId,
                 productSetCode: productSetCode.toUpperCase(),
@@ -158,26 +137,18 @@ export class ProductSetService {
             }
         });
         
-        if(productSet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found');
-        }
-        
         let productSetDTO: ProductSetDTO = ({ ...productSet });
             
         return productSetDTO;
     }
     
-    async updateProductSet(updateProductSetDTO: UpdateProductSetDTO) {
+    async updateProductSet(updateProductSetDTO: UpdateProductSetDTO): Promise<ProductSetDTO> {
                             
-        let productSet = await this.productSetRepository.findOne({ 
+        let productSet = await this.productSetRepository.findOneOrFail({ 
             where: { 
                 productSetId: updateProductSetDTO.productSetId
             } 
         });
-
-        if(!productSet) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found'); 
-        }
 
         productSet.productSetName = updateProductSetDTO.productSetName;
         productSet.productSetCode = updateProductSetDTO.productSetCode;
@@ -188,34 +159,26 @@ export class ProductSetService {
         
         await this.productSetRepository.save(productSet);
 
-        let productSetDTO = this.getProductSetById(productSet.productSetId);
+        let productSetDTO = await this.getProductSetById(productSet.productSetId);
 
         return productSetDTO;
     
     }
 
-    async createProductSetsByProductLineCode(productLineCode: string) {
+    async createProductSetsByProductLineCode(productLineCode: string): Promise<ProductSetDTO[]> {
         //TO DO: CREATE PRODUCT SETS FOR ALL VENDORS;
         if (productLineCode == PRODUCT_LINE_CODE.MAGIC_THE_GATHERING) {
             return this.createTCGdbMTGProductSets();
         } else {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found'); 
+            throw new NotFoundException('Product line code not found for bulk product set creation.');
         }
     }
 
     //TCGdb MTG PRODUCT SET CREATION;
-    async createTCGdbMTGProductSets() {
+    async createTCGdbMTGProductSets(): Promise<ProductSetDTO[]> {
 
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING);
-
-        if(productVendor == null || productVendor instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
-        }
-
-        if (productLine == null || productLine instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
-        }
 
         let tcgdbMTGSets = await this.tcgdbMTGSetService.getTCGdbMTGSets();
         let productSetDTOs: ProductSetDTO[] = [];
@@ -223,9 +186,13 @@ export class ProductSetService {
         for(let i = 0; i < tcgdbMTGSets.length; i++) {
             let tcgdbMTGSet = tcgdbMTGSets[i];
             
-            let productSet = await this.getProductSetByTCGdbId(tcgdbMTGSet.tcgdbMTGSetId);
+            let productSet = await this.productSetRepository.findOne({
+                where: { 
+                    productSetTCGdbId: tcgdbMTGSet.tcgdbMTGSetId 
+                } 
+            });
             
-            if (productSet instanceof ErrorMessageDTO) {
+            if (!productSet) {
                 productSet = this.productSetRepository.create({
                     productSetTCGdbId: tcgdbMTGSet.tcgdbMTGSetId,
                     productSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,

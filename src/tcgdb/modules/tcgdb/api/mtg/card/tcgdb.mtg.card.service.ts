@@ -43,6 +43,31 @@ export class TCGdbMTGCardService {
         return data;
     }
 
+    async getTCGdbMTGCardsExtendedBySetCode(setCode: string) {
+        
+        let tcgdbMTGCardDTOs: TCGdbMTGCardDTO[] = [];
+        
+        //GET TCGDB SET BY SET CODE;
+        let tcgdbMTGSetDTO: TCGdbMTGSetDTO = await this.tcgdbMTGSetService.getTCGdbMTGSetBySetCode(setCode);
+
+        //GET ALL TCGDB CARDS BY SET CODE;
+        const accessToken = await this.tcgdbAPIUtilService.getTCGdbAPIAccessToken();
+        const url = this.tcgdbAPIURL + '/tcgdb/mtg/card/set/code/' + setCode + '/extended';
+        const headers = { 'Authorization': 'Bearer ' + accessToken };
+        const response = this.httpService.get(url, { headers }).pipe(
+            map(response => response.data),
+            catchError(error => {
+                throw new ForbiddenException(error.response.data);
+            })
+        );
+
+        let data = await lastValueFrom(response);
+
+        
+        return data;
+    }
+
+
     async getTCGdbMTGCardsBySetId(setId: string) {
         
         let tcgdbMTGCardDTOs: TCGdbMTGCardDTO[] = [];

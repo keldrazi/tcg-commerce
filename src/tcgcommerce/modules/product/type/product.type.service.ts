@@ -1,36 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductTypeDTO, UpdateProductTypeDTO, ProductTypeDTO } from './dto/product.type.dto';
 import { ProductType } from 'src/typeorm/entities/tcgcommerce/modules/product/type/product.type.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductTypeService {
 
     constructor(
-        @InjectRepository(ProductType) private productTypeRepository: Repository<ProductType>,
-        private errorMessageService: ErrorMessageService,
+        @InjectRepository(ProductType) private productTypeRepository: Repository<ProductType>
     ) { }
 
-    async getProductTypeById(productTypeId: string) {
-        let productType = await this.productTypeRepository.findOne({ 
+    async getProductTypeById(productTypeId: string): Promise<ProductTypeDTO> {
+        let productType = await this.productTypeRepository.findOneOrFail({ 
             where: { 
                 productTypeId: productTypeId 
             } 
         });
         
-        if (productType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
-        }
-
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
 
         return productTypeDTO;
         
     }
 
-    async getProductTypesByProductVendorIdAndProductLineId(productVendorId: string, productLineId: string) {
+    async getProductTypesByProductVendorIdAndProductLineId(productVendorId: string, productLineId: string): Promise<ProductTypeDTO[]> {
         let productTypes = await this.productTypeRepository.find({ 
             where: { 
                 productVendorId: productVendorId,
@@ -59,8 +53,8 @@ export class ProductTypeService {
         
     }
 
-    async getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendorId: string, productLineId: string, productTypeCode: string) {
-        let productType = await this.productTypeRepository.findOne({ 
+    async getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendorId: string, productLineId: string, productTypeCode: string): Promise<ProductTypeDTO> {
+        let productType = await this.productTypeRepository.findOneOrFail({ 
             where: { 
                 productVendorId: productVendorId,
                 productLineId: productLineId,
@@ -68,17 +62,13 @@ export class ProductTypeService {
             }
         });
         
-        if (productType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
-        }
-
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
 
         return productTypeDTO;
         
     }
 
-    async getProductTypes() {
+    async getProductTypes(): Promise<ProductTypeDTO[]> {
         let productTypes = await this.productTypeRepository.find();
         
         let productTypeDTOs: ProductTypeDTO[] = [];
@@ -97,41 +87,33 @@ export class ProductTypeService {
         return productTypeDTOs;
     }
     
-    async getProductTypeByName(productTypeName: string) {
-        let productType = await this.productTypeRepository.findOne({ 
+    async getProductTypeByName(productTypeName: string): Promise<ProductTypeDTO> {
+        let productType = await this.productTypeRepository.findOneOrFail({ 
             where: { 
                 productTypeName: productTypeName 
             } 
         });
         
-        if (productType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
-        }
-
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
 
         return productTypeDTO;
         
     }
 
-    async getProductTypeByCode(productTypeCode: string) {
-        let productType = await this.productTypeRepository.findOne({ 
+    async getProductTypeByCode(productTypeCode: string): Promise<ProductTypeDTO> {
+        let productType = await this.productTypeRepository.findOneOrFail({ 
             where: { 
                 productTypeCode: productTypeCode 
             } 
         });
         
-        if (productType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
-        }
-
         let productTypeDTO: ProductTypeDTO = ({ ...productType });
 
         return productTypeDTO;
         
     }
     
-    async createProductType(createProductTypeDTO: CreateProductTypeDTO) {
+    async createProductType(createProductTypeDTO: CreateProductTypeDTO): Promise<ProductTypeDTO> {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let productType = await this.productTypeRepository.findOne({ 
@@ -142,30 +124,26 @@ export class ProductTypeService {
             } 
         });
         
-        if (productType != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_ALREADY_EXISTS', 'Product type already exists');
+        if (productType) {
+            throw new ConflictException('Product type already exists');
         }
         
         productType = this.productTypeRepository.create({ ...createProductTypeDTO });
         productType = await this.productTypeRepository.save(productType);
 
-        let productTypeDTO = this.getProductTypeById(productType.productTypeId);
+        let productTypeDTO = await this.getProductTypeById(productType.productTypeId);
         
         return productTypeDTO;
         
     }
 
-    async updateProductType(updateProductTypeDTO: UpdateProductTypeDTO) {
+    async updateProductType(updateProductTypeDTO: UpdateProductTypeDTO): Promise<ProductTypeDTO> {
                     
-        let productType = await this.productTypeRepository.findOne({ 
+        let productType = await this.productTypeRepository.findOneOrFail({ 
             where: { 
                 productTypeId: updateProductTypeDTO.productTypeId
             } 
         });
-
-        if (!productType) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found'); 
-        }
 
         productType.productTypeName = updateProductTypeDTO.productTypeName;
         productType.productTypeCode = updateProductTypeDTO.productTypeCode;
@@ -174,10 +152,10 @@ export class ProductTypeService {
         
         await this.productTypeRepository.save(productType);
 
-        let productTypeDTO = this.getProductTypeById(productType.productTypeId);
+        let productTypeDTO = await this.getProductTypeById(productType.productTypeId);
         
         return productTypeDTO;
-    
-    }
+        
+        }
     
 }

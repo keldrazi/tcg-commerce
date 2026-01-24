@@ -1,46 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ReportModule } from 'src/typeorm/entities/tcgcommerce/modules/report/module/report.module.entity';
 import { CreateReportModuleDTO, UpdateReportModuleDTO, ReportModuleDTO } from './dto/report.module.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ReportModuleService {
 
     constructor(
         @InjectRepository(ReportModule) private reportModuleRepository: Repository<ReportModule>,
-        private errorMessageService: ErrorMessageService
     ) { }
 
-    async getReportModuleById(reportModuleId: string) {
-        let reportModule = await this.reportModuleRepository.findOne({ 
+    async getReportModuleById(reportModuleId: string): Promise<ReportModuleDTO> {
+        let reportModule = await this.reportModuleRepository.findOneOrFail({ 
             where: { 
                 reportModuleId : reportModuleId
             } 
         });
         
-        if (reportModule == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_NOT_FOUND', 'Report module was not found');
-        }
-
         let reportModuleDTO: ReportModuleDTO = ({ ...reportModule });
 
         return reportModuleDTO;
 
     }
 
-    async getReportModuleByCommerceAccountId(commerceAccountId: string) {
-        let reportModule = await this.reportModuleRepository.findOne({ 
+    async getReportModuleByCommerceAccountId(commerceAccountId: string): Promise<ReportModuleDTO> {
+        let reportModule = await this.reportModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
         
-        if (reportModule == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_NOT_FOUND', 'Report module was not found');
-        }
-
         let reportModuleDTO: ReportModuleDTO = ({ ...reportModule });
 
         return reportModuleDTO;
@@ -48,14 +38,14 @@ export class ReportModuleService {
     }
 
 
-    async getReportModules() {
+    async getReportModules(): Promise<ReportModuleDTO[]> {
         let reportModules = await this.reportModuleRepository.find();
         
-        if (reportModules == null) {
-            return [];
-        }
-
         let reportModuleDTOs: ReportModuleDTO[] = [];
+
+        if(reportModules == null) {
+            return reportModuleDTOs;
+        }
 
         for(let i = 0; i < reportModules.length; i++) {
             let reportModule = reportModules[i];
@@ -69,15 +59,15 @@ export class ReportModuleService {
         
     }
 
-    async createReportModule(createReportModuleDTO: CreateReportModuleDTO) {
+    async createReportModule(createReportModuleDTO: CreateReportModuleDTO): Promise<ReportModuleDTO> {
         let reportModule = await this.reportModuleRepository.findOne({
             where: {
                 commerceAccountId: createReportModuleDTO.commerceAccountId
             }
         });
-
-        if (reportModule != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_EXISTS', 'Report module already exists');
+        
+        if(reportModule != null) {
+           throw new ConflictException('Report module with this commerce account ID already exists');
         }
 
 
@@ -89,17 +79,13 @@ export class ReportModuleService {
         return reportModuleDTO;
     }
 
-    async updateReportModule(updateReportModuleDTO: UpdateReportModuleDTO) {
+    async updateReportModule(updateReportModuleDTO: UpdateReportModuleDTO): Promise<ReportModuleDTO> {
         
-        let reportModule = await this.reportModuleRepository.findOne({ 
+        let reportModule = await this.reportModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: updateReportModuleDTO.commerceAccountId
             } 
         });
-
-        if (reportModule == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_NOT_FOUND', 'Report module was not found');
-        }
 
         reportModule.reportModuleSettings = updateReportModuleDTO.reportModuleSettings;
         reportModule.reportModuleRoles = updateReportModuleDTO.reportModuleRoles;

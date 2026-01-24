@@ -1,29 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateReportPriceChangeWeeklyDTO, UpdateReportPriceChangeWeeklyDTO, ReportPriceChangeWeeklyDTO } from './dto/report.price.change.weekly.dto';
 import { ReportPriceChangeWeeklyDefaultSettings, ReportPriceChangeWeeklyCategory } from './interface/report.price.change.weekly.interface';
 import { ReportPriceChangeWeekly } from 'src/typeorm/entities/tcgcommerce/modules/report/price/change/weekly/report.price.change.weekly.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ReportPriceChangeWeeklyService {
 
     constructor(
         @InjectRepository(ReportPriceChangeWeekly) private reportPriceChangeWeeklyRepository: Repository<ReportPriceChangeWeekly>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceChangeWeeklyById(reportPriceChangeWeeklyId: string) {
-        let reportPriceChangeWeekly = await this.reportPriceChangeWeeklyRepository.findOne({ 
+    async getReportPriceChangeWeeklyById(reportPriceChangeWeeklyId: string): Promise<ReportPriceChangeWeeklyDTO> {
+        let reportPriceChangeWeekly = await this.reportPriceChangeWeeklyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeWeeklyId: reportPriceChangeWeeklyId
             } 
         });
-
-        if (reportPriceChangeWeekly == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_WEEKLY_NOT_FOUND', 'Report price change weekly was not found');
-        }
 
         let reportPriceChangeWeeklyDTO: ReportPriceChangeWeeklyDTO = new ReportPriceChangeWeeklyDTO();
         reportPriceChangeWeeklyDTO.productLineId = reportPriceChangeWeekly.productLineId;
@@ -39,9 +33,8 @@ export class ReportPriceChangeWeeklyService {
         return reportPriceChangeWeeklyDTO;
     }
     
-    async createReportPriceChangeWeekly(createReportPriceChangeWeeklyDTO: CreateReportPriceChangeWeeklyDTO) {
+    async createReportPriceChangeWeekly(createReportPriceChangeWeeklyDTO: CreateReportPriceChangeWeeklyDTO): Promise<ReportPriceChangeWeeklyDTO> {
     
-        //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let reportPriceChangeWeekly = await this.reportPriceChangeWeeklyRepository.findOne({ 
             where: { 
                 productVendorId: createReportPriceChangeWeeklyDTO.productVendorId,
@@ -51,8 +44,8 @@ export class ReportPriceChangeWeeklyService {
             } 
         });
         
-        if (reportPriceChangeWeekly != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_WEEKLY_ALREADY_EXISTS', 'Report price change weekly already exists');
+        if (reportPriceChangeWeekly) {
+            throw new ConflictException('Report price change weekly already exists');
         }
         
         reportPriceChangeWeekly = this.reportPriceChangeWeeklyRepository.create({ ...createReportPriceChangeWeeklyDTO });
@@ -66,17 +59,14 @@ export class ReportPriceChangeWeeklyService {
         
     }
 
-    async updateReportPriceChangeWeekly(updateReportPriceChangeWeeklyDTO: UpdateReportPriceChangeWeeklyDTO) {
+    async updateReportPriceChangeWeekly(updateReportPriceChangeWeeklyDTO: UpdateReportPriceChangeWeeklyDTO): Promise<ReportPriceChangeWeeklyDTO> {
                     
-        let reportPriceChangeWeekly = await this.reportPriceChangeWeeklyRepository.findOne({ 
+        let reportPriceChangeWeekly = await this.reportPriceChangeWeeklyRepository.findOneOrFail({ 
             where: { 
                 reportPriceChangeWeeklyId: updateReportPriceChangeWeeklyDTO.reportPriceChangeWeeklyId
             } 
         });
 
-        if (!reportPriceChangeWeekly) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_CHANGE_WEEKLY_NOT_FOUND', 'Report price change weekly was not found'); 
-        }
         reportPriceChangeWeekly.reportTypeId = updateReportPriceChangeWeeklyDTO.reportTypeId;
         reportPriceChangeWeekly.reportPriceChangeWeeklyName = updateReportPriceChangeWeeklyDTO.reportPriceChangeWeeklyName;
         reportPriceChangeWeekly.reportPriceChangeWeeklyDescription = updateReportPriceChangeWeeklyDTO.reportPriceChangeWeeklyDescription;

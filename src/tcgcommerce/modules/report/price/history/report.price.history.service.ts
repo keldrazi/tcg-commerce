@@ -1,30 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateReportPriceHistoryDTO, UpdateReportPriceHistoryDTO, ReportPriceHistoryDTO } from './dto/report.price.history.dto';
 import { ReportPriceHistoryDefaultSettings, ReportPriceHistoryCategory } from './interface/report.price.history.interface';
 import { ReportPriceHistory } from 'src/typeorm/entities/tcgcommerce/modules/report/price/history/report.price.history.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-
 
 @Injectable()
 export class ReportPriceHistoryService {
 
     constructor(
         @InjectRepository(ReportPriceHistory) private reportPriceHistoryRepository: Repository<ReportPriceHistory>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getReportPriceHistoryById(reportPriceHistoryId: string) {
-        let reportPriceHistory = await this.reportPriceHistoryRepository.findOne({ 
+    async getReportPriceHistoryById(reportPriceHistoryId: string): Promise<ReportPriceHistoryDTO> {
+        let reportPriceHistory = await this.reportPriceHistoryRepository.findOneOrFail({ 
             where: { 
                 reportPriceHistoryId: reportPriceHistoryId
             } 
         });
-
-        if (reportPriceHistory == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_HISTORY_NOT_FOUND', 'Report price history was not found');
-        }
 
         let reportPriceHistoryDTO: ReportPriceHistoryDTO = new ReportPriceHistoryDTO();
         reportPriceHistoryDTO.productLineId = reportPriceHistory.productLineId;
@@ -40,7 +33,7 @@ export class ReportPriceHistoryService {
         return reportPriceHistoryDTO;
     }
     
-    async createReportPriceHistory(createReportPriceHistoryDTO: CreateReportPriceHistoryDTO) {
+    async createReportPriceHistory(createReportPriceHistoryDTO: CreateReportPriceHistoryDTO): Promise<ReportPriceHistoryDTO> {
     
         let reportPriceHistory = await this.reportPriceHistoryRepository.findOne({ 
             where: { 
@@ -51,8 +44,8 @@ export class ReportPriceHistoryService {
             } 
         });
         
-        if (reportPriceHistory != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_HISTORY_ALREADY_EXISTS', 'Report price history already exists');
+        if (reportPriceHistory) {
+            throw new ConflictException('Report price history already exists');
         }
         
         reportPriceHistory = this.reportPriceHistoryRepository.create({ ...createReportPriceHistoryDTO });
@@ -66,17 +59,14 @@ export class ReportPriceHistoryService {
         
     }
 
-    async updateReportPriceHistory(updateReportPriceHistoryDTO: UpdateReportPriceHistoryDTO) {
+    async updateReportPriceHistory(updateReportPriceHistoryDTO: UpdateReportPriceHistoryDTO): Promise<ReportPriceHistoryDTO> {
                     
-        let reportPriceHistory = await this.reportPriceHistoryRepository.findOne({ 
+        let reportPriceHistory = await this.reportPriceHistoryRepository.findOneOrFail({ 
             where: { 
                 reportPriceHistoryId: updateReportPriceHistoryDTO.reportPriceHistoryId
             } 
         });
 
-        if (!reportPriceHistory) {
-            return this.errorMessageService.createErrorMessage('REPORT_PRICE_HISTORY_NOT_FOUND', 'Report price history was not found'); 
-        }
         reportPriceHistory.reportTypeId = updateReportPriceHistoryDTO.reportTypeId;
         reportPriceHistory.reportPriceHistoryName = updateReportPriceHistoryDTO.reportPriceHistoryName;
         reportPriceHistory.reportPriceHistoryDescription = updateReportPriceHistoryDTO.reportPriceHistoryDescription;
