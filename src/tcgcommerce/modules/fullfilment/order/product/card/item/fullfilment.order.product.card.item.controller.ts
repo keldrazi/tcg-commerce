@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { FullfilmentOrderProductCardItemService } from './fullfilment.order.product.card.item.service';
+import { EntityNotFoundError } from 'typeorm';
 
 @Controller('fullfilment/order/product/card/item')
 export class FullfilmentOrderProductCardItemController {
@@ -11,12 +12,23 @@ export class FullfilmentOrderProductCardItemController {
     
     @Get('/id/:fullfilmentOrderProductCardItemId')
     async getFullfilmentOrderProductCardItemById(@Param('fullfilmentOrderProductCardItemId') fullfilmentOrderProductCardItemId: string) {
-        return await this.fullfilmentOrderProductCardItemService.getFullfilmentOrderProductCardItemById(fullfilmentOrderProductCardItemId);
+        try {
+            return await this.fullfilmentOrderProductCardItemService.getFullfilmentOrderProductCardItemById(fullfilmentOrderProductCardItemId);
+        } catch (e) {
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Fullfilment order product card item not found');
+            }
+            throw new InternalServerErrorException('Failed to get fullfilment order product card item');
+        }
     }
 
     @Get('/foid/:fullfilmentOrderId')
     async getFullfilmentOrderProductCardItemsByFullfilmentOrderId(@Param('fullfilmentOrderId') fullfilmentOrderId: string) {
-        return await this.fullfilmentOrderProductCardItemService.getFullfilmentOrderProductCardItemsByFullfilmentOrderId(fullfilmentOrderId);
+        try {
+            return await this.fullfilmentOrderProductCardItemService.getFullfilmentOrderProductCardItemsByFullfilmentOrderId(fullfilmentOrderId);
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get fullfilment order product card items');
+        }
     }
 
 }

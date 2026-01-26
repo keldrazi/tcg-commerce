@@ -3,7 +3,7 @@ import { IsBoolean, IsString } from "class-validator";
 export class FullfilmentModuleDTO {
     fullfilmentModuleId: string;
     applicationModuleId: string;
-    fullfilmentAccountId: string;
+    commerceAccountId: string;
     fullfilmentModuleSettings: string;
     fullfilmentModuleRoles: string;
     fullfilmentModuleIsActive: boolean;
@@ -15,7 +15,7 @@ export class CreateFullfilmentModuleDTO {
     @IsString()
     applicationModuleId: string;
     @IsString()
-    fullfilmentAccountId: string;
+    commerceAccountId: string;
     @IsString()
     fullfilmentModuleSettings: string;
     @IsString()

@@ -1,28 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateFullfilmentOrderTypeDTO, UpdateFullfilmentOrderTypeDTO, FullfilmentOrderTypeDTO } from './dto/fullfilment.order.type.dto';
 import { FullfilmentOrderType } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/type/fullfilment.order.type.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class FullfilmentOrderTypeService {
 
     constructor(
         @InjectRepository(FullfilmentOrderType) private fullfilmentOrderTypeRepository: Repository<FullfilmentOrderType>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getFullfilmentOrderTypeById(fullfilmentOrderTypeId: string) {
-        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOne({ 
+        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderTypeId: fullfilmentOrderTypeId 
             } 
         });
-        
-        if (fullfilmentOrderType == null) {
-            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_TYPE_NOT_FOUND', 'Fullfilment order type was not found');
-        }
 
         let fullfilmentOrderTypeDTO: FullfilmentOrderTypeDTO = ({ ...fullfilmentOrderType });
 
@@ -50,15 +44,11 @@ export class FullfilmentOrderTypeService {
     }
     
     async getFullfilmentOrderTypeByName(fullfilmentOrderTypeName: string) {
-        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOne({ 
+        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderTypeName: fullfilmentOrderTypeName 
             } 
         });
-        
-        if (fullfilmentOrderType == null) {
-            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_TYPE_NOT_FOUND', 'Fullfilment order type was not found');
-        }
 
         let fullfilmentOrderTypeDTO: FullfilmentOrderTypeDTO = ({ ...fullfilmentOrderType });
 
@@ -67,15 +57,11 @@ export class FullfilmentOrderTypeService {
     }
 
     async getFullfilmentOrderTypeByCode(fullfilmentOrderTypeCode: string) {
-        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOne({ 
+        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderTypeCode: fullfilmentOrderTypeCode 
             } 
         });
-        
-        if (fullfilmentOrderType == null) {
-            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_TYPE_NOT_FOUND', 'Fullfilment order type was not found');
-        }
 
         let fullfilmentOrderTypeDTO: FullfilmentOrderTypeDTO = ({ ...fullfilmentOrderType });
 
@@ -93,7 +79,7 @@ export class FullfilmentOrderTypeService {
         });
         
         if (fullfilmentOrderType != null) {
-            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_TYPE_ALREADY_EXISTS', 'Fullfilment order type already exists');
+            throw new ConflictException('Fullfilment order type already exists');
         }
         
         fullfilmentOrderType = this.fullfilmentOrderTypeRepository.create({ ...createFullfilmentOrderTypeDTO });
@@ -107,15 +93,11 @@ export class FullfilmentOrderTypeService {
 
     async updateFullfilmentOrderType(updateFullfilmentOrderTypeDTO: UpdateFullfilmentOrderTypeDTO) {
                     
-        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOne({ 
+        let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderTypeId: updateFullfilmentOrderTypeDTO.fullfilmentOrderTypeId
             } 
         });
-
-        if (!fullfilmentOrderType) {
-            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_TYPE_NOT_FOUND', 'Fullfilment order type was not found'); 
-        }
 
         fullfilmentOrderType.fullfilmentOrderTypeName = updateFullfilmentOrderTypeDTO.fullfilmentOrderTypeName;
         fullfilmentOrderType.fullfilmentOrderTypeCode = updateFullfilmentOrderTypeDTO.fullfilmentOrderTypeCode;

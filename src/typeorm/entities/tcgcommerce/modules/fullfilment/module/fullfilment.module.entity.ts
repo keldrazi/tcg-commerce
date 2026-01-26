@@ -7,7 +7,7 @@ export class FullfilmentModule {
     @Column()
     applicationModuleId: string;
     @Column()
-    fullfilmentAccountId: string;
+    commerceAccountId: string;
     @Column('jsonb')
     fullfilmentModuleSettings: string;
     @Column('jsonb')

@@ -3,26 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FullfilmentOrderProductCardItemDTO } from './dto/fullfilment.order.product.card.item.dto';
 import { FullfilmentOrderProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/product/card/item/fullfilment.order.product.card.item.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class FullfilmentOrderProductCardItemService {
 
     constructor(
         @InjectRepository(FullfilmentOrderProductCardItem) private fullfilmentOrderProductCardItemRepository: Repository<FullfilmentOrderProductCardItem>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getFullfilmentOrderProductCardItemById(fullfilmentOrderProductCardItemId: string) {
-        let fullfilmentOrderProductCardItem = await this.fullfilmentOrderProductCardItemRepository.findOne({ 
+        let fullfilmentOrderProductCardItem = await this.fullfilmentOrderProductCardItemRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderProductCardItemId: fullfilmentOrderProductCardItemId 
             } 
         });
-        
-        if (fullfilmentOrderProductCardItem == null) {
-            return this.errorMessageService.createErrorMessage('FULLFILMENT_ORDER_PRODUCT_CARD_ITEM_NOT_FOUND', 'Fullfilment order product card item was not found');
-        }
 
         let fullfilmentOrderProductCardItemDTO: FullfilmentOrderProductCardItemDTO = ({ ...fullfilmentOrderProductCardItem });
         

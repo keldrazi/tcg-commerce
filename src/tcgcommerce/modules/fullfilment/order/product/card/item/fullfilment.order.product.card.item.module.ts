@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { FullfilmentOrderService } from './fullfilment.order.service';
-import { FullfilmentOrderController } from './fullfilment.order.controller';
-import { FullfilmentOrder } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/fullfilment.order.entity';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
-
+import { FullfilmentOrderProductCardItemService } from './fullfilment.order.product.card.item.service';
+import { FullfilmentOrderProductCardItemController } from './fullfilment.order.product.card.item.controller';
+import { FullfilmentOrderProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/fullfilment/order/product/card/item/fullfilment.order.product.card.item.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([FullfilmentOrder]),
-        ErrorMessageModule
+        TypeOrmModule.forFeature([FullfilmentOrderProductCardItem]),
     ],
-    controllers: [FullfilmentOrderController],
-    providers: [FullfilmentOrderService],
-    exports: [FullfilmentOrderService]
+    controllers: [FullfilmentOrderProductCardItemController],
+    providers: [FullfilmentOrderProductCardItemService],
+    exports: [FullfilmentOrderProductCardItemService]
 })
-export class FullfilmentOrderModule {}
+export class FullfilmentOrderProductCardItemModule {}
