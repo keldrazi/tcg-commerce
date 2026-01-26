@@ -1,28 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InventoryModule } from 'src/typeorm/entities/tcgcommerce/modules/inventory/module/inventory.module.entity';
 import { CreateInventoryModuleDTO, UpdateInventoryModuleDTO, InventoryModuleDTO } from './dto/inventory.module.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class InventoryModuleService {
 
     constructor(
         @InjectRepository(InventoryModule) private inventoryModuleRepository: Repository<InventoryModule>,
-        private errorMessageService: ErrorMessageService
     ) { }
 
     async getInventoryModuleById(inventoryModuleId: string) {
-        let inventoryModule = await this.inventoryModuleRepository.findOne({ 
+        let inventoryModule = await this.inventoryModuleRepository.findOneOrFail({ 
             where: { 
                 inventoryModuleId : inventoryModuleId
             } 
         });
-        
-        if (inventoryModule == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_NOT_FOUND', 'Inventory module was not found');
-        }
 
         let inventoryModuleDTO: InventoryModuleDTO = ({ ...inventoryModule });
 
@@ -31,15 +25,11 @@ export class InventoryModuleService {
     }
 
     async getInventoryModuleByCommerceAccountId(commerceAccountId: string) {
-        let inventoryModule = await this.inventoryModuleRepository.findOne({ 
+        let inventoryModule = await this.inventoryModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
-        
-        if (inventoryModule == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_NOT_FOUND', 'Inventory module was not found');
-        }
 
         let inventoryModuleDTO: InventoryModuleDTO = ({ ...inventoryModule });
 
@@ -77,7 +67,7 @@ export class InventoryModuleService {
         });
 
         if (inventoryModule != null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_EXISTS', 'Inventory module already exists');
+            throw new ConflictException('Inventory module already exists');
         }
 
 
@@ -91,15 +81,11 @@ export class InventoryModuleService {
 
     async updateInventoryModule(updateInventoryModuleDTO: UpdateInventoryModuleDTO) {
         
-        let inventoryModule = await this.inventoryModuleRepository.findOne({ 
+        let inventoryModule = await this.inventoryModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: updateInventoryModuleDTO.commerceAccountId
             } 
         });
-
-        if (inventoryModule == null) {
-            return this.errorMessageService.createErrorMessage('REPORT_MODULE_NOT_FOUND', 'Inventory module was not found');
-        }
 
         inventoryModule.inventoryModuleSettings = updateInventoryModuleDTO.inventoryModuleSettings;
         inventoryModule.inventoryModuleRoles = updateInventoryModuleDTO.inventoryModuleRoles;

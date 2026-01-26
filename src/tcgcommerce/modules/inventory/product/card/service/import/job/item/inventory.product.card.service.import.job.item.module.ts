@@ -10,7 +10,6 @@ import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/
 import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { CommerceLocationModule } from 'src/tcgcommerce/modules/commerce/location/commerce.location.module';
 import { InventoryProductCardServiceImportJobProviderModule } from '../provider/inventory.product.card.service.import.job.provider.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
 @Module({
@@ -24,7 +23,6 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         CommerceLocationModule,
         InventoryProductCardModule,
         InventoryProductCardServiceImportJobProviderModule,
-        ErrorMessageModule,
     ],
     controllers: [],
     providers: [InventoryProductCardServiceImportJobItemService],

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InventoryProductCardServiceImportJobDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/dto/inventory.product.card.service.import.job.dto';
@@ -12,8 +12,6 @@ import { InventoryProductCardService } from 'src/tcgcommerce/modules/inventory/p
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InventoryProductCardServiceImportJobProviderService } from '../provider/inventory.product.card.service.import.job.provider.service';
 import { INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS } from 'src/system/constants/tcgcommerce/inventory/product/card/service/import/job/inventory.product.card.service.import.job.constants';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 
 @Injectable()
@@ -28,7 +26,6 @@ export class InventoryProductCardServiceImportJobItemService {
         private inventoryProductCardService: InventoryProductCardService,
         private eventEmitter: EventEmitter2,
         private inventoryProductCardServiceImportJobProviderService: InventoryProductCardServiceImportJobProviderService,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
@@ -61,8 +58,8 @@ export class InventoryProductCardServiceImportJobItemService {
 
         let inventoryProductCardServiceImportJobProviderDTOs = await this.inventoryProductCardServiceImportJobProviderService.processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeCode);
         
-        if(inventoryProductCardServiceImportJobProviderDTOs == null || inventoryProductCardServiceImportJobProviderDTOs instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_ITEM_DATA_INVALID', 'No valid inventory product card service import job items found in the import file.');
+        if(inventoryProductCardServiceImportJobProviderDTOs == null || inventoryProductCardServiceImportJobProviderDTOs.length === 0) {
+            throw new BadRequestException('No valid inventory product card service import job items found in the import file.');
         }
 
         for(let i = 0; i < inventoryProductCardServiceImportJobProviderDTOs.length; i++) {
@@ -72,13 +69,13 @@ export class InventoryProductCardServiceImportJobItemService {
             let productCardCondition = await this.productCardConditionService.getProductCardConditionByCodeAndProductLineId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderCondition, inventoryProductCardServiceImportJobDTO.productLineId);
             let productCardPrinting = await this.productCardPrintingService.getProductCardPrintingByNameAndProductLineId(inventoryProductCardServiceImportJobProviderDTO.inventoryProductCardServiceImportJobProviderPrinting, inventoryProductCardServiceImportJobDTO.productLineId);
             
-            if((productCard == null ||productCard instanceof ErrorMessageDTO) || (productCardCondition == null || productCardCondition instanceof ErrorMessageDTO) || (productCardPrinting == null || productCardPrinting instanceof ErrorMessageDTO)) {
+            if(productCard == null || productCardCondition == null || productCardPrinting == null) {
                 continue;
             }
 
             let productSet = await this.productSetService.getProductSetById(productCard.productSetId);
 
-            if(productSet == null || productSet instanceof ErrorMessageDTO) {
+            if(productSet == null) {
                 continue;
             }
 
@@ -161,7 +158,7 @@ export class InventoryProductCardServiceImportJobItemService {
             let inventoryProductCardServiceImportJobItemDTO = inventoryProductCardServiceImportJobItemDTOs[i];
             let inventoryProductCardDTO = await this.inventoryProductCardService.getInventoryProductCardByProductCardPrintingId(inventoryProductCardServiceImportJobItemDTO.commerceAccountId, inventoryProductCardServiceImportJobItemDTO.commerceLocationId, inventoryProductCardServiceImportJobItemDTO.productCardId, inventoryProductCardServiceImportJobItemDTO.productCardPrintingId, inventoryProductCardServiceImportJobItemDTO.productLanguageId);
             
-            if(inventoryProductCardDTO == null || inventoryProductCardDTO instanceof ErrorMessageDTO) {
+            if(inventoryProductCardDTO == null) {
                 continue;
             }
 

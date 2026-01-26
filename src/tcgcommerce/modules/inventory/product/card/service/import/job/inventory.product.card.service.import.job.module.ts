@@ -6,7 +6,6 @@ import { InventoryProductCardServiceImportJob } from 'src/typeorm/entities/tcgco
 import { InventoryProductCardServiceImportJobItemModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/item/inventory.product.card.service.import.job.item.module';
 import { AwsS3Module } from 'src/system/modules/aws/s3/aws.s3.module';
 import { InventoryProductCardServiceImportJobProviderTypeModule } from 'src/tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
@@ -14,7 +13,6 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         InventoryProductCardServiceImportJobItemModule,
         AwsS3Module,
         InventoryProductCardServiceImportJobProviderTypeModule,
-        ErrorMessageModule
     ],
     controllers: [InventoryProductCardServiceImportJobController],
     providers: [InventoryProductCardServiceImportJobService],

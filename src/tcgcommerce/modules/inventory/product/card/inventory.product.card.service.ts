@@ -5,7 +5,6 @@ import { InventoryProductCardDTO, UpdateInventoryProductCardDTO } from 'src/tcgc
 import { InventoryProductCard } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/inventory.product.card.entity';
 import { InventoryProductCardItem } from 'src/tcgcommerce/modules/inventory/product/card/interface/inventory.product.card.item.interface';
 import { InventoryProductCardServiceCreateJobItemDTO } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/dto/inventory.product.card.service.create.job.item.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class InventoryProductCardService {
@@ -13,7 +12,6 @@ export class InventoryProductCardService {
 
     constructor(
         @InjectRepository(InventoryProductCard) private inventoryProductCardRepository: Repository<InventoryProductCard>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getInventoryProductCardsByCommerceAccountId(commerceAccountId: string) {

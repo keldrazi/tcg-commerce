@@ -12,7 +12,6 @@ import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.
 import { ProductTypeModule } from 'src/tcgcommerce/modules/product/type/product.type.module';
 import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/product.language.module';
 import { PriceRuleProductCardUpdateDailyModule } from 'src/tcgcommerce/modules/price/rule/product/card/update/daily/price.rule.product.card.update.daily.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
@@ -26,7 +25,6 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         ProductTypeModule,
         ProductLanguageModule,
         PriceRuleProductCardUpdateDailyModule,
-        ErrorMessageModule
     ],
     controllers: [InventoryProductCardServiceUpdatePriceJobController],
     providers: [InventoryProductCardServiceUpdatePriceJobService],

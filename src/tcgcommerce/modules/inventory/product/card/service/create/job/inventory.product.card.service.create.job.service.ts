@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InventoryProductCardServiceCreateJob } from 'src/typeorm/entities/tcgcommerce/modules/inventory/product/card/service/create/job/inventory.product.card.service.create.job.entity';
@@ -7,8 +7,6 @@ import { INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS } from 'src/system/con
 import { OnEvent } from '@nestjs/event-emitter';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { InventoryProductCardServiceCreateJobItemService } from 'src/tcgcommerce/modules/inventory/product/card/service/create/job/item/inventory.product.card.service.create.job.item.service';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 
 @Injectable()
@@ -18,7 +16,6 @@ export class InventoryProductCardServiceCreateJobService {
         @InjectRepository(InventoryProductCardServiceCreateJob) private inventoryProductCardServiceCreateJobRepository: Repository<InventoryProductCardServiceCreateJob>,
         private productSetService: ProductSetService,
         private inventoryProductCardServiceCreateJobItemService: InventoryProductCardServiceCreateJobItemService,
-        private errorMessageService: ErrorMessageService
     ) { }
 
 
@@ -148,16 +145,11 @@ export class InventoryProductCardServiceCreateJobService {
     
 
     async getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOne({
+        let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
             }
         });
-
-        if(inventoryProductCardServiceCreateJob == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found');
-        };
-        
 
         //MAP TO DTO;
         let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
@@ -167,15 +159,11 @@ export class InventoryProductCardServiceCreateJobService {
     }
 
     async getInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId: string) {
-        let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOne({
+        let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
             }
         });
-
-        if(inventoryProductCardServiceCreateJob == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found');
-        }
 
         //MAP TO DTO;
         let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
@@ -207,14 +195,7 @@ export class InventoryProductCardServiceCreateJobService {
             }
         });
 
-        if(inventoryProductCardServiceCreateJob == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found');
-        }
-
-        //MAP TO DTO;
-        let inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO = ({ ...inventoryProductCardServiceCreateJob});
-
-        return inventoryProductCardServiceCreateJobDTO;
+        return inventoryProductCardServiceCreateJob;
     }
 
     
@@ -227,8 +208,8 @@ export class InventoryProductCardServiceCreateJobService {
         let productLineId = createInventoryProductCardServiceCreateJobsDTO.productLineId;
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendorId, productLineId);
 
-        if(productSets == null || productSets instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'Product sets not found for the provided product vendor and product line.');
+        if(productSets == null || productSets.length === 0) {
+            throw new BadRequestException('Product sets not found for the provided product vendor and product line.');
         }
 
 
@@ -255,13 +236,13 @@ export class InventoryProductCardServiceCreateJobService {
                 productSetCode: productSet.productSetCode
             }
             
-            let inventoryProductCardServiceCreateJobDTO = await this.createInventoryProductCardServiceCreateJobSet(createInventoryProductCardServiceCreateJobDTO);
-
-            if(inventoryProductCardServiceCreateJobDTO == null || inventoryProductCardServiceCreateJobDTO instanceof ErrorMessageDTO) {
+            try {
+                let inventoryProductCardServiceCreateJobDTO = await this.createInventoryProductCardServiceCreateJobSet(createInventoryProductCardServiceCreateJobDTO);
+                inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
+            } catch (e) {
+                // Skip this set if it already exists or fails
                 continue;
             }
-
-            inventoryProductCardServiceCreateJobDTOs.push(inventoryProductCardServiceCreateJobDTO);
 
         }
             
@@ -272,10 +253,10 @@ export class InventoryProductCardServiceCreateJobService {
 
     async createInventoryProductCardServiceCreateJobSet(createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO) {
 
-        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO);
+        let existingJob = await this.getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO);
 
-        if(inventoryProductCardServiceCreateJobDTO != null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_ALREADY_EXISTS', 'Inventory product card service create job already exists for the provided parameters.');
+        if(existingJob != null) {
+            throw new ConflictException('Inventory product card service create job already exists for the provided parameters.');
         }
 
         let inventoryProductCardServiceCreateJobCode = await this.createInventoryProductCardServiceCreateJobCode(createInventoryProductCardServiceCreateJobDTO.productLineCode, createInventoryProductCardServiceCreateJobDTO.productSetCode, createInventoryProductCardServiceCreateJobDTO.commerceLocationName);
@@ -288,12 +269,7 @@ export class InventoryProductCardServiceCreateJobService {
         inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.save(inventoryProductCardServiceCreateJob);
         
         
-        inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobId);
-        
-        if(inventoryProductCardServiceCreateJobDTO == null || inventoryProductCardServiceCreateJobDTO instanceof ErrorMessageDTO) {
-            //TO DO: HANDLE ERROR FOR FAILED CREATION OF IMPORT JOB;
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_CREATION_FAILED', 'Failed to create inventory product card service create job.');
-        }
+        let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobId);
     
         
         return inventoryProductCardServiceCreateJobDTO;
@@ -302,9 +278,8 @@ export class InventoryProductCardServiceCreateJobService {
 
     async processsInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string) {
         let inventoryProductCardServiceCreateJobsDTO = await this.getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId, productLineCode, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY);
-        if(inventoryProductCardServiceCreateJobsDTO == null || inventoryProductCardServiceCreateJobsDTO instanceof ErrorMessageDTO) {
-            //TO DO: HANDLE ERROR FOR NON EXISTENT IMPORT JOB;
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOBS_NOT_FOUND', 'Inventory product card service create jobs not found for the provided parameters.');
+        if(inventoryProductCardServiceCreateJobsDTO == null || inventoryProductCardServiceCreateJobsDTO.length === 0) {
+            throw new NotFoundException('Inventory product card service create jobs not found for the provided parameters.');
         }
 
         this.processsInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO);
@@ -326,9 +301,6 @@ export class InventoryProductCardServiceCreateJobService {
 
     async processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
-        if(inventoryProductCardServiceCreateJobDTO == null || inventoryProductCardServiceCreateJobDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found for inventoryProductCardServiceCreateJobId: ' + inventoryProductCardServiceCreateJobId);
-        }
 
         await this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
     
@@ -337,8 +309,8 @@ export class InventoryProductCardServiceCreateJobService {
 
     async approveInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string) {
         let inventoryProductCardServiceCreateJobsDTO = await this.getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId, productLineCode, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW);
-        if(inventoryProductCardServiceCreateJobsDTO == null) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOBS_NOT_FOUND', 'Inventory product card service create jobs not found for the provided parameters.');
+        if(inventoryProductCardServiceCreateJobsDTO == null || inventoryProductCardServiceCreateJobsDTO.length === 0) {
+            throw new NotFoundException('Inventory product card service create jobs not found for the provided parameters.');
         }
 
         this.approveInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO);
@@ -359,10 +331,6 @@ export class InventoryProductCardServiceCreateJobService {
     async approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
-        if(inventoryProductCardServiceCreateJobDTO == null || inventoryProductCardServiceCreateJobDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found for inventoryProductCardServiceCreateJobId: ' + inventoryProductCardServiceCreateJobId);
-        }
-
         await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
 
         await this.inventoryProductCardServiceCreateJobItemService.approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
@@ -373,12 +341,8 @@ export class InventoryProductCardServiceCreateJobService {
     async deleteInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
-        if(inventoryProductCardServiceCreateJobDTO == null || inventoryProductCardServiceCreateJobDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found for inventoryProductCardServiceCreateJobId: ' + inventoryProductCardServiceCreateJobId);
-        }
-
         if(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_CANNOT_DELETE_COMPLETED', 'Completed inventory product card service create jobs cannot be deleted.');
+            throw new ConflictException('Completed inventory product card service create jobs cannot be deleted.');
         }
 
         await this.inventoryProductCardServiceCreateJobItemService.deleteInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobId);
@@ -408,10 +372,6 @@ export class InventoryProductCardServiceCreateJobService {
     async updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobStatus: string) {
         let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
-        if(inventoryProductCardServiceCreateJob == null || inventoryProductCardServiceCreateJob instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found for inventoryProductCardServiceCreateJobId: ' + inventoryProductCardServiceCreateJobId);
-        }
-
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobStatus = inventoryProductCardServiceCreateJobStatus;
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobUpdateDate = new Date();
 
@@ -422,10 +382,6 @@ export class InventoryProductCardServiceCreateJobService {
 
     async updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobCount: number) {
         let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
-
-        if(inventoryProductCardServiceCreateJob == null || inventoryProductCardServiceCreateJob instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found for inventoryProductCardServiceCreateJobId: ' + inventoryProductCardServiceCreateJobId);
-        }
 
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobCount = inventoryProductCardServiceCreateJobCount;
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobUpdateDate = new Date();
@@ -450,10 +406,6 @@ export class InventoryProductCardServiceCreateJobService {
             await this.updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId, inventoryProductCardServiceCreateJobCount);
 
             let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
-
-            if(inventoryProductCardServiceCreateJobDTO == null || inventoryProductCardServiceCreateJobDTO instanceof ErrorMessageDTO) {
-                return this.errorMessageService.createErrorMessage('INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_NOT_FOUND', 'Inventory product card service create job not found for inventoryProductCardServiceCreateJobId: ' + inventoryProductCardServiceCreateJobId);
-            }
 
             await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_INVENTORY_CARD_PRICES);
             this.inventoryProductCardServiceCreateJobItemService.updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO);

@@ -12,7 +12,6 @@ import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/
 import { ProductCardPrintingModule } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.module';
 import { TCGdbMTGPriceChangeDailyModule } from 'src/tcgdb/modules/tcgdb/api/mtg/price/change/daily/tcgdb.mtg.price.change.daily.module';
 import { PriceRuleProductCardBaseModule } from 'src/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
@@ -27,7 +26,6 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         InventoryProductCardModule,
         TCGdbMTGPriceChangeDailyModule,
         PriceRuleProductCardBaseModule,
-        ErrorMessageModule,
     ],
     controllers: [],
     providers: [InventoryProductCardServiceUpdatePriceJobItemService],
