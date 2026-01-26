@@ -1,16 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePOSVendorOptionPriceTypeDTO, UpdatePOSVendorOptionPriceTypeDTO, POSVendorOptionPriceTypeDTO } from './dto/pos.vendor.option.price.type.dto';
 import { POSVendorOptionPriceType } from 'src/typeorm/entities/tcgcommerce/modules/pos/vendor/option/price/type/pos.vendor.option.price.type.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class POSVendorOptionPriceTypeService {
 
     constructor(
         @InjectRepository(POSVendorOptionPriceType) private posVendorOptionPriceTypeRepository: Repository<POSVendorOptionPriceType>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getPOSVendorOptionPriceType(posVendorOptionPriceTypeId: string) {
@@ -21,7 +19,7 @@ export class POSVendorOptionPriceTypeService {
         });
         
         if (posVendorOptionPriceType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor option price type was not found');
         }
 
         let posVendorOptionPriceTypeDTO:POSVendorOptionPriceTypeDTO = ({ ...posVendorOptionPriceType });        
@@ -66,7 +64,7 @@ export class POSVendorOptionPriceTypeService {
         });
         
         if (posVendorOptionPriceType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor option price type was not found');
         }
 
         let posVendorOptionPriceTypeDTO:POSVendorOptionPriceTypeDTO = ({ ...posVendorOptionPriceType });   
@@ -84,7 +82,7 @@ export class POSVendorOptionPriceTypeService {
         });
         
         if (posVendorOptionPriceType == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor option price type was not found');
         }
 
         let posVendorOptionPriceTypeDTO:POSVendorOptionPriceTypeDTO = ({ ...posVendorOptionPriceType });   
@@ -103,7 +101,7 @@ export class POSVendorOptionPriceTypeService {
         });
         
         if (posVendorOptionPriceType != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'POS vendor already exists');
+            throw new ConflictException('POS vendor option price type already exists');
         }
         
         posVendorOptionPriceType = this.posVendorOptionPriceTypeRepository.create({ ...createPOSVendorOptionPriceTypeDTO });
@@ -124,7 +122,7 @@ export class POSVendorOptionPriceTypeService {
         });
 
         if (!posVendorOptionPriceType) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor option price type was not found');
         }
 
         posVendorOptionPriceType.posVendorOptionPriceTypeName = updatePOSVendorOptionPriceTypeDTO.posVendorOptionPriceTypeName;

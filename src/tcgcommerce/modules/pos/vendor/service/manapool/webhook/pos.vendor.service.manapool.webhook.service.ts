@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommerceAccountSettingsPOSVendorServiceManaPoolService } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.service';
 import { POSVendorServiceManaPoolAPIRestV1WebhookService } from '../api/rest/v1/webhook/pos.vendor.service.manapool.api.rest.v1.webhook.service';
 import { POSVendorServiceManaPoolWebhookProcessService } from './process/pos.vendor.service.manapool.webhook.process.service';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class POSVendorServiceManaPoolWebhookService {
@@ -14,7 +12,6 @@ export class POSVendorServiceManaPoolWebhookService {
         private commerceAccountSettingsPOSVendorServiceManaPoolService: CommerceAccountSettingsPOSVendorServiceManaPoolService,
         private posVendorServiceManaPoolAPIRestV1WebhookService: POSVendorServiceManaPoolAPIRestV1WebhookService,
         private posVendorServiceManaPoolWebhookProcessService: POSVendorServiceManaPoolWebhookProcessService,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     private manaPoolWebhookURL = this.configService.get('MANAPOOL_WEBHOOK_URL');
@@ -22,8 +19,8 @@ export class POSVendorServiceManaPoolWebhookService {
     async getManaPoolWebhooks(commerceAccountId: string) {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null || commerceAccountSettingsPOSVendorServiceManaPool instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_MANAPOOL_NOT_FOUND', 'Commerce account settings POS vendor service Manapool was not found');
+        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
+            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
         }
 
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
@@ -36,8 +33,8 @@ export class POSVendorServiceManaPoolWebhookService {
     async getManaPoolWebhookById(commerceAccountId: string, webhookId: string) {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null || commerceAccountSettingsPOSVendorServiceManaPool instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_MANAPOOL_NOT_FOUND', 'Commerce account settings POS vendor service Manapool was not found');
+        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
+            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
         }
 
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
@@ -50,8 +47,8 @@ export class POSVendorServiceManaPoolWebhookService {
     async createManaPoolWebhook(commerceAccountId, webhookType: string) {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null || commerceAccountSettingsPOSVendorServiceManaPool instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_MANAPOOL_NOT_FOUND', 'Commerce account settings POS vendor service Manapool was not found');
+        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
+            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
         }
 
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;

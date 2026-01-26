@@ -1,16 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePOSVendorDTO, UpdatePOSVendorDTO, POSVendorDTO } from './dto/pos.vendor.dto';
 import { POSVendor } from 'src/typeorm/entities/tcgcommerce/modules/pos/vendor/pos.vendor.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class POSVendorService {
 
     constructor(
         @InjectRepository(POSVendor) private posVendorRepository: Repository<POSVendor>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getPOSVendor(posVendorId: string) {
@@ -21,7 +19,7 @@ export class POSVendorService {
         });
         
         if (posVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor was not found');
         }
 
         let posVendorDTO:POSVendorDTO = ({ ...posVendor });        
@@ -64,7 +62,7 @@ export class POSVendorService {
         });
         
         if (posVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor was not found');
         }
 
         let posVendorDTO:POSVendorDTO = ({ ...posVendor });   
@@ -81,7 +79,7 @@ export class POSVendorService {
         });
         
         if (posVendor == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor was not found');
         }
 
         let posVendorDTO:POSVendorDTO = ({ ...posVendor });   
@@ -100,7 +98,7 @@ export class POSVendorService {
         });
         
         if (posVendor != null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_ALREADY_EXISTS', 'POS vendor already exists');
+            throw new ConflictException('POS vendor already exists');
         }
         
         posVendor = this.posVendorRepository.create({ ...createPOSVendorDTO });
@@ -121,7 +119,7 @@ export class POSVendorService {
         });
 
         if (!posVendor) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'POS vendor was not found');
+            throw new NotFoundException('POS vendor was not found');
         }
 
         posVendor.posVendorName = updatePOSVendorDTO.posVendorName;

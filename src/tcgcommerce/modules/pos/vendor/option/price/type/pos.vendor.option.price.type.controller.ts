@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { CreatePOSVendorOptionPriceTypeDTO, UpdatePOSVendorOptionPriceTypeDTO } from './dto/pos.vendor.option.price.type.dto';
 import { POSVendorOptionPriceTypeService } from './pos.vendor.option.price.type.service';
 
@@ -12,24 +12,49 @@ export class POSVendorOptionPriceTypeController {
     
     @Get('/id/:posVendorOptionPriceTypeId')
     async getPOSVendorOptionPriceType(@Param('posVendorOptionPriceTypeId') posVendorOptionPriceTypeId: string) {
-        return await this.posVendorOptionPriceTypeService.getPOSVendorOptionPriceType(posVendorOptionPriceTypeId);
+        try {
+            return await this.posVendorOptionPriceTypeService.getPOSVendorOptionPriceType(posVendorOptionPriceTypeId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get POS vendor option price type');
+        }
     }
 
     @Get('/all/:posVendorId')
     async getPOSVendorOptionPriceTypes(@Param('posVendorId') posVendorId: string) {
-        return await this.posVendorOptionPriceTypeService.getPOSVendorOptionPriceTypes(posVendorId);
+        try {
+            return await this.posVendorOptionPriceTypeService.getPOSVendorOptionPriceTypes(posVendorId);
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get POS vendor option price types');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createPOSVendorOptionPriceType(@Body() createPOSVendorOptionPriceTypeDTO: CreatePOSVendorOptionPriceTypeDTO) {
-        return await this.posVendorOptionPriceTypeService.createPOSVendorOptionPriceType(createPOSVendorOptionPriceTypeDTO);
+        try {
+            return await this.posVendorOptionPriceTypeService.createPOSVendorOptionPriceType(createPOSVendorOptionPriceTypeDTO);
+        } catch (e) {
+            if (e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create POS vendor option price type');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updatePOSVendorOptionPriceType(@Body() updatePOSVendorOptionPriceTypeDTO: UpdatePOSVendorOptionPriceTypeDTO) {
-        return await this.posVendorOptionPriceTypeService.updatePOSVendorOptionPriceType(updatePOSVendorOptionPriceTypeDTO);
+        try {
+            return await this.posVendorOptionPriceTypeService.updatePOSVendorOptionPriceType(updatePOSVendorOptionPriceTypeDTO);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to update POS vendor option price type');
+        }
     }
 
     

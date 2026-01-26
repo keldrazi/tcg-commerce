@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { CreatePOSVendorDTO, UpdatePOSVendorDTO, POSVendorDTO } from './dto/pos.vendor.dto';
 import { POSVendorService } from './pos.vendor.service';
 
@@ -12,24 +12,49 @@ export class POSVendorController {
     
     @Get('/id/:posVendorId')
     async getPOSVendor(@Param('posVendorId') posVendorId: string) {
-        return await this.posVendorService.getPOSVendor(posVendorId);
+        try {
+            return await this.posVendorService.getPOSVendor(posVendorId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get POS vendor');
+        }
     }
 
     @Get('/all')
     async getPOSVendors() {
-        return await this.posVendorService.getPOSVendors();
+        try {
+            return await this.posVendorService.getPOSVendors();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get POS vendors');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createPOSVendor(@Body() createPOSVendorDTO: CreatePOSVendorDTO) {
-        return await this.posVendorService.createPOSVendor(createPOSVendorDTO);
+        try {
+            return await this.posVendorService.createPOSVendor(createPOSVendorDTO);
+        } catch (e) {
+            if (e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create POS vendor');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updatePOSVendor(@Body() updatePOSVendorDTO: UpdatePOSVendorDTO) {
-        return await this.posVendorService.updatePOSVendor(updatePOSVendorDTO);
+        try {
+            return await this.posVendorService.updatePOSVendor(updatePOSVendorDTO);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to update POS vendor');
+        }
     }
 
     
