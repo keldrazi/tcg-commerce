@@ -1,44 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ApplicationModule } from 'src/typeorm/entities/tcgcommerce/modules/application/module/application.module.entity';
 import { CreateApplicationModuleDTO, UpdateApplicationModuleDTO, ApplicationModuleDTO } from './dto/application.module.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ApplicationModuleService {
 
     constructor(
         @InjectRepository(ApplicationModule) private applicationModuleRepository: Repository<ApplicationModule>,
-        private errorMessageService: ErrorMessageService
     ) { }
 
-    async getApplicationModuleById(applicationModuleId: string) {
-        let applicationModule = await this.applicationModuleRepository.findOne({ 
+    async getApplicationModuleById(applicationModuleId: string): Promise<ApplicationModuleDTO>{
+        let applicationModule = await this.applicationModuleRepository.findOneOrFail({ 
             where: { 
                 applicationModuleId : applicationModuleId
             } 
         });
         
-        if (applicationModule == null) {
-            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found');
-        }
-
         let applicationModuleDTO: ApplicationModuleDTO = ({ ...applicationModule });
-
 
         return applicationModuleDTO;
         
     }
 
-    async getApplicationModules() {
+    async getApplicationModules(): Promise<ApplicationModuleDTO[]>{
         let applicationModules = await this.applicationModuleRepository.find();
         
-        if (applicationModules == null) {
-            return [];
-        }
-
         let applicationModuleDTOs: ApplicationModuleDTO[] = [];
+
+        if (!applicationModules) {
+            return applicationModuleDTOs;
+        }
 
         for(let i = 0; i < applicationModules.length; i++) {
             let applicationModule = applicationModules[i];
@@ -52,7 +45,7 @@ export class ApplicationModuleService {
         
     }
 
-    async createApplicationModule(createApplicationModuleDTO: CreateApplicationModuleDTO) {
+    async createApplicationModule(createApplicationModuleDTO: CreateApplicationModuleDTO): Promise<ApplicationModuleDTO> {
         
         let applicationModule = await this.applicationModuleRepository.findOne({ 
             where: { 
@@ -60,8 +53,8 @@ export class ApplicationModuleService {
             } 
         });
         
-        if (applicationModule != null) {
-            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_ALREADY_EXISTS', 'Application module already exists');
+        if(applicationModule) {
+            throw new ConflictException('Application module already exists');
         }
         
         applicationModule = this.applicationModuleRepository.create({ ...createApplicationModuleDTO });
@@ -72,17 +65,13 @@ export class ApplicationModuleService {
         return applicationModuleDTO;
     }
 
-    async updateApplicationModule(updateApplicationModuleDTO: UpdateApplicationModuleDTO) {
-        let applicationModule = await this.applicationModuleRepository.findOne({
+    async updateApplicationModule(updateApplicationModuleDTO: UpdateApplicationModuleDTO): Promise<ApplicationModuleDTO> {
+        let applicationModule = await this.applicationModuleRepository.findOneOrFail({
             where: {    
                 applicationModuleId: updateApplicationModuleDTO.applicationModuleId
             }
         });
  
-        if (applicationModule == null) {
-            return this.errorMessageService.createErrorMessage('APPLICATION_MODULE_NOT_FOUND', 'Application module was not found');
-        }
-
         applicationModule.applicationModuleName = updateApplicationModuleDTO.applicationModuleName;
         applicationModule.applicationModuleDescription = updateApplicationModuleDTO.applicationModuleDescription;
         applicationModule.applicationModuleIsActive = updateApplicationModuleDTO.applicationModuleIsActive;

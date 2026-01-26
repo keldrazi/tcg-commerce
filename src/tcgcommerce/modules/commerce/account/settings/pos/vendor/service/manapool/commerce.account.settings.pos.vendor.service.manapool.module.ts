@@ -3,14 +3,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommerceAccountSettingsPOSVendorServiceManaPoolService } from './commerce.account.settings.pos.vendor.service.manapool.service';
 import { CommerceAccountSettingsPOSVendorServiceManaPoolController } from './commerce.account.settings.pos.vendor.service.manapool.controller';
 import { CommerceAccountSettingsPOSVendorServiceManaPool } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/manapool/commerce.account.settings.pos.vendor.service.manapool.entity';
-import { POSVendorServiceManaPoolAPIRestV1Module } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/api/rest/v1/admin/pos.vendor.service.manapool.api.rest.v1.admin.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
+import { POSVendorServiceManaPoolAdminModule } from 'src/tcgcommerce/modules/pos/vendor/service/manapool/admin/pos.vendor.service.manapool.admin.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([CommerceAccountSettingsPOSVendorServiceManaPool]),
-        POSVendorServiceManaPoolAPIRestV1Module,
-        ErrorMessageModule
+        POSVendorServiceManaPoolAdminModule
     ],
     controllers: [CommerceAccountSettingsPOSVendorServiceManaPoolController],
     providers: [CommerceAccountSettingsPOSVendorServiceManaPoolService],

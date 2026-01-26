@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceUserVerification } from 'src/typeorm/entities/tcgcommerce/modules/commerce/user/verification/commerce.user.verification.entity';
 import { CommerceUserVerificationDTO } from './dto/commerce.user.verification.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { create } from 'axios';
 
 
 @Injectable()
@@ -12,7 +10,6 @@ export class CommerceUserVerificationService {
 
     constructor(
         @InjectRepository(CommerceUserVerification) private commerceUserVerificationRepository: Repository<CommerceUserVerification>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async createCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationType: string) {

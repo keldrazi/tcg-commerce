@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CustomerUserVerification } from 'src/typeorm/entities/tcgcommerce/modules/customer/user/verification/customer.user.verification.entity';
 import { CustomerUserVerificationDTO } from './dto/customer.user.verification.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 
 @Injectable()
@@ -11,7 +10,6 @@ export class CustomerUserVerificationService {
 
     constructor(
         @InjectRepository(CustomerUserVerification) private customerUserVerificationRepository: Repository<CustomerUserVerification>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async createCustomerUserVerification(commerceAccountId: string, customerUserId: string, customerUserVerificationType: string) {
@@ -60,7 +58,7 @@ export class CustomerUserVerificationService {
 
         let now = new Date();
         if (customerUserVerification == null || customerUserVerification.customerUserVerificationCodeIsValid == false || customerUserVerification.customerUserVerificationCodeExpires < now) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_VERIFICATION_INVALID_OR_EXPIRED', 'Invalid or expired user verification code.');
+            return false;
         }
 
         customerUserVerification.customerUserVerificationCodeIsValid = false;

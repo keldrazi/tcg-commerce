@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe, NotFoundException, InternalServerErrorException, ConflictException } from '@nestjs/common';
 import { CommerceAccountSettingsPOSVendorServiceShopifyService } from './commerce.account.settings.pos.vendor.service.shopify.service';
 import { CreateCommerceAccountSettingsPOSVendorServiceShopifyDTO, UpdateCommerceAccountSettingsPOSVendorServiceShopifyDTO } from './dto/commerce.account.settings.pos.vendor.service.shopify.dto';
+import { EntityNotFoundError } from 'typeorm';
 
-@Controller('commerce/account/settings/pos/vendor/service/manapool')
+@Controller('commerce/account/settings/pos/vendor/service/shopify')
 export class CommerceAccountSettingsPOSVendorServiceShopifyController {
 
     constructor(
@@ -11,28 +12,63 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyController {
     
     @Get('/caid/:commerceAccountId')
     async getCommerceAccountSettingsPOSVendorServiceShopifyByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountSettingsPOSVendorServiceShopifyService.getCommerceAccountSettingsPOSVendorServiceShopifyByCommerceAccountId(commerceAccountId);
+        try {
+            return await this.commerceAccountSettingsPOSVendorServiceShopifyService.getCommerceAccountSettingsPOSVendorServiceShopifyByCommerceAccountId(commerceAccountId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce account settings POS vendor service Shopify not found');
+            }
+            throw new InternalServerErrorException('Failed to get commerce account settings POS vendor service Shopify');
+        }
     }
 
     @Get('/id/:commerceAccountSettingsPOSVendorServiceShopifyId')
     async getCommerceAccountSettingsPOSVendorServiceShopify(@Param('commerceAccountSettingsPOSVendorServiceShopifyId') commerceAccountSettingsPOSVendorServiceShopifyId: string) {
-        return await this.commerceAccountSettingsPOSVendorServiceShopifyService.getCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId);
+        try {
+            return await this.commerceAccountSettingsPOSVendorServiceShopifyService.getCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce account settings POS vendor service Shopify not found');
+            }
+            throw new InternalServerErrorException('Failed to get commerce account settings POS vendor service Shopify');
+        }
     }
 
     @Get('/verify/:commerceAccountSettingsPOSVendorServiceShopifyId')
     async verifyCommerceAccountSettingsPOSVendorServiceShopifyById(@Param('commerceAccountSettingsPOSVendorServiceShopifyId') commerceAccountSettingsPOSVendorServiceShopifyId: string) {
-        return await this.commerceAccountSettingsPOSVendorServiceShopifyService.verifyCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId);
+        try {
+            return await this.commerceAccountSettingsPOSVendorServiceShopifyService.verifyCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce account settings POS vendor service Shopify not found');
+            }
+            throw new InternalServerErrorException('Failed to verify commerce account settings POS vendor service Shopify');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createCommerceAccountSettingsPOSVendorServiceShopify(@Body() createCommerceAccountSettingsPOSVendorServiceShopifyDTO: CreateCommerceAccountSettingsPOSVendorServiceShopifyDTO) {
-        return this.commerceAccountSettingsPOSVendorServiceShopifyService.createCommerceAccountSettingsPOSVendorServiceShopify(createCommerceAccountSettingsPOSVendorServiceShopifyDTO);
+        try {
+            return await this.commerceAccountSettingsPOSVendorServiceShopifyService.createCommerceAccountSettingsPOSVendorServiceShopify(createCommerceAccountSettingsPOSVendorServiceShopifyDTO);
+        } catch (e) {
+            if(e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create commerce account settings POS vendor service Shopify');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateCommerceAccountSettingsPOSVendorServiceShopify(@Body() updateCommerceAccountSettingsPOSVendorServiceShopifyDTO: UpdateCommerceAccountSettingsPOSVendorServiceShopifyDTO) {
-        return this.commerceAccountSettingsPOSVendorServiceShopifyService.updateCommerceAccountSettingsPOSVendorServiceShopify(updateCommerceAccountSettingsPOSVendorServiceShopifyDTO);
+        try {
+            return await this.commerceAccountSettingsPOSVendorServiceShopifyService.updateCommerceAccountSettingsPOSVendorServiceShopify(updateCommerceAccountSettingsPOSVendorServiceShopifyDTO);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce account settings POS vendor service Shopify not found');
+            }
+            throw new InternalServerErrorException('Failed to update commerce account settings POS vendor service Shopify');
+        }
     }
 }

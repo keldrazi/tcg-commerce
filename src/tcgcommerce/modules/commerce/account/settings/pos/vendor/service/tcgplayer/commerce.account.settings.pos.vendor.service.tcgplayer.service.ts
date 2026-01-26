@@ -6,7 +6,6 @@ import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
 import { CommerceAccountSettingsPOSVendorServiceTCGPlayer } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/tcgplayer/commerce.account.settings.pos.vendor.service.tcgplayer.entity';
 import { CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO } from './dto/commerce.account.settings.pos.vendor.service.tcgplayer.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
@@ -15,7 +14,6 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
         @InjectRepository(CommerceAccountSettingsPOSVendorServiceTCGPlayer) private commerceAccountSettingsPOSVendorServiceTCGPlayerRepository: Repository<CommerceAccountSettingsPOSVendorServiceTCGPlayer>,
         private configService: ConfigService,
         private httpService: HttpService,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     private tcgPlayerStoreAuthorizationURL = this.configService.get('TCGPLAYER_STORE_AUTHORIZATION_URL');
@@ -25,15 +23,11 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
     private tcgPlayerClientSecret = this.configService.get('TCGPLAYER_CLIENT_SECRET');
 
     async getCommerceAccountSettingsPOSVendorServiceTCGPlayerById(commerceAccountSettingsPOSVendorServiceTCGPlayerId: string) {
-        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
+        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountSettingsPOSVendorServiceTCGPlayerId : commerceAccountSettingsPOSVendorServiceTCGPlayerId
             } 
         });
-
-        if (commerceAccountSettingsPOSVendorServiceTCGPlayer == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service TCGPlayer was not found');
-        }
 
         let commerceAccountSettingsPOSVendorServiceTCGPlayerDTO: CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO = ({ ...commerceAccountSettingsPOSVendorServiceTCGPlayer });  
         
@@ -42,15 +36,11 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
     }
 
     async getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId: string) {
-        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
+        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
-        
-        if (commerceAccountSettingsPOSVendorServiceTCGPlayer == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service TCGPlayer was not found');
-        }
 
         let commerceAccountSettingsPOSVendorServiceTCGPlayerDTO: CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO = ({ ...commerceAccountSettingsPOSVendorServiceTCGPlayer });
 
@@ -94,15 +84,11 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
             throw new ForbiddenException(error.response.data);
         }
 
-        let newCommerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
+        let newCommerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
-
-        if (newCommerceAccountSettingsPOSVendorServiceTCGPlayer == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service TCGPlayer was not found');
-        }
 
         let commerceAccountSettingsPOSVendorServiceTCGPlayerDTO: CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO = ({ ...newCommerceAccountSettingsPOSVendorServiceTCGPlayer });
 
@@ -111,15 +97,11 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
     }
 
     async updateCommerceAccountSettingsPOSVendorServiceTCGPlayerStoreInfo(commerceAccountId:string) {
-        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
+        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
-
-        if (commerceAccountSettingsPOSVendorServiceTCGPlayer == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service TCGPlayer was not found');
-        }
 
         let bearerToken = await this.getCommerceAccountSettingsPOSVendorServiceTCGPlayerAPIBearerToken(commerceAccountId);
 
@@ -147,15 +129,11 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
 
     async getCommerceAccountSettingsPOSVendorServiceTCGPlayerAPIBearerToken(commerceAccountId: string) {
             
-        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOne({ 
+        let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
-    
-        if (commerceAccountSettingsPOSVendorServiceTCGPlayer == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_SETTINGS_POS_VENDOR_SERVICE_SHOPIFY_NOT_FOUND', 'Commerce account settings POS vendor service TCGPlayer was not found');
-        }
 
         if(commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerBearerToken != null) {
         const commerceAccountSettingsPOSVendorServiceTCGPlayerBearerTokenExpires = new Date(commerceAccountSettingsPOSVendorServiceTCGPlayer.commerceAccountSettingsPOSVendorServiceTCGPlayerBearerTokenExpires);

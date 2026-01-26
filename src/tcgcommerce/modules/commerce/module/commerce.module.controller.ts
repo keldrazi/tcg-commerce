@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, InternalServerErrorException, ConflictException } from '@nestjs/common';
 import { CommerceModuleService } from './commerce.module.service';
 import { CreateCommerceModuleDTO, UpdateCommerceModuleDTO } from './dto/commerce.module.dto';
-
+import { EntityNotFoundError } from 'typeorm';
 
 
 @Controller('commerce/module')
@@ -13,29 +13,61 @@ export class CommerceModuleController {
     
     @Get()
     async getCommerceModules() {
-        return await this.commerceModuleService.getCommerceModules();
+        try {
+            return await this.commerceModuleService.getCommerceModules();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get commerce modules');
+        }
     }
 
     @Get('/id/:commerceModuleId')
     async getCommerceModuleById(@Param('commerceModuleId') commerceModuleId: string) {
-        return await this.commerceModuleService.getCommerceModuleById(commerceModuleId);
+        try {
+            return await this.commerceModuleService.getCommerceModuleById(commerceModuleId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce module not found');
+            }
+            throw new InternalServerErrorException('Failed to get commerce module');
+        }
     }
 
     @Get('/caid/:commerceAccountId')
     async getCommerceModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceModuleService.getCommerceModuleByCommerceAccountId(commerceAccountId);
+        try {
+            return await this.commerceModuleService.getCommerceModuleByCommerceAccountId(commerceAccountId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce module not found');
+            }
+            throw new InternalServerErrorException('Failed to get commerce module');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createCommerceModule(@Body() createCommerceModuleDTO: CreateCommerceModuleDTO) {
-        return this.commerceModuleService.createCommerceModule(createCommerceModuleDTO);
+        try {
+            return await this.commerceModuleService.createCommerceModule(createCommerceModuleDTO);
+        } catch (e) {
+            if(e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create commerce module');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateCommerceModule(@Body() updateCommerceModuleDTO: UpdateCommerceModuleDTO) {
-        return this.commerceModuleService.updateCommerceModule(updateCommerceModuleDTO);
+        try {
+            return await this.commerceModuleService.updateCommerceModule(updateCommerceModuleDTO);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce module not found');
+            }
+            throw new InternalServerErrorException('Failed to update commerce module');
+        }
     }
 
 }

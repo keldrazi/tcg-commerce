@@ -19,7 +19,7 @@ export class ProductVendorController {
             if(e instanceof EntityNotFoundError) {
                 throw new NotFoundException('Product vendor not found');
             }
-            throw new InternalServerErrorException('Failed to get product vendor by ID');
+            throw new InternalServerErrorException('Failed to get product vendor');
         }
     }
 
@@ -54,7 +54,7 @@ export class ProductVendorController {
             if(e instanceof EntityNotFoundError) {
                 throw new NotFoundException('Product vendor not found');
             }
-            throw new InternalServerErrorException('Failed to get product vendor by ID');
+            throw new InternalServerErrorException('Failed to update product vendor');
         }
     }
 }

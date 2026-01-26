@@ -1,28 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceModule } from 'src/typeorm/entities/tcgcommerce/modules/commerce/module/commerce.module.entity';
 import { CreateCommerceModuleDTO, UpdateCommerceModuleDTO, CommerceModuleDTO } from './dto/commerce.module.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CommerceModuleService {
 
     constructor(
         @InjectRepository(CommerceModule) private commerceModuleRepository: Repository<CommerceModule>,
-        private errorMessageService: ErrorMessageService
     ) { }
 
     async getCommerceModuleById(commerceModuleId: string) {
-        let commerceModule = await this.commerceModuleRepository.findOne({ 
+        let commerceModule = await this.commerceModuleRepository.findOneOrFail({ 
             where: { 
                 commerceModuleId : commerceModuleId
             } 
         });
-        
-        if (commerceModule == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found');
-        }
 
         let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
 
@@ -31,15 +25,11 @@ export class CommerceModuleService {
     }
 
     async getCommerceModuleByCommerceAccountId(commerceAccountId: string) {
-        let commerceModule = await this.commerceModuleRepository.findOne({ 
+        let commerceModule = await this.commerceModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
-        
-        if (commerceModule == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found');
-        }
 
         let commerceModuleDTO :CommerceModuleDTO = ({ ...commerceModule})
 
@@ -77,7 +67,7 @@ export class CommerceModuleService {
         });
 
         if (commerceModule != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_EXISTS', 'Commerce module already exists');
+            throw new ConflictException('Commerce module already exists');
         }
         
         commerceModule = this.commerceModuleRepository.create({ ...createCommerceModuleDTO });
@@ -90,15 +80,11 @@ export class CommerceModuleService {
 
     async updateCommerceModule(updateCommerceModuleDTO: UpdateCommerceModuleDTO) {
             
-        let commerceModule = await this.commerceModuleRepository.findOne({ 
+        let commerceModule = await this.commerceModuleRepository.findOneOrFail({ 
             where: { 
                 commerceModuleId: updateCommerceModuleDTO.commerceModuleId
             } 
         });
-
-        if (commerceModule == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_MODULE_NOT_FOUND', 'Commerce module was not found');
-        }
 
         commerceModule.commerceModuleSettings = updateCommerceModuleDTO.commerceModuleSettings;
         commerceModule.commerceModuleRoles = updateCommerceModuleDTO.commerceModuleRoles;

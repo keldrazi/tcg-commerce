@@ -1,20 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccount } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/commerce.account.entity';
 import { CreateCommerceAccountDTO, UpdateCommerceAccountDTO, CommerceAccountDTO } from './dto/commerce.account.dto';
 import { CommerceAccountApplicationModule } from './interface/commerce.account.interface';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CommerceAccountService {
 
     constructor(
         @InjectRepository(CommerceAccount) private commerceAccountRepository: Repository<CommerceAccount>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getActiveCommerceAccounts() {
+    async getActiveCommerceAccounts(): Promise<CommerceAccountDTO[]> {
         let commerceAccounts = await this.commerceAccountRepository.find({
             where: {
                 commerceAccountIsActive: true
@@ -23,6 +21,10 @@ export class CommerceAccountService {
 
         let commerceAccountDTOs: CommerceAccountDTO[] = [];
 
+        if(!commerceAccounts) {
+            return commerceAccountDTOs;
+        }
+    
         for(let i = 0; i < commerceAccounts.length; i++) {
             let commerceAccount = commerceAccounts[i];
             let commerceAccountDTO: CommerceAccountDTO = {
@@ -47,18 +49,14 @@ export class CommerceAccountService {
         return commerceAccountDTOs;
     }
 
-    async getCommerceAccountById(commerceAccountId: string) {
-        let commerceAccount = await this.commerceAccountRepository.findOne({ 
+    async getCommerceAccountById(commerceAccountId: string): Promise<CommerceAccountDTO> {
+        let commerceAccount = await this.commerceAccountRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: commerceAccountId 
             } 
         });
-        
-        if (commerceAccount == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_NOT_FOUND', 'Commerce account was not found');
-        }
 
-         let commerceAccountDTO: CommerceAccountDTO = {
+        let commerceAccountDTO: CommerceAccountDTO = {
             commerceAccountId: commerceAccount.commerceAccountId,
             commerceAccountName: commerceAccount.commerceAccountName,
             commerceAccountContactName: commerceAccount.commerceAccountContactName,
@@ -78,19 +76,35 @@ export class CommerceAccountService {
         
     }
 
-    async getCommerceAccountByClientIdAndToken(commerceAccountAPIClientId: string, commerceAccountAPIClientToken: string) {
-        let commerceAccount = await this.commerceAccountRepository.findOne({ 
+    async getCommerceAccountByClientIdAndToken(commerceAccountAPIClientId: string, commerceAccountAPIClientToken: string): Promise<CommerceAccountDTO> {
+        let commerceAccount = await this.commerceAccountRepository.findOneOrFail({ 
             where: {
                 commerceAccountAPIClientId: commerceAccountAPIClientId,
                 commerceAccountAPIClientToken: commerceAccountAPIClientToken
             } 
         });
 
-        return commerceAccount;
+        let commerceAccountDTO: CommerceAccountDTO = {
+            commerceAccountId: commerceAccount.commerceAccountId,
+            commerceAccountName: commerceAccount.commerceAccountName,
+            commerceAccountContactName: commerceAccount.commerceAccountContactName,
+            commerceAccountContactEmail: commerceAccount.commerceAccountContactEmail,
+            commerceAccountContactPhone: commerceAccount.commerceAccountContactPhone,
+            commerceAccountHandle: commerceAccount.commerceAccountHandle,
+            commerceAccountApplicationModules: JSON.parse(commerceAccount.commerceAccountApplicationModules) as CommerceAccountApplicationModule[],
+            commerceAccountAPIClientId: commerceAccount.commerceAccountAPIClientId,
+            commerceAccountAPIClientToken: commerceAccount.commerceAccountAPIClientToken,
+            commerceAccountIsActive: commerceAccount.commerceAccountIsActive,
+            commerceAccountIsAdmin: commerceAccount.commerceAccountIsAdmin,
+            commerceAccountCreateDate: commerceAccount.commerceAccountCreateDate,
+            commerceAccountUpdateDate: commerceAccount.commerceAccountUpdateDate,
+         };
+        
+        return commerceAccountDTO;
 
     }
 
-    async createCommerceAccount(createCommerceAccountDTO: CreateCommerceAccountDTO) {
+    async createCommerceAccount(createCommerceAccountDTO: CreateCommerceAccountDTO): Promise<CommerceAccountDTO> {
 
         let commerceAccount = await this.commerceAccountRepository.findOne({ 
             where: { 
@@ -98,8 +112,8 @@ export class CommerceAccountService {
             } 
         });
 
-        if (commerceAccount != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_EXISTS', 'Commerce account with already exists');
+        if (commerceAccount) {
+            throw new ConflictException('Commerce account already exists');
         }
 
         let commerceAccountAPIHandle = await this.createCommerceAccountAPIHandle(createCommerceAccountDTO.commerceAccountHandle);
@@ -116,16 +130,12 @@ export class CommerceAccountService {
         return commerceAccountDTO;
     }
 
-    async updateCommerceAccount(updateCommerceAccountDTO: UpdateCommerceAccountDTO) {
-        let commerceAccount = await this.commerceAccountRepository.findOne({ 
+    async updateCommerceAccount(updateCommerceAccountDTO: UpdateCommerceAccountDTO): Promise<CommerceAccountDTO> {
+        let commerceAccount = await this.commerceAccountRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: updateCommerceAccountDTO.commerceAccountId 
             } 
         });
-
-        if (commerceAccount == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_NOT_FOUND', 'Commerce account was not found');
-        }
 
         commerceAccount.commerceAccountName = updateCommerceAccountDTO.commerceAccountName;
         commerceAccount.commerceAccountContactName = updateCommerceAccountDTO.commerceAccountContactName;

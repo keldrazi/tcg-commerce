@@ -1,28 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceLocation } from 'src/typeorm/entities/tcgcommerce/modules/commerce/location/commerce.location.entity';
 import { CreateCommerceLocationDTO, CommerceLocationDTO, UpdateCommerceLocationDTO } from './dto/commerce.location.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CommerceLocationService {
 
     constructor(
         @InjectRepository(CommerceLocation) private commerceLocationRepository: Repository<CommerceLocation>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getCommerceLocationById(commerceLocationId: string) {
-        let commerceLocation = await this.commerceLocationRepository.findOne({ 
+        let commerceLocation = await this.commerceLocationRepository.findOneOrFail({ 
             where: { 
                 commerceLocationId : commerceLocationId
             } 
         });
-
-        if (commerceLocation == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_NOT_FOUND', 'Commerce location was not found');
-        }
 
         let commerceLocationDTO: CommerceLocationDTO = ({ ...commerceLocation });
 
@@ -89,7 +83,7 @@ export class CommerceLocationService {
         });
 
         if(commerceLocation != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_EXISTS', 'Commerce location already exists');
+            throw new ConflictException('Commerce location already exists');
         }
 
         //CHECK FOR DEFAULT LOCATION;
@@ -116,15 +110,11 @@ export class CommerceLocationService {
     }
 
     async updateCommerceLocation(updateCommerceLocationDTO: UpdateCommerceLocationDTO) {
-        let commerceLocation = await this.commerceLocationRepository.findOne({
+        let commerceLocation = await this.commerceLocationRepository.findOneOrFail({
             where: {
                 commerceLocationId: updateCommerceLocationDTO.commerceLocationId
             }
         });
-
-        if(commerceLocation == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_LOCATION_NOT_FOUND', 'Commerce location was not found');
-        }
 
         //CHECK FOR DEFAULT LOCATION;
         if(updateCommerceLocationDTO.commerceLocationIsDefault) {

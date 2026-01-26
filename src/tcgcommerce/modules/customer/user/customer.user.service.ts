@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CustomerUser } from 'src/typeorm/entities/tcgcommerce/modules/customer/user/customer.user.entity';
 import { CreateCustomerUserDTO, UpdateCustomerUserDTO, CustomerUserDTO } from './dto/customer.user.dto';
 import * as bcrypt from 'bcrypt';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { CustomerUserVerificationService } from 'src/tcgcommerce/modules/customer/user/verification/customer.user.verification.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 
 @Injectable()
@@ -14,20 +12,15 @@ export class CustomerUserService {
 
     constructor(
         @InjectRepository(CustomerUser) private customerUserRepository: Repository<CustomerUser>,
-        private errorMessageService: ErrorMessageService,
         private customerUserVerificationService: CustomerUserVerificationService,
     ) { }
 
     async getCustomerUserById(customerUserId: string) {
-        let customerUser = await this.customerUserRepository.findOne({ 
+        let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId
             } 
         });
-        
-        if (customerUser == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_ACCOUNT_USER_NOT_FOUND', 'Customer account user was not found');
-        }
 
         let customerUserDTO:CustomerUserDTO = ({ ...customerUser });
 
@@ -69,7 +62,7 @@ export class CustomerUserService {
         });
 
         if(customerUser != null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_ALREADY_EXISTS', 'Customer user already exists');
+            throw new ConflictException('Customer user already exists');
         }
 
         let customerUserPasswordHash = await this.hashPassword(createCustomerUserDTO.customerUserPassword);
@@ -86,15 +79,11 @@ export class CustomerUserService {
     }
 
     async updateCustomerUser(updateCustomerUserDTO: UpdateCustomerUserDTO) {
-        let customerUser = await this.customerUserRepository.findOne({ 
+        let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: updateCustomerUserDTO.customerUserId 
             } 
         });
-        
-        if (customerUser == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_NOT_FOUND', 'Customer user was not found');
-        }
 
         customerUser.customerUserEmail = updateCustomerUserDTO.customerUserEmail;
         customerUser.customerUserIsActive = updateCustomerUserDTO.customerUserIsActive;
@@ -108,15 +97,11 @@ export class CustomerUserService {
     }
 
     async deleteCustomerUser(customerUserId: string) {
-        let customerUser = await this.customerUserRepository.findOne({ 
+        let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId 
             } 
         });
-
-        if (customerUser == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_NOT_FOUND', 'Customer user was not found');
-        }
 
         customerUser.customerUserIsActive = false;
         customerUser.customerUserUpdateDate = new Date();
@@ -129,16 +114,12 @@ export class CustomerUserService {
     }
 
     async passwordResetCustomerUser(commerceAccountId: string, customerUserEmail: string) {
-        let customerUser = await this.customerUserRepository.findOne({ 
+        let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: commerceAccountId,
                 customerUserEmail: customerUserEmail 
             } 
         });
-
-        if (customerUser == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_NOT_FOUND', 'Customer user was not found');
-        }
 
         await this.customerUserVerificationService.createCustomerUserVerification(commerceAccountId, customerUser.customerUserId, 'CUSTOMER_USER_PASSWORD_RESET');
 
@@ -148,15 +129,11 @@ export class CustomerUserService {
     }
 
     async updateCustomerUserPassword(customerUserId: string, customerUserPassword: string) {
-        let customerUser = await this.customerUserRepository.findOne({ 
+        let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId
             } 
         });
-
-        if (customerUser == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_ACCOUNT_USER_NOT_FOUND', 'Customer account user was not found');
-        }
 
         let customerUserPasswordHash = await this.hashPassword(customerUserPassword);
         customerUser.customerUserPassword = customerUserPasswordHash;
@@ -172,19 +149,15 @@ export class CustomerUserService {
     async verifyCustomerUser(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string) {
         let isVerified = await this.customerUserVerificationService.verifyCustomerUserVerification(commerceAccountId, customerUserId, customerUserVerificationCode, 'CUSTOMER_USER_REGISTRATION');
 
-        if(!isVerified || isVerified instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_VERIFICATION_FAILED', 'Customer user verification failed');
+        if(!isVerified) {
+            throw new ConflictException('Customer user verification failed');
         }
 
-        let customerUser = await this.customerUserRepository.findOne({ 
+        let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId 
             } 
         });
-
-        if (customerUser == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_NOT_FOUND', 'Customer user was not found');
-        }
 
         customerUser.customerUserIsVerified = true;
         customerUser.customerUserUpdateDate = new Date();
@@ -199,20 +172,16 @@ export class CustomerUserService {
 
     async verifyCustomerUserPassword(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string, customerUserPassword: string) {
         
-        let customerUser = await this.customerUserRepository.findOne({ 
+        let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId 
             } 
         });
-
-        if (customerUser == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_NOT_FOUND', 'Customer user was not found');
-        }
         
         let isVerified = await this.customerUserVerificationService.verifyCustomerUserVerification(commerceAccountId, customerUserId, customerUserVerificationCode, 'CUSTOMER_USER_PASSWORD_RESET');
 
-        if(!isVerified || isVerified instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_VERIFICATION_FAILED', 'Customer user verification failed');
+        if(!isVerified) {
+            throw new ConflictException('Customer user verification failed');
         }
 
         let customerUserDTO = await this.updateCustomerUserPassword(customerUserId, customerUserPassword);

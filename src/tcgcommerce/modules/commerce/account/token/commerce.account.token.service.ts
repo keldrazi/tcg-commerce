@@ -1,28 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceAccountToken } from 'src/typeorm/entities/tcgcommerce/modules/commerce/account/token/commerce.account.token.entity';
 import { CreateCommerceAccountTokenDTO, UpdateCommerceAccountTokenDTO, CommerceAccountTokenDTO } from './dto/commerce.account.token.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CommerceAccountTokenService {
     constructor(
         @InjectRepository(CommerceAccountToken) private commerceAccountTokenRepository: Repository<CommerceAccountToken>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
 
     async getCommerceAccountTokenByCommerceAccountId(commerceAccountId: string) {
-        let commerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
+        let commerceAccountToken = await this.commerceAccountTokenRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: commerceAccountId 
             } 
         });
-        
-        if (commerceAccountToken == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_NOT_FOUND', 'Commerce account token was not found');
-        }
 
         let commerceAccountTokenDTO: CommerceAccountTokenDTO = ({ ...commerceAccountToken });
         
@@ -39,7 +33,7 @@ export class CommerceAccountTokenService {
         });
 
         if (commerceAccountToken != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_EXISTS', 'Commerce account token already exists');
+            throw new ConflictException('Commerce account token already exists');
         }
 
         commerceAccountToken = this.commerceAccountTokenRepository.create({
@@ -57,15 +51,11 @@ export class CommerceAccountTokenService {
     }
 
     async updateCommerceAccountToken(updateCommerceAccountTokenDTO: UpdateCommerceAccountTokenDTO) {
-        let commerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
+        let commerceAccountToken = await this.commerceAccountTokenRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: updateCommerceAccountTokenDTO.commerceAccountId 
             } 
         });
-
-        if (commerceAccountToken == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_ACCOUNT_TOKEN_NOT_FOUND', 'Commerce account token was not found');
-        }
 
         commerceAccountToken.commerceAccountTokenId = updateCommerceAccountTokenDTO.commerceAccountTokenId;
         commerceAccountToken.commerceAccountId = updateCommerceAccountTokenDTO.commerceAccountId;

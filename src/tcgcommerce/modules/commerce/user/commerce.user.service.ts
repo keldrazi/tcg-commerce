@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommerceUser } from 'src/typeorm/entities/tcgcommerce/modules/commerce/user/commerce.user.entity';
 import { CreateCommerceUserDTO, UpdateCommerceUserDTO, CommerceUserDTO } from './dto/commerce.user.dto';
 import * as bcrypt from 'bcrypt';
 import { CommerceUserVerificationService } from './verification/commerce.user.verification.service';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 
 @Injectable()
@@ -14,19 +13,14 @@ export class CommerceUserService {
     constructor(
         @InjectRepository(CommerceUser) private commerceUserRepository: Repository<CommerceUser>,
         private commerceUserVerificationService: CommerceUserVerificationService,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
     async getCommerceUserById(commerceUserId: string) {
-        let commerceUser = await this.commerceUserRepository.findOne({ 
+        let commerceUser = await this.commerceUserRepository.findOneOrFail({ 
             where: { 
                 commerceUserId: commerceUserId
             } 
         });
-        
-        if (commerceUser == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found for commerceUserId: ' + commerceUserId);
-        }
 
         let commerceUserDTO:CommerceUserDTO = ({ ...commerceUser });
 
@@ -66,13 +60,13 @@ export class CommerceUserService {
         });
 
         if (commerceUser == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_FAILED_LOGIN', 'Commerce user login failed');
+            throw new UnauthorizedException('Commerce user login failed');
         }
 
         let isPasswordValid = await bcrypt.compare(commerceUserPassword, commerceUser.commerceUserPassword);
 
         if (!isPasswordValid) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_FAILED_LOGIN', 'Commerce user login failed');
+            throw new UnauthorizedException('Commerce user login failed');
         }
 
         let commerceUserDTO = await this.getCommerceUserById(commerceUser.commerceUserId);
@@ -90,7 +84,7 @@ export class CommerceUserService {
         });
 
         if (commerceUser != null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_EXISTS', 'Commerce user exists');
+            throw new ConflictException('Commerce user exists');
         }
 
         let commerceUserPasswordHash = await this.hashPassword(createCommerceUserDTO.commerceUserPassword);
@@ -105,15 +99,11 @@ export class CommerceUserService {
     }
 
     async updateCommerceUser(updateCommerceUserDTO: UpdateCommerceUserDTO) {
-        let commerceUser = await this.commerceUserRepository.findOne({
+        let commerceUser = await this.commerceUserRepository.findOneOrFail({
             where: {
                 commerceUserId: updateCommerceUserDTO.commerceUserId
             }
         });
-        
-        if (commerceUser == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user not found');
-        }
 
         commerceUser.commerceUserName = updateCommerceUserDTO.commerceUserName;
         commerceUser.commerceUserEmail = updateCommerceUserDTO.commerceUserEmail;
@@ -129,15 +119,11 @@ export class CommerceUserService {
     }
 
     async deleteCommerceUser(commerceUserId: string) {
-        let commerceUser = await this.commerceUserRepository.findOne({
+        let commerceUser = await this.commerceUserRepository.findOneOrFail({
             where: {
                 commerceUserId: commerceUserId
             }
         });
-
-        if (commerceUser == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user not found');
-        }
 
         commerceUser.commerceUserIsActive = false;
         commerceUser.commerceUserUpdateDate = new Date();
@@ -150,11 +136,7 @@ export class CommerceUserService {
     }
 
     async passwordResetCommerceUser(commerceAccountId: string, commerceUserEmail: string) {
-        let commerceUser = await this.commerceUserRepository.findOne({ where: { commerceAccountId, commerceUserEmail } });
-
-        if (commerceUser == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found');
-        }
+        let commerceUser = await this.commerceUserRepository.findOneOrFail({ where: { commerceAccountId, commerceUserEmail } });
 
         await this.commerceUserVerificationService.createCommerceUserVerification(commerceAccountId, commerceUser.commerceUserId, 'COMMERCE_USER_PASSWORD_RESET');
 
@@ -164,15 +146,11 @@ export class CommerceUserService {
     }
 
     async updateCommerceUserPassword(commerceUserId: string, commerceUserPassword: string) {
-        let commerceUser = await this.commerceUserRepository.findOne({
+        let commerceUser = await this.commerceUserRepository.findOneOrFail({
             where: {
                 commerceUserId: commerceUserId
             }
         });
-
-        if (commerceUser == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found');
-        }
        
 
         let commerceUserPasswordHash = await this.hashPassword(commerceUserPassword);
@@ -190,18 +168,14 @@ export class CommerceUserService {
         let isVerified = await this.commerceUserVerificationService.verifyCommerceUserVerification(commerceAccountId, commerceUserId, commerceUserVerificationCode, 'COMMERCE_USER_PASSWORD_RESET');
 
         if(!isVerified) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_VERIFICATION_FAILED', 'Commerce user verification failed');
+            throw new ConflictException('Commerce user verification failed');
         }
 
-        let commerceUser = await this.commerceUserRepository.findOne({ 
+        let commerceUser = await this.commerceUserRepository.findOneOrFail({ 
             where: { 
                 commerceUserId: commerceUserId
             } 
         });
-
-        if (commerceUser == null) {
-            return this.errorMessageService.createErrorMessage('COMMERCE_USER_NOT_FOUND', 'Commerce user was not found');
-        }
 
         let commerceUserDTO = await this.updateCommerceUserPassword(commerceUserId, commerceUserPassword);
         

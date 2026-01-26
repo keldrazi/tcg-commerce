@@ -1,28 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CustomerUserProfile } from 'src/typeorm/entities/tcgcommerce/modules/customer/user/profile/customer.user.profile.entity';
 import { CreateCustomerUserProfileDTO, UpdateCustomerUserProfileDTO, CustomerUserProfileDTO } from './dto/customer.user.profile.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class CustomerUserProfileService {
 
     constructor(
         @InjectRepository(CustomerUserProfile) private customerUserProfileRepository: Repository<CustomerUserProfile>,
-        private errorMessageService: ErrorMessageService
     ) { }
 
     async getCustomerUserProfileById(customerUserProfileId: string) {
-        let customerUserProfile = await this.customerUserProfileRepository.findOne({ 
+        let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserProfileId: customerUserProfileId
             } 
         });
-        
-        if (customerUserProfile == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_PROFILE_NOT_FOUND', 'Customer user profile was not found');
-        }
 
         let customerUserProfileDTO:CustomerUserProfileDTO = ({ ...customerUserProfile });
 
@@ -56,15 +50,11 @@ export class CustomerUserProfileService {
     }
 
     async getCustomerUserProfileByCustomerUserId(customerUserId: string) {
-        let customerUserProfile = await this.customerUserProfileRepository.findOne({ 
+        let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId
             } 
         });
-        
-        if (customerUserProfile == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_PROFILE_NOT_FOUND', 'Customer user profile was not found');
-        }
 
         let customerUserProfileDTO:CustomerUserProfileDTO = ({ ...customerUserProfile });
 
@@ -81,7 +71,7 @@ export class CustomerUserProfileService {
         });
 
         if(customerUserProfile != null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_PROFILE_ALREADY_EXISTS', 'Customer user profile already exists');
+            throw new ConflictException('Customer user profile already exists');
         }
 
         customerUserProfile = this.customerUserProfileRepository.create({ ...createCustomerUserProfileDTO });
@@ -93,15 +83,11 @@ export class CustomerUserProfileService {
     }
 
     async updateCustomerUserProfile(updateCustomerUserProfileDTO: UpdateCustomerUserProfileDTO) {
-        let customerUserProfile = await this.customerUserProfileRepository.findOne({ 
+        let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserProfileId: updateCustomerUserProfileDTO.customerUserProfileId 
             } 
         });
-        
-        if (customerUserProfile == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_PROFILE_NOT_FOUND', 'Customer user profile was not found');
-        }
 
         customerUserProfile = { ...updateCustomerUserProfileDTO, ...customerUserProfile };
         customerUserProfile.customerUserProfileUpdateDate = new Date();
@@ -113,15 +99,11 @@ export class CustomerUserProfileService {
     }
 
     async deleteCustomerUserProfile(customerUserProfileId: string) {
-        let customerUserProfile = await this.customerUserProfileRepository.findOne({ 
+        let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserProfileId: customerUserProfileId
             } 
         });
-
-        if (customerUserProfile == null) {
-            return this.errorMessageService.createErrorMessage('CUSTOMER_USER_PROFILE_NOT_FOUND', 'Customer user profile was not found');
-        }
 
         customerUserProfile.customerUserProfileIsActive = false;
         customerUserProfile.customerUserProfileUpdateDate = new Date();

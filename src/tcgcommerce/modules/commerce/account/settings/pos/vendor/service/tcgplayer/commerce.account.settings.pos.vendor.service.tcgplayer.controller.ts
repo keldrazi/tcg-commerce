@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe, NotFoundException, InternalServerErrorException, ConflictException } from '@nestjs/common';
 import { CommerceAccountSettingsPOSVendorServiceTCGPlayerService } from './commerce.account.settings.pos.vendor.service.tcgplayer.service';
-import { CreateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO, UpdateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO } from './dto/commerce.account.settings.pos.vendor.service.tcgplayer.dto';
+import { CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO } from './dto/commerce.account.settings.pos.vendor.service.tcgplayer.dto';
+import { EntityNotFoundError } from 'typeorm';
 
-@Controller('commerce/account/settings/pos/vendor/service/manapool')
+@Controller('commerce/account/settings/pos/vendor/service/tcgplayer')
 export class CommerceAccountSettingsPOSVendorServiceTCGPlayerController {
 
     constructor(
@@ -11,28 +12,25 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerController {
     
     @Get('/caid/:commerceAccountId')
     async getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId);
+        try {
+            return await this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce account settings POS vendor service TCGPlayer not found');
+            }
+            throw new InternalServerErrorException('Failed to get commerce account settings POS vendor service TCGPlayer');
+        }
     }
 
     @Get('/id/:commerceAccountSettingsPOSVendorServiceTCGPlayerId')
     async getCommerceAccountSettingsPOSVendorServiceTCGPlayer(@Param('commerceAccountSettingsPOSVendorServiceTCGPlayerId') commerceAccountSettingsPOSVendorServiceTCGPlayerId: string) {
-        return await this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.getCommerceAccountSettingsPOSVendorServiceTCGPlayerById(commerceAccountSettingsPOSVendorServiceTCGPlayerId);
-    }
-
-    @Get('/verify/:commerceAccountSettingsPOSVendorServiceTCGPlayerId')
-    async verifyCommerceAccountSettingsPOSVendorServiceTCGPlayerById(@Param('commerceAccountSettingsPOSVendorServiceTCGPlayerId') commerceAccountSettingsPOSVendorServiceTCGPlayerId: string) {
-        return await this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.verifyCommerceAccountSettingsPOSVendorServiceTCGPlayerById(commerceAccountSettingsPOSVendorServiceTCGPlayerId);
-    }
-
-    @Post('/create')
-    @UsePipes(new ValidationPipe())
-    async createCommerceAccountSettingsPOSVendorServiceTCGPlayer(@Body() createCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO: CreateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO) {
-        return this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.createCommerceAccountSettingsPOSVendorServiceTCGPlayer(createCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO);
-    }
-
-    @Put('/update')
-    @UsePipes(new ValidationPipe())
-    async updateCommerceAccountSettingsPOSVendorServiceTCGPlayer(@Body() updateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO: UpdateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO) {
-        return this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.updateCommerceAccountSettingsPOSVendorServiceTCGPlayer(updateCommerceAccountSettingsPOSVendorServiceTCGPlayerDTO);
+        try {
+            return await this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.getCommerceAccountSettingsPOSVendorServiceTCGPlayerById(commerceAccountSettingsPOSVendorServiceTCGPlayerId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Commerce account settings POS vendor service TCGPlayer not found');
+            }
+            throw new InternalServerErrorException('Failed to get commerce account settings POS vendor service TCGPlayer');
+        }
     }
 }
