@@ -20,7 +20,7 @@ export class InventoryProductCardServiceImportJobProviderService {
     ) {}
     
     
-    async processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobProviderTypeCode: string) {
+    async processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobProviderTypeCode: string): Promise<InventoryProductCardServiceImportJobProviderDTO[]> {
 
         let inventoryProductCardServiceImportJobProviderTypeDTO = await this.inventoryProductCardServiceImportJobProviderTypeService.getInventoryProductCardServiceImportJobProviderTypeByCode(inventoryProductCardServiceImportJobProviderTypeCode);
 
@@ -78,7 +78,7 @@ export class InventoryProductCardServiceImportJobProviderService {
 
     }
 
-    async processInventoryProductCardServiceImportJobCSVData(inventoryProductCardServiceImportJobCSVData: any, inventoryProductCardServiceImportJobProviderTypeDataKeyQty: string) {
+    async processInventoryProductCardServiceImportJobCSVData(inventoryProductCardServiceImportJobCSVData: any, inventoryProductCardServiceImportJobProviderTypeDataKeyQty: string): Promise<{ totalInventoryProductCardServiceImportJobCardQty: number; inventoryProductCardServiceImportJobCardData: any[] }> {
        
         let totalInventoryProductCardServiceImportJobCardQty = 0;
         

@@ -26,7 +26,7 @@ export class AwsS3Service {
  
   }
 
-  async uploadImage(imageBuffer: Buffer, bucketPath: String, imageExtension: string){
+  async uploadImage(imageBuffer: Buffer, bucketPath: String, imageExtension: string): Promise<string> {
     const key = bucketPath + uuidv4() + imageExtension;
     
     const command = new PutObjectCommand({
@@ -44,7 +44,7 @@ export class AwsS3Service {
 
   }
 
-  async uploadPDF(imageBuffer: Buffer, bucketPath: String, fileName: string){
+  async uploadPDF(imageBuffer: Buffer, bucketPath: String, fileName: string): Promise<string> {
     const key = bucketPath + fileName + '.pdf';
     
     const command = new PutObjectCommand({
@@ -62,7 +62,7 @@ export class AwsS3Service {
 
   }
 
-  async uploadCSV(imageBuffer: Buffer, bucketPath: String, fileName: string){
+  async uploadCSV(imageBuffer: Buffer, bucketPath: String, fileName: string): Promise<string> {
     const key = bucketPath + fileName + '.csv';
     
     const command = new PutObjectCommand({

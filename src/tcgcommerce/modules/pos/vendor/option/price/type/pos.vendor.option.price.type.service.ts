@@ -11,7 +11,7 @@ export class POSVendorOptionPriceTypeService {
         @InjectRepository(POSVendorOptionPriceType) private posVendorOptionPriceTypeRepository: Repository<POSVendorOptionPriceType>,
     ) { }
 
-    async getPOSVendorOptionPriceType(posVendorOptionPriceTypeId: string) {
+    async getPOSVendorOptionPriceType(posVendorOptionPriceTypeId: string): Promise<POSVendorOptionPriceTypeDTO> {
         let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
             where: { 
                 posVendorOptionPriceTypeId: posVendorOptionPriceTypeId
@@ -28,7 +28,7 @@ export class POSVendorOptionPriceTypeService {
         
     }
 
-    async getPOSVendorOptionPriceTypes(posVendorId: string) {
+    async getPOSVendorOptionPriceTypes(posVendorId: string): Promise<POSVendorOptionPriceTypeDTO[]> {
         let posVendorOptionPriceTypes = await this.posVendorOptionPriceTypeRepository.find({
             where: {
                 posVendorId,
@@ -55,7 +55,7 @@ export class POSVendorOptionPriceTypeService {
         return posVendorOptionPriceTypeDTOs;
     }
     
-    async getPOSVendorOptionPriceTypeByName(posVendorId: string, posVendorOptionPriceTypeName: string) {
+    async getPOSVendorOptionPriceTypeByName(posVendorId: string, posVendorOptionPriceTypeName: string): Promise<POSVendorOptionPriceTypeDTO> {
         let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
             where: { 
                 posVendorId: posVendorId,
@@ -73,7 +73,7 @@ export class POSVendorOptionPriceTypeService {
         
     }
 
-    async getPOSVendorOptionPriceTypeByCode(posVendorId: string, posVendorOptionPriceTypeCode: string) {
+    async getPOSVendorOptionPriceTypeByCode(posVendorId: string, posVendorOptionPriceTypeCode: string): Promise<POSVendorOptionPriceTypeDTO> {
         let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
             where: { 
                 posVendorId: posVendorId,
@@ -91,7 +91,7 @@ export class POSVendorOptionPriceTypeService {
         
     }
     
-    async createPOSVendorOptionPriceType(createPOSVendorOptionPriceTypeDTO: CreatePOSVendorOptionPriceTypeDTO) {
+    async createPOSVendorOptionPriceType(createPOSVendorOptionPriceTypeDTO: CreatePOSVendorOptionPriceTypeDTO): Promise<POSVendorOptionPriceTypeDTO> {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
@@ -113,7 +113,7 @@ export class POSVendorOptionPriceTypeService {
         
     }
 
-    async updatePOSVendorOptionPriceType(updatePOSVendorOptionPriceTypeDTO: UpdatePOSVendorOptionPriceTypeDTO) {
+    async updatePOSVendorOptionPriceType(updatePOSVendorOptionPriceTypeDTO: UpdatePOSVendorOptionPriceTypeDTO): Promise<POSVendorOptionPriceTypeDTO> {
                 
         let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
             where: { 

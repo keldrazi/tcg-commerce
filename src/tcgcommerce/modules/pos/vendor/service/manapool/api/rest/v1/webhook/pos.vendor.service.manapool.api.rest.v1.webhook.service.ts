@@ -18,7 +18,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
     private manaPoolAccessTokenHeader = "X-ManaPool-Access-Token";
 
     
-    async getManaPoolWebhooks(email: string, accessToken: string) {
+    async getManaPoolWebhooks(email: string, accessToken: string): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/webhooks';
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
@@ -35,7 +35,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
 
     }
 
-    async getManaPoolWebhookById(email: string, accessToken: string, webhookId: string) {
+    async getManaPoolWebhookById(email: string, accessToken: string, webhookId: string): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/webhooks/' + webhookId;
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
@@ -51,7 +51,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
         return data;
     }
 
-    async createManaPoolWebhook(email: string, accessToken: string, webhookTopic: string, webhookCallbackURL: string) {
+    async createManaPoolWebhook(email: string, accessToken: string, webhookTopic: string, webhookCallbackURL: string): Promise<any> {
         let webhook = {
             "topic": webhookTopic,
             "callback_url": webhookCallbackURL
@@ -72,7 +72,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
 
     }
 
-    async deleteManaPoolWebhookById(email: string, accessToken: string, webhookId: string) {
+    async deleteManaPoolWebhookById(email: string, accessToken: string, webhookId: string): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/webhooks/' + webhookId;
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };

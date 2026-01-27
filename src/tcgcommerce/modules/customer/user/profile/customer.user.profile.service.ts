@@ -11,7 +11,7 @@ export class CustomerUserProfileService {
         @InjectRepository(CustomerUserProfile) private customerUserProfileRepository: Repository<CustomerUserProfile>,
     ) { }
 
-    async getCustomerUserProfileById(customerUserProfileId: string) {
+    async getCustomerUserProfileById(customerUserProfileId: string): Promise<CustomerUserProfileDTO> {
         let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserProfileId: customerUserProfileId
@@ -24,7 +24,7 @@ export class CustomerUserProfileService {
         
     }
 
-    async getCustomerUserProfilesByCommerceAccountId(commerceAccountId: string) {
+    async getCustomerUserProfilesByCommerceAccountId(commerceAccountId: string): Promise<CustomerUserProfileDTO[]> {
         
         let customerUserProfileDTOs: CustomerUserProfileDTO[] = [];
         
@@ -49,7 +49,7 @@ export class CustomerUserProfileService {
 
     }
 
-    async getCustomerUserProfileByCustomerUserId(customerUserId: string) {
+    async getCustomerUserProfileByCustomerUserId(customerUserId: string): Promise<CustomerUserProfileDTO> {
         let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId
@@ -62,7 +62,7 @@ export class CustomerUserProfileService {
         
     }
 
-    async createCustomerUserProfile(createCustomerUserProfileDTO: CreateCustomerUserProfileDTO) {
+    async createCustomerUserProfile(createCustomerUserProfileDTO: CreateCustomerUserProfileDTO): Promise<CustomerUserProfileDTO> {
         let customerUserProfile = await this.customerUserProfileRepository.findOne({ 
             where: { 
                 commerceAccountId: createCustomerUserProfileDTO.commerceAccountId, 
@@ -82,7 +82,7 @@ export class CustomerUserProfileService {
         return customerUserProfileDTO;
     }
 
-    async updateCustomerUserProfile(updateCustomerUserProfileDTO: UpdateCustomerUserProfileDTO) {
+    async updateCustomerUserProfile(updateCustomerUserProfileDTO: UpdateCustomerUserProfileDTO): Promise<CustomerUserProfileDTO> {
         let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserProfileId: updateCustomerUserProfileDTO.customerUserProfileId 
@@ -98,7 +98,7 @@ export class CustomerUserProfileService {
         return customerUserProfileDTO;
     }
 
-    async deleteCustomerUserProfile(customerUserProfileId: string) {
+    async deleteCustomerUserProfile(customerUserProfileId: string): Promise<CustomerUserProfileDTO> {
         let customerUserProfile = await this.customerUserProfileRepository.findOneOrFail({ 
             where: { 
                 customerUserProfileId: customerUserProfileId

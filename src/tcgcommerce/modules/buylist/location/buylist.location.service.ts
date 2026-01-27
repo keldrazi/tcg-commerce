@@ -1,19 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistLocationDTO, UpdateBuylistLocationDTO, BuylistLocationDTO } from './dto/buylist.location.dto';
 import { BuylistLocation } from 'src/typeorm/entities/tcgcommerce/modules/buylist/location/buylist.location.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistLocationService {
 
     constructor(
         @InjectRepository(BuylistLocation) private buylistLocationRepository: Repository<BuylistLocation>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getBuylistLocationById(buylistLocationId: string) {
+    async getBuylistLocationById(buylistLocationId: string): Promise<BuylistLocationDTO> {
         let buylistLocation = await this.buylistLocationRepository.findOne({ 
             where: { 
                 buylistLocationId: buylistLocationId 
@@ -21,7 +19,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found');
+            throw new NotFoundException('Buylist location was not found');
         }
 
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
@@ -30,7 +28,7 @@ export class BuylistLocationService {
         
     }
 
-    async getBuylistLocationsByCommerceAccountId(commerceAccountId: string) {
+    async getBuylistLocationsByCommerceAccountId(commerceAccountId: string): Promise<BuylistLocationDTO[]> {
         let buylistLocations = await this.buylistLocationRepository.find({
             where: {
                 commerceAccountId: commerceAccountId
@@ -53,7 +51,7 @@ export class BuylistLocationService {
         return buylistLocationDTOs;
     }
     
-    async getBuylistLocationByName(name: string) {
+    async getBuylistLocationByName(name: string): Promise<BuylistLocationDTO> {
         let buylistLocation = await this.buylistLocationRepository.findOne({ 
             where: { 
                 buylistLocationName: name 
@@ -61,7 +59,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found');
+            throw new NotFoundException('Buylist location was not found');
         }
 
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
@@ -70,7 +68,7 @@ export class BuylistLocationService {
         
     }
     
-    async createBuylistLocation(createBuylistLocationDTO: CreateBuylistLocationDTO) {
+    async createBuylistLocation(createBuylistLocationDTO: CreateBuylistLocationDTO): Promise<BuylistLocationDTO> {
     
         //CHECK TO SEE IF THE BUYLIST LOCATION ALREADY EXISTS;
         let buylistLocation = await this.buylistLocationRepository.findOne({ 
@@ -80,7 +78,7 @@ export class BuylistLocationService {
         });
         
         if (buylistLocation != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_EXISTS', 'Buylist location with name already exists');
+            throw new ConflictException('Buylist location with name already exists');
         }
         
         buylistLocation = this.buylistLocationRepository.create({ ...createBuylistLocationDTO });
@@ -92,7 +90,7 @@ export class BuylistLocationService {
         
     }
 
-    async updateBuylistLocation(updateBuylistLocationDTO: UpdateBuylistLocationDTO) {
+    async updateBuylistLocation(updateBuylistLocationDTO: UpdateBuylistLocationDTO): Promise<BuylistLocationDTO> {
                     
         let buylistLocation = await this.buylistLocationRepository.findOne({ 
             where: { 
@@ -101,7 +99,7 @@ export class BuylistLocationService {
         });    
         
         if (!buylistLocation) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_LOCATION_NOT_FOUND', 'Buylist location was not found');
+            throw new NotFoundException('Buylist location was not found');
         }
 
         buylistLocation.buylistLocationName = updateBuylistLocationDTO.buylistLocationName;

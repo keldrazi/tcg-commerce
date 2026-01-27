@@ -1,8 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer'; 
 import { EmailTemplateService } from 'src/system/modules/email/template/email.template.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 
 @Injectable()
@@ -10,17 +8,12 @@ export class EmailServiceSendService {
   constructor(
     private mailerService: MailerService,
     private emailTemplateService: EmailTemplateService,
-    private errorMessageService: ErrorMessageService,
   ) {}
 
   
-  async sendEmail(emailTo: string, emailTemplateName: string, emailTemplateContextValues: any) {
+  async sendEmail(emailTo: string, emailTemplateName: string, emailTemplateContextValues: any): Promise<void> {
 
     let emailTemplateDTO = await this.emailTemplateService.getEmailTemplateByName(emailTemplateName);
-
-    if (emailTemplateDTO == null || emailTemplateDTO instanceof ErrorMessageDTO) {
-      return this.errorMessageService.createErrorMessage('EMAIL_TEMPLATE_NOT_FOUND', 'Email template was not found for emailTemplateName: ' + emailTemplateName);
-    }
 
     let context: any = {};
 

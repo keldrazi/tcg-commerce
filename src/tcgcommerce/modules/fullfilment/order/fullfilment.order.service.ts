@@ -11,7 +11,7 @@ export class FullfilmentOrderService {
         @InjectRepository(FullfilmentOrder) private fullfilmentOrderRepository: Repository<FullfilmentOrder>,
     ) { }
 
-    async getFullfilmentOrderById(fullfilmentOrderId: string) {
+    async getFullfilmentOrderById(fullfilmentOrderId: string): Promise<FullfilmentOrderDTO> {
         let fullfilmentOrder = await this.fullfilmentOrderRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderId: fullfilmentOrderId 
@@ -24,7 +24,7 @@ export class FullfilmentOrderService {
         
     }
 
-    async getFullfilmentOrdersByCommerceAccountId(commerceAccountId: string) {
+    async getFullfilmentOrdersByCommerceAccountId(commerceAccountId: string): Promise<FullfilmentOrderDTO[]> {
         let fullfilmentOrders = await this.fullfilmentOrderRepository.find({
             where: {
                 commerceAccountId: commerceAccountId

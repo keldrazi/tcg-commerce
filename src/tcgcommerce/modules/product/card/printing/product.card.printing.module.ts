@@ -6,7 +6,6 @@ import { ProductCardPrinting } from 'src/typeorm/entities/tcgcommerce/modules/pr
 import { TCGdbMTGPrintingModule } from 'src/tcgdb/modules/tcgdb/api/mtg/printing/tcgdb.mtg.printing.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
 @Module({
@@ -14,8 +13,7 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         TypeOrmModule.forFeature([ProductCardPrinting]),
         TCGdbMTGPrintingModule,
         ProductLineModule,
-        ProductVendorModule,
-        ErrorMessageModule
+        ProductVendorModule
     ],
     controllers: [ProductCardPrintingController],
     providers: [ProductCardPrintingService],

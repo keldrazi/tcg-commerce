@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { POSModule } from 'src/typeorm/entities/tcgcommerce/modules/pos/module/pos.module.entity';
@@ -11,7 +11,7 @@ export class POSModuleService {
         @InjectRepository(POSModule) private posModuleRepository: Repository<POSModule>,
     ) { }
 
-    async getPOSModule(posModuleId: string) {
+    async getPOSModule(posModuleId: string): Promise<POSModuleDTO> {
         let posModule = await this.posModuleRepository.findOne({ 
             where: { 
                 posModuleId : posModuleId
@@ -19,7 +19,7 @@ export class POSModuleService {
         });
         
         if (!posModule) {
-            return null;
+            throw new NotFoundException('POS module not found');
         }
 
         let posModuleDTO = new POSModuleDTO();
@@ -36,7 +36,7 @@ export class POSModuleService {
         
     }
 
-    async getPOSModuleByCommerceAccountId(commerceAccountId: string) {
+    async getPOSModuleByCommerceAccountId(commerceAccountId: string): Promise<POSModuleDTO> {
         let posModule = await this.posModuleRepository.findOne({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -44,7 +44,7 @@ export class POSModuleService {
         });
         
         if (!posModule) {
-            return null;
+            throw new NotFoundException('POS module not found for this commerce account');
         }
 
         let posModuleDTO = new POSModuleDTO();
@@ -61,7 +61,7 @@ export class POSModuleService {
         
     }
 
-    async getPOSModules() {
+    async getPOSModules(): Promise<POSModuleDTO[]> {
         let posModules = await this.posModuleRepository.find();
         
         if (posModules == null) {
@@ -90,7 +90,7 @@ export class POSModuleService {
         
     }
 
-    async createPOSModule(createPOSModuleDTO: CreatePOSModuleDTO) {
+    async createPOSModule(createPOSModuleDTO: CreatePOSModuleDTO): Promise<POSModuleDTO> {
         let newPOSModule = this.posModuleRepository.create({ ...createPOSModuleDTO });
         newPOSModule = await this.posModuleRepository.save(newPOSModule);
 
@@ -99,7 +99,7 @@ export class POSModuleService {
         return posModuleDTO;
     }
 
-    async updatePOSModule(updatePOSModuleDTO: UpdatePOSModuleDTO) {
+    async updatePOSModule(updatePOSModuleDTO: UpdatePOSModuleDTO): Promise<POSModuleDTO> {
             
         let existingPOSModule = await this.posModuleRepository.findOne({ 
             where: { 
@@ -107,9 +107,8 @@ export class POSModuleService {
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!existingPOSModule) {
-            return null; 
+            throw new NotFoundException('POS module not found');
         }
 
         existingPOSModule.posModuleSettings = updatePOSModuleDTO.posModuleSettings;

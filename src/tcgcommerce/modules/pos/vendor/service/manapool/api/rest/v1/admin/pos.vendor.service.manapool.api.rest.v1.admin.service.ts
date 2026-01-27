@@ -18,7 +18,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
     private manaPoolAccessTokenHeader = "X-ManaPool-Access-Token";
 
     
-    async getManaPoolAccount(email: string, accessToken: string) {
+    async getManaPoolAccount(email: string, accessToken: string): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/account';
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
@@ -35,7 +35,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
 
     }
 
-    async getManaPoolSellerInventoryByTCGPlayerSku(email: string, accessToken: string, tcgPlayerSku: number) {
+    async getManaPoolSellerInventoryByTCGPlayerSku(email: string, accessToken: string, tcgPlayerSku: number): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/seller/inventory/tcgsku/' + tcgPlayerSku;
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
@@ -51,7 +51,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         return data;
     }
 
-    async updateManaPoolSellerInventoriesByTCGPlayerSku(email: string, accessToken: string, inventory: any[]) {
+    async updateManaPoolSellerInventoriesByTCGPlayerSku(email: string, accessToken: string, inventory: any[]): Promise<any> {
         const url = this.manaPoolAPIURL + '/seller/inventory/tcgsku';
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
         const response = this.httpService.post(url, inventory, { headers }).pipe(
@@ -67,7 +67,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
 
     }
 
-    async updateManaPoolSellerInventoryByTCGPlayerSku(email: string, accessToken: string, tcgPlayerSku: number, inventory: any) {
+    async updateManaPoolSellerInventoryByTCGPlayerSku(email: string, accessToken: string, tcgPlayerSku: number, inventory: any): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/seller/inventory/tcgsku/' + tcgPlayerSku;
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
@@ -83,7 +83,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         return data;
     }
 
-    async deleteManaPoolSellerInventoryByTCGPlayerSku(email: string, accessToken: string, tcgPlayerSku: number) {
+    async deleteManaPoolSellerInventoryByTCGPlayerSku(email: string, accessToken: string, tcgPlayerSku: number): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/seller/inventory/tcgsku/' + tcgPlayerSku;
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
@@ -99,7 +99,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         return data;
     }
 
-    async getManaPoolSellerOrders(email: string, accessToken: string) {
+    async getManaPoolSellerOrders(email: string, accessToken: string): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/seller/orders';
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };
@@ -115,7 +115,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         return data;
     }
 
-    async getManaPoolSellerOrderById(email: string, accessToken: string, orderId: string) {
+    async getManaPoolSellerOrderById(email: string, accessToken: string, orderId: string): Promise<any> {
         
         const url = this.manaPoolAPIURL + '/seller/orders/' + orderId ;
         const headers = { [this.manaPoolEmailHeader]: email, [this.manaPoolAccessTokenHeader]: accessToken };

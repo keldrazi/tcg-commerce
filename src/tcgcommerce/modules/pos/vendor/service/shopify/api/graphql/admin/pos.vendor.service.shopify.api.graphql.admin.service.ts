@@ -17,7 +17,7 @@ export class POSVendorServiceShopifyAPIGraphQLAdminService {
     
 
     //UTILITY METHODS;
-    async createAdminAPIClient(storeDomain: string, accessToken: string) {
+    async createAdminAPIClient(storeDomain: string, accessToken: string): Promise<any> {
         let adminApiClient = createAdminApiClient({
             storeDomain: storeDomain,
             accessToken: accessToken,

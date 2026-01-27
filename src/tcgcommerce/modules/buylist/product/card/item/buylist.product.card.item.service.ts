@@ -1,28 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistProductCardItemDTO, UpdateBuylistProductCardItemDTO, BuylistProductCardItemDTO } from './dto/buylist.product.card.item.dto';
 import { BuylistProductCardItem } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/item/buylist.product.card.item.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { OnEvent } from '@nestjs/event-emitter';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BuylistImportProductCardItemService } from 'src/tcgcommerce/modules/buylist/import/product/card/item/buylist.import.product.card.item.service';
 import { BuylistImportProductCardService } from 'src/tcgcommerce/modules/buylist/import/product/card/buylist.import.product.card.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
-import { count } from 'console';
 
 @Injectable()
 export class BuylistProductCardItemService {
 
     constructor(
         @InjectRepository(BuylistProductCardItem) private buylistProductCardItemRepository: Repository<BuylistProductCardItem>,
-        private errorMessageService: ErrorMessageService,
         private buylistImportProductCardItemService: BuylistImportProductCardItemService,
         private buylistImportProductCardService: BuylistImportProductCardService,
         private eventEmitter: EventEmitter2,
     ) { }
 
-    async getBuylistProductCardItemById(buylistProductCardItemId: string) {
+    async getBuylistProductCardItemById(buylistProductCardItemId: string): Promise<BuylistProductCardItemDTO> {
         let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
             where: { 
                 buylistProductCardItemId: buylistProductCardItemId 
@@ -30,7 +26,7 @@ export class BuylistProductCardItemService {
         });
         
         if (buylistProductCardItem == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found');
+            throw new NotFoundException('Buylist product card item was not found');
         }
 
         let buylistProductCardItemDTO: BuylistProductCardItemDTO = ({ ...buylistProductCardItem });
@@ -39,7 +35,7 @@ export class BuylistProductCardItemService {
         
     }
 
-    async getBuylistProductCardItemsByBuylistProductCardId(buylistProductCardId: string) {
+    async getBuylistProductCardItemsByBuylistProductCardId(buylistProductCardId: string): Promise<BuylistProductCardItemDTO[]> {
         let buylistProductCardItems = await this.buylistProductCardItemRepository.find({ 
             where: { 
                 buylistProductCardId: buylistProductCardId 
@@ -62,7 +58,7 @@ export class BuylistProductCardItemService {
         
     }
 
-    async createBuylistProductCardItem(createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO) {
+    async createBuylistProductCardItem(createBuylistProductCardItemDTO: CreateBuylistProductCardItemDTO): Promise<BuylistProductCardItemDTO> {
 
         let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
             where: { 
@@ -73,7 +69,7 @@ export class BuylistProductCardItemService {
         });
         
         if (buylistProductCardItem != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_EXISTS', 'Buylist product card item exists');
+            throw new ConflictException('Buylist product card item exists');
         }
         
         buylistProductCardItem = this.buylistProductCardItemRepository.create({ ...createBuylistProductCardItemDTO });
@@ -87,7 +83,7 @@ export class BuylistProductCardItemService {
         
     }
 
-    async updateBuylistProductCardItem(updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO) {
+    async updateBuylistProductCardItem(updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO): Promise<BuylistProductCardItemDTO> {
                     
         let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
             where: { 
@@ -96,7 +92,7 @@ export class BuylistProductCardItemService {
         });   
         
         if (!buylistProductCardItem) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found'); 
+            throw new NotFoundException('Buylist product card item was not found'); 
         }
         let buylistProductCardItemQtyUpdateCount = 0;
         let countType = "";
@@ -128,7 +124,7 @@ export class BuylistProductCardItemService {
     
     }
 
-    async deleteBuylistProductCardItemById(buylistProductCardItemId: string) {
+    async deleteBuylistProductCardItemById(buylistProductCardItemId: string): Promise<boolean> {
 
         let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({
             where: {
@@ -137,7 +133,7 @@ export class BuylistProductCardItemService {
         });
 
         if (!buylistProductCardItem) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_ITEM_NOT_FOUND', 'Buylist product card item was not found');
+            throw new NotFoundException('Buylist product card item was not found');
         }
 
         //NEED TO EMIT EVENT TO UPDATE THE BUYLIST QTY COUNT;
@@ -154,11 +150,11 @@ export class BuylistProductCardItemService {
     }
 
     @OnEvent('buylist.import.product.card.approved')
-    async createBuylistProductCardItemsFromImport(payload: any) {
+    async createBuylistProductCardItemsFromImport(payload: any): Promise<void> {
         let buylistImportProductCardDTO = await this.buylistImportProductCardService.getBuylistImportProductCardById(payload.buylistImportProductCardId);
 
-        if(buylistImportProductCardDTO == null || buylistImportProductCardDTO instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_NOT_FOUND', 'Buylist import product card not found');
+        if(buylistImportProductCardDTO == null) {
+            throw new NotFoundException('Buylist import product card not found');
         }
         let buylistImportProductCardItemDTOs = await this.buylistImportProductCardItemService.getBuylistImportProductCardItemsByBuylistId(payload.buylistImportProductCardId);
 

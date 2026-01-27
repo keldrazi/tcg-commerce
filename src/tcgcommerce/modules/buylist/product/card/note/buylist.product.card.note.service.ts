@@ -1,19 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistProductCardNoteDTO, BuylistProductCardNoteDTO } from './dto/buylist.product.card.note.dto';
 import { BuylistProductCardNote } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/note/buylist.product.card.note.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistProductCardNoteService {
 
     constructor(
         @InjectRepository(BuylistProductCardNote) private buylistProductCardNoteRepository: Repository<BuylistProductCardNote>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getBuylistProductCardNoteById(buylistProductCardNoteId: string) {
+    async getBuylistProductCardNoteById(buylistProductCardNoteId: string): Promise<BuylistProductCardNoteDTO> {
         let buylistProductCardNote = await this.buylistProductCardNoteRepository.findOne({ 
             where: { 
                 buylistProductCardNoteId: buylistProductCardNoteId 
@@ -21,7 +19,7 @@ export class BuylistProductCardNoteService {
         });
         
         if (buylistProductCardNote == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_STATUS_NOT_FOUND', 'Buylist status was not found');
+            throw new NotFoundException('Buylist status was not found');
         }
 
         let buylistProductCardNoteDTO: BuylistProductCardNoteDTO = ({ ...buylistProductCardNote });
@@ -30,7 +28,7 @@ export class BuylistProductCardNoteService {
         
     }
 
-    async getBuylistProductCardNotesByBuylistProductCardId(buylistProductCardId: string) {
+    async getBuylistProductCardNotesByBuylistProductCardId(buylistProductCardId: string): Promise<BuylistProductCardNoteDTO[]> {
         let buylistProductCardNotes = await this.buylistProductCardNoteRepository.find({
             where: {
                 buylistProductCardId: buylistProductCardId
@@ -53,7 +51,7 @@ export class BuylistProductCardNoteService {
         return buylistProductCardNoteDTOs;
     }
     
-    async createBuylistProductCardNote(createBuylistProductCardNoteDTO: CreateBuylistProductCardNoteDTO) {
+    async createBuylistProductCardNote(createBuylistProductCardNoteDTO: CreateBuylistProductCardNoteDTO): Promise<BuylistProductCardNoteDTO> {
         
         let buylistProductCardNote = this.buylistProductCardNoteRepository.create({ ...createBuylistProductCardNoteDTO });
         buylistProductCardNote = await this.buylistProductCardNoteRepository.save(buylistProductCardNote);

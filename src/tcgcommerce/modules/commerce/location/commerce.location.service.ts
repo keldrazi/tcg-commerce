@@ -11,7 +11,7 @@ export class CommerceLocationService {
         @InjectRepository(CommerceLocation) private commerceLocationRepository: Repository<CommerceLocation>,
     ) { }
 
-    async getCommerceLocationById(commerceLocationId: string) {
+    async getCommerceLocationById(commerceLocationId: string): Promise<CommerceLocationDTO> {
         let commerceLocation = await this.commerceLocationRepository.findOneOrFail({ 
             where: { 
                 commerceLocationId : commerceLocationId
@@ -24,7 +24,7 @@ export class CommerceLocationService {
         
     }
 
-    async getActiveCommerceLocationsByCommerceAccountId(commerceAccountId: string) {
+    async getActiveCommerceLocationsByCommerceAccountId(commerceAccountId: string): Promise<CommerceLocationDTO[]> {
         let commerceLocations = await this.commerceLocationRepository.find({ 
             where: { 
                 commerceAccountId : commerceAccountId,
@@ -49,7 +49,7 @@ export class CommerceLocationService {
         
     }
 
-    async getCommerceLocationsByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceLocationsByCommerceAccountId(commerceAccountId: string): Promise<CommerceLocationDTO[]> {
         let commerceLocations = await this.commerceLocationRepository.find({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -73,7 +73,7 @@ export class CommerceLocationService {
         
     }
 
-    async createCommerceLocation(createCommerceLocationDTO: CreateCommerceLocationDTO) {
+    async createCommerceLocation(createCommerceLocationDTO: CreateCommerceLocationDTO): Promise<CommerceLocationDTO> {
 
         let commerceLocation = await this.commerceLocationRepository.findOne({ 
             where: {
@@ -109,7 +109,7 @@ export class CommerceLocationService {
         return commerceLocationDTO;
     }
 
-    async updateCommerceLocation(updateCommerceLocationDTO: UpdateCommerceLocationDTO) {
+    async updateCommerceLocation(updateCommerceLocationDTO: UpdateCommerceLocationDTO): Promise<CommerceLocationDTO> {
         let commerceLocation = await this.commerceLocationRepository.findOneOrFail({
             where: {
                 commerceLocationId: updateCommerceLocationDTO.commerceLocationId

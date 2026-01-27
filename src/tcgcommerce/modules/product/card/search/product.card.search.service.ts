@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, ILike, Not, Repository } from 'typeorm';
 import { ProductCardSearchResultDTO, ProductCardSearchDTO } from './dto/product.card.search.dto';
@@ -7,8 +7,6 @@ import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { AiImageCardServiceXimilarService } from 'src/system/modules/ai/image/card/service/ximilar/ai.image.card.service.ximilar.service';
 import { AiImageCardServiceXimilarDTO } from 'src/system/modules/ai/image/card/service/ximilar/dto/ai.image.card.service.ximilar.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 
 @Injectable()
@@ -18,29 +16,28 @@ export class ProductCardSearchService implements OnModuleInit {
         @InjectRepository(ProductCard) private productCardRepository: Repository<ProductCard>,
         private productLineService: ProductLineService,
         private productSetService: ProductSetService,
-        private aiImageCardServiceXimilarService: AiImageCardServiceXimilarService,
-        private errorMessageService: ErrorMessageService
+        private aiImageCardServiceXimilarService: AiImageCardServiceXimilarService
     ) { }
 
     private mtgProductLine: any;
     private mtgProductLineId: string;
 
-    async onModuleInit() {
+    async onModuleInit(): Promise<void> {
 
         this.mtgProductLine = await this.productLineService.getProductLineByCode('MTG');
         this.mtgProductLineId = this.mtgProductLine.productLineId;
 
     }
 
-    async searchProductCardsByName(productLineCode: string, query: string) {
+    async searchProductCardsByName(productLineCode: string, query: string): Promise<ProductCardSearchResultDTO> {
 
         if(query == null || query.trim() == '') {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_SEARCH_QUERY_EMPTY', 'Product card search query cannot be empty.');
+            throw new BadRequestException('Product card search query cannot be empty.');
         }
 
         let productLineId = this.getProductLineIdByCode(productLineCode);
         if(productLineId == "0") {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + productLineCode);
+            throw new NotFoundException('Product line was not found for productLineCode: ' + productLineCode);
         }
 
         let productCardSearchResultDTO: ProductCardSearchResultDTO = {
@@ -91,18 +88,18 @@ export class ProductCardSearchService implements OnModuleInit {
 
     }
 
-    async searchProductCardsBySetCode(productLineCode: string, setCode: string) {
+    async searchProductCardsBySetCode(productLineCode: string, setCode: string): Promise<ProductCardSearchResultDTO> {
         
         let productLineId = this.getProductLineIdByCode(productLineCode);
         
         if(productLineId == "0") {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + productLineCode);
+            throw new NotFoundException('Product line was not found for productLineCode: ' + productLineCode);
         }
 
         let productSet = await this.productSetService.getProductSetByProductSetCode(productLineId, setCode);
 
-        if(productSet == null || productSet instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set was not found for setCode: ' + setCode);
+        if(productSet == null) {
+            throw new NotFoundException('Product set was not found for setCode: ' + setCode);
         }
 
         let productCardSearchResultDTO: ProductCardSearchResultDTO = {
@@ -151,12 +148,12 @@ export class ProductCardSearchService implements OnModuleInit {
         return productCardSearchResultDTO;
     }
 
-    async searchProductCardByImage(productLineCode: string,productCardImageBase64: string, productCardPrintingType: string) {
+    async searchProductCardByImage(productLineCode: string,productCardImageBase64: string, productCardPrintingType: string): Promise<ProductCardSearchDTO | undefined> {
         
         let productLineId = this.getProductLineIdByCode(productLineCode);
         
         if(productLineId == "0") {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found for productLineCode: ' + productLineCode);
+            throw new NotFoundException('Product line was not found for productLineCode: ' + productLineCode);
         }
 
         let aiImageCardServiceXimilarDTO: AiImageCardServiceXimilarDTO | null = await this.aiImageCardServiceXimilarService.analyzeCardImage(productCardImageBase64, productCardPrintingType);

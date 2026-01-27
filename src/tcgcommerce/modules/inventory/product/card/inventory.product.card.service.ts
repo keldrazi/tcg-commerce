@@ -14,7 +14,7 @@ export class InventoryProductCardService {
         @InjectRepository(InventoryProductCard) private inventoryProductCardRepository: Repository<InventoryProductCard>,
     ) { }
 
-    async getInventoryProductCardsByCommerceAccountId(commerceAccountId: string) {
+    async getInventoryProductCardsByCommerceAccountId(commerceAccountId: string): Promise<InventoryProductCardDTO[]> {
 
         let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
         let inventoryProductCards = await this.inventoryProductCardRepository.find({
@@ -34,7 +34,7 @@ export class InventoryProductCardService {
     }
 
 
-    async getInventoryProductCardsByProductSetId(commerceAccountId: string, commerceLocationId: string, productSetId: string, productLanguageId: string) {
+    async getInventoryProductCardsByProductSetId(commerceAccountId: string, commerceLocationId: string, productSetId: string, productLanguageId: string): Promise<InventoryProductCardDTO[]> {
 
         let inventoryProductCardDTOs: InventoryProductCardDTO[] = [];
         let inventoryProductCards = await this.inventoryProductCardRepository.find({
@@ -58,7 +58,7 @@ export class InventoryProductCardService {
     }
 
 
-    async getInventoryProductCardsByProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string) {
+    async getInventoryProductCardsByProductCardId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productLanguageId: string): Promise<InventoryProductCardDTO[] | null> {
 
         
         let inventoryProductCards = await this.inventoryProductCardRepository.find({
@@ -86,7 +86,7 @@ export class InventoryProductCardService {
         
     }
 
-    async getInventoryProductCardByProductCardPrintingId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productCardPrintingId: string, productLanguageId: string) {
+    async getInventoryProductCardByProductCardPrintingId(commerceAccountId: string, commerceLocationId: string, productCardId: string, productCardPrintingId: string, productLanguageId: string): Promise<InventoryProductCardDTO | null> {
 
         let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
             where: {
@@ -108,7 +108,7 @@ export class InventoryProductCardService {
         
     }
 
-    async createInventoryProductCardFromCreateJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobItemDTO) {
+    async createInventoryProductCardFromCreateJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobItemDTO): Promise<InventoryProductCardDTO> {
         let inventoryProductCard = this.inventoryProductCardRepository.create({
             productCardId: inventoryProductCardServiceCreateJobDTO.productCardId,
             productCardTCGdbId: inventoryProductCardServiceCreateJobDTO.productCardTCGdbId,
@@ -137,7 +137,7 @@ export class InventoryProductCardService {
     }
 
 
-    async createInventoryProductCardDTO(inventoryProductCard: InventoryProductCard) {
+    async createInventoryProductCardDTO(inventoryProductCard: InventoryProductCard): Promise<InventoryProductCardDTO> {
         
         let inventoryProductCardDTO: InventoryProductCardDTO = new InventoryProductCardDTO();
         inventoryProductCardDTO.inventoryProductCardId = inventoryProductCard.inventoryProductCardId;
@@ -165,7 +165,7 @@ export class InventoryProductCardService {
 
     }
 
-    async updateInventoryProductCards(inventoryProductCardDTOs: InventoryProductCardDTO[]) {
+    async updateInventoryProductCards(inventoryProductCardDTOs: InventoryProductCardDTO[]): Promise<number> {
         
         let inventoryProductCardUpdateRecordCount = 0;
         for(let i = 0; i < inventoryProductCardDTOs.length; i++) {
@@ -182,7 +182,7 @@ export class InventoryProductCardService {
 
     }
 
-    async updateInventoryProductCard(inventoryProductCardDTO: InventoryProductCardDTO) {
+    async updateInventoryProductCard(inventoryProductCardDTO: InventoryProductCardDTO): Promise<InventoryProductCardDTO | null> {
         let inventoryProductCard = await this.inventoryProductCardRepository.findOne({
             where: {
                 inventoryProductCardId: inventoryProductCardDTO.inventoryProductCardId

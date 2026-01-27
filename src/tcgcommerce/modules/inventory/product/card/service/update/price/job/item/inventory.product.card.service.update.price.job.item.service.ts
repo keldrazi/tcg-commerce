@@ -38,7 +38,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         private priceRuleProductCardBaseService: PriceRuleProductCardBaseService,
     ) { }
 
-    async getInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobItemsByJobId(inventoryProductCardServiceUpdatePriceJobId: string): Promise<InventoryProductCardServiceUpdatePriceJobItemDTO[]> {
 
         let inventoryProductCardServiceUpdatePriceJobItemDTOs: InventoryProductCardServiceUpdatePriceJobItemDTO[] = [];
 
@@ -63,7 +63,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
 
     }
 
-    async getInventoryProductCardServiceUpdatePriceJobItemsBySetId(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
+    async getInventoryProductCardServiceUpdatePriceJobItemsBySetId(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO): Promise<InventoryProductCardServiceUpdatePriceJobItemDTO[]> {
 
         let inventoryProductCardServiceUpdatePriceJobItemDTOs: InventoryProductCardServiceUpdatePriceJobItemDTO[] = [];
 
@@ -93,7 +93,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
 
     }
 
-    async getInventoryProductCardServiceUpdatePriceJobItemByProductCardId(inventoryProductCardServiceUpdatePriceJobId: string, productCardId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobItemByProductCardId(inventoryProductCardServiceUpdatePriceJobId: string, productCardId: string): Promise<InventoryProductCardServiceUpdatePriceJobItemDTO | null> {
         let inventoryProductCardServiceUpdatePriceJobItem = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.findOne({
             where: {
                 inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId,
@@ -110,7 +110,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         return inventoryProductCardServiceUpdatePriceJobItemDTO;
     }
 
-    async getInventoryProductCardServiceUpdatePriceJobItemById(inventoryProductCardServiceUpdatePriceJobItemId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobItemById(inventoryProductCardServiceUpdatePriceJobItemId: string): Promise<InventoryProductCardServiceUpdatePriceJobItemDTO> {
         let inventoryProductCardServiceUpdatePriceJobItem = await this.inventoryProductCardServiceUpdatePriceJobItemRepository.findOne({
             where: {
                 inventoryProductCardServiceUpdatePriceJobItemId: inventoryProductCardServiceUpdatePriceJobItemId
@@ -126,7 +126,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
         return inventoryProductCardServiceUpdatePriceJobItemDTO;
     }
 
-    async getInventoryProductCardServiceUpdatePriceJobItemDetailsByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
+    async getInventoryProductCardServiceUpdatePriceJobItemDetailsByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO): Promise<any[]> {
         //GET THE PRODUCT CARDS FOR THE SET;
         let productCards = await this.productCardService.getProductCardsByProductSetId(inventoryProductCardServiceUpdatePriceJobDTO.productSetId);
 
@@ -159,7 +159,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
 
     }
 
-    async createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem: InventoryProductCardServiceUpdatePriceJobItem) {
+    async createInventoryProductCardServiceUpdatePriceJobItemDTO(inventoryProductCardServiceUpdatePriceJobItem: InventoryProductCardServiceUpdatePriceJobItem): Promise<InventoryProductCardServiceUpdatePriceJobItemDTO> {
 
         let inventoryProductCardServiceUpdatePriceJobItemDTO: InventoryProductCardServiceUpdatePriceJobItemDTO = new InventoryProductCardServiceUpdatePriceJobItemDTO();
         inventoryProductCardServiceUpdatePriceJobItemDTO.inventoryProductCardServiceUpdatePriceJobItemId = inventoryProductCardServiceUpdatePriceJobItem.inventoryProductCardServiceUpdatePriceJobItemId;
@@ -186,7 +186,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
     }
 
 
-    async createInventoryProductCardUpdatePriceJobItemsByJobs(inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[]) {
+    async createInventoryProductCardUpdatePriceJobItemsByJobs(inventoryProductCardServiceUpdatePriceJobDTOs: InventoryProductCardServiceUpdatePriceJobDTO[]): Promise<void> {
 
         for(let i = 0; i < inventoryProductCardServiceUpdatePriceJobDTOs.length; i++) {
             let inventoryProductCardServiceUpdatePriceJobDTO = await this.createInventoryProductCardUpdatePriceJobItemsByJob(inventoryProductCardServiceUpdatePriceJobDTOs[i]);
@@ -200,7 +200,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
 
     }
 
-    async createInventoryProductCardUpdatePriceJobItemsByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
+    async createInventoryProductCardUpdatePriceJobItemsByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO): Promise<InventoryProductCardServiceUpdatePriceJobDTO | null> {
 
         //GET THE BASE PRICE RULES;
         let priceRuleProductCardBaseDTO = await this.priceRuleProductCardBaseService.getPriceRuleProductCardBaseByCommerceAccountId(inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId, inventoryProductCardServiceUpdatePriceJobDTO.productVendorId, inventoryProductCardServiceUpdatePriceJobDTO.productLineId, inventoryProductCardServiceUpdatePriceJobDTO.productTypeId);
@@ -318,7 +318,7 @@ export class InventoryProductCardServiceUpdatePriceJobItemService {
     }  
 
     //INVENTORY PRICE UPDATES BASED ON PRICE RULES;
-    async updateInventoryProductCardUpdateInventoryPricesByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO) {
+    async updateInventoryProductCardUpdateInventoryPricesByJob(inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO): Promise<InventoryProductCardServiceUpdatePriceJobDTO> {
 
         let commerceAccountId = inventoryProductCardServiceUpdatePriceJobDTO.commerceAccountId;
         let commerceLocationDTOs = JSON.parse(inventoryProductCardServiceUpdatePriceJobDTO.commerceLocations) as CommerceLocationDTO[];

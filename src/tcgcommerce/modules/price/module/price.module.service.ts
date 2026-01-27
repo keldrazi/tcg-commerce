@@ -1,19 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceModule } from 'src/typeorm/entities/tcgcommerce/modules/price/module/price.module.entity';
 import { CreatePriceModuleDTO, UpdatePriceModuleDTO, PriceModuleDTO } from './dto/price.module.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class PriceModuleService {
 
     constructor(
         @InjectRepository(PriceModule) private priceModuleRepository: Repository<PriceModule>,
-        private errorMessageService: ErrorMessageService
     ) { }
 
-    async getPriceModuleById(priceModuleId: string) {
+    async getPriceModuleById(priceModuleId: string): Promise<PriceModuleDTO> {
         let priceModule = await this.priceModuleRepository.findOne({ 
             where: { 
                 priceModuleId : priceModuleId
@@ -21,7 +19,7 @@ export class PriceModuleService {
         });
         
         if (priceModule == null) {
-            return this.errorMessageService.createErrorMessage('PRICE_MODULE_NOT_FOUND', 'Price module was not found');
+            throw new NotFoundException('Price module not found');
         }
 
         let priceModuleDTO: PriceModuleDTO = ({ ...priceModule });
@@ -30,7 +28,7 @@ export class PriceModuleService {
         
     }
 
-    async getPriceModuleByCommerceAccountId(commerceAccountId: string) {
+    async getPriceModuleByCommerceAccountId(commerceAccountId: string): Promise<PriceModuleDTO> {
         let priceModule = await this.priceModuleRepository.findOne({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -38,7 +36,7 @@ export class PriceModuleService {
         });
         
         if (priceModule == null) {
-            return this.errorMessageService.createErrorMessage('PRICE_MODULE_NOT_FOUND', 'Price module was not found');
+            throw new NotFoundException('Price module not found for this commerce account');
         }
 
         let priceModuleDTO: PriceModuleDTO = ({ ...priceModule });
@@ -47,7 +45,7 @@ export class PriceModuleService {
         
     }
 
-    async getPriceModules() {
+    async getPriceModules(): Promise<PriceModuleDTO[]> {
         let priceModules = await this.priceModuleRepository.find();
         
         if (priceModules == null) {
@@ -68,7 +66,7 @@ export class PriceModuleService {
         
     }
 
-    async createPriceModule(createPriceModuleDTO: CreatePriceModuleDTO) {
+    async createPriceModule(createPriceModuleDTO: CreatePriceModuleDTO): Promise<PriceModuleDTO> {
         let priceModule = await this.priceModuleRepository.findOne({ 
             where: { 
                 commerceAccountId : createPriceModuleDTO.commerceAccountId
@@ -76,7 +74,7 @@ export class PriceModuleService {
         });
 
         if (priceModule != null) {
-            return this.errorMessageService.createErrorMessage('PRICE_MODULE_ALREADY_EXISTS', 'Price module already exists');
+            throw new ConflictException('Price module already exists');
         }
         
         priceModule = this.priceModuleRepository.create({ ...createPriceModuleDTO });
@@ -87,7 +85,7 @@ export class PriceModuleService {
         return priceModuleDTO;
     }
 
-    async updatePriceModule(updatePriceModuleDTO: UpdatePriceModuleDTO) {
+    async updatePriceModule(updatePriceModuleDTO: UpdatePriceModuleDTO): Promise<PriceModuleDTO> {
             
         let priceModule = await this.priceModuleRepository.findOne({ 
             where: { 
@@ -96,7 +94,7 @@ export class PriceModuleService {
         });
 
         if (priceModule == null) {
-            return this.errorMessageService.createErrorMessage('PRICE_MODULE_NOT_FOUND', 'Price module was not found');
+            throw new NotFoundException('Price module not found');
         }
 
         priceModule.priceModuleSettings = updatePriceModuleDTO.priceModuleSettings;

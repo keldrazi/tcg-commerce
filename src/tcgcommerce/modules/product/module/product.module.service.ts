@@ -1,19 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductModule } from 'src/typeorm/entities/tcgcommerce/modules/product/module/product.module.entity';
 import { CreateProductModuleDTO, UpdateProductModuleDTO, ProductModuleDTO } from './dto/product.module.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class ProductModuleService {
 
     constructor(
         @InjectRepository(ProductModule) private productModuleRepository: Repository<ProductModule>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getProductModuleById(productModuleId: string) {
+    async getProductModuleById(productModuleId: string): Promise<ProductModuleDTO> {
         let productModule = await this.productModuleRepository.findOne({ 
             where: { 
                 productModuleId : productModuleId
@@ -21,7 +19,7 @@ export class ProductModuleService {
         });
         
         if (productModule == null) {
-            return await this.errorMessageService.createErrorMessage('PRODUCT_MODULE_NOT_FOUND', 'Product module was not found');
+            throw new NotFoundException('Product module not found');
         }
 
         let productModuleDTO: ProductModuleDTO = ({ ...productModule });
@@ -30,7 +28,7 @@ export class ProductModuleService {
 
     }
 
-    async getProductModuleByCommerceAccountId(commerceAccountId: string) {
+    async getProductModuleByCommerceAccountId(commerceAccountId: string): Promise<ProductModuleDTO> {
         let productModule = await this.productModuleRepository.findOne({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -38,7 +36,7 @@ export class ProductModuleService {
         });
         
         if (!productModule) {
-            return await this.errorMessageService.createErrorMessage('PRODUCT_MODULE_NOT_FOUND', 'Product module was not found');
+            throw new NotFoundException('Product module not found for this commerce account');
         }
 
         let productModuleDTO: ProductModuleDTO = ({ ...productModule });
@@ -48,7 +46,7 @@ export class ProductModuleService {
     }
 
 
-    async getProductModules() {
+    async getProductModules(): Promise<ProductModuleDTO[]> {
         let productModules = await this.productModuleRepository.find();
         
         if (productModules == null) {
@@ -69,7 +67,7 @@ export class ProductModuleService {
         
     }
 
-    async createProductModule(createProductModuleDTO: CreateProductModuleDTO) {
+    async createProductModule(createProductModuleDTO: CreateProductModuleDTO): Promise<ProductModuleDTO> {
         let productModule = await this.productModuleRepository.findOne({ 
             where: { 
                 commerceAccountId : createProductModuleDTO.commerceAccountId
@@ -77,7 +75,7 @@ export class ProductModuleService {
         });
 
         if (productModule != null) {
-            return await this.errorMessageService.createErrorMessage('PRODUCT_MODULE_ALREADY_EXISTS', 'Product module already exists');
+            throw new ConflictException('Product module already exists');
         }
         
         productModule = this.productModuleRepository.create({ ...createProductModuleDTO });
@@ -88,7 +86,7 @@ export class ProductModuleService {
         return productModuleDTO;
     }
 
-    async updateProductModule(updateProductModuleDTO: UpdateProductModuleDTO) {
+    async updateProductModule(updateProductModuleDTO: UpdateProductModuleDTO): Promise<ProductModuleDTO> {
         
         let productModule = await this.productModuleRepository.findOne({ 
             where: { 
@@ -97,7 +95,7 @@ export class ProductModuleService {
         });
 
         if (!productModule) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_MODULE_NOT_FOUND', 'Product module was not found'); 
+            throw new NotFoundException('Product module not found');
         }
 
         productModule.productModuleSettings = updateProductModuleDTO.productModuleSettings;

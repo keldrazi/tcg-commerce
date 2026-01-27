@@ -15,7 +15,7 @@ export class CommerceUserService {
         private commerceUserVerificationService: CommerceUserVerificationService,
     ) { }
 
-    async getCommerceUserById(commerceUserId: string) {
+    async getCommerceUserById(commerceUserId: string): Promise<CommerceUserDTO> {
         let commerceUser = await this.commerceUserRepository.findOneOrFail({ 
             where: { 
                 commerceUserId: commerceUserId
@@ -28,7 +28,7 @@ export class CommerceUserService {
         
     }
 
-    async getCommerceUsersByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceUsersByCommerceAccountId(commerceAccountId: string): Promise<CommerceUserDTO[]> {
         let commerceUsers = await this.commerceUserRepository.find({ 
             where: { 
                 commerceAccountId: commerceAccountId 
@@ -52,7 +52,7 @@ export class CommerceUserService {
 
     }
 
-    async loginCommerceUser(commerceUserEmail:string, commerceUserPassword:string) {
+    async loginCommerceUser(commerceUserEmail:string, commerceUserPassword:string): Promise<CommerceUserDTO> {
         let commerceUser = await this.commerceUserRepository.findOne({ 
             where: { 
                 commerceUserEmail: commerceUserEmail 
@@ -75,7 +75,7 @@ export class CommerceUserService {
 
     }
 
-    async createCommerceUser(createCommerceUserDTO: CreateCommerceUserDTO) {
+    async createCommerceUser(createCommerceUserDTO: CreateCommerceUserDTO): Promise<CommerceUserDTO> {
         let commerceUser = await this.commerceUserRepository.findOne({ 
             where: { 
                 commerceAccountId: createCommerceUserDTO.commerceAccountId,
@@ -98,7 +98,7 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
-    async updateCommerceUser(updateCommerceUserDTO: UpdateCommerceUserDTO) {
+    async updateCommerceUser(updateCommerceUserDTO: UpdateCommerceUserDTO): Promise<CommerceUserDTO> {
         let commerceUser = await this.commerceUserRepository.findOneOrFail({
             where: {
                 commerceUserId: updateCommerceUserDTO.commerceUserId
@@ -118,7 +118,7 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
-    async deleteCommerceUser(commerceUserId: string) {
+    async deleteCommerceUser(commerceUserId: string): Promise<CommerceUserDTO> {
         let commerceUser = await this.commerceUserRepository.findOneOrFail({
             where: {
                 commerceUserId: commerceUserId
@@ -135,7 +135,7 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
-    async passwordResetCommerceUser(commerceAccountId: string, commerceUserEmail: string) {
+    async passwordResetCommerceUser(commerceAccountId: string, commerceUserEmail: string): Promise<CommerceUserDTO> {
         let commerceUser = await this.commerceUserRepository.findOneOrFail({ where: { commerceAccountId, commerceUserEmail } });
 
         await this.commerceUserVerificationService.createCommerceUserVerification(commerceAccountId, commerceUser.commerceUserId, 'COMMERCE_USER_PASSWORD_RESET');
@@ -145,7 +145,7 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
-    async updateCommerceUserPassword(commerceUserId: string, commerceUserPassword: string) {
+    async updateCommerceUserPassword(commerceUserId: string, commerceUserPassword: string): Promise<CommerceUserDTO> {
         let commerceUser = await this.commerceUserRepository.findOneOrFail({
             where: {
                 commerceUserId: commerceUserId
@@ -164,7 +164,7 @@ export class CommerceUserService {
         return commerceUserDTO;
     }
 
-    async verifyCommerceUserPassword(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: string, commerceUserPassword: string) {
+    async verifyCommerceUserPassword(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: string, commerceUserPassword: string): Promise<CommerceUserDTO> {
         let isVerified = await this.commerceUserVerificationService.verifyCommerceUserVerification(commerceAccountId, commerceUserId, commerceUserVerificationCode, 'COMMERCE_USER_PASSWORD_RESET');
 
         if(!isVerified) {
@@ -183,7 +183,7 @@ export class CommerceUserService {
 
     }
 
-    async hashPassword(commerceUserPassword: string){
+    async hashPassword(commerceUserPassword: string): Promise<string> {
         let commerceUserPasswordHash = await bcrypt.hash(commerceUserPassword, 10);
 
         return commerceUserPasswordHash;

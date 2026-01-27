@@ -11,7 +11,7 @@ export class POSVendorService {
         @InjectRepository(POSVendor) private posVendorRepository: Repository<POSVendor>,
     ) { }
 
-    async getPOSVendor(posVendorId: string) {
+    async getPOSVendor(posVendorId: string): Promise<POSVendorDTO> {
         let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
                 posVendorId: posVendorId
@@ -28,7 +28,7 @@ export class POSVendorService {
         
     }
 
-    async getPOSVendors() {
+    async getPOSVendors(): Promise<POSVendorDTO[]> {
         let posVendors = await this.posVendorRepository.find({
             where: {
                 posVendorIsActive: true
@@ -54,7 +54,7 @@ export class POSVendorService {
         return posVendorDTOs;
     }
     
-    async getPOSVendorByName(name: string) {
+    async getPOSVendorByName(name: string): Promise<POSVendorDTO> {
         let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
                 posVendorName: name 
@@ -71,7 +71,7 @@ export class POSVendorService {
         
     }
 
-    async getPOSVendorByCode(code: string) {
+    async getPOSVendorByCode(code: string): Promise<POSVendorDTO> {
         let posVendor = await this.posVendorRepository.findOne({ 
             where: { 
                 posVendorCode: code 
@@ -88,7 +88,7 @@ export class POSVendorService {
         
     }
     
-    async createPOSVendor(createPOSVendorDTO: CreatePOSVendorDTO) {
+    async createPOSVendor(createPOSVendorDTO: CreatePOSVendorDTO): Promise<POSVendorDTO> {
     
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let posVendor = await this.posVendorRepository.findOne({ 
@@ -110,7 +110,7 @@ export class POSVendorService {
         
     }
 
-    async updatePOSVendor(updatePOSVendorDTO: UpdatePOSVendorDTO) {
+    async updatePOSVendor(updatePOSVendorDTO: UpdatePOSVendorDTO): Promise<POSVendorDTO> {
                 
         let posVendor = await this.posVendorRepository.findOne({ 
             where: { 

@@ -11,7 +11,7 @@ export class FullfilmentOrderTypeService {
         @InjectRepository(FullfilmentOrderType) private fullfilmentOrderTypeRepository: Repository<FullfilmentOrderType>,
     ) { }
 
-    async getFullfilmentOrderTypeById(fullfilmentOrderTypeId: string) {
+    async getFullfilmentOrderTypeById(fullfilmentOrderTypeId: string): Promise<FullfilmentOrderTypeDTO> {
         let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderTypeId: fullfilmentOrderTypeId 
@@ -24,7 +24,7 @@ export class FullfilmentOrderTypeService {
         
     }
 
-    async getFullfilmentOrderTypes() {
+    async getFullfilmentOrderTypes(): Promise<FullfilmentOrderTypeDTO[]> {
         let fullfilmentOrderTypes = await this.fullfilmentOrderTypeRepository.find();
         
         let fullfilmentOrderTypeDTOs: FullfilmentOrderTypeDTO[] = [];
@@ -43,7 +43,7 @@ export class FullfilmentOrderTypeService {
         return fullfilmentOrderTypeDTOs;
     }
     
-    async getFullfilmentOrderTypeByName(fullfilmentOrderTypeName: string) {
+    async getFullfilmentOrderTypeByName(fullfilmentOrderTypeName: string): Promise<FullfilmentOrderTypeDTO> {
         let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderTypeName: fullfilmentOrderTypeName 
@@ -56,7 +56,7 @@ export class FullfilmentOrderTypeService {
         
     }
 
-    async getFullfilmentOrderTypeByCode(fullfilmentOrderTypeCode: string) {
+    async getFullfilmentOrderTypeByCode(fullfilmentOrderTypeCode: string): Promise<FullfilmentOrderTypeDTO> {
         let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderTypeCode: fullfilmentOrderTypeCode 
@@ -69,7 +69,7 @@ export class FullfilmentOrderTypeService {
         
     }
     
-    async createFullfilmentOrderType(createFullfilmentOrderTypeDTO: CreateFullfilmentOrderTypeDTO) {
+    async createFullfilmentOrderType(createFullfilmentOrderTypeDTO: CreateFullfilmentOrderTypeDTO): Promise<FullfilmentOrderTypeDTO> {
     
         //CHECK TO SEE IF THE FULLFILMENT ORDER TYPE ALREADY EXISTS;
         let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOne({ 
@@ -91,7 +91,7 @@ export class FullfilmentOrderTypeService {
         
     }
 
-    async updateFullfilmentOrderType(updateFullfilmentOrderTypeDTO: UpdateFullfilmentOrderTypeDTO) {
+    async updateFullfilmentOrderType(updateFullfilmentOrderTypeDTO: UpdateFullfilmentOrderTypeDTO): Promise<FullfilmentOrderTypeDTO> {
                     
         let fullfilmentOrderType = await this.fullfilmentOrderTypeRepository.findOneOrFail({ 
             where: { 

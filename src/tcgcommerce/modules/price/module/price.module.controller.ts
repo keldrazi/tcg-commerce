@@ -1,8 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { PriceModuleService } from './price.module.service';
 import { CreatePriceModuleDTO, UpdatePriceModuleDTO } from './dto/price.module.dto';
-
-
 
 @Controller('price/module')
 export class PriceModuleController {
@@ -13,29 +11,61 @@ export class PriceModuleController {
     
     @Get()
     async getPriceModules() {
-        return await this.priceModuleService.getPriceModules();
+        try {
+            return await this.priceModuleService.getPriceModules();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get price modules');
+        }
     }
 
     @Get('id/:priceModuleId')
     async getPriceModuleById(@Param('priceModuleId') priceModuleId: string) {
-        return await this.priceModuleService.getPriceModuleById(priceModuleId);
+        try {
+            return await this.priceModuleService.getPriceModuleById(priceModuleId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get price module');
+        }
     }
 
     @Get('/caid/:commerceAccountId')
     async getPriceModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.priceModuleService.getPriceModuleByCommerceAccountId(commerceAccountId);
+        try {
+            return await this.priceModuleService.getPriceModuleByCommerceAccountId(commerceAccountId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get price module by commerce account');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createPriceModule(@Body() createPriceModuleDTO: CreatePriceModuleDTO) {
-        return this.priceModuleService.createPriceModule(createPriceModuleDTO);
+        try {
+            return await this.priceModuleService.createPriceModule(createPriceModuleDTO);
+        } catch (e) {
+            if (e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create price module');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updatePriceModule(@Body() updatePriceModuleDTO: UpdatePriceModuleDTO) {
-        return this.priceModuleService.updatePriceModule(updatePriceModuleDTO);
+        try {
+            return await this.priceModuleService.updatePriceModule(updatePriceModuleDTO);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to update price module');
+        }
     }
 
 }

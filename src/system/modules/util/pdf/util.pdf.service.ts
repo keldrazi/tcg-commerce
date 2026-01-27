@@ -34,7 +34,7 @@ export class UtilPDFService {
         return pdfBuffer
     }
 
-    async convertToImages(pdf) {
+    async convertToImages(pdf): Promise<Buffer[]> {
         let pdfData = pdf;
       
         pdfData = new Uint8Array(pdf);
@@ -56,7 +56,7 @@ export class UtilPDFService {
         
       }
     
-      async docRender(pdfDocument, pageNo) {
+      async docRender(pdfDocument, pageNo): Promise<Buffer> {
         const page = await pdfDocument.getPage(pageNo);
         const outputScale = 1.0;
         let viewport = page.getViewport({ scale: outputScale });

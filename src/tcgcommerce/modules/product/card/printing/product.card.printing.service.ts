@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductCardPrintingDTO, ProductCardPrintingDTO, UpdateProductCardPrintingDTO } from './dto/product.card.printing.dto';
@@ -6,8 +6,6 @@ import { ProductCardPrinting } from 'src/typeorm/entities/tcgcommerce/modules/pr
 import { TCGdbMTGPrintingService } from 'src/tcgdb/modules/tcgdb/api/mtg/printing/tcgdb.mtg.printing.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
@@ -17,11 +15,10 @@ export class ProductCardPrintingService {
         @InjectRepository(ProductCardPrinting) private productCardPrintingRepository: Repository<ProductCardPrinting>,
         private tcgdbMTGPrintingService: TCGdbMTGPrintingService,
         private productLineService: ProductLineService,
-        private productVendorService: ProductVendorService,
-        private errorMessageService: ErrorMessageService
+        private productVendorService: ProductVendorService
     ) { }
 
-    async getProductCardPrintingById(productCardPrintingId: string) {
+    async getProductCardPrintingById(productCardPrintingId: string): Promise<ProductCardPrintingDTO> {
         let productCardPrinting = await this.productCardPrintingRepository.findOne({
             where: { 
                 productCardPrintingId: productCardPrintingId 
@@ -29,7 +26,7 @@ export class ProductCardPrintingService {
         });
 
         if(productCardPrinting == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTING_NOT_FOUND', 'Product card printing was not found');
+            throw new NotFoundException('Product card printing was not found');
         }
 
         let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
@@ -37,7 +34,7 @@ export class ProductCardPrintingService {
         return productCardPrintingDTO;
     }
 
-    async getProductCardPrintingByName(productCardPrintingName: string) {
+    async getProductCardPrintingByName(productCardPrintingName: string): Promise<ProductCardPrintingDTO> {
         let productCardPrinting = await this.productCardPrintingRepository.findOne({
             where: { 
                 productCardPrintingName: productCardPrintingName 
@@ -45,7 +42,7 @@ export class ProductCardPrintingService {
         });
 
         if(productCardPrinting == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTING_NOT_FOUND', 'Product card printing was not found');
+            throw new NotFoundException('Product card printing was not found');
         }
 
         let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
@@ -53,14 +50,14 @@ export class ProductCardPrintingService {
         return productCardPrintingDTO;
     }
 
-    async getProductCardPrintingsByProductLineCode(productLineCode: string) {
+    async getProductCardPrintingsByProductLineCode(productLineCode: string): Promise<ProductCardPrintingDTO[]> {
 
         productLineCode = productLineCode.toUpperCase();
         
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
 
-        if(productLine == null || productLine instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
+        if(productLine == null) {
+            throw new NotFoundException('Product line was not found');
         }
 
         let productLineId = productLine.productLineId;
@@ -90,7 +87,7 @@ export class ProductCardPrintingService {
         return productCardPrintingDTOs;
     }
 
-    async getProductCardPrintingsByProductLineId(productLineId: string) {
+    async getProductCardPrintingsByProductLineId(productLineId: string): Promise<ProductCardPrintingDTO[]> {
 
         let productCardPrintings = await this.productCardPrintingRepository.find({
             where: { 
@@ -119,7 +116,7 @@ export class ProductCardPrintingService {
 
     
 
-    async getProductCardPrintings() {
+    async getProductCardPrintings(): Promise<ProductCardPrintingDTO[]> {
         let productCardPrintings = await this.productCardPrintingRepository.find({
             order: { 
                 productCardPrintingDisplayOrder: 'ASC' 
@@ -142,7 +139,7 @@ export class ProductCardPrintingService {
         return productCardPrintingDTOs;
     }
 
-    async getProductCardPrintingByNameAndProductLineId(productCardPrintingName: string, productLineId: string) {
+    async getProductCardPrintingByNameAndProductLineId(productCardPrintingName: string, productLineId: string): Promise<ProductCardPrintingDTO> {
         let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
             where: { 
                 productCardPrintingName: productCardPrintingName,
@@ -151,7 +148,7 @@ export class ProductCardPrintingService {
         });
         
         if(productCardPrinting == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTING_NOT_FOUND', 'Product card printing was not found');
+            throw new NotFoundException('Product card printing was not found');
         }
 
         let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
@@ -160,7 +157,7 @@ export class ProductCardPrintingService {
         
     }
 
-    async createProductCardPrinting(createProductCardPrintingDTO: CreateProductCardPrintingDTO) {
+    async createProductCardPrinting(createProductCardPrintingDTO: CreateProductCardPrintingDTO): Promise<ProductCardPrintingDTO> {
 
         //CHECK TO SEE IF THE PRODUCT CARD VARIANT ALREADY EXISTS;
         let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
@@ -172,7 +169,7 @@ export class ProductCardPrintingService {
         });
 
         if(productCardPrinting != null) {
-            return this.errorMessageService.createErrorMessage('DUPLICATE_PRODUCT_CARD_PRINTING', 'A product card printing already exists.');
+            throw new ConflictException('A product card printing already exists.');
         }
         
         productCardPrinting = this.productCardPrintingRepository.create({ ...createProductCardPrintingDTO });
@@ -184,7 +181,7 @@ export class ProductCardPrintingService {
         
     }
 
-    async updateProductCardPrinting(updateProductCardPrintingDTO: UpdateProductCardPrintingDTO) {
+    async updateProductCardPrinting(updateProductCardPrintingDTO: UpdateProductCardPrintingDTO): Promise<ProductCardPrintingDTO> {
                         
         let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
             where: { 
@@ -193,7 +190,7 @@ export class ProductCardPrintingService {
         });
 
         if(!productCardPrinting) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_PRINTING_NOT_FOUND', 'Product card printing was not found');
+            throw new NotFoundException('Product card printing was not found');
         }
 
         productCardPrinting.productCardPrintingName = updateProductCardPrintingDTO.productCardPrintingName;
@@ -210,33 +207,33 @@ export class ProductCardPrintingService {
     }
 
     //BULK CREATE PRODUCT CARD PRINTINGS;
-    async createProductCardPrintingsByProductLineCode(productLineCode: string) {
+    async createProductCardPrintingsByProductLineCode(productLineCode: string): Promise<number> {
         //TO DO: CREATE PRODUCT CARD PRINTINGS;
         if (productLineCode == PRODUCT_LINE_CODE.MAGIC_THE_GATHERING) {
             return this.createTCGdbMTGProductCardPrintings();
         } else {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
+            throw new NotFoundException('Product line was not found');
         }
     }
 
-    async createTCGdbMTGProductCardPrintings() {
+    async createTCGdbMTGProductCardPrintings(): Promise<number> {
 
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING);
         
-        if(productVendor == null || productVendor instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        if(productVendor == null) {
+            throw new NotFoundException('Product vendor was not found');
         }
         
-        if(productLine == null || productLine instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
+        if(productLine == null) {
+            throw new NotFoundException('Product line was not found');
         }
         
         //GET THE PRODUCT CARD PRINTINGS FROM TCGDB;
         let tcgdbMTGProductCardPrintings = await this.tcgdbMTGPrintingService.getTCGdbMTGPrintings();
         
         if(tcgdbMTGProductCardPrintings == null) {
-            return this.errorMessageService.createErrorMessage('TCGDB_MTG_PRINTINGS_NOT_FOUND', 'TCGDB MTG printings were not found.');
+            throw new NotFoundException('TCGDB MTG printings were not found.');
         }
 
         let productCardPrintingRecordCount = 0;
@@ -244,22 +241,26 @@ export class ProductCardPrintingService {
         for(let i = 0; i < tcgdbMTGProductCardPrintings.length; i++) {
             let tcgdbMTGProductCardPrinting = tcgdbMTGProductCardPrintings[i];
             
-            let productCardPrinting = await this.getProductCardPrintingByNameAndProductLineId(tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName, productLine.productLineId);
-            
-            //IF THE PRODUCT CARD PRINTING ALREADY EXISTS, SKIP TO THE NEXT ONE;
-            if(productCardPrinting instanceof ErrorMessageDTO) {
-                let createProductCardPrintingDTO = new CreateProductCardPrintingDTO();
-                createProductCardPrintingDTO.productVendorId = productVendor.productVendorId;
-                createProductCardPrintingDTO.productLineId = productLine.productLineId;
-                createProductCardPrintingDTO.productCardPrintingTCGdbId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingId;
-                createProductCardPrintingDTO.productCardPrintingTCGPlayerId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingTCGPlayerId;
-                createProductCardPrintingDTO.productCardPrintingName = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName;
-                createProductCardPrintingDTO.productCardPrintingDisplayOrder = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingDisplayOrder;
-                createProductCardPrintingDTO.productCardPrintingIsActive = true;
-                
-                await this.createProductCardPrinting(createProductCardPrintingDTO);
+            try {
+                //IF THE PRODUCT CARD PRINTING ALREADY EXISTS, SKIP TO THE NEXT ONE;
+                await this.getProductCardPrintingByNameAndProductLineId(tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName, productLine.productLineId);
+            } catch (error) {
+                if (error instanceof NotFoundException) {
+                    let createProductCardPrintingDTO = new CreateProductCardPrintingDTO();
+                    createProductCardPrintingDTO.productVendorId = productVendor.productVendorId;
+                    createProductCardPrintingDTO.productLineId = productLine.productLineId;
+                    createProductCardPrintingDTO.productCardPrintingTCGdbId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingId;
+                    createProductCardPrintingDTO.productCardPrintingTCGPlayerId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingTCGPlayerId;
+                    createProductCardPrintingDTO.productCardPrintingName = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName;
+                    createProductCardPrintingDTO.productCardPrintingDisplayOrder = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingDisplayOrder;
+                    createProductCardPrintingDTO.productCardPrintingIsActive = true;
+                    
+                    await this.createProductCardPrinting(createProductCardPrintingDTO);
 
-                productCardPrintingRecordCount++; 
+                    productCardPrintingRecordCount++;
+                } else {
+                    throw error;
+                }
             }
             
         }

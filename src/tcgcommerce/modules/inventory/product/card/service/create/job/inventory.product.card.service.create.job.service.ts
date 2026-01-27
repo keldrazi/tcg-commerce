@@ -19,7 +19,7 @@ export class InventoryProductCardServiceCreateJobService {
     ) { }
 
 
-    async getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId: string) {
+    async getInventoryProductCardServiceCreateJobsByCommerceAccountId(commerceAccountId: string): Promise<InventoryProductCardServiceCreateJobDTO[]> {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
             where: {
@@ -43,7 +43,7 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceLocationId(commerceLocationId: string) {
+    async getInventoryProductCardServiceCreateJobsByCommerceLocationId(commerceLocationId: string): Promise<InventoryProductCardServiceCreateJobDTO[]> {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
             where: {
@@ -67,7 +67,7 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string) {
+    async getInventoryProductCardServiceCreateJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string): Promise<InventoryProductCardServiceCreateJobDTO[]> {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
             where: {
@@ -92,7 +92,7 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCode(commerceLocationId: string, productLineCode: string) {
+    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCode(commerceLocationId: string, productLineCode: string): Promise<InventoryProductCardServiceCreateJobDTO[]> {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
             where: {
@@ -117,7 +117,7 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTOs;
     }
 
-    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId: string, productLineCode: string, inventoryProductCardServiceCreateJobStatus: string) {
+    async getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId: string, productLineCode: string, inventoryProductCardServiceCreateJobStatus: string): Promise<InventoryProductCardServiceCreateJobDTO[]> {
 
         let inventoryProductCardServiceCreateJobs = await this.inventoryProductCardServiceCreateJobRepository.find({
             where: {
@@ -144,7 +144,7 @@ export class InventoryProductCardServiceCreateJobService {
     }
     
 
-    async getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
+    async getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string): Promise<InventoryProductCardServiceCreateJobDTO> {
         let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
@@ -158,7 +158,7 @@ export class InventoryProductCardServiceCreateJobService {
 
     }
 
-    async getInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId: string) {
+    async getInventoryProductCardServiceCreateJobDetailsById(inventoryProductCardServiceCreateJobId: string): Promise<{ inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO; inventoryProductCardServiceCreateJobItems: any[] }> {
         let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
@@ -182,7 +182,7 @@ export class InventoryProductCardServiceCreateJobService {
 
     }
 
-    async getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO) {
+    async getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO): Promise<InventoryProductCardServiceCreateJob | null> {
         let inventoryProductCardServiceCreateJob = await this.inventoryProductCardServiceCreateJobRepository.findOne({
             where: {
                 commerceAccountId: createInventoryProductCardServiceCreateJobDTO.commerceAccountId,
@@ -201,7 +201,7 @@ export class InventoryProductCardServiceCreateJobService {
     
 
     /* CREATE ALL PRODUCT CARD INVENTORY BATCH LOAD JOBS */
-    async createInventoryProductCardServiceCreateJobs(createInventoryProductCardServiceCreateJobsDTO: CreateInventoryProductCardServiceCreateJobsDTO) {
+    async createInventoryProductCardServiceCreateJobs(createInventoryProductCardServiceCreateJobsDTO: CreateInventoryProductCardServiceCreateJobsDTO): Promise<InventoryProductCardServiceCreateJobDTO[]> {
 
         //GET THE SETS OF THE PRODUCT LINE;
         let productVendorId = createInventoryProductCardServiceCreateJobsDTO.productVendorId;
@@ -251,7 +251,7 @@ export class InventoryProductCardServiceCreateJobService {
     }
     
 
-    async createInventoryProductCardServiceCreateJobSet(createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO) {
+    async createInventoryProductCardServiceCreateJobSet(createInventoryProductCardServiceCreateJobDTO: CreateInventoryProductCardServiceCreateJobDTO): Promise<InventoryProductCardServiceCreateJobDTO> {
 
         let existingJob = await this.getInventoryProductCardServiceCreateJobByDTO(createInventoryProductCardServiceCreateJobDTO);
 
@@ -276,7 +276,7 @@ export class InventoryProductCardServiceCreateJobService {
         
     }
 
-    async processsInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string) {
+    async processsInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string): Promise<number> {
         let inventoryProductCardServiceCreateJobsDTO = await this.getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId, productLineCode, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY);
         if(inventoryProductCardServiceCreateJobsDTO == null || inventoryProductCardServiceCreateJobsDTO.length === 0) {
             throw new NotFoundException('Inventory product card service create jobs not found for the provided parameters.');
@@ -289,7 +289,7 @@ export class InventoryProductCardServiceCreateJobService {
         
     }
 
-    async processsInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO: InventoryProductCardServiceCreateJobDTO[]) {
+    async processsInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO: InventoryProductCardServiceCreateJobDTO[]): Promise<void> {
         
         for(let i = 0; i < inventoryProductCardServiceCreateJobsDTO.length; i++) {
             let inventoryProductCardServiceCreateJobDTO = inventoryProductCardServiceCreateJobsDTO[i];
@@ -299,7 +299,7 @@ export class InventoryProductCardServiceCreateJobService {
         
     }
 
-    async processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
+    async processsInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string): Promise<InventoryProductCardServiceCreateJobDTO> {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
         await this.inventoryProductCardServiceCreateJobItemService.createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
@@ -307,7 +307,7 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTO;
     }
 
-    async approveInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string) {
+    async approveInventoryProductCardServiceCreateJobs(commerceLocationId: string, productLineCode: string): Promise<number> {
         let inventoryProductCardServiceCreateJobsDTO = await this.getInventoryProductCardServiceCreateJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId, productLineCode, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_READY_FOR_REVIEW);
         if(inventoryProductCardServiceCreateJobsDTO == null || inventoryProductCardServiceCreateJobsDTO.length === 0) {
             throw new NotFoundException('Inventory product card service create jobs not found for the provided parameters.');
@@ -319,7 +319,7 @@ export class InventoryProductCardServiceCreateJobService {
 
     }
 
-    async approveInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO: InventoryProductCardServiceCreateJobDTO[]) {
+    async approveInventoryProductCardServiceCreateJobsByIds(inventoryProductCardServiceCreateJobsDTO: InventoryProductCardServiceCreateJobDTO[]): Promise<void> {
 
         for(let i = 0; i < inventoryProductCardServiceCreateJobsDTO.length; i++) {
             let inventoryProductCardServiceCreateJobDTO = inventoryProductCardServiceCreateJobsDTO[i];
@@ -328,7 +328,7 @@ export class InventoryProductCardServiceCreateJobService {
 
     }
 
-    async approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
+    async approveInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string): Promise<InventoryProductCardServiceCreateJobDTO> {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
         await this.updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId, INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
@@ -338,7 +338,7 @@ export class InventoryProductCardServiceCreateJobService {
         return inventoryProductCardServiceCreateJobDTO;
     }
 
-    async deleteInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string) {
+    async deleteInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId: string): Promise<InventoryProductCardServiceCreateJobDTO> {
         let inventoryProductCardServiceCreateJobDTO = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
         if(inventoryProductCardServiceCreateJobDTO.inventoryProductCardServiceCreateJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_CREATE_JOB_STATUS.PROCESSING_COMPLETE) {
@@ -358,7 +358,7 @@ export class InventoryProductCardServiceCreateJobService {
 
     //HELPER FUNCTIONS (REFACTOR TO UTIL SERVICE LATER);
     
-    async createInventoryProductCardServiceCreateJobCode(productLineCode: string, productSetCode: string, commerceLocationName:string) {
+    async createInventoryProductCardServiceCreateJobCode(productLineCode: string, productSetCode: string, commerceLocationName:string): Promise<string> {
 
         let now = new Date();
         let dateCode = now.getFullYear().toString() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + '-' + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
@@ -369,7 +369,7 @@ export class InventoryProductCardServiceCreateJobService {
     }
 
 
-    async updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobStatus: string) {
+    async updateInventoryProductCardServiceCreateJobStatus(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobStatus: string): Promise<boolean> {
         let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobStatus = inventoryProductCardServiceCreateJobStatus;
@@ -380,7 +380,7 @@ export class InventoryProductCardServiceCreateJobService {
         return true;
     }
 
-    async updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobCount: number) {
+    async updateInventoryProductCardServiceCreateJobCount(inventoryProductCardServiceCreateJobId: string, inventoryProductCardServiceCreateJobCount: number): Promise<boolean> {
         let inventoryProductCardServiceCreateJob = await this.getInventoryProductCardServiceCreateJobById(inventoryProductCardServiceCreateJobId);
 
         inventoryProductCardServiceCreateJob.inventoryProductCardServiceCreateJobCount = inventoryProductCardServiceCreateJobCount;
@@ -396,7 +396,7 @@ export class InventoryProductCardServiceCreateJobService {
     
     /* EVENT LISTENERS */
     @OnEvent('inventory.product.card.service.create.job.update.status')
-    async handleInventoryProductCardServiceCreateJobStatusEvent(payload: any) {
+    async handleInventoryProductCardServiceCreateJobStatusEvent(payload: any): Promise<void> {
         
         let inventoryProductCardServiceCreateJobId = payload.inventoryProductCardServiceCreateJobId;
         let inventoryProductCardServiceCreateJobStatus = payload.inventoryProductCardServiceCreateJobStatus;

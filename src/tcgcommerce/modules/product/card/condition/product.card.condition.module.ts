@@ -6,15 +6,13 @@ import { ProductCardCondition } from 'src/typeorm/entities/tcgcommerce/modules/p
 import { TCGdbMTGConditionModule } from 'src/tcgdb/modules/tcgdb/api/mtg/condition/tcgdb.mtg.condition.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([ProductCardCondition]),
         TCGdbMTGConditionModule,
         ProductLineModule,
-        ProductVendorModule,
-        ErrorMessageModule
+        ProductVendorModule
     ],
     controllers: [ProductCardConditionController],
     providers: [ProductCardConditionService],

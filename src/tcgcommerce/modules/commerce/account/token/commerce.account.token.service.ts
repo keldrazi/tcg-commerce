@@ -11,7 +11,7 @@ export class CommerceAccountTokenService {
     ) { }
 
 
-    async getCommerceAccountTokenByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceAccountTokenByCommerceAccountId(commerceAccountId: string): Promise<CommerceAccountTokenDTO> {
         let commerceAccountToken = await this.commerceAccountTokenRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: commerceAccountId 
@@ -24,7 +24,7 @@ export class CommerceAccountTokenService {
         
     }
 
-    async createCommerceAccountToken(createCommerceAccountTokenDTO: CreateCommerceAccountTokenDTO) {
+    async createCommerceAccountToken(createCommerceAccountTokenDTO: CreateCommerceAccountTokenDTO): Promise<CommerceAccountTokenDTO> {
 
         let commerceAccountToken = await this.commerceAccountTokenRepository.findOne({ 
             where: { 
@@ -50,7 +50,7 @@ export class CommerceAccountTokenService {
         return commerceAccountTokenDTO;
     }
 
-    async updateCommerceAccountToken(updateCommerceAccountTokenDTO: UpdateCommerceAccountTokenDTO) {
+    async updateCommerceAccountToken(updateCommerceAccountTokenDTO: UpdateCommerceAccountTokenDTO): Promise<CommerceAccountTokenDTO> {
         let commerceAccountToken = await this.commerceAccountTokenRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: updateCommerceAccountTokenDTO.commerceAccountId 

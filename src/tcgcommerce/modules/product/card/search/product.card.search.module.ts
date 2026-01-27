@@ -6,7 +6,6 @@ import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.
 import { ProductCardSearchService } from './product.card.search.service';
 import { ProductCardSearchController } from './product.card.search.controller';
 import { AiImageCardServiceXimilarModule } from 'src/system/modules/ai/image/card/service/ximilar/ai.image.card.service.ximilar.module';
-import { ErrorMessageModule } from 'src/system/modules/error/message/error.message.module';
 
 
 
@@ -15,8 +14,7 @@ import { ErrorMessageModule } from 'src/system/modules/error/message/error.messa
         TypeOrmModule.forFeature([ProductCard]),
         ProductLineModule,
         ProductSetModule,
-        AiImageCardServiceXimilarModule,
-        ErrorMessageModule
+        AiImageCardServiceXimilarModule
     ],
     controllers: [ProductCardSearchController],
     providers: [ProductCardSearchService],

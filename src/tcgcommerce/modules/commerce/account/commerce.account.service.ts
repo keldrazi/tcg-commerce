@@ -152,7 +152,7 @@ export class CommerceAccountService {
         return commerceAccountDTO;
     }
 
-    async createCommerceAccountAPIHandle(commerceAccountHandle: string) {
+    async createCommerceAccountAPIHandle(commerceAccountHandle: string): Promise<string> {
         return commerceAccountHandle
             .toLowerCase() 
             .replace(/\s+/g, '-') 

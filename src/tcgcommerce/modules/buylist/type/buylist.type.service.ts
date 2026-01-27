@@ -1,20 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistTypeDTO, UpdateBuylistTypeDTO, BuylistTypeDTO } from './dto/buylist.type.dto';
 import { BuylistType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/type/buylist.type.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class BuylistTypeService {
 
     constructor(
         @InjectRepository(BuylistType) private buylistTypeRepository: Repository<BuylistType>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getBuylistTypeById(buylistTypeId: string) {
+    async getBuylistTypeById(buylistTypeId: string): Promise<BuylistTypeDTO> {
         let buylistType = await this.buylistTypeRepository.findOne({ 
             where: { 
                 buylistTypeId: buylistTypeId 
@@ -22,7 +19,7 @@ export class BuylistTypeService {
         });
         
         if (buylistType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
+            throw new NotFoundException('Buylist type was not found');
         }
 
         let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
@@ -31,7 +28,7 @@ export class BuylistTypeService {
         
     }
 
-    async getBuylistTypes() {
+    async getBuylistTypes(): Promise<BuylistTypeDTO[]> {
         let buylistTypes = await this.buylistTypeRepository.find();
         
         let buylistTypeDTOs: BuylistTypeDTO[] = [];
@@ -50,7 +47,7 @@ export class BuylistTypeService {
         return buylistTypeDTOs;
     }
     
-    async getBuylistTypeByName(buylistTypeName: string) {
+    async getBuylistTypeByName(buylistTypeName: string): Promise<BuylistTypeDTO> {
         let buylistType = await this.buylistTypeRepository.findOne({ 
             where: { 
                 buylistTypeName: buylistTypeName 
@@ -58,7 +55,7 @@ export class BuylistTypeService {
         });
         
         if (buylistType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
+            throw new NotFoundException('Buylist type was not found');
         }
 
         let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
@@ -67,7 +64,7 @@ export class BuylistTypeService {
         
     }
     
-    async createBuylistType(createBuylistTypeDTO: CreateBuylistTypeDTO) {
+    async createBuylistType(createBuylistTypeDTO: CreateBuylistTypeDTO): Promise<BuylistTypeDTO> {
     
         let buylistType = await this.buylistTypeRepository.findOne({ 
             where: { 
@@ -76,7 +73,7 @@ export class BuylistTypeService {
         });
 
         if (buylistType != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_ALREADY_EXISTS', 'Buylist type already exists');
+            throw new ConflictException('Buylist type already exists');
         }
         
         buylistType = this.buylistTypeRepository.create({ ...createBuylistTypeDTO });
@@ -88,7 +85,7 @@ export class BuylistTypeService {
         
     }
 
-    async updateBuylistType(updateBuylistTypeDTO: UpdateBuylistTypeDTO) {
+    async updateBuylistType(updateBuylistTypeDTO: UpdateBuylistTypeDTO): Promise<BuylistTypeDTO> {
                     
         let buylistType = await this.buylistTypeRepository.findOne({ 
             where: { 
@@ -97,7 +94,7 @@ export class BuylistTypeService {
         });
             
         if (!buylistType) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_TYPE_NOT_FOUND', 'Buylist type was not found');
+            throw new NotFoundException('Buylist type was not found');
         }
 
         buylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;

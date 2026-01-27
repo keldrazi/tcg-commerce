@@ -11,7 +11,7 @@ export class CommerceModuleService {
         @InjectRepository(CommerceModule) private commerceModuleRepository: Repository<CommerceModule>,
     ) { }
 
-    async getCommerceModuleById(commerceModuleId: string) {
+    async getCommerceModuleById(commerceModuleId: string): Promise<CommerceModuleDTO> {
         let commerceModule = await this.commerceModuleRepository.findOneOrFail({ 
             where: { 
                 commerceModuleId : commerceModuleId
@@ -24,7 +24,7 @@ export class CommerceModuleService {
         
     }
 
-    async getCommerceModuleByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceModuleByCommerceAccountId(commerceAccountId: string): Promise<CommerceModuleDTO> {
         let commerceModule = await this.commerceModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -37,7 +37,7 @@ export class CommerceModuleService {
         
     }
 
-    async getCommerceModules() {
+    async getCommerceModules(): Promise<CommerceModuleDTO[]> {
         let commerceModules = await this.commerceModuleRepository.find();
         
         if (commerceModules == null) {
@@ -58,7 +58,7 @@ export class CommerceModuleService {
         
     }
 
-    async createCommerceModule(createCommerceModuleDTO: CreateCommerceModuleDTO) {
+    async createCommerceModule(createCommerceModuleDTO: CreateCommerceModuleDTO): Promise<CommerceModuleDTO> {
         
         let commerceModule = await this.commerceModuleRepository.findOne({ 
             where: { 
@@ -78,7 +78,7 @@ export class CommerceModuleService {
         return commerceModuleDTO;
     }
 
-    async updateCommerceModule(updateCommerceModuleDTO: UpdateCommerceModuleDTO) {
+    async updateCommerceModule(updateCommerceModuleDTO: UpdateCommerceModuleDTO): Promise<CommerceModuleDTO> {
             
         let commerceModule = await this.commerceModuleRepository.findOneOrFail({ 
             where: { 

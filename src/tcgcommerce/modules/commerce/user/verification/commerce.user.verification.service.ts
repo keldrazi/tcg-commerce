@@ -12,7 +12,7 @@ export class CommerceUserVerificationService {
         @InjectRepository(CommerceUserVerification) private commerceUserVerificationRepository: Repository<CommerceUserVerification>,
     ) { }
 
-    async createCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationType: string) {
+    async createCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationType: string): Promise<CommerceUserVerificationDTO> {
 
         let commerceUserVerificationCode = await this.createCommerceUserVerificationCode();
         let commerceUserVerificationCodeExpires = new Date();
@@ -45,7 +45,7 @@ export class CommerceUserVerificationService {
 
     }
 
-    async verifyCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: string, commerceUserVerificationType: string) {
+    async verifyCommerceUserVerification(commerceAccountId: string, commerceUserId: string, commerceUserVerificationCode: string, commerceUserVerificationType: string): Promise<boolean> {
 
         let commerceUserVerification = await this.commerceUserVerificationRepository.findOne({ 
             where: { 
@@ -69,7 +69,7 @@ export class CommerceUserVerificationService {
         return true;
     }
 
-    async createCommerceUserVerificationCode() {
+    async createCommerceUserVerificationCode(): Promise<string> {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         let verificationCodePartA = '';
         let verificationCodePartB = '';

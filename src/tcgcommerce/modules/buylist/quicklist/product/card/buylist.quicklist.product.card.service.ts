@@ -1,20 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistQuicklistProductCardDTO, UpdateBuylistQuicklistProductCardDTO, BuylistQuicklistProductCardDTO } from './dto/buylist.quicklist.product.card.dto';
 import { BuylistQuicklistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/quicklist/product/card/buylist.quicklist.product.card.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class BuylistQuicklistProductCardService {
 
     constructor(
         @InjectRepository(BuylistQuicklistProductCard) private buylistQuicklistProductCardRepository: Repository<BuylistQuicklistProductCard>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getBuylistQuicklistProductCardById(buylistQuicklistProductCardId: string) {
+    async getBuylistQuicklistProductCardById(buylistQuicklistProductCardId: string): Promise<BuylistQuicklistProductCardDTO> {
         let buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.findOne({ 
             where: { 
                 buylistQuicklistProductCardId: buylistQuicklistProductCardId 
@@ -22,7 +19,7 @@ export class BuylistQuicklistProductCardService {
         });
         
         if (buylistQuicklistProductCard == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist quicklist product card was not found');
+            throw new NotFoundException('Buylist quicklist product card was not found');
         }
 
         let buylistQuicklistProductCardDTO: BuylistQuicklistProductCardDTO = ({ ...buylistQuicklistProductCard });
@@ -31,7 +28,7 @@ export class BuylistQuicklistProductCardService {
         
     }
 
-    async getBuylistQuicklistProductCardsByCommerceAccountId(commerceAccountId: string) {
+    async getBuylistQuicklistProductCardsByCommerceAccountId(commerceAccountId: string): Promise<BuylistQuicklistProductCardDTO[]> {
         
         let buylistQuicklistProductCardDTOs: BuylistQuicklistProductCardDTO[] = [];
 
@@ -55,7 +52,7 @@ export class BuylistQuicklistProductCardService {
         return buylistQuicklistProductCardDTOs;
     }
     
-    async createBuylistQuicklistProductCard(createBuylistQuicklistProductCardDTO: CreateBuylistQuicklistProductCardDTO) {
+    async createBuylistQuicklistProductCard(createBuylistQuicklistProductCardDTO: CreateBuylistQuicklistProductCardDTO): Promise<BuylistQuicklistProductCardDTO> {
 
         let buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.findOne({ 
             where: { 
@@ -70,7 +67,7 @@ export class BuylistQuicklistProductCardService {
         });
         
         if (buylistQuicklistProductCard != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_EXISTS', 'Buylist quicklist product card already exists');
+            throw new ConflictException('Buylist quicklist product card already exists');
         }
         
         
@@ -83,7 +80,7 @@ export class BuylistQuicklistProductCardService {
         
     }
 
-    async updateBuylistQuicklistProductCard(updateBuylistQuicklistProductCardDTO: UpdateBuylistQuicklistProductCardDTO) {
+    async updateBuylistQuicklistProductCard(updateBuylistQuicklistProductCardDTO: UpdateBuylistQuicklistProductCardDTO): Promise<BuylistQuicklistProductCardDTO> {
                     
         let buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.findOne({ 
             where: { 
@@ -92,7 +89,7 @@ export class BuylistQuicklistProductCardService {
         });
         
         if (buylistQuicklistProductCard == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist quicklist product card was not found');
+            throw new NotFoundException('Buylist quicklist product card was not found');
         }
 
         buylistQuicklistProductCard.commerceUserId = updateBuylistQuicklistProductCardDTO.commerceUserId;
@@ -107,7 +104,7 @@ export class BuylistQuicklistProductCardService {
     
     }
     
-    async deleteBuylistQuicklistProductCard(buylistQuicklistProductCardId: string) {
+    async deleteBuylistQuicklistProductCard(buylistQuicklistProductCardId: string): Promise<boolean> {
 
         let buylistQuicklistProductCard = await this.buylistQuicklistProductCardRepository.findOne({ 
             where: { 
@@ -116,7 +113,7 @@ export class BuylistQuicklistProductCardService {
         });
 
         if (buylistQuicklistProductCard == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_QUICKLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist quicklist product card was not found');
+            throw new NotFoundException('Buylist quicklist product card was not found');
         }
 
         await this.buylistQuicklistProductCardRepository.delete({ buylistQuicklistProductCardId: buylistQuicklistProductCardId });

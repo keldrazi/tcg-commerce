@@ -11,7 +11,7 @@ export class BuylistImportProductCardProviderTypeUtilService {
 
     //TO DO: MOVE THIS TO A DATABASE TABLE LATER;
     
-    async getBuylistImportProductCardProviderTypeCardCondition(buylistImportProductCardProviderTypeCardCondition: string, buylistImportProductCardProviderTypeFileConditionKey: BuylistImportProductCardProviderTypeFileConditionKey) {
+    async getBuylistImportProductCardProviderTypeCardCondition(buylistImportProductCardProviderTypeCardCondition: string, buylistImportProductCardProviderTypeFileConditionKey: BuylistImportProductCardProviderTypeFileConditionKey): Promise<string> {
         
         let cardCondition = "";
 
@@ -40,7 +40,7 @@ export class BuylistImportProductCardProviderTypeUtilService {
     }
 
     
-    async getBuylistImportProductCardProviderTypeCardPrinting(buylistImportProductCardProviderTypeCardPrinting: string, buylistImportProductCardProviderTypeFilePrintingKey: BuylistImportProductCardProviderTypeFilePrintingKey) {
+    async getBuylistImportProductCardProviderTypeCardPrinting(buylistImportProductCardProviderTypeCardPrinting: string, buylistImportProductCardProviderTypeFilePrintingKey: BuylistImportProductCardProviderTypeFilePrintingKey): Promise<string> {
         
         let cardPrinting = "";
 

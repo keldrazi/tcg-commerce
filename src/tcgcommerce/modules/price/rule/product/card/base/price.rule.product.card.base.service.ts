@@ -1,20 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PriceRuleProductCardBaseDTO, CreatePriceRuleProductCardBaseDTO, UpdatePriceRuleProductCardBaseDTO} from './dto/price.rule.product.card.base.dto';
 import { PriceRuleProductCardBase } from 'src/typeorm/entities/tcgcommerce/modules/price/rule/product/card/base/price.rule.product.card.base.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class PriceRuleProductCardBaseService {
 
     constructor(
-        @InjectRepository(PriceRuleProductCardBase) private priceRuleProductCardBaseRepository: Repository<PriceRuleProductCardBase>,
-        private errorMessageService: ErrorMessageService
+        @InjectRepository(PriceRuleProductCardBase) private priceRuleProductCardBaseRepository: Repository<PriceRuleProductCardBase>
     ) { }
 
 
-    async getPriceRuleProductCardBaseById(priceRuleProductCardBaseId: string) {
+    async getPriceRuleProductCardBaseById(priceRuleProductCardBaseId: string): Promise<PriceRuleProductCardBaseDTO> {
         let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
             where: {
                 priceRuleProductCardBaseId: priceRuleProductCardBaseId,
@@ -22,7 +20,7 @@ export class PriceRuleProductCardBaseService {
         });
         
         if(priceRuleProductCardBase == null) {
-            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_NOT_FOUND', 'Price rule product card base was not found');
+            throw new NotFoundException('Price rule product card base was not found');
         }
 
         let priceRuleProductCardBaseDTO: PriceRuleProductCardBaseDTO = ({ ...priceRuleProductCardBase})
@@ -30,7 +28,7 @@ export class PriceRuleProductCardBaseService {
         return priceRuleProductCardBaseDTO;
     }
 
-    async getPriceRuleProductCardBaseByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string) {
+    async getPriceRuleProductCardBaseByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string): Promise<PriceRuleProductCardBaseDTO> {
         let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
             where: {
                 commerceAccountId: commerceAccountId,
@@ -41,7 +39,7 @@ export class PriceRuleProductCardBaseService {
         });
         
         if(priceRuleProductCardBase == null) {
-            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_NOT_FOUND', 'Price rule product card base was not found');
+            throw new NotFoundException('Price rule product card base was not found');
         }
 
         let priceRuleProductCardBaseDTO: PriceRuleProductCardBaseDTO = ({ ...priceRuleProductCardBase})
@@ -51,7 +49,7 @@ export class PriceRuleProductCardBaseService {
 
 
 
-    async createPriceRuleProductCardBase(createPriceRuleProductCardBaseDTO: CreatePriceRuleProductCardBaseDTO) {
+    async createPriceRuleProductCardBase(createPriceRuleProductCardBaseDTO: CreatePriceRuleProductCardBaseDTO): Promise<PriceRuleProductCardBaseDTO> {
         
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
         let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
@@ -64,7 +62,7 @@ export class PriceRuleProductCardBaseService {
         });
 
         if (priceRuleProductCardBase != null) {
-            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_ALREADY_EXISTS', 'Price rule product card base already exists for this commerce account and product');
+            throw new ConflictException('Price rule product card base already exists for this commerce account and product');
         }
 
         priceRuleProductCardBase = this.priceRuleProductCardBaseRepository.create({ ...createPriceRuleProductCardBaseDTO });
@@ -75,7 +73,7 @@ export class PriceRuleProductCardBaseService {
         return priceRuleProductCardBaseDTO;
     }   
 
-    async updatePriceRuleProductCardBase(updatePriceRuleProductCardBaseDTO: UpdatePriceRuleProductCardBaseDTO) {
+    async updatePriceRuleProductCardBase(updatePriceRuleProductCardBaseDTO: UpdatePriceRuleProductCardBaseDTO): Promise<PriceRuleProductCardBaseDTO> {
 
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
         let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
@@ -85,7 +83,7 @@ export class PriceRuleProductCardBaseService {
         });
         
         if (priceRuleProductCardBase == null) {
-            return this.errorMessageService.createErrorMessage('PRICE_RULE_PRODUCT_CARD_BASE_NOT_FOUND', 'Price rule product card base was not found');
+            throw new NotFoundException('Price rule product card base was not found');
         }
 
         priceRuleProductCardBase.priceRuleProductCardBaseId = updatePriceRuleProductCardBaseDTO.priceRuleProductCardBaseId;

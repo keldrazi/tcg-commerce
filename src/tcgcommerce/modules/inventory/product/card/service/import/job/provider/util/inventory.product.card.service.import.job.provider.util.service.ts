@@ -10,7 +10,7 @@ export class InventoryProductCardServiceImportJobProviderUtilService {
 
     //TO DO: MOVE THIS TO A DATABASE TABLE LATER;
     
-    async getInventoryProductCardServiceImportJobTypeCardCondition(inventoryProductCardServiceImportJobTypeCardCondition: string) {
+    async getInventoryProductCardServiceImportJobTypeCardCondition(inventoryProductCardServiceImportJobTypeCardCondition: string): Promise<string> {
         
         let cardCondition = "";
 
@@ -39,7 +39,7 @@ export class InventoryProductCardServiceImportJobProviderUtilService {
     }
 
     
-    async getInventoryProductCardServiceImportJobTypeCardPrinting(inventoryProductCardServiceImportJobTypeCardPrinting: string) {
+    async getInventoryProductCardServiceImportJobTypeCardPrinting(inventoryProductCardServiceImportJobTypeCardPrinting: string): Promise<string> {
         
         let cardPrintingType = "";
 

@@ -11,7 +11,7 @@ export class CustomerModuleService {
         @InjectRepository(CustomerModule) private customerModuleRepository: Repository<CustomerModule>,
     ) { }
 
-    async getCustomerModuleById(customerModuleId: string) {
+    async getCustomerModuleById(customerModuleId: string): Promise<CustomerModuleDTO> {
         let customerModule = await this.customerModuleRepository.findOneOrFail({ 
             where: { 
                 customerModuleId: customerModuleId
@@ -24,7 +24,7 @@ export class CustomerModuleService {
         
     }
 
-    async getCustomerModulesByCommerceAccountId(commerceAccountId: string) {
+    async getCustomerModulesByCommerceAccountId(commerceAccountId: string): Promise<CustomerModuleDTO[]> {
         let customerModules = await this.customerModuleRepository.find({ 
             where: { 
                 commerceAccountId: commerceAccountId
@@ -48,7 +48,7 @@ export class CustomerModuleService {
         
     }
 
-    async getCustomerModules() {
+    async getCustomerModules(): Promise<CustomerModuleDTO[]> {
         let customerModules = await this.customerModuleRepository.find();
         
         if (customerModules == null) {
@@ -68,7 +68,7 @@ export class CustomerModuleService {
         
     }
 
-    async createCustomerModule(createCustomerModuleDTO: CreateCustomerModuleDTO) {
+    async createCustomerModule(createCustomerModuleDTO: CreateCustomerModuleDTO): Promise<CustomerModuleDTO> {
         
         let customerModule = await this.customerModuleRepository.findOne({ 
             where: { 
@@ -89,7 +89,7 @@ export class CustomerModuleService {
         return customerModuleDTO;
     }
 
-    async updateCustomerModule(updateCustomerModuleDTO: UpdateCustomerModuleDTO) {
+    async updateCustomerModule(updateCustomerModuleDTO: UpdateCustomerModuleDTO): Promise<CustomerModuleDTO> {
             
         let customerModule = await this.customerModuleRepository.findOneOrFail({ 
             where: { 

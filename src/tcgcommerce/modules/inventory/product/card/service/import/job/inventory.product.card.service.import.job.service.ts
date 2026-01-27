@@ -20,7 +20,7 @@ export class InventoryProductCardServiceImportJobService {
         private inventoryProductCardServiceImportJobProviderTypeService: InventoryProductCardServiceImportJobProviderTypeService,
     ) { }
 
-    async getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId: string) {
+    async getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId: string): Promise<InventoryProductCardServiceImportJobDTO> {
         let inventoryProductCardServiceImportJob = await this.inventoryProductCardServiceImportJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId
@@ -34,7 +34,7 @@ export class InventoryProductCardServiceImportJobService {
 
     }
 
-    async getInventoryProductCardServiceImportJobsByCommerceAccountId(commerceAccountId: string) {
+    async getInventoryProductCardServiceImportJobsByCommerceAccountId(commerceAccountId: string): Promise<InventoryProductCardServiceImportJobDTO[]> {
         let inventoryProductCardServiceImportJobs = await this.inventoryProductCardServiceImportJobRepository.find({
             where: {
                 commerceAccountId: commerceAccountId
@@ -58,7 +58,7 @@ export class InventoryProductCardServiceImportJobService {
         return inventoryProductCardServiceImportJobDTOs;
     }
     
-    async getInventoryProductCardServiceImportJobsByCommerceLocationId(commerceLocationId: string) {
+    async getInventoryProductCardServiceImportJobsByCommerceLocationId(commerceLocationId: string): Promise<InventoryProductCardServiceImportJobDTO[]> {
         let inventoryProductCardServiceImportJobs = await this.inventoryProductCardServiceImportJobRepository.find({
             where: {
                 commerceLocationId: commerceLocationId
@@ -82,7 +82,7 @@ export class InventoryProductCardServiceImportJobService {
         return inventoryProductCardServiceImportJobDTOs;
     }
 
-    async getInventoryProductCardServiceImportJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string) {
+    async getInventoryProductCardServiceImportJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string): Promise<InventoryProductCardServiceImportJobDTO[]> {
         let inventoryProductCardServiceImportJobs = await this.inventoryProductCardServiceImportJobRepository.find({
             where: {
                 commerceAccountId: commerceAccountId,
@@ -107,7 +107,7 @@ export class InventoryProductCardServiceImportJobService {
         return inventoryProductCardServiceImportJobDTOs;
     }
 
-    async getInventoryProductCardServiceImportJobsByCommerceLocationIdAndProductLineCode(commerceLocationId: string, productLineCode: string) {
+    async getInventoryProductCardServiceImportJobsByCommerceLocationIdAndProductLineCode(commerceLocationId: string, productLineCode: string): Promise<InventoryProductCardServiceImportJobDTO[]> {
         let inventoryProductCardServiceImportJobs = await this.inventoryProductCardServiceImportJobRepository.find({
             where: {
                 commerceLocationId: commerceLocationId,
@@ -132,7 +132,7 @@ export class InventoryProductCardServiceImportJobService {
         return inventoryProductCardServiceImportJobDTOs;
     }
 
-    async getInventoryProductCardServiceImportJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId: string, productLineCode: string, inventoryProductCardServiceImportJobStatus: string) {
+    async getInventoryProductCardServiceImportJobsByCommerceLocationIdAndProductLineCodeAndStatus(commerceLocationId: string, productLineCode: string, inventoryProductCardServiceImportJobStatus: string): Promise<InventoryProductCardServiceImportJobDTO[]> {
 
         let inventoryProductCardServiceImportJobs = await this.inventoryProductCardServiceImportJobRepository.find({
             where: {
@@ -160,7 +160,7 @@ export class InventoryProductCardServiceImportJobService {
     }
 
 
-    async getInventoryProductCardServiceImportJobDetailsById(inventoryProductCardServiceImportJobId: string) {
+    async getInventoryProductCardServiceImportJobDetailsById(inventoryProductCardServiceImportJobId: string): Promise<{ inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO; inventoryProductCardServiceImportJobItemDTOs: any[] }> {
         let inventoryProductCardServiceImportJob = await this.inventoryProductCardServiceImportJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId
@@ -180,7 +180,7 @@ export class InventoryProductCardServiceImportJobService {
 
     }
     
-    async getInventoryProductCardServiceImportJobByOriginalFileName(commerceAccountId: string, commerceLocationId: string, inventoryProductCardServiceImportJobFileOriginalName: string) {
+    async getInventoryProductCardServiceImportJobByOriginalFileName(commerceAccountId: string, commerceLocationId: string, inventoryProductCardServiceImportJobFileOriginalName: string): Promise<InventoryProductCardServiceImportJob | null> {
         return await this.inventoryProductCardServiceImportJobRepository.findOne({
             where: { 
                 commerceAccountId: commerceAccountId,
@@ -190,7 +190,7 @@ export class InventoryProductCardServiceImportJobService {
         });
     }
 
-    async createInventoryProductCardServiceImportJob(inventoryProductCardServiceImportJobFile: Express.Multer.File, createInventoryProductCardServiceImportJobDTO: CreateInventoryProductCardServiceImportJobDTO) {
+    async createInventoryProductCardServiceImportJob(inventoryProductCardServiceImportJobFile: Express.Multer.File, createInventoryProductCardServiceImportJobDTO: CreateInventoryProductCardServiceImportJobDTO): Promise<string> {
 
         //CHECK TO SEE IF A FILE WITH THE SAME NAME EXISTS;
         let existingImportJobCard = await this.getInventoryProductCardServiceImportJobByOriginalFileName(createInventoryProductCardServiceImportJobDTO.commerceAccountId, createInventoryProductCardServiceImportJobDTO.commerceLocationId, inventoryProductCardServiceImportJobFile.originalname);
@@ -225,7 +225,7 @@ export class InventoryProductCardServiceImportJobService {
 
     }
 
-    async createInventoryProductCardServiceImportJobCode(productLineCode: string, inventoryProductCardServiceImportJobProviderTypeName: string, commerceLocationName:string) {
+    async createInventoryProductCardServiceImportJobCode(productLineCode: string, inventoryProductCardServiceImportJobProviderTypeName: string, commerceLocationName:string): Promise<string> {
 
         let now = new Date();
         let dateCode = now.getFullYear().toString() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + '-' + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
@@ -236,7 +236,7 @@ export class InventoryProductCardServiceImportJobService {
     
     }
 
-    async uploadInventoryProductCardServiceImportJobFile(commerceAccountId: string, inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobCode: string, inventoryProductCardServiceImportJobProviderTypeDTO: InventoryProductCardServiceImportJobProviderTypeDTO) {
+    async uploadInventoryProductCardServiceImportJobFile(commerceAccountId: string, inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobCode: string, inventoryProductCardServiceImportJobProviderTypeDTO: InventoryProductCardServiceImportJobProviderTypeDTO): Promise<string> {
 
         let inventoryProductCardImportJobFileBuffer = inventoryProductCardServiceImportJobFile.buffer;
         let inventoryProductCardImportJobBucketPath = commerceAccountId + '/' + inventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeFileUploadPath;
@@ -248,7 +248,7 @@ export class InventoryProductCardServiceImportJobService {
 
     }
 
-    async updateInventoryProductCardServiceImportJobStatus(inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobStatus: string) {
+    async updateInventoryProductCardServiceImportJobStatus(inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobStatus: string): Promise<boolean> {
         let inventoryProductCardServiceImportJob = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
 
         inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobStatus = inventoryProductCardServiceImportJobStatus;
@@ -259,7 +259,7 @@ export class InventoryProductCardServiceImportJobService {
         return true;
     }
 
-    async updateInventoryProductCardServiceImportJobCount(inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobCount: number, inventoryProductCardServiceImportJobQtyCount: number) {
+    async updateInventoryProductCardServiceImportJobCount(inventoryProductCardServiceImportJobId: string, inventoryProductCardServiceImportJobCount: number, inventoryProductCardServiceImportJobQtyCount: number): Promise<boolean> {
         let inventoryProductCardServiceImportJob = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
 
         inventoryProductCardServiceImportJob.inventoryProductCardServiceImportJobCount = inventoryProductCardServiceImportJobCount;
@@ -271,7 +271,7 @@ export class InventoryProductCardServiceImportJobService {
         return true;
     }
 
-    async approveInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId: string) {
+    async approveInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId: string): Promise<InventoryProductCardServiceImportJobDTO> {
         let inventoryProductCardServiceImportJobDTO = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
 
         await this.updateInventoryProductCardServiceImportJobStatus(inventoryProductCardServiceImportJobId, INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_ADDING_TO_INVENTORY);
@@ -281,7 +281,7 @@ export class InventoryProductCardServiceImportJobService {
         return inventoryProductCardServiceImportJobDTO;
     }
 
-    async deleteInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId: string) {
+    async deleteInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId: string): Promise<InventoryProductCardServiceImportJobDTO> {
         let inventoryProductCardServiceImportJobDTO = await this.getInventoryProductCardServiceImportJobById(inventoryProductCardServiceImportJobId);
 
         if(inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobStatus == INVENTORY_PRODUCT_CARD_SERVICE_IMPORT_JOB_STATUS.PROCESSING_COMPLETE) {
@@ -299,7 +299,7 @@ export class InventoryProductCardServiceImportJobService {
 
     /* EVENT LISTENERS */
     @OnEvent('inventory.product.card.service.import.job.update.status')
-    async handleInventoryProductCardServiceImportJobStatusEvent(payload: any) {
+    async handleInventoryProductCardServiceImportJobStatusEvent(payload: any): Promise<void> {
 
         let inventoryProductCardServiceImportJobId = payload.inventoryProductCardServiceImportJobId;
         let inventoryProductCardServiceImportJobStatus = payload.inventoryProductCardServiceImportJobStatus;

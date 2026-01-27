@@ -15,7 +15,7 @@ export class AiImageCardServiceXimilarService {
     ) {}
     
 
-    async analyzeCardImage(imageBase64: string, cardPrinting: string) {
+    async analyzeCardImage(imageBase64: string, cardPrinting: string): Promise<AiImageCardServiceXimilarDTO | null> {
         const ximilarAPIURL = this.configService.get('XIMILAR_API_URL');
         const ximilarAccessToken = this.configService.get('XIMILAR_ACCESS_TOKEN');
 

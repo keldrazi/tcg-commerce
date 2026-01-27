@@ -19,7 +19,7 @@ export class POSVendorServiceShopifyAPIRestWebhookService {
     private shopifyRestURL = this.configService.get('SHOPIFY_REST_URL')
     private shopifyAPIVersion = this.configService.get('SHOPIFY_API_VERSION');
     
-    async createShopifyWebhook(storeName:string, accessToken:string, webhookTopic: string, webhookAddress: string) {
+    async createShopifyWebhook(storeName:string, accessToken:string, webhookTopic: string, webhookAddress: string): Promise<any> {
 
         let shopifyWebhook: ShopifyWebhook = {
             address: webhookAddress,
@@ -56,7 +56,7 @@ export class POSVendorServiceShopifyAPIRestWebhookService {
     /*******************************************************************************/
     /* UTILITY METHODS
     /******************************************************************************/
-    async getShopifyRestURIByStoreName(storeName:string) {
+    async getShopifyRestURIByStoreName(storeName:string): Promise<string> {
         return this.shopifyRestURLPrefix + storeName + this.shopifyRestURL + this.shopifyAPIVersion + '/';
     }
 

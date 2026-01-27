@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EmailModule } from 'src/typeorm/entities/system/modules/email/module/email.module.entity';
@@ -11,7 +11,7 @@ export class EmailModuleService {
         @InjectRepository(EmailModule) private emailModuleRepository: Repository<EmailModule>,
     ) { }
 
-    async getEmailModule(emailModuleId: string) {
+    async getEmailModule(emailModuleId: string): Promise<EmailModuleDTO> {
         let emailModule = await this.emailModuleRepository.findOne({ 
             where: { 
                 emailModuleId : emailModuleId
@@ -19,7 +19,7 @@ export class EmailModuleService {
         });
         
         if (!emailModule) {
-            return null;
+            throw new NotFoundException('Email module not found');
         }
 
         let emailModuleDTO = new EmailModuleDTO();
@@ -36,7 +36,7 @@ export class EmailModuleService {
         
     }
 
-    async getEmailModuleByCommerceAccountId(commerceAccountId: string) {
+    async getEmailModuleByCommerceAccountId(commerceAccountId: string): Promise<EmailModuleDTO> {
         let emailModule = await this.emailModuleRepository.findOne({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -44,7 +44,7 @@ export class EmailModuleService {
         });
         
         if (!emailModule) {
-            return null;
+            throw new NotFoundException('Email module not found for this commerce account');
         }
 
         let emailModuleDTO = new EmailModuleDTO();
@@ -61,7 +61,7 @@ export class EmailModuleService {
         
     }
 
-    async getEmailModules() {
+    async getEmailModules(): Promise<EmailModuleDTO[]> {
         let emailModules = await this.emailModuleRepository.find();
         
         if (emailModules == null) {
@@ -90,7 +90,7 @@ export class EmailModuleService {
         
     }
 
-    async createEmailModule(createEmailModuleDTO: CreateEmailModuleDTO) {
+    async createEmailModule(createEmailModuleDTO: CreateEmailModuleDTO): Promise<EmailModuleDTO> {
         let newEmailModule = this.emailModuleRepository.create({ ...createEmailModuleDTO });
         newEmailModule = await this.emailModuleRepository.save(newEmailModule);
 
@@ -99,7 +99,7 @@ export class EmailModuleService {
         return emailModuleDTO;
     }
 
-    async updateEmailModule(updateEmailModuleDTO: UpdateEmailModuleDTO) {
+    async updateEmailModule(updateEmailModuleDTO: UpdateEmailModuleDTO): Promise<EmailModuleDTO> {
             
         let existingEmailModule = await this.emailModuleRepository.findOne({ 
             where: { 
@@ -107,9 +107,8 @@ export class EmailModuleService {
             } 
         });
 
-        //TO DO: RETUNR AN ERROR IF PRODUCT MODULE NOT FOUND;
         if (!existingEmailModule) {
-            return null; 
+            throw new NotFoundException('Email module not found');
         }
 
         existingEmailModule.emailModuleSettings = updateEmailModuleDTO.emailModuleSettings;

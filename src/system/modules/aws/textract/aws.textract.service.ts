@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TextractClient, AnalyzeDocumentCommand, FeatureType } from '@aws-sdk/client-textract';
+import { TextractClient, AnalyzeDocumentCommand, AnalyzeDocumentCommandOutput, FeatureType } from '@aws-sdk/client-textract';
  
 @Injectable()
 export class AwsTextractService {
@@ -24,7 +24,7 @@ export class AwsTextractService {
  
   }
 
-  async analyzeDocument(document: Buffer) {
+  async analyzeDocument(document: Buffer): Promise<AnalyzeDocumentCommandOutput> {
     
     const input = {
       Document: {

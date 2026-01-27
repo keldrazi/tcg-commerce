@@ -15,7 +15,7 @@ export class CustomerUserService {
         private customerUserVerificationService: CustomerUserVerificationService,
     ) { }
 
-    async getCustomerUserById(customerUserId: string) {
+    async getCustomerUserById(customerUserId: string): Promise<CustomerUserDTO> {
         let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId
@@ -28,7 +28,7 @@ export class CustomerUserService {
         
     }
 
-    async getCustomerUsersByCommerceAccountId(commerceAccountId: string) {
+    async getCustomerUsersByCommerceAccountId(commerceAccountId: string): Promise<CustomerUserDTO[]> {
         
         let customerUserDTOs: CustomerUserDTO[] = [];
         
@@ -53,7 +53,7 @@ export class CustomerUserService {
 
     }
 
-    async createCustomerUser(createCustomerUserDTO: CreateCustomerUserDTO) {
+    async createCustomerUser(createCustomerUserDTO: CreateCustomerUserDTO): Promise<CustomerUserDTO> {
         let customerUser = await this.customerUserRepository.findOne({ 
             where: { 
                 commerceAccountId: createCustomerUserDTO.commerceAccountId, 
@@ -78,7 +78,7 @@ export class CustomerUserService {
         return customerUserDTO;
     }
 
-    async updateCustomerUser(updateCustomerUserDTO: UpdateCustomerUserDTO) {
+    async updateCustomerUser(updateCustomerUserDTO: UpdateCustomerUserDTO): Promise<CustomerUserDTO> {
         let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: updateCustomerUserDTO.customerUserId 
@@ -96,7 +96,7 @@ export class CustomerUserService {
         return customerUserDTO;
     }
 
-    async deleteCustomerUser(customerUserId: string) {
+    async deleteCustomerUser(customerUserId: string): Promise<CustomerUserDTO> {
         let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId 
@@ -113,7 +113,7 @@ export class CustomerUserService {
         return customerUserDTO;
     }
 
-    async passwordResetCustomerUser(commerceAccountId: string, customerUserEmail: string) {
+    async passwordResetCustomerUser(commerceAccountId: string, customerUserEmail: string): Promise<CustomerUserDTO> {
         let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: commerceAccountId,
@@ -128,7 +128,7 @@ export class CustomerUserService {
         return customerUserDTO;
     }
 
-    async updateCustomerUserPassword(customerUserId: string, customerUserPassword: string) {
+    async updateCustomerUserPassword(customerUserId: string, customerUserPassword: string): Promise<CustomerUserDTO> {
         let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
                 customerUserId: customerUserId
@@ -146,7 +146,7 @@ export class CustomerUserService {
         return customerUserDTO;
     }
 
-    async verifyCustomerUser(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string) {
+    async verifyCustomerUser(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string): Promise<CustomerUserDTO> {
         let isVerified = await this.customerUserVerificationService.verifyCustomerUserVerification(commerceAccountId, customerUserId, customerUserVerificationCode, 'CUSTOMER_USER_REGISTRATION');
 
         if(!isVerified) {
@@ -170,7 +170,7 @@ export class CustomerUserService {
 
     }
 
-    async verifyCustomerUserPassword(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string, customerUserPassword: string) {
+    async verifyCustomerUserPassword(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string, customerUserPassword: string): Promise<CustomerUserDTO> {
         
         let customerUser = await this.customerUserRepository.findOneOrFail({ 
             where: { 
@@ -190,7 +190,7 @@ export class CustomerUserService {
 
     }
 
-    async hashPassword(customerUserPassword: string){
+    async hashPassword(customerUserPassword: string): Promise<string> {
         let customerUserPasswordHash = await bcrypt.hash(customerUserPassword, 10);
 
         return customerUserPasswordHash;

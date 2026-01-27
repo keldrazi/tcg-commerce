@@ -11,7 +11,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
         @InjectRepository(InventoryProductCardServiceImportJobProviderType) private inventoryProductCardServiceImportJobProviderTypeRepository: Repository<InventoryProductCardServiceImportJobProviderType>,
     ) { }
 
-    async getInventoryProductCardServiceImportJobProviderTypeById(inventoryProductCardServiceImportJobProviderTypeId: string) {
+    async getInventoryProductCardServiceImportJobProviderTypeById(inventoryProductCardServiceImportJobProviderTypeId: string): Promise<InventoryProductCardServiceImportJobProviderTypeDTO> {
         let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({ 
             where: { 
                 inventoryProductCardServiceImportJobProviderTypeId: inventoryProductCardServiceImportJobProviderTypeId 
@@ -38,7 +38,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
     }
 
-    async getInventoryProductCardServiceImportJobProviderTypes() {
+    async getInventoryProductCardServiceImportJobProviderTypes(): Promise<InventoryProductCardServiceImportJobProviderTypeDTO[]> {
         let inventoryProductCardServiceImportJobProviderTypes = await this.inventoryProductCardServiceImportJobProviderTypeRepository.find();
 
         //TO DO: CREATE AN ERROR TO RETURN;
@@ -68,7 +68,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
         return inventoryProductCardServiceImportJobProviderTypeDTOs;
     }
 
-    async getInventoryProductCardServiceImportJobProviderTypeByName(inventoryProductCardServiceImportJobProviderTypeName: string) {
+    async getInventoryProductCardServiceImportJobProviderTypeByName(inventoryProductCardServiceImportJobProviderTypeName: string): Promise<InventoryProductCardServiceImportJobProviderTypeDTO> {
         let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
             where: {
                 inventoryProductCardServiceImportJobProviderTypeName: inventoryProductCardServiceImportJobProviderTypeName
@@ -96,7 +96,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
     }
 
-    async getInventoryProductCardServiceImportJobProviderTypeByCode(inventoryProductCardServiceImportJobProviderTypeCode: string) {
+    async getInventoryProductCardServiceImportJobProviderTypeByCode(inventoryProductCardServiceImportJobProviderTypeCode: string): Promise<InventoryProductCardServiceImportJobProviderTypeDTO | null> {
         let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
             where: {
                 inventoryProductCardServiceImportJobProviderTypeCode: inventoryProductCardServiceImportJobProviderTypeCode
@@ -124,7 +124,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
     }
 
-    async createInventoryProductCardServiceImportJobProviderType(createInventoryProductCardServiceImportJobProviderTypeDTO: CreateInventoryProductCardServiceImportJobProviderTypeDTO) {
+    async createInventoryProductCardServiceImportJobProviderType(createInventoryProductCardServiceImportJobProviderTypeDTO: CreateInventoryProductCardServiceImportJobProviderTypeDTO): Promise<InventoryProductCardServiceImportJobProviderTypeDTO> {
         let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
             where: {
                 inventoryProductCardServiceImportJobProviderTypeName: createInventoryProductCardServiceImportJobProviderTypeDTO.inventoryProductCardServiceImportJobProviderTypeName
@@ -144,7 +144,7 @@ export class InventoryProductCardServiceImportJobProviderTypeService {
 
     }
 
-    async updateInventoryProductCardServiceImportJobProviderType(updateInventoryProductCardServiceImportJobProviderTypeDTO: UpdateInventoryProductCardServiceImportJobProviderTypeDTO) {
+    async updateInventoryProductCardServiceImportJobProviderType(updateInventoryProductCardServiceImportJobProviderTypeDTO: UpdateInventoryProductCardServiceImportJobProviderTypeDTO): Promise<InventoryProductCardServiceImportJobProviderTypeDTO> {
 
         let inventoryProductCardServiceImportJobProviderType = await this.inventoryProductCardServiceImportJobProviderTypeRepository.findOne({
             where: {

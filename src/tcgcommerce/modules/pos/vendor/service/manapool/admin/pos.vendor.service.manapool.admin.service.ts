@@ -14,7 +14,7 @@ export class POSVendorServiceManaPoolAdminService {
     ) { }
 
 
-    async getManaPoolAccount(commerceAccountId: string) {
+    async getManaPoolAccount(commerceAccountId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
         
         if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
@@ -27,15 +27,15 @@ export class POSVendorServiceManaPoolAdminService {
         return await this.posVendorServiceManaPoolAPIRestV1AdminService.getManaPoolAccount(email, accessToken);
     }
 
-    async updateManaPoolSellerInventoriesByTCGPlayerSku(commerceAccountId: string, inventoryProductCardDTOs: InventoryProductCardDTO[]) {
+    async updateManaPoolSellerInventoriesByTCGPlayerSku(commerceAccountId: string, inventoryProductCardDTOs: InventoryProductCardDTO[]): Promise<void> {
 
     }
 
-    async updateManaPoolSellerInventoryByTCGPlayerSku(commerceAccountId: string, inventoryProductCardDTOs: InventoryProductCardDTO) {
+    async updateManaPoolSellerInventoryByTCGPlayerSku(commerceAccountId: string, inventoryProductCardDTOs: InventoryProductCardDTO): Promise<void> {
         
     }
 
-    async getManaPoolSellerOrders(commerceAccountId: string) {
+    async getManaPoolSellerOrders(commerceAccountId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
         if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
@@ -48,7 +48,7 @@ export class POSVendorServiceManaPoolAdminService {
         return await this.posVendorServiceManaPoolAPIRestV1AdminService.getManaPoolSellerOrders(email, accessToken);
     }
 
-    async getManaPoolSellerOrderById(commerceAccountId: string, orderId: string) {
+    async getManaPoolSellerOrderById(commerceAccountId: string, orderId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
         if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
@@ -62,7 +62,7 @@ export class POSVendorServiceManaPoolAdminService {
     }
 
     //UTILITY METHODS;
-    async getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId: string): Promise<any> {
         return await this.commerceAccountSettingsPOSVendorServiceManaPoolService.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
     }
         

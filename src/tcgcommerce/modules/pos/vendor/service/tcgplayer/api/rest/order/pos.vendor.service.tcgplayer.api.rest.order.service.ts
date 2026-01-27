@@ -17,7 +17,7 @@ export class POSVendorServiceTCGPlayerAPIRestOrderService {
     private tcgPlayerOrderSort = "OrderDate Desc";
     private tcgPlayerOrderLimit = "100";
 
-    async getTCGPlayerStoreInfo(bearerToken:string, storeKey:string) {
+    async getTCGPlayerStoreInfo(bearerToken:string, storeKey:string): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey;
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.get(url, { headers }).pipe(
@@ -32,7 +32,7 @@ export class POSVendorServiceTCGPlayerAPIRestOrderService {
         return data;
     }
 
-    async searchTCGPlayersOrders(bearerToken:string, storeKey:string) {
+    async searchTCGPlayersOrders(bearerToken:string, storeKey:string): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey + '/orders?sort=' + this.tcgPlayerOrderSort + '&limit=' + this.tcgPlayerOrderLimit;
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.get(url, { headers }).pipe(
@@ -47,7 +47,7 @@ export class POSVendorServiceTCGPlayerAPIRestOrderService {
         return data;
     }
 
-    async getTCGPlayerOrders(bearerToken:string, storeKey:string, orderNumbers: string) {
+    async getTCGPlayerOrders(bearerToken:string, storeKey:string, orderNumbers: string): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey + '/orders/' + orderNumbers;
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.get(url, { headers }).pipe(
@@ -62,7 +62,7 @@ export class POSVendorServiceTCGPlayerAPIRestOrderService {
         return data;
     }
 
-    async getTCGPlayerOrderItems(bearerToken:string, storeKey:string, orderNumber: string) {
+    async getTCGPlayerOrderItems(bearerToken:string, storeKey:string, orderNumber: string): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey + '/orders/' + orderNumber + '/items';
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.get(url, { headers }).pipe(

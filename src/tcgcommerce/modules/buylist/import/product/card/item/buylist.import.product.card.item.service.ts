@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BuylistImportProductCardDTO } from 'src/tcgcommerce/modules/buylist/import/product/card/dto/buylist.import.product.card.dto';
@@ -10,8 +10,6 @@ import { ProductCardConditionService } from 'src/tcgcommerce/modules/product/car
 import { ProductCardPrintingService } from 'src/tcgcommerce/modules/product/card/printing/product.card.printing.service';
 import { BuylistImportProductCardProviderService } from '../provider/buylist.import.product.card.provider.service';
 import { BuylistProductCardService } from 'src/tcgcommerce/modules/buylist/product/card/buylist.product.card.service';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 
@@ -24,13 +22,12 @@ export class BuylistImportProductCardItemService {
         private productSetService: ProductSetService,
         private productCardConditionService: ProductCardConditionService,
         private productCardPrintingService: ProductCardPrintingService,
-        private errorMessageService: ErrorMessageService,
         private buylistImportProductCardProviderService: BuylistImportProductCardProviderService,
         private buylistProductCardService: BuylistProductCardService,
         private eventEmitter: EventEmitter2,
     ) { }
 
-    async getBuylistImportProductCardItemsByBuylistId(buylistImportProductCardId: string) {
+    async getBuylistImportProductCardItemsByBuylistId(buylistImportProductCardId: string): Promise<BuylistImportProductCardItemDTO[]> {
     
         let buylistImportProductCardItemDTOs: BuylistImportProductCardItemDTO[] = [];
 
@@ -52,18 +49,18 @@ export class BuylistImportProductCardItemService {
 
     }
 
-    async createBuylistImportProductCardItems(buylistImportProductCardFile: Express.Multer.File, buylistImportProductCardDTO: BuylistImportProductCardDTO) {
+    async createBuylistImportProductCardItems(buylistImportProductCardFile: Express.Multer.File, buylistImportProductCardDTO: BuylistImportProductCardDTO): Promise<boolean> {
 
         let buylistImportProductCardProviderDTOs = await this.buylistImportProductCardProviderService.processBuylistImportProductCardCards(buylistImportProductCardFile, buylistImportProductCardDTO.buylistImportProductCardId, buylistImportProductCardDTO.buylistImportProductCardProviderTypeCode);
         
-        if(buylistImportProductCardProviderDTOs == null || buylistImportProductCardProviderDTOs instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_ITEM_DATA_INVALID', 'No valid buylist import product card provider items found in the import file.');
+        if(buylistImportProductCardProviderDTOs == null) {
+            throw new BadRequestException('No valid buylist import product card provider items found in the import file.');
         }
 
         let buylistProductCard = await this.buylistProductCardService.getBuylistProductCardById(buylistImportProductCardDTO.buylistProductCardId);
 
-        if(buylistProductCard == null || buylistProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card not found');
+        if(buylistProductCard == null) {
+            throw new NotFoundException('Buylist product card not found');
         }
 
         let buylistImportProductCardCount = 0;
@@ -76,13 +73,13 @@ export class BuylistImportProductCardItemService {
             let productCardCondition = await this.productCardConditionService.getProductCardConditionByCodeAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderCondition, buylistProductCard.productLineId);
             let productCardPrinting = await this.productCardPrintingService.getProductCardPrintingByNameAndProductLineId(buylistImportProductCardProviderDTO.buylistImportProductCardProviderPrinting, buylistProductCard.productLineId);
             
-            if((productCard == null ||productCard instanceof ErrorMessageDTO) || (productCardCondition == null || productCardCondition instanceof ErrorMessageDTO) || (productCardPrinting == null || productCardPrinting instanceof ErrorMessageDTO)) {
+            if((productCard == null) || (productCardCondition == null) || (productCardPrinting == null)) {
                 continue;
             }
 
             let productSet = await this.productSetService.getProductSetById(productCard.productSetId);
 
-            if(productSet == null || productSet instanceof ErrorMessageDTO) {
+            if(productSet == null) {
                 continue;
             }
 
@@ -124,7 +121,7 @@ export class BuylistImportProductCardItemService {
         return true;
     }
 
-    async deleteBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string) {
+    async deleteBuylistImportProductCardItemsByJobId(buylistImportProductCardId: string): Promise<boolean> {
         
         await this.buylistImportProductCardItemRepository.delete({
             buylistImportProductCardId: buylistImportProductCardId

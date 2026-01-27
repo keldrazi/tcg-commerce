@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EmailTemplate } from 'src/typeorm/entities/system/modules/email/template/email.template.entity';
 import { CreateEmailTemplateDTO, EmailTemplateDTO, UpdateEmailTemplateDTO } from './dto/email.template.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { EmailTemplateContext } from './interface/email.template.interface';
 
 @Injectable()
@@ -11,10 +10,9 @@ export class EmailTemplateService {
 
     constructor(
         @InjectRepository(EmailTemplate) private emailTemplateRepository: Repository<EmailTemplate>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getEmailTemplate(emailTemplateId: string) {
+    async getEmailTemplate(emailTemplateId: string): Promise<EmailTemplateDTO> {
         let emailTemplate = await this.emailTemplateRepository.findOne({ 
             where: { 
                 emailTemplateId : emailTemplateId
@@ -22,7 +20,7 @@ export class EmailTemplateService {
         });
         
         if (!emailTemplate) {
-            return this.errorMessageService.createErrorMessage('EMAIL_TEMPLATE_NOT_FOUND', 'Email template was not found for emailTemplateId: ' + emailTemplateId);
+            throw new NotFoundException('Email template not found for emailTemplateId: ' + emailTemplateId);
         }
 
         let emailTemplateDTO = new EmailTemplateDTO();
@@ -41,7 +39,7 @@ export class EmailTemplateService {
         
     }
 
-    async getEmailTemplateByName(emailTemplateName: string) {
+    async getEmailTemplateByName(emailTemplateName: string): Promise<EmailTemplateDTO> {
         let emailTemplate = await this.emailTemplateRepository.findOne({ 
             where: { 
                 emailTemplateName : emailTemplateName
@@ -49,7 +47,7 @@ export class EmailTemplateService {
         });
         
         if (!emailTemplate) {
-            return this.errorMessageService.createErrorMessage('EMAIL_TEMPLATE_NOT_FOUND', 'Email template was not found for emailTemplateName: ' + emailTemplateName);
+            throw new NotFoundException('Email template not found for emailTemplateName: ' + emailTemplateName);
         }
 
         let emailTemplateDTO = new EmailTemplateDTO();
@@ -69,7 +67,7 @@ export class EmailTemplateService {
         
     }
 
-    async getEmailTemplates() {
+    async getEmailTemplates(): Promise<EmailTemplateDTO[]> {
         let emailTemplates = await this.emailTemplateRepository.find();
         
         if (emailTemplates == null) {
@@ -100,7 +98,7 @@ export class EmailTemplateService {
         
     }
 
-    async createEmailTemplate(createEmailTemplateDTO: CreateEmailTemplateDTO) {
+    async createEmailTemplate(createEmailTemplateDTO: CreateEmailTemplateDTO): Promise<EmailTemplateDTO> {
 
         let newEmailTemplate = this.emailTemplateRepository.create({ ...createEmailTemplateDTO });
         newEmailTemplate = await this.emailTemplateRepository.save(newEmailTemplate);
@@ -110,7 +108,7 @@ export class EmailTemplateService {
         return emailTemplateDTO;
     }
 
-    async updateEmailTemplate(updateEmailTemplateDTO: UpdateEmailTemplateDTO) {
+    async updateEmailTemplate(updateEmailTemplateDTO: UpdateEmailTemplateDTO): Promise<EmailTemplateDTO> {
         let emailTemplate = await this.emailTemplateRepository.findOne({
             where: {
                 emailTemplateId: updateEmailTemplateDTO.emailTemplateId
@@ -118,7 +116,7 @@ export class EmailTemplateService {
         });
 
         if(emailTemplate == null) {
-            return this.errorMessageService.createErrorMessage('EMAIL_TEMPLATE_NOT_FOUND', 'Email template was not found for emailTemplateId: ' + updateEmailTemplateDTO.emailTemplateId);
+            throw new NotFoundException('Email template not found for emailTemplateId: ' + updateEmailTemplateDTO.emailTemplateId);
         }
 
         emailTemplate.emailTemplateName = updateEmailTemplateDTO.emailTemplateName;

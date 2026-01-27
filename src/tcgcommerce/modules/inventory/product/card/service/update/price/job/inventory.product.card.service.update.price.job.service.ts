@@ -32,7 +32,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
     ) { }
 
 
-    async getInventoryProductCardServiceUpdatePriceJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string) {
+    async getInventoryProductCardServiceUpdatePriceJobsByCommerceAccountIdAndProductLineCode(commerceAccountId: string, productLineCode: string): Promise<InventoryProductCardServiceUpdatePriceJobDTO[]> {
 
         let inventoryProductCardServiceUpdatePriceJobs = await this.inventoryProductCardServiceUpdatePriceJobRepository.find({
             where: {
@@ -57,7 +57,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         return inventoryProductCardServiceUpdatePriceJobDTOs;
     }
 
-    async getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId: string): Promise<InventoryProductCardServiceUpdatePriceJobDTO> {
         let inventoryProductCardServiceUpdatePriceJob = await this.inventoryProductCardServiceUpdatePriceJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId
@@ -71,7 +71,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
 
     }
 
-    async getInventoryProductCardServiceUpdatePriceJobDetailsById(inventoryProductCardServiceUpdatePriceJobId: string) {
+    async getInventoryProductCardServiceUpdatePriceJobDetailsById(inventoryProductCardServiceUpdatePriceJobId: string): Promise<{ inventoryProductCardServiceUpdatePriceJobDTO: InventoryProductCardServiceUpdatePriceJobDTO; inventoryProductCardServiceUpdatePriceJobItems: any }> {
         let inventoryProductCardServiceUpdatePriceJob = await this.inventoryProductCardServiceUpdatePriceJobRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceUpdatePriceJobId: inventoryProductCardServiceUpdatePriceJobId
@@ -91,7 +91,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
 
     }
 
-    async createInventoryProductCardServiceUpdatePriceJobs(productVendorCode:string, productLineCode:string, productTypeCode:string, productLanguageCode:string) {
+    async createInventoryProductCardServiceUpdatePriceJobs(productVendorCode:string, productLineCode:string, productTypeCode:string, productLanguageCode:string): Promise<number | null | undefined> {
         
         let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
@@ -169,7 +169,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
 
     //HELPER FUNCTIONS (REFACTOR TO UTIL SERVICE LATER);
     
-    async createInventoryProductCardServiceUpdatePriceJobCode(productLineCode: string, productSetCode: string) {
+    async createInventoryProductCardServiceUpdatePriceJobCode(productLineCode: string, productSetCode: string): Promise<string> {
 
         let now = new Date();
         let dateCode = now.getFullYear().toString() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + '-' + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
@@ -180,7 +180,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
     }
 
 
-    async updateInventoryProductCardServiceUpdatePriceJobStatus(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobStatus: string) {
+    async updateInventoryProductCardServiceUpdatePriceJobStatus(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobStatus: string): Promise<boolean> {
         let inventoryProductCardServiceUpdatePriceJob = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
         inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobStatus = inventoryProductCardServiceUpdatePriceJobStatus;
@@ -191,7 +191,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
         return true;
     }
 
-    async updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobCount: number, inventoryProductCardServiceUpdatePriceJobIncreaseCount: number, inventoryProductCardServiceUpdatePriceJobDecreaseCount: number) {
+    async updateInventoryProductCardServiceUpdatePriceJobCount(inventoryProductCardServiceUpdatePriceJobId: string, inventoryProductCardServiceUpdatePriceJobCount: number, inventoryProductCardServiceUpdatePriceJobIncreaseCount: number, inventoryProductCardServiceUpdatePriceJobDecreaseCount: number): Promise<boolean> {
         let inventoryProductCardServiceUpdatePriceJob = await this.getInventoryProductCardServiceUpdatePriceJobById(inventoryProductCardServiceUpdatePriceJobId);
 
         inventoryProductCardServiceUpdatePriceJob.inventoryProductCardServiceUpdatePriceJobCount = inventoryProductCardServiceUpdatePriceJobCount;
@@ -206,7 +206,7 @@ export class InventoryProductCardServiceUpdatePriceJobService {
     
     /* EVENT LISTENERS */
     @OnEvent('inventory.product.card.service.update.price.job.update.status')
-    async handleInventoryProductCardServiceUpdatePriceJobStatusEvent(payload: any) {
+    async handleInventoryProductCardServiceUpdatePriceJobStatusEvent(payload: any): Promise<void> {
         
         let inventoryProductCardServiceUpdatePriceJobId = payload.inventoryProductCardServiceUpdatePriceJobId;
         let inventoryProductCardServiceUpdatePriceJobStatus = payload.inventoryProductCardServiceUpdatePriceJobStatus;

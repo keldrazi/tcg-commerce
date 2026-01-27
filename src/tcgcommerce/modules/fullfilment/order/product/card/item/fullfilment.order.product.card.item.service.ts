@@ -11,7 +11,7 @@ export class FullfilmentOrderProductCardItemService {
         @InjectRepository(FullfilmentOrderProductCardItem) private fullfilmentOrderProductCardItemRepository: Repository<FullfilmentOrderProductCardItem>,
     ) { }
 
-    async getFullfilmentOrderProductCardItemById(fullfilmentOrderProductCardItemId: string) {
+    async getFullfilmentOrderProductCardItemById(fullfilmentOrderProductCardItemId: string): Promise<FullfilmentOrderProductCardItemDTO> {
         let fullfilmentOrderProductCardItem = await this.fullfilmentOrderProductCardItemRepository.findOneOrFail({ 
             where: { 
                 fullfilmentOrderProductCardItemId: fullfilmentOrderProductCardItemId 
@@ -24,7 +24,7 @@ export class FullfilmentOrderProductCardItemService {
         
     }
 
-    async getFullfilmentOrderProductCardItemsByFullfilmentOrderId(fullfilmentOrderId: string) {
+    async getFullfilmentOrderProductCardItemsByFullfilmentOrderId(fullfilmentOrderId: string): Promise<FullfilmentOrderProductCardItemDTO[]> {
         let fullfilmentOrderProductCardItems = await this.fullfilmentOrderProductCardItemRepository.find({
             where: {
                 fullfilmentOrderId: fullfilmentOrderId

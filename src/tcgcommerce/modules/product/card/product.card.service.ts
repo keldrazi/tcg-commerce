@@ -212,7 +212,7 @@ export class ProductCardService {
     } 
 
     //CREATE PRODUCT CARDS;
-    async createProductCardsByProductLineCode(productLineCode: string): Promise<ProductCardDTO[]> {
+    async createProductCardsByProductLineCode(productLineCode: string): Promise<number> {
         
         if (productLineCode == PRODUCT_LINE_CODE.MAGIC_THE_GATHERING) {
             return this.createTCGdbMTGProductCards();
@@ -223,7 +223,7 @@ export class ProductCardService {
     }
 
     //CREATE PRODUCT CARDS (MTG);
-    async createTCGdbMTGProductCards(): Promise<ProductCardDTO[]> {
+    async createTCGdbMTGProductCards(): Promise<number> {
 
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING); 
@@ -300,30 +300,30 @@ export class ProductCardService {
     }
 
     //CREATE PRODUCT CARDS (MTG);
-    async updateTCGdbMTGProductCardsWithScryfallData() {
+    async updateTCGdbMTGProductCardsWithScryfallData(): Promise<number> {
 
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING); 
         
 
-        if (productVendor == null || productVendor instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_VENDOR_NOT_FOUND', 'Product vendor was not found');
+        if (productVendor == null) {
+            throw new NotFoundException('Product vendor was not found');
         }
         
-        if (productLine == null || productLine instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_LINE_NOT_FOUND', 'Product line was not found');
+        if (productLine == null) {
+            throw new NotFoundException('Product line was not found');
         }
 
         let productType = await this.productTypeService.getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendor.productVendorId, productLine.productLineId, PRODUCT_TYPE_CODE.SINGLE);
 
-        if (productType == null || productType instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_TYPE_NOT_FOUND', 'Product type was not found');
+        if (productType == null) {
+            throw new NotFoundException('Product type was not found');
         }
 
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
         
-        if(productSets == null || productSets instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SETS_NOT_FOUND', 'No product sets found for vendor and line.');
+        if(productSets == null) {
+            throw new NotFoundException('No product sets found for vendor and line.');
         }
         
         let productCardRecordCount = 0;
@@ -363,106 +363,6 @@ export class ProductCardService {
 
         return productCardRecordCount;
     }
-
-    //CREATE PRODUCT CARDS;
-    //WILL EVENTUALLY NEED THIS FOR PRERELEASE SETS;
-    /*
-    async createProductCardsBySet(productSetCode: string, productVendorCode: string, productLineCode: string, productTypeCode: string) {
-        
-        let productVendor = await this.productVendorService.getProductVendorByCode(productVendorCode);
-        let productLine = await this.productLineService.getProductLineByCode(productLineCode);
-        let productType = await this.productTypeService.getProductTypeByCode(productTypeCode);
-        
-        if((productLine == null || productLine instanceof ErrorMessageDTO) || (productVendor == null || productVendor instanceof ErrorMessageDTO) || (productType == null || productType instanceof ErrorMessageDTO)) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARD_CREATION_FAILED', 'Failed to create product cards due to invalid product line, vendor, or type.');
-        }
-
-        let productSet = await this.productSetService.getProductSetByCode(productVendor.productVendorId, productLine.productLineId, productSetCode);
-
-        if(productSet == null || productSet instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set not found for set code: ' + productSetCode);
-        }
-
-        switch (productLine.productLineCode) {
-            case "MTG":
-                console.log("MTG");
-                return await this.createMTGProductCardsBySet(productSet.productSetId, productVendor.productVendorId, productLine.productLineId, productType.productTypeId);
-
-        }
-        
-        return true;
-
-        
-    }
-
-    //CREATE PRODUCT CARDS BY SET (MTG);
-    async createMTGProductCardsBySet(productSetId: string, productVendorId: string, productLineId: string, productTypeId: string) {
-        
-        let productCardRecordCount = 0;
-
-        let productSet = await this.productSetService.getProductSet(productSetId);
-
-        if(productSet == null || productSet instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_SET_NOT_FOUND', 'Product set not found');
-        }
-            
-        let productCardsBySet = await this.tcgdbMTGCardService.getTCGdbMTGCardsBySetId(productSet.productSetTCGdbId);
-
-        if(productCardsBySet == null) {
-            return this.errorMessageService.createErrorMessage('PRODUCT_CARDS_NOT_FOUND', 'No cards found for set: ' + productSet.productSetName + " (" + productSet.productSetCode + ")");
-        }
-
-        console.log("Found " + productCardsBySet.tcgdbMTGCards.length + " cards for set: " + productSet.productSetName + " (" + productSet.productSetCode + ")");
-        for(let j = 0; j < productCardsBySet.tcgdbMTGCards.length; j++) {
-            let tcgdbMTGCard = productCardsBySet.tcgdbMTGCards[j];
-            let productCardRarity = await this.productCardRarityService.getProductCardRarityByCodeAndProductLineId(tcgdbMTGCard.tcgdbMTGCardRarityCode, productLineId);
-            
-            if(productCardRarity == null || productCardRarity instanceof ErrorMessageDTO) {
-                console.log("Skipping card due to missing rarity: " + tcgdbMTGCard.tcgdbMTGCardName + " (" + tcgdbMTGCard.tcgdbMTGCardNumber + ") Rarity: " + tcgdbMTGCard.tcgdbMTGCardRarityCode);
-                continue;
-            }
-            //CHECK TO SEE IF THE CARD EXISTS;
-            let productCardCheck = await this.getProductCardByTCGdbId(tcgdbMTGCard.tcgdbMTGCardId);
-            
-            if (productCardCheck instanceof ProductCardDTO) {
-                continue;
-            }
-
-            let productCardMetadata = "[]";
-            
-            if (tcgdbMTGCard.tcgdbMTGCardScryfallData != null) {
-                productCardMetadata = tcgdbMTGCard.tcgdbMTGCardScryfallData;
-            }
-
-            const newProductCard = this.productCardRepository.create({
-                productCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
-                productCardTCGPlayerId: tcgdbMTGCard.tcgdbMTGCardTCGPlayerId,
-                productVendorId: productVendorId,
-                productLineId: productLineId,
-                productTypeId: productTypeId,
-                productSetId: productSet.productSetId,
-                productSetCode: productSet.productSetCode,
-                productCardRarityId: productCardRarity.productCardRarityId,
-                productCardRarityCode: productCardRarity.productCardRarityCode,
-                productCardNumber: tcgdbMTGCard.tcgdbMTGCardNumber,
-                productCardName: tcgdbMTGCard.tcgdbMTGCardName,
-                productCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
-                productCardImage: tcgdbMTGCard.tcgdbMTGCardImageURL,
-                productCardExtendedData: tcgdbMTGCard.tcgdbMTGCardTCGPlayerData,
-                productCardMetadata: productCardMetadata,
-                productCardSKUs: tcgdbMTGCard.tcgdbMTGCardTCGPlayerSKUs,
-                productCardIsPresale: false,
-                productCardIsActive: true,
-            });
-
-            await this.productCardRepository.save(newProductCard);
-
-            productCardRecordCount++;
-        }
-        
-        return productCardRecordCount;
-    }
-    */
 
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

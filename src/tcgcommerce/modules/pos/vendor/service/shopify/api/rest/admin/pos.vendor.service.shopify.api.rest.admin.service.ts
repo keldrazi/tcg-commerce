@@ -22,7 +22,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
     /*******************************************************************************/
     /* SHOP METHODS (USED FOR VERIFICATION)
     /******************************************************************************/
-    async getShopifyShop(storeName:string, accessToken:string, productId: string) {
+    async getShopifyShop(storeName:string, accessToken:string, productId: string): Promise<any> {
 
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
     
@@ -50,7 +50,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
     /*******************************************************************************/
     /* PRODUCT METHODS
     /******************************************************************************/
-    async getShopifyProductsByProductType(storeName: string, accessToken: string, productType: string) {
+    async getShopifyProductsByProductType(storeName: string, accessToken: string, productType: string): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
         
@@ -74,7 +74,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         
     }
 
-    async getShopifyProductByProductHandle(storeName: string, accessToken: string, productHandle: string) {
+    async getShopifyProductByProductHandle(storeName: string, accessToken: string, productHandle: string): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -98,7 +98,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         
     }
 
-    async createShopifyProduct(storeName: string, accessToken: string, shopifyProduct: ShopifyProduct) {
+    async createShopifyProduct(storeName: string, accessToken: string, shopifyProduct: ShopifyProduct): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
         
@@ -121,7 +121,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         return data;
     }
 
-    async updateShopifyProduct(storeName: string, accessToken: string, shopifyProduct: ShopifyProductUpdate) {
+    async updateShopifyProduct(storeName: string, accessToken: string, shopifyProduct: ShopifyProductUpdate): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
         
@@ -147,7 +147,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
     /*******************************************************************************/
     /* PRODUCT NETAFIELD METHODS
     /******************************************************************************/
-    async getShopifyProductMetafieldsByProductId(storeName: string, accessToken: string, productId: string) {
+    async getShopifyProductMetafieldsByProductId(storeName: string, accessToken: string, productId: string): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
         
@@ -171,7 +171,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         
     }
 
-    async getShopifyProductMetafieldsByMetafieldId(storeName: string, accessToken: string, productId: string, metafieldId: string) {
+    async getShopifyProductMetafieldsByMetafieldId(storeName: string, accessToken: string, productId: string, metafieldId: string): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -195,7 +195,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         
     }
 
-    async createShopifyProductMetafield(storeName: string, accessToken: string, productId: string, shopifyProductMetafield: ShopifyProductMetafield) {
+    async createShopifyProductMetafield(storeName: string, accessToken: string, productId: string, shopifyProductMetafield: ShopifyProductMetafield): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -218,7 +218,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         return data;
     }
 
-    async updateShopifyProductMetafield(storeName: string, accessToken: string, productId: string, shopifyProductMetafield: any) {
+    async updateShopifyProductMetafield(storeName: string, accessToken: string, productId: string, shopifyProductMetafield: any): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -244,7 +244,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
     /*******************************************************************************/
     /* PRODUCT VARIANT METHODS
     /******************************************************************************/
-    async getShopifyProductVariantsByProductId(storeName:string, accessToken:string, productId:string) {
+    async getShopifyProductVariantsByProductId(storeName:string, accessToken:string, productId:string): Promise<ShopifyProductVariants> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -285,7 +285,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         return shopifyProductVariants;
     }
 
-    async updateShopifyProductVariant(storeName:string, accessToken:string, productVariantId:string, productVariant:any) {
+    async updateShopifyProductVariant(storeName:string, accessToken:string, productVariantId:string, productVariant:any): Promise<any> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
         
@@ -315,7 +315,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
     /* INVENTORY METHODS
     /******************************************************************************/
 
-    async getShopifyInventoryItemsByProductId(storeName:string, accessToken:string, productId: string) {
+    async getShopifyInventoryItemsByProductId(storeName:string, accessToken:string, productId: string): Promise<ShopifyInventoryItems> {
 
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
         
@@ -359,7 +359,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         
     }
 
-    async getShopifyInventoryItemById(storeName:string, accessToken:string, inventoryItemId: number) {
+    async getShopifyInventoryItemById(storeName:string, accessToken:string, inventoryItemId: number): Promise<ShopifyInventoryItem> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -388,7 +388,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         
     }
 
-    async getShopifyInventoryLevelsByInventoryItemId(storeName:string, accessToken:string, inventoryItemId: number) {
+    async getShopifyInventoryLevelsByInventoryItemId(storeName:string, accessToken:string, inventoryItemId: number): Promise<ShopifyInventoryLevels> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -426,7 +426,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         
     }
 
-    async updateShopifyInventoryItem(storeName:string, accessToken:string, invetoryItem: ShopifyInventoryItem){
+    async updateShopifyInventoryItem(storeName:string, accessToken:string, invetoryItem: ShopifyInventoryItem): Promise<ShopifyInventoryItem> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -456,7 +456,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         return invetoryItem
     }
 
-    async updateShopifyInventoryLevel(storeName:string, accessToken:string, inventoryLevel: ShopifyInventoryLevel){
+    async updateShopifyInventoryLevel(storeName:string, accessToken:string, inventoryLevel: ShopifyInventoryLevel): Promise<ShopifyInventoryLevel> {
             
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -485,7 +485,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         return inventoryLevel
     }
 
-    async disconnectShopifyInventoryLevel(storeName:string, accessToken:string, inventoryItemId: number, locationId: number){
+    async disconnectShopifyInventoryLevel(storeName:string, accessToken:string, inventoryItemId: number, locationId: number): Promise<number> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -509,7 +509,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         return inventoryItemId;
     }
 
-    async connectShopifyInventoryLevel(storeName:string, accessToken:string, inventoryItemId: number, locationId: number){
+    async connectShopifyInventoryLevel(storeName:string, accessToken:string, inventoryItemId: number, locationId: number): Promise<number> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -541,7 +541,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
     /* LOCATION METHODS
     /******************************************************************************/
 
-    async getShopifyLocations(storeName:string, accessToken:string) {
+    async getShopifyLocations(storeName:string, accessToken:string): Promise<ShopifyLocations> {
         
         let shopifyRestURI = await this.getShopifyRestURIByStoreName(storeName);
 
@@ -584,7 +584,7 @@ export class POSVendorServiceShopifyAPIRestAdminService {
     /*******************************************************************************/
     /* UTILITY METHODS
     /******************************************************************************/
-    async getShopifyRestURIByStoreName(storeName:string) {
+    async getShopifyRestURIByStoreName(storeName:string): Promise<string> {
         return this.shopifyRestURLPrefix + storeName + this.shopifyRestURL + this.shopifyAPIVersion + '/';
     }
 

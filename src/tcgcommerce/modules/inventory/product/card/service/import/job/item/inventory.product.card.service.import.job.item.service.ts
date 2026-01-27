@@ -28,7 +28,7 @@ export class InventoryProductCardServiceImportJobItemService {
         private inventoryProductCardServiceImportJobProviderService: InventoryProductCardServiceImportJobProviderService,
     ) { }
 
-    async getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+    async getInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string): Promise<InventoryProductCardServiceImportJobItemDTO[]> {
     
             let inventoryProductCardServiceImportJobItemDTOs: InventoryProductCardServiceImportJobItemDTO[] = [];
     
@@ -54,7 +54,7 @@ export class InventoryProductCardServiceImportJobItemService {
     
         }
 
-    async createInventoryProductCardServiceImportJobItems(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
+    async createInventoryProductCardServiceImportJobItems(inventoryProductCardServiceImportJobFile: Express.Multer.File, inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO): Promise<boolean> {
 
         let inventoryProductCardServiceImportJobProviderDTOs = await this.inventoryProductCardServiceImportJobProviderService.processInventoryProductCardServiceImportJobCards(inventoryProductCardServiceImportJobFile, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobId, inventoryProductCardServiceImportJobDTO.inventoryProductCardServiceImportJobProviderTypeCode);
         
@@ -118,7 +118,7 @@ export class InventoryProductCardServiceImportJobItemService {
         return true;
     }
 
-    async getInventoryProductCardServiceImportJobItemDetailsByJob(inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO) {
+    async getInventoryProductCardServiceImportJobItemDetailsByJob(inventoryProductCardServiceImportJobDTO: InventoryProductCardServiceImportJobDTO): Promise<InventoryProductCardServiceImportJobItemDTO[]> {
 
         let inventoryProductCardServiceImportJobItems = await this.inventoryProductCardServiceImportJobItemRepository.find({
             where: {
@@ -143,7 +143,7 @@ export class InventoryProductCardServiceImportJobItemService {
 
     }
 
-    async approveInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+    async approveInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string): Promise<boolean> {
             
         this.eventEmitter.emit(
             'inventory.product.card.service.import.job.update.status',
@@ -185,7 +185,7 @@ export class InventoryProductCardServiceImportJobItemService {
 
     }
 
-    async deleteInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string) {
+    async deleteInventoryProductCardServiceImportJobItemsByJobId(inventoryProductCardServiceImportJobId: string): Promise<boolean> {
         
         await this.inventoryProductCardServiceImportJobItemRepository.delete({
             inventoryProductCardServiceImportJobId: inventoryProductCardServiceImportJobId

@@ -1,19 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BuylistModule } from 'src/typeorm/entities/tcgcommerce/modules/buylist/module/buylist.module.entity';
 import { CreateBuylistModuleDTO, UpdateBuylistModuleDTO, BuylistModuleDTO } from './dto/buylist.module.dto';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistModuleService {
 
     constructor(
-        @InjectRepository(BuylistModule) private buylistModuleRepository: Repository<BuylistModule>,
-        private errorMessageService: ErrorMessageService
+        @InjectRepository(BuylistModule) private buylistModuleRepository: Repository<BuylistModule>
     ) { }
 
-    async getBuylistModuleById(buylistModuleId: string) {
+    async getBuylistModuleById(buylistModuleId: string): Promise<BuylistModuleDTO> {
         let buylistModule = await this.buylistModuleRepository.findOne({ 
             where: { 
                 buylistModuleId : buylistModuleId
@@ -21,7 +19,7 @@ export class BuylistModuleService {
         });
         
         if (buylistModule == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found');
+            throw new NotFoundException('Buylist module was not found');
         }
 
         let buylistModuleDTO :BuylistModuleDTO = ({ ...buylistModule})
@@ -30,7 +28,7 @@ export class BuylistModuleService {
         
     }
 
-    async getBuylistModuleByCommerceAccountId(commerceAccountId: string) {
+    async getBuylistModuleByCommerceAccountId(commerceAccountId: string): Promise<BuylistModuleDTO> {
         let buylistModule = await this.buylistModuleRepository.findOne({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -38,7 +36,7 @@ export class BuylistModuleService {
         });
         
         if (buylistModule == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found');
+            throw new NotFoundException('Buylist module was not found');
         }
 
         let buylistModuleDTO :BuylistModuleDTO = ({ ...buylistModule})
@@ -47,7 +45,7 @@ export class BuylistModuleService {
         
     }
 
-    async getBuylistModules() {
+    async getBuylistModules(): Promise<BuylistModuleDTO[]> {
         let buylistModules = await this.buylistModuleRepository.find();
         
         if (buylistModules == null) {
@@ -68,7 +66,7 @@ export class BuylistModuleService {
         
     }
 
-    async createBuylistModule(createBuylistModuleDTO: CreateBuylistModuleDTO) {
+    async createBuylistModule(createBuylistModuleDTO: CreateBuylistModuleDTO): Promise<BuylistModuleDTO> {
         
         let buylistModule = await this.buylistModuleRepository.findOne({ 
             where: { 
@@ -84,7 +82,7 @@ export class BuylistModuleService {
         return buylistModuleDTO;
     }
 
-    async updateBuylistModule(updateBuylistModuleDTO: UpdateBuylistModuleDTO) {
+    async updateBuylistModule(updateBuylistModuleDTO: UpdateBuylistModuleDTO): Promise<BuylistModuleDTO> {
             
         let buylistModule = await this.buylistModuleRepository.findOne({ 
             where: { 
@@ -93,7 +91,7 @@ export class BuylistModuleService {
         });
 
         if (buylistModule == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_MODULE_NOT_FOUND', 'Buylist module was not found');
+            throw new NotFoundException('Buylist module was not found');
         }
 
         buylistModule.buylistModuleSettings = updateBuylistModuleDTO.buylistModuleSettings;

@@ -1,8 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { POSModuleService } from './pos.module.service';
 import { CreatePOSModuleDTO, UpdatePOSModuleDTO } from './dto/pos.module.dto';
-
-
 
 @Controller('pos/module')
 export class POSModuleController {
@@ -13,29 +11,61 @@ export class POSModuleController {
     
     @Get('/all')
     async getPOSModules() {
-        return await this.posModuleService.getPOSModules();
+        try {
+            return await this.posModuleService.getPOSModules();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get POS modules');
+        }
     }
 
     @Get('/:posModuleId')
     async getPOSModule(@Param('posModuleId') posModuleId: string) {
-        return await this.posModuleService.getPOSModule(posModuleId);
+        try {
+            return await this.posModuleService.getPOSModule(posModuleId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get POS module');
+        }
     }
 
     @Get('/commerceAccount/:commerceAccountId')
     async getPOSModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.posModuleService.getPOSModuleByCommerceAccountId(commerceAccountId);
+        try {
+            return await this.posModuleService.getPOSModuleByCommerceAccountId(commerceAccountId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get POS module by commerce account');
+        }
     }
 
     @Post()
     @UsePipes(new ValidationPipe())
     async createPOSModule(@Body() createPOSModuleDTO: CreatePOSModuleDTO) {
-        return this.posModuleService.createPOSModule(createPOSModuleDTO);
+        try {
+            return await this.posModuleService.createPOSModule(createPOSModuleDTO);
+        } catch (e) {
+            if (e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create POS module');
+        }
     }
 
     @Put()
     @UsePipes(new ValidationPipe())
     async updatePOSModule(@Body() updatePOSModuleDTO: UpdatePOSModuleDTO) {
-        return this.posModuleService.updatePOSModule(updatePOSModuleDTO);
+        try {
+            return await this.posModuleService.updatePOSModule(updatePOSModuleDTO);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to update POS module');
+        }
     }
 
 }

@@ -11,7 +11,7 @@ export class InventoryModuleService {
         @InjectRepository(InventoryModule) private inventoryModuleRepository: Repository<InventoryModule>,
     ) { }
 
-    async getInventoryModuleById(inventoryModuleId: string) {
+    async getInventoryModuleById(inventoryModuleId: string): Promise<InventoryModuleDTO> {
         let inventoryModule = await this.inventoryModuleRepository.findOneOrFail({ 
             where: { 
                 inventoryModuleId : inventoryModuleId
@@ -24,7 +24,7 @@ export class InventoryModuleService {
 
     }
 
-    async getInventoryModuleByCommerceAccountId(commerceAccountId: string) {
+    async getInventoryModuleByCommerceAccountId(commerceAccountId: string): Promise<InventoryModuleDTO> {
         let inventoryModule = await this.inventoryModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -38,7 +38,7 @@ export class InventoryModuleService {
     }
 
 
-    async getInventoryModules() {
+    async getInventoryModules(): Promise<InventoryModuleDTO[]> {
         let inventoryModules = await this.inventoryModuleRepository.find();
         
         if (inventoryModules == null) {
@@ -59,7 +59,7 @@ export class InventoryModuleService {
         
     }
 
-    async createInventoryModule(createInventoryModuleDTO: CreateInventoryModuleDTO) {
+    async createInventoryModule(createInventoryModuleDTO: CreateInventoryModuleDTO): Promise<InventoryModuleDTO> {
         let inventoryModule = await this.inventoryModuleRepository.findOne({
             where: {
                 commerceAccountId: createInventoryModuleDTO.commerceAccountId
@@ -79,7 +79,7 @@ export class InventoryModuleService {
         return inventoryModuleDTO;
     }
 
-    async updateInventoryModule(updateInventoryModuleDTO: UpdateInventoryModuleDTO) {
+    async updateInventoryModule(updateInventoryModuleDTO: UpdateInventoryModuleDTO): Promise<InventoryModuleDTO> {
         
         let inventoryModule = await this.inventoryModuleRepository.findOneOrFail({ 
             where: { 

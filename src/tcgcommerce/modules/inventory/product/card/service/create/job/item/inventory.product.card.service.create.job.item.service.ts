@@ -40,7 +40,7 @@ export class InventoryProductCardServiceCreateJobItemService {
         private priceRuleProductCardBaseService: PriceRuleProductCardBaseService,
     ) { }
 
-    async getInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+    async getInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string): Promise<InventoryProductCardServiceCreateJobItemDTO[]> {
 
         let inventoryProductCardServiceCreateJobItemDTOs: InventoryProductCardServiceCreateJobItemDTO[] = [];
 
@@ -61,7 +61,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     }
 
-    async getInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async getInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO): Promise<InventoryProductCardServiceCreateJobItemDTO[]> {
 
         let inventoryProductCardServiceCreateJobItemDTOs: InventoryProductCardServiceCreateJobItemDTO[] = [];
 
@@ -88,7 +88,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     }
 
-    async getInventoryProductCardServiceCreateJobItemByProductCardId(inventoryProductCardServiceCreateJobId: string, productCardId: string) {
+    async getInventoryProductCardServiceCreateJobItemByProductCardId(inventoryProductCardServiceCreateJobId: string, productCardId: string): Promise<InventoryProductCardServiceCreateJobItemDTO | null> {
         let inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.findOne({
             where: {
                 inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId,
@@ -105,7 +105,7 @@ export class InventoryProductCardServiceCreateJobItemService {
         return inventoryProductCardServiceCreateJobItemDTO;
     }
 
-    async getInventoryProductCardServiceCreateJobItemDetailsByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async getInventoryProductCardServiceCreateJobItemDetailsByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO): Promise<any[]> {
         //GET THE PRODUCT CARDS FOR THE SET;
         let productCards = await this.productCardService.getProductCardsByProductSetId(inventoryProductCardServiceCreateJobDTO.productSetId);
 
@@ -140,7 +140,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     }
 
-    async createInventoryProductCardServiceCreateJobItemDTO(inventoryProductCardServiceCreateJobItem: InventoryProductCardServiceCreateJobItem) {
+    async createInventoryProductCardServiceCreateJobItemDTO(inventoryProductCardServiceCreateJobItem: InventoryProductCardServiceCreateJobItem): Promise<InventoryProductCardServiceCreateJobItemDTO> {
 
         let inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO = new InventoryProductCardServiceCreateJobItemDTO();
         inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemId = inventoryProductCardServiceCreateJobItem.inventoryProductCardServiceCreateJobItemId;
@@ -169,7 +169,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     }
 
-    async createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async createInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO): Promise<void> {
         //GET THE PRODUCT SET BY CODE;
         let productSet = await this.productSetService.getProductSetById(inventoryProductCardServiceCreateJobDTO.productSetId);
         
@@ -215,7 +215,7 @@ export class InventoryProductCardServiceCreateJobItemService {
     //BATCH LOAD OF INVENTORY PRODUCT BY SET/COMMERCE ACCOUNT/COMMERCE LOCATION;
     //BATCH INVENTORY PRODUCT CARD BY SET CREATION;
     //TO DO: REFACTOR THIS METHOD TO BE MORE MODULAR;
-    async createInventoryProductCardServiceCreateJobItemsBySet(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async createInventoryProductCardServiceCreateJobItemsBySet(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO): Promise<InventoryProductCardServiceCreateJobItemDTO[]> {
 
         //GET THE COMMERCE LOCATION;
         let commerceLocation = await this.commerceLocationService.getCommerceLocationById(inventoryProductCardServiceCreateJobDTO.commerceLocationId);
@@ -352,7 +352,7 @@ export class InventoryProductCardServiceCreateJobItemService {
     }
     
     //UPDATE INVENTORY PRODUCT CARD SERVICE CREATE JOB ITEM PRICES;
-    async updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO) {
+    async updateInventoryProductCardCreateJobItemPricesByJob(inventoryProductCardServiceCreateJobDTO: InventoryProductCardServiceCreateJobDTO): Promise<void> {
         
         //GET THE INVENTORY PRODUCT CARDS FOR THE SET;
         let inventoryProductCardServiceCreateJobItemDTOs = await this.getInventoryProductCardServiceCreateJobItemsBySetId(inventoryProductCardServiceCreateJobDTO);
@@ -429,7 +429,7 @@ export class InventoryProductCardServiceCreateJobItemService {
     }
     
 
-    async approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+    async approveInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string): Promise<boolean> {
         
         this.eventEmitter.emit(
             'inventory.product.card.service.create.job.update.status',
@@ -457,7 +457,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     }
 
-    async deleteInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string) {
+    async deleteInventoryProductCardServiceCreateJobItemsByJobId(inventoryProductCardServiceCreateJobId: string): Promise<boolean> {
         
         await this.inventoryProductCardServiceCreateJobItemRepository.delete({
             inventoryProductCardServiceCreateJobId: inventoryProductCardServiceCreateJobId
@@ -468,7 +468,7 @@ export class InventoryProductCardServiceCreateJobItemService {
     }
 
     //UPDATE INVENTORY PRODUCT CARD SERVICE CREATE JOB ITEM WITH PRICES;
-    async updateInventoryProductCardServiceCreateJobItem(inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO) {
+    async updateInventoryProductCardServiceCreateJobItem(inventoryProductCardServiceCreateJobItemDTO: InventoryProductCardServiceCreateJobItemDTO): Promise<InventoryProductCardServiceCreateJobItemDTO> {
         let inventoryProductCardServiceCreateJobItem = await this.inventoryProductCardServiceCreateJobItemRepository.findOneOrFail({
             where: {
                 inventoryProductCardServiceCreateJobItemId: inventoryProductCardServiceCreateJobItemDTO.inventoryProductCardServiceCreateJobItemId
@@ -484,7 +484,7 @@ export class InventoryProductCardServiceCreateJobItemService {
     }
 
     //GET TCPLAYER SKU BY PRINTING/LANGUAGE;
-    async getProductCardTCGPlayerSKUByPrinting(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number) {
+    async getProductCardTCGPlayerSKUByPrinting(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number): Promise<any | null> {
         const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
         const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
             item.languageId === productCardLanguageId &&
@@ -500,7 +500,7 @@ export class InventoryProductCardServiceCreateJobItemService {
     }
 
     //GET TCPLAYER SKU BY CONDITION/PRINTING/LANGUAGE;
-    async getProductCardTCGPlayerSKUByCondition(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number) {
+    async getProductCardTCGPlayerSKUByCondition(productCardTCGPlayerSKUs: any, productCardLanguageId: number, productCardPrintingId: number, productCardConditionId: number): Promise<any | null> {
         const productCardTCGPlayerSKUsJson = productCardTCGPlayerSKUs;
         const productCardTCGPlayerSKU = productCardTCGPlayerSKUsJson.find(item => 
             item.languageId === productCardLanguageId &&
@@ -517,7 +517,7 @@ export class InventoryProductCardServiceCreateJobItemService {
 
     }
 
-    async getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO, priceRuleProductCardBaseDTO: any) {
+    async getTCGdbPriceCurrentByRule(tcgdbMTGPriceCurrentDTO: TCGdbMTGPriceCurrentDTO, priceRuleProductCardBaseDTO: any): Promise<number> {
         let tcgdbCurrentPrice = 0;
 
         switch(priceRuleProductCardBaseDTO.priceRuleProductCardBaseOption) {

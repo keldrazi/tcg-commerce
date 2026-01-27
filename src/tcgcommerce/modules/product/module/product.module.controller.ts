@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { ProductModuleService } from './product.module.service';
 import { CreateProductModuleDTO, UpdateProductModuleDTO } from './dto/product.module.dto';
 
@@ -11,29 +11,61 @@ export class ProductModuleController {
     
     @Get()
     async getProductModules() {
-        return await this.productModuleService.getProductModules();
+        try {
+            return await this.productModuleService.getProductModules();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get product modules');
+        }
     }
 
     @Get('/id/:productModuleId')
     async getProductModuleById(@Param('productModuleId') productModuleId: string) {
-        return await this.productModuleService.getProductModuleById(productModuleId);
+        try {
+            return await this.productModuleService.getProductModuleById(productModuleId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get product module');
+        }
     }
 
     @Get('/caid/:commerceAccountId')
     async getProductModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.productModuleService.getProductModuleByCommerceAccountId(commerceAccountId);
+        try {
+            return await this.productModuleService.getProductModuleByCommerceAccountId(commerceAccountId);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to get product module by commerce account');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductModule(@Body() createProductModuleDTO: CreateProductModuleDTO) {
-        return this.productModuleService.createProductModule(createProductModuleDTO);
+        try {
+            return await this.productModuleService.createProductModule(createProductModuleDTO);
+        } catch (e) {
+            if (e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create product module');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductModule(@Body() updateProductModuleDTO: UpdateProductModuleDTO) {
-        return this.productModuleService.updateProductModule(updateProductModuleDTO);
+        try {
+            return await this.productModuleService.updateProductModule(updateProductModuleDTO);
+        } catch (e) {
+            if (e instanceof NotFoundException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to update product module');
+        }
     }
 
 }

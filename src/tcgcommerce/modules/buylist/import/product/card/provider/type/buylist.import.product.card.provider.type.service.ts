@@ -1,20 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistImportProductCardProviderTypeDTO, UpdateBuylistImportProductCardProviderTypeDTO, BuylistImportProductCardProviderTypeDTO } from './dto/buylist.import.product.card.provider.type.dto';
 import { BuylistImportProductCardProviderTypeFileDataKey, BuylistImportProductCardProviderTypeFileConditionKey, BuylistImportProductCardProviderTypeFilePrintingKey } from './interface/buylist.import.product.card.provider.type.interface';
 import { BuylistImportProductCardProviderType } from 'src/typeorm/entities/tcgcommerce/modules/buylist/import/product/card/provider/type/buylist.import.product.card.provider.type.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistImportProductCardProviderTypeService {
 
     constructor(
         @InjectRepository(BuylistImportProductCardProviderType) private buylistImportProductCardProviderTypeRepository: Repository<BuylistImportProductCardProviderType>,
-        private errorMessageService: ErrorMessageService
     ) { }
 
-    async getBuylistImportProductCardProviderTypeById(buylistImportProductCardProviderTypeId: string) {
+    async getBuylistImportProductCardProviderTypeById(buylistImportProductCardProviderTypeId: string): Promise<BuylistImportProductCardProviderTypeDTO> {
         let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({ 
             where: { 
                 buylistImportProductCardProviderTypeId: buylistImportProductCardProviderTypeId 
@@ -22,7 +20,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
         
         if (buylistImportProductCardProviderType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
+            throw new NotFoundException('Buylist import product card provider type not found');
         }
 
         let buylistImportProductCardProviderTypeDTO = await this.createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType);
@@ -31,7 +29,7 @@ export class BuylistImportProductCardProviderTypeService {
 
     }
 
-    async getBuylistImportProductCardProviderTypes() {
+    async getBuylistImportProductCardProviderTypes(): Promise<BuylistImportProductCardProviderTypeDTO[]> {
         let buylistImportProductCardProviderTypes = await this.buylistImportProductCardProviderTypeRepository.find();
 
         //TO DO: CREATE AN ERROR TO RETURN;
@@ -51,7 +49,7 @@ export class BuylistImportProductCardProviderTypeService {
         return buylistImportProductCardProviderTypeDTOs;
     }
 
-    async getBuylistImportProductCardProviderTypeByName(buylistImportProductCardProviderTypeName: string) {
+    async getBuylistImportProductCardProviderTypeByName(buylistImportProductCardProviderTypeName: string): Promise<BuylistImportProductCardProviderTypeDTO> {
         let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
                 buylistImportProductCardProviderTypeName: buylistImportProductCardProviderTypeName
@@ -59,7 +57,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
 
         if (buylistImportProductCardProviderType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
+            throw new NotFoundException('Buylist import product card provider type not found');
         }
 
         let buylistImportProductCardProviderTypeDTO =await this.createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType);
@@ -68,7 +66,7 @@ export class BuylistImportProductCardProviderTypeService {
 
     }
 
-    async getBuylistImportProductCardProviderTypeByCode(buylistImportProductCardProviderTypeCode: string) {
+    async getBuylistImportProductCardProviderTypeByCode(buylistImportProductCardProviderTypeCode: string): Promise<BuylistImportProductCardProviderTypeDTO> {
         let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
                 buylistImportProductCardProviderTypeCode: buylistImportProductCardProviderTypeCode
@@ -76,7 +74,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
 
         if (buylistImportProductCardProviderType == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
+            throw new NotFoundException('Buylist import product card provider type not found');
         }
 
         let buylistImportProductCardProviderTypeDTO = await this.createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType);
@@ -86,7 +84,7 @@ export class BuylistImportProductCardProviderTypeService {
 
     }
 
-    async createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType: BuylistImportProductCardProviderType) {
+    async createBuylistImportProductCardProviderTypeDTO(buylistImportProductCardProviderType: BuylistImportProductCardProviderType): Promise<BuylistImportProductCardProviderTypeDTO> {
         let buylistImportProductCardProviderTypeDTO = new BuylistImportProductCardProviderTypeDTO();
         buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeId = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeId;
         buylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName = buylistImportProductCardProviderType.buylistImportProductCardProviderTypeName;
@@ -104,7 +102,7 @@ export class BuylistImportProductCardProviderTypeService {
         return buylistImportProductCardProviderTypeDTO;
     }
 
-    async createBuylistImportProductCardProviderType(createBuylistImportProductCardProviderTypeDTO: CreateBuylistImportProductCardProviderTypeDTO) {
+    async createBuylistImportProductCardProviderType(createBuylistImportProductCardProviderTypeDTO: CreateBuylistImportProductCardProviderTypeDTO): Promise<BuylistImportProductCardProviderTypeDTO> {
 
         //CHECK TO SEE IF THE PRODUCT CARD TYPE ALREADY EXISTS;
         let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
@@ -114,7 +112,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
 
         if (buylistImportProductCardProviderType != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_DUPLICATE', 'Buylist import product card provider type already exists');
+            throw new ConflictException('Buylist import product card provider type already exists');
         }
 
         buylistImportProductCardProviderType = this.buylistImportProductCardProviderTypeRepository.create({ ...createBuylistImportProductCardProviderTypeDTO });
@@ -126,7 +124,7 @@ export class BuylistImportProductCardProviderTypeService {
 
     }
 
-    async updateBuylistImportProductCardProviderType(updateBuylistImportProductCardProviderTypeDTO: UpdateBuylistImportProductCardProviderTypeDTO) {
+    async updateBuylistImportProductCardProviderType(updateBuylistImportProductCardProviderTypeDTO: UpdateBuylistImportProductCardProviderTypeDTO): Promise<BuylistImportProductCardProviderTypeDTO> {
 
         let buylistImportProductCardProviderType = await this.buylistImportProductCardProviderTypeRepository.findOne({
             where: {
@@ -135,7 +133,7 @@ export class BuylistImportProductCardProviderTypeService {
         });
 
         if (!buylistImportProductCardProviderType) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_IMPORT_PRODUCT_CARD_PROVIDER_TYPE_NOT_FOUND', 'Buylist import product card provider type not found');
+            throw new NotFoundException('Buylist import product card provider type not found');
         }
 
         buylistImportProductCardProviderType.buylistImportProductCardProviderTypeName = updateBuylistImportProductCardProviderTypeDTO.buylistImportProductCardProviderTypeName;

@@ -22,7 +22,7 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
     private tcgPlayerClientId = this.configService.get('TCGPLAYER_CLIENT_ID')
     private tcgPlayerClientSecret = this.configService.get('TCGPLAYER_CLIENT_SECRET');
 
-    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerById(commerceAccountSettingsPOSVendorServiceTCGPlayerId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerById(commerceAccountSettingsPOSVendorServiceTCGPlayerId: string): Promise<CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO> {
         let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountSettingsPOSVendorServiceTCGPlayerId : commerceAccountSettingsPOSVendorServiceTCGPlayerId
@@ -35,7 +35,7 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
         
     }
 
-    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId: string): Promise<CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO> {
         let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -48,11 +48,11 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
         
     }
 
-    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerAuthorizationURL() {
+    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerAuthorizationURL(): Promise<string> {
         return this.tcgPlayerStoreAuthorizationURL + '/' + this.tcgPlayerClientSecret;
     }
 
-    async authorizeCommerceAccountSettingsPOSVendorServiceTCGPlayer(commerceAccountId: string, authorizationCode: string) {
+    async authorizeCommerceAccountSettingsPOSVendorServiceTCGPlayer(commerceAccountId: string, authorizationCode: string): Promise<CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO> {
         
         const url = this.tcgPlayerAppAuthorizationURL + '/' + authorizationCode;
 
@@ -96,7 +96,7 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
 
     }
 
-    async updateCommerceAccountSettingsPOSVendorServiceTCGPlayerStoreInfo(commerceAccountId:string) {
+    async updateCommerceAccountSettingsPOSVendorServiceTCGPlayerStoreInfo(commerceAccountId:string): Promise<CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO> {
         let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -127,7 +127,7 @@ export class CommerceAccountSettingsPOSVendorServiceTCGPlayerService {
         return commerceAccountSettingsPOSVendorServiceTCGPlayerDTO;
     }
 
-    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerAPIBearerToken(commerceAccountId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerAPIBearerToken(commerceAccountId: string): Promise<string> {
             
         let commerceAccountSettingsPOSVendorServiceTCGPlayer = await this.commerceAccountSettingsPOSVendorServiceTCGPlayerRepository.findOneOrFail({ 
             where: { 

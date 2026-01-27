@@ -1,21 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistProductCardDTO, UpdateBuylistProductCardDTO, BuylistProductCardDTO } from './dto/buylist.product.card.dto';
 import { BuylistProductCard } from 'src/typeorm/entities/tcgcommerce/modules/buylist/product/card/buylist.product.card.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ErrorMessageDTO } from 'src/system/modules/error/message/dto/error.message.dto';
 
 @Injectable()
 export class BuylistProductCardService {
 
     constructor(
         @InjectRepository(BuylistProductCard) private buylistProductCardRepository: Repository<BuylistProductCard>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getBuylistProductCardById(buylistProductCardId: string) {
+    async getBuylistProductCardById(buylistProductCardId: string): Promise<BuylistProductCardDTO> {
         let buylistProductCard = await this.buylistProductCardRepository.findOne({ 
             where: { 
                 buylistProductCardId: buylistProductCardId 
@@ -23,7 +20,7 @@ export class BuylistProductCardService {
         });
         
         if (buylistProductCard == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found');
+            throw new NotFoundException('Buylist product card was not found');
         }
 
         let buylistProductCardDTO: BuylistProductCardDTO = ({ ...buylistProductCard });
@@ -32,7 +29,7 @@ export class BuylistProductCardService {
         
     }
 
-    async getBuylistProductCardsByCommerceAccountId(commerceAccountId: string) {
+    async getBuylistProductCardsByCommerceAccountId(commerceAccountId: string): Promise<BuylistProductCardDTO[]> {
         let buylistProductCards = await this.buylistProductCardRepository.find({
             where: {
                 commerceAccountId: commerceAccountId
@@ -55,7 +52,7 @@ export class BuylistProductCardService {
         return buylistProductCardDTOs;
     }
     
-    async createBuylistProductCard(createBuylistProductCardDTO: CreateBuylistProductCardDTO) {
+    async createBuylistProductCard(createBuylistProductCardDTO: CreateBuylistProductCardDTO): Promise<BuylistProductCardDTO> {
         
         let buylistProductCard = this.buylistProductCardRepository.create({ ...createBuylistProductCardDTO });
         //CREATE BUYLIST PRODUCT CARD CODE
@@ -74,7 +71,7 @@ export class BuylistProductCardService {
         
     }
 
-    async updateBuylistProductCard(updateBuylistProductCardDTO: UpdateBuylistProductCardDTO) {
+    async updateBuylistProductCard(updateBuylistProductCardDTO: UpdateBuylistProductCardDTO): Promise<BuylistProductCardDTO> {
                     
         let buylistProductCard = await this.buylistProductCardRepository.findOne({ 
             where: { 
@@ -83,7 +80,7 @@ export class BuylistProductCardService {
         });
             
         if (!buylistProductCard) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found'); 
+            throw new NotFoundException('Buylist product card was not found'); 
         }
 
         buylistProductCard.customerAccountUserId = updateBuylistProductCardDTO.customerAccountUserId;
@@ -107,19 +104,16 @@ export class BuylistProductCardService {
     
     }
 
-    async createBuylistProductCardCode(productVendorCode: string, productLineCode: string, productTypeCode: string, productLanguageCode: string) {
+    async createBuylistProductCardCode(productVendorCode: string, productLineCode: string, productTypeCode: string, productLanguageCode: string): Promise<string> {
         return `BPC-${productVendorCode}-${productLineCode}-${productTypeCode}-${productLanguageCode}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     }
 
     //DELETE BUYLIST PRODUCT CARD, ONLY IF IT HASN'T BEEN SUBMITTED;
 
     @OnEvent('buylist.product.card.update.count')
-    async updateBuylistProductCardCount(payload: any) {
+    async updateBuylistProductCardCount(payload: any): Promise<void> {
         let buylistProductCard = await this.getBuylistProductCardById(payload.buylistProductCardId);
         let countType = payload.countType;
-        if(buylistProductCard == null || buylistProductCard instanceof ErrorMessageDTO) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRODUCT_CARD_NOT_FOUND', 'Buylist product card was not found'); 
-        }
         if(countType == "ADD") {
             buylistProductCard.buylistProductCardTotalCount = buylistProductCard.buylistProductCardTotalCount + payload.buylistProductCardItemCount;
             buylistProductCard.buylistProductCardTotalQtyCount = buylistProductCard.buylistProductCardTotalQtyCount + payload.buylistProductCardItemQtyCount;

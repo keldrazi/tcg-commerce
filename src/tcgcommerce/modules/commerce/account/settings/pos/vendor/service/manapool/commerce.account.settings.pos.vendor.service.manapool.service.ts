@@ -13,7 +13,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         private POSVendorServiceManaPoolAdminService: POSVendorServiceManaPoolAdminService,
     ) { }
 
-    async getCommerceAccountSettingsPOSVendorServiceManaPoolById(commerceAccountSettingsPOSVendorServiceManaPoolId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceManaPoolById(commerceAccountSettingsPOSVendorServiceManaPoolId: string): Promise<CommerceAccountSettingsPOSVendorServiceManaPoolDTO> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.commerceAccountSettingsPOSVendorServiceManaPoolRepository.findOneOrFail({ 
             where: { 
                 commerceAccountSettingsPOSVendorServiceManaPoolId : commerceAccountSettingsPOSVendorServiceManaPoolId
@@ -26,7 +26,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         
     }
 
-    async getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId: string): Promise<CommerceAccountSettingsPOSVendorServiceManaPoolDTO> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.commerceAccountSettingsPOSVendorServiceManaPoolRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -39,7 +39,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         
     }
 
-    async createCommerceAccountSettingsPOSVendorServiceManaPool(createCommerceAccountSettingsPOSVendorServiceManaPoolDTO: CreateCommerceAccountSettingsPOSVendorServiceManaPoolDTO) {   
+    async createCommerceAccountSettingsPOSVendorServiceManaPool(createCommerceAccountSettingsPOSVendorServiceManaPoolDTO: CreateCommerceAccountSettingsPOSVendorServiceManaPoolDTO): Promise<CommerceAccountSettingsPOSVendorServiceManaPoolDTO> {   
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.commerceAccountSettingsPOSVendorServiceManaPoolRepository.findOne({ 
             where: {
                 commerceAccountId : createCommerceAccountSettingsPOSVendorServiceManaPoolDTO.commerceAccountId, 
@@ -58,7 +58,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         return commerceAccountSettingsPOSVendorServiceManaPoolDTO;
     }
 
-    async updateCommerceAccountSettingsPOSVendorServiceManaPool(updateCommerceAccountSettingsPOSVendorServiceManaPoolDTO: UpdateCommerceAccountSettingsPOSVendorServiceManaPoolDTO) {
+    async updateCommerceAccountSettingsPOSVendorServiceManaPool(updateCommerceAccountSettingsPOSVendorServiceManaPoolDTO: UpdateCommerceAccountSettingsPOSVendorServiceManaPoolDTO): Promise<CommerceAccountSettingsPOSVendorServiceManaPoolDTO> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.commerceAccountSettingsPOSVendorServiceManaPoolRepository.findOneOrFail({
             where: {
                 commerceAccountSettingsPOSVendorServiceManaPoolId: updateCommerceAccountSettingsPOSVendorServiceManaPoolDTO.commerceAccountSettingsPOSVendorServiceManaPoolId
@@ -78,7 +78,7 @@ export class CommerceAccountSettingsPOSVendorServiceManaPoolService {
         return commerceAccountSettingsPOSVendorServiceManaPoolDTO;
     }
 
-    async verifyCommerceAccountSettingsPOSVendorServiceManaPoolById(commerceAccountId: string) {
+    async verifyCommerceAccountSettingsPOSVendorServiceManaPoolById(commerceAccountId: string): Promise<CommerceAccountSettingsPOSVendorServiceManaPoolDTO> {
 
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.commerceAccountSettingsPOSVendorServiceManaPoolRepository.findOneOrFail({
             where: {

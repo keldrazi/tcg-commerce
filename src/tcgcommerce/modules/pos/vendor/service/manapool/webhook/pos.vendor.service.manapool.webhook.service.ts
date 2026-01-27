@@ -16,7 +16,7 @@ export class POSVendorServiceManaPoolWebhookService {
 
     private manaPoolWebhookURL = this.configService.get('MANAPOOL_WEBHOOK_URL');
 
-    async getManaPoolWebhooks(commerceAccountId: string) {
+    async getManaPoolWebhooks(commerceAccountId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
         if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
@@ -30,7 +30,7 @@ export class POSVendorServiceManaPoolWebhookService {
 
     }
 
-    async getManaPoolWebhookById(commerceAccountId: string, webhookId: string) {
+    async getManaPoolWebhookById(commerceAccountId: string, webhookId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
         if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
@@ -44,7 +44,7 @@ export class POSVendorServiceManaPoolWebhookService {
     
     }
 
-    async createManaPoolWebhook(commerceAccountId, webhookType: string) {
+    async createManaPoolWebhook(commerceAccountId, webhookType: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
         if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
@@ -67,17 +67,17 @@ export class POSVendorServiceManaPoolWebhookService {
     }
 
     //WEBHOOK CALLBACK METHODS;
-    async processManaPoolWebhookCallback(commerceAccountId:string, webhookData: any) {
+    async processManaPoolWebhookCallback(commerceAccountId:string, webhookData: any): Promise<boolean> {
         //Process webhook data here as needed
         return true;
     }
 
     //UTILITY METHODS;
-    async getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId: string): Promise<any> {
         return await this.commerceAccountSettingsPOSVendorServiceManaPoolService.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
     }
 
-    async createWebhookURL(commerceAccountId) {
+    async createWebhookURL(commerceAccountId): Promise<string> {
         return this.manaPoolWebhookURL + '/' + commerceAccountId;
     }
         

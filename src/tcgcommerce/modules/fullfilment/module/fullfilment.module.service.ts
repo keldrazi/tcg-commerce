@@ -11,7 +11,7 @@ export class FullfilmentModuleService {
         @InjectRepository(FullfilmentModule) private fullfilmentModuleRepository: Repository<FullfilmentModule>,
     ) { }
 
-    async getFullfilmentModule(fullfilmentModuleId: string) {
+    async getFullfilmentModule(fullfilmentModuleId: string): Promise<FullfilmentModuleDTO> {
         let fullfilmentModule = await this.fullfilmentModuleRepository.findOneOrFail({ 
             where: { 
                 fullfilmentModuleId : fullfilmentModuleId
@@ -24,7 +24,7 @@ export class FullfilmentModuleService {
         
     }
 
-    async getFullfilmentModules() {
+    async getFullfilmentModules(): Promise<FullfilmentModuleDTO[]> {
         let fullfilmentModules = await this.fullfilmentModuleRepository.find();
         
         if (fullfilmentModules == null) {
@@ -45,7 +45,7 @@ export class FullfilmentModuleService {
         
     }
 
-    async createFullfilmentModule(createFullfilmentModuleDTO: CreateFullfilmentModuleDTO) {
+    async createFullfilmentModule(createFullfilmentModuleDTO: CreateFullfilmentModuleDTO): Promise<FullfilmentModuleDTO> {
         
         let existingModule = await this.fullfilmentModuleRepository.findOne({ 
             where: { 
@@ -65,7 +65,7 @@ export class FullfilmentModuleService {
         return fullfilmentModuleDTO;
     }
 
-    async updateFullfilmentModule(updateFullfilmentModuleDTO: UpdateFullfilmentModuleDTO) {
+    async updateFullfilmentModule(updateFullfilmentModuleDTO: UpdateFullfilmentModuleDTO): Promise<FullfilmentModuleDTO> {
             
         let existingFullfilmentModule = await this.fullfilmentModuleRepository.findOneOrFail({ 
             where: { 

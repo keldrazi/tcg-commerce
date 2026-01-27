@@ -16,7 +16,7 @@ export class POSVendorServiceTCGPlayerAPIRestAdminService {
 
     private tcgPlayerAPIURL = this.configService.get('TCGPLAYER_API_URL');
     
-    async getTCGPlayerStoreSelfInfo(bearerToken:string, storeKey:string) {
+    async getTCGPlayerStoreSelfInfo(bearerToken:string, storeKey:string): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/self';
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.get(url, { headers }).pipe(
@@ -31,7 +31,7 @@ export class POSVendorServiceTCGPlayerAPIRestAdminService {
         return data;
     }
 
-    async getTCGPlayerStoreInfo(bearerToken:string, storeKey:string) {
+    async getTCGPlayerStoreInfo(bearerToken:string, storeKey:string): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey;
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.get(url, { headers }).pipe(
@@ -46,7 +46,7 @@ export class POSVendorServiceTCGPlayerAPIRestAdminService {
         return data;
     }
 
-    async updateTCGPlayerSKUInventory(bearerToken:string, storeKey:string, tcgPlayerSku: string,tcgPlayerSkuInventory: TCGPlayerSKUInventory) {
+    async updateTCGPlayerSKUInventory(bearerToken:string, storeKey:string, tcgPlayerSku: string,tcgPlayerSkuInventory: TCGPlayerSKUInventory): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey + '/inventory/skus/' + tcgPlayerSku;
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.put(url, tcgPlayerSkuInventory, { headers }).pipe(
@@ -61,7 +61,7 @@ export class POSVendorServiceTCGPlayerAPIRestAdminService {
         return data;
     }
 
-    async updateTCGPlayerSKUInventoryPrice(bearerToken:string, storeKey:string, tcgPlayerSku: string,tcgPlayerSkuInventoryPrice: TCGPlayerSKUInventoryPrice) {
+    async updateTCGPlayerSKUInventoryPrice(bearerToken:string, storeKey:string, tcgPlayerSku: string,tcgPlayerSkuInventoryPrice: TCGPlayerSKUInventoryPrice): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey + '/inventory/skus/' + tcgPlayerSku + '/price';
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.put(url, tcgPlayerSkuInventoryPrice, { headers }).pipe(
@@ -76,7 +76,7 @@ export class POSVendorServiceTCGPlayerAPIRestAdminService {
         return data;
     }
 
-    async updateTCGPlayerSKUInventoryPrices(bearerToken:string, storeKey:string, tcgPlayerSku: string,tcgPlayerSkuInventoryPrices: TCGPlayerSKUInventoryPrice[]) {
+    async updateTCGPlayerSKUInventoryPrices(bearerToken:string, storeKey:string, tcgPlayerSku: string,tcgPlayerSkuInventoryPrices: TCGPlayerSKUInventoryPrice[]): Promise<any> {
         const url = this.tcgPlayerAPIURL + '/stores/' + storeKey + '/inventory/skus/batch';
         const headers = { 'Authorization': 'Bearer ' + bearerToken };
         const response = this.httpService.post(url, tcgPlayerSkuInventoryPrices, { headers }).pipe(

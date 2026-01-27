@@ -1,19 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBuylistStatusDTO, UpdateBuylistStatusDTO, BuylistStatusDTO } from './dto/buylist.status.dto';
 import { BuylistStatus } from 'src/typeorm/entities/tcgcommerce/modules/buylist/status/buylist.status.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistStatusService {
 
     constructor(
         @InjectRepository(BuylistStatus) private buylistStatusRepository: Repository<BuylistStatus>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
-    async getBuylistStatusById(buylistStatusId: string) {
+    async getBuylistStatusById(buylistStatusId: string): Promise<BuylistStatusDTO> {
         let buylistStatus = await this.buylistStatusRepository.findOne({ 
             where: { 
                 buylistStatusId: buylistStatusId 
@@ -21,7 +19,7 @@ export class BuylistStatusService {
         });
         
         if (buylistStatus == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_STATUS_NOT_FOUND', 'Buylist status was not found');
+            throw new NotFoundException('Buylist status was not found');
         }
 
         let buylistStatusDTO: BuylistStatusDTO = ({ ...buylistStatus });
@@ -30,7 +28,7 @@ export class BuylistStatusService {
         
     }
 
-    async getBuylistStatuses() {
+    async getBuylistStatuses(): Promise<BuylistStatusDTO[]> {
         let buylistStatuses = await this.buylistStatusRepository.find();
         
         let buylistStatusDTOs: BuylistStatusDTO[] = [];
@@ -49,7 +47,7 @@ export class BuylistStatusService {
         return buylistStatusDTOs;
     }
     
-    async getBuylistStatusByName(buylistStatusName: string) {
+    async getBuylistStatusByName(buylistStatusName: string): Promise<BuylistStatusDTO> {
         let buylistStatus = await this.buylistStatusRepository.findOne({ 
             where: { 
                 buylistStatusName: buylistStatusName 
@@ -57,7 +55,7 @@ export class BuylistStatusService {
         });
         
         if (buylistStatus == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_STATUS_NOT_FOUND', 'Buylist status was not found');
+            throw new NotFoundException('Buylist status was not found');
         }
 
         let buylistStatusDTO: BuylistStatusDTO = ({ ...buylistStatus });
@@ -66,7 +64,7 @@ export class BuylistStatusService {
         
     }
     
-    async createBuylistStatus(createBuylistStatusDTO: CreateBuylistStatusDTO) {
+    async createBuylistStatus(createBuylistStatusDTO: CreateBuylistStatusDTO): Promise<BuylistStatusDTO> {
     
         let buylistStatus = await this.buylistStatusRepository.findOne({ 
             where: { 
@@ -75,7 +73,7 @@ export class BuylistStatusService {
         });
 
         if (buylistStatus != null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_STATUS_ALREADY_EXISTS', 'Buylist status already exists');
+            throw new ConflictException('Buylist status already exists');
         }
         
         buylistStatus = this.buylistStatusRepository.create({ ...createBuylistStatusDTO });
@@ -87,7 +85,7 @@ export class BuylistStatusService {
         
     }
 
-    async updateBuylistStatus(updateBuylistStatusDTO: UpdateBuylistStatusDTO) {
+    async updateBuylistStatus(updateBuylistStatusDTO: UpdateBuylistStatusDTO): Promise<BuylistStatusDTO> {
                     
         let buylistStatus = await this.buylistStatusRepository.findOne({ 
             where: { 
@@ -96,7 +94,7 @@ export class BuylistStatusService {
         });
             
         if (!buylistStatus) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_STATUS_NOT_FOUND', 'Buylist status was not found');
+            throw new NotFoundException('Buylist status was not found');
         }
 
         buylistStatus.buylistStatusName = updateBuylistStatusDTO.buylistStatusName;

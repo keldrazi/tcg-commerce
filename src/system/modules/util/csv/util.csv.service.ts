@@ -7,7 +7,7 @@ export class UtilCSVService {
 
     constructor() {}
 
-    async parseCSV(file: Express.Multer.File) {
+    async parseCSV(file: Express.Multer.File): Promise<any> {
         const dataString = file.buffer.toString('utf-8');
         return new Promise((resolve, reject) => { 
             Papa.parse(dataString, { 
@@ -24,7 +24,7 @@ export class UtilCSVService {
         });
     }
 
-    async unparseCSV(data: any[]) {
+    async unparseCSV(data: any[]): Promise<Buffer> {
         const csvString = Papa.unparse(data);
         return Buffer.from(csvString, 'utf-8');
     }

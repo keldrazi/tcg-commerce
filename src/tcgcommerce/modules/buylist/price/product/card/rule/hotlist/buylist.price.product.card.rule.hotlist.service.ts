@@ -1,20 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BuylistPriceProductCardRuleHotlistDTO, CreateBuylistPriceProductCardRuleHotlistDTO, UpdateBuylistPriceProductCardRuleHotlistDTO} from './dto/buylist.price.product.card.rule.hotlist.dto';
 import { BuylistPriceProductCardRuleHotlist } from 'src/typeorm/entities/tcgcommerce/modules/buylist/price/product/card/rule/hotlist/buylist.price.product.card.rule.hotlist.entity';
-import { ErrorMessageService } from 'src/system/modules/error/message/error.message.service';
 
 @Injectable()
 export class BuylistPriceProductCardRuleHotlistService {
 
     constructor(
         @InjectRepository(BuylistPriceProductCardRuleHotlist) private buylistPriceProductCardRuleHotlistRepository: Repository<BuylistPriceProductCardRuleHotlist>,
-        private errorMessageService: ErrorMessageService,
     ) { }
 
 
-    async getBuylistPriceProductCardRuleHotlistById(buylistPriceProductCardRuleHotlistId: string) {
+    async getBuylistPriceProductCardRuleHotlistById(buylistPriceProductCardRuleHotlistId: string): Promise<BuylistPriceProductCardRuleHotlistDTO> {
         let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
             where: {
                 buylistPriceProductCardRuleHotlistId: buylistPriceProductCardRuleHotlistId,
@@ -22,7 +20,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if(buylistPriceProductCardRuleHotlist == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found');
+            throw new NotFoundException('Buylist price product card rule hotlist was not found');
         }
 
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
@@ -30,7 +28,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         return buylistPriceProductCardRuleHotlistDTO;
     }
 
-    async getBuylistPriceProductCardRuleHotlistByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string) {
+    async getBuylistPriceProductCardRuleHotlistByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string): Promise<BuylistPriceProductCardRuleHotlistDTO> {
         let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
             where: {
                 commerceAccountId: commerceAccountId,
@@ -41,7 +39,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if(buylistPriceProductCardRuleHotlist == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found');
+            throw new NotFoundException('Buylist price product card rule hotlist was not found');
         }
 
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
@@ -51,7 +49,7 @@ export class BuylistPriceProductCardRuleHotlistService {
 
 
 
-    async createBuylistPriceProductCardRuleHotlist(createBuylistPriceProductCardRuleHotlistDTO: CreateBuylistPriceProductCardRuleHotlistDTO) {
+    async createBuylistPriceProductCardRuleHotlist(createBuylistPriceProductCardRuleHotlistDTO: CreateBuylistPriceProductCardRuleHotlistDTO): Promise<BuylistPriceProductCardRuleHotlistDTO> {
         
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
         let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
@@ -64,7 +62,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if (buylistPriceProductCardRuleHotlist != null) {
-           return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_ALREADY_EXISTS', 'Buylist price product card rule hotlist already exists');
+           throw new ConflictException('Buylist price product card rule hotlist already exists');
         }
 
         let newBuylistPriceProductCardRuleHotlist = this.buylistPriceProductCardRuleHotlistRepository.create({ ...createBuylistPriceProductCardRuleHotlistDTO });
@@ -75,7 +73,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         return buylistPriceProductCardRuleHotlistDTO;
     }   
 
-    async updateBuylistPriceProductCardRuleHotlist(updateBuylistPriceProductCardRuleHotlistDTO: UpdateBuylistPriceProductCardRuleHotlistDTO) {
+    async updateBuylistPriceProductCardRuleHotlist(updateBuylistPriceProductCardRuleHotlistDTO: UpdateBuylistPriceProductCardRuleHotlistDTO): Promise<BuylistPriceProductCardRuleHotlistDTO> {
 
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
         let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
@@ -85,7 +83,7 @@ export class BuylistPriceProductCardRuleHotlistService {
         });
         
         if (buylistPriceProductCardRuleHotlist == null) {
-            return this.errorMessageService.createErrorMessage('BUYLIST_PRICE_PRODUCT_CARD_RULE_HOTLIST_NOT_FOUND', 'Buylist price product card rule hotlist was not found');
+            throw new NotFoundException('Buylist price product card rule hotlist was not found');
         }
 
         buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistId = updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistId;

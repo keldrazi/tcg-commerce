@@ -12,7 +12,7 @@ export class CustomerUserVerificationService {
         @InjectRepository(CustomerUserVerification) private customerUserVerificationRepository: Repository<CustomerUserVerification>,
     ) { }
 
-    async createCustomerUserVerification(commerceAccountId: string, customerUserId: string, customerUserVerificationType: string) {
+    async createCustomerUserVerification(commerceAccountId: string, customerUserId: string, customerUserVerificationType: string): Promise<CustomerUserVerificationDTO> {
 
         let customerUserVerificationCode = this.createCustomerUserVerificationCode();
         let customerUserVerificationCodeExpires = new Date();
@@ -45,7 +45,7 @@ export class CustomerUserVerificationService {
 
     }
 
-    async verifyCustomerUserVerification(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string, customerUserVerificationType: string) {
+    async verifyCustomerUserVerification(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string, customerUserVerificationType: string): Promise<boolean> {
 
         let customerUserVerification = await this.customerUserVerificationRepository.findOne({ 
             where: { 

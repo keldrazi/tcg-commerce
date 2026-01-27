@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { CommerceAccountSettingsPOSVendorServiceTCGPlayerService } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/tcgplayer/commerce.account.settings.pos.vendor.service.tcgplayer.service';
 import { POSVendorServiceTCGPlayerAPIRestAdminService } from '../api/rest/admin/pos.vendor.service.tcgplayer.api.rest.admin.service';
 import { InventoryProductCardDTO } from 'src/tcgcommerce/modules/inventory/product/card/dto/inventory.product.card.dto';
+import { CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO } from 'src/tcgcommerce/modules/commerce/account/settings/pos/vendor/service/tcgplayer/dto/commerce.account.settings.pos.vendor.service.tcgplayer.dto';
 
 @Injectable()
 export class POSVendorServiceTCGPlayerAdminService {
@@ -18,7 +19,7 @@ export class POSVendorServiceTCGPlayerAdminService {
     
 
     //UTILITY METHODS;
-    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId: string): Promise<CommerceAccountSettingsPOSVendorServiceTCGPlayerDTO> {
         return await this.commerceAccountSettingsPOSVendorServiceTCGPlayerService.getCommerceAccountSettingsPOSVendorServiceTCGPlayerByCommerceAccountId(commerceAccountId);
     }
         

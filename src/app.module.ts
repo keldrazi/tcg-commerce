@@ -57,7 +57,6 @@ import { InventoryProductCardServiceUpdatePriceJobItemModule } from './tcgcommer
 import { InventoryProductCardServiceImportJobProviderTypeModule } from './tcgcommerce/modules/inventory/product/card/service/import/job/provider/type/inventory.product.card.service.import.job.provider.type.module';
 //System Modules;
 import { UtilScheduleTaskPriceModule } from './system/modules/util/schedule/task/price/util.schedule.task.price.module';
-import { ErrorMessageModule } from './system/modules/error/message/error.message.module';
 import { TCGdbAPIUtilModule } from './tcgdb/modules/tcgdb/api/util/tcgdb.api.util.module';
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -124,7 +123,6 @@ const NODE_ENV = process.env.NODE_ENV;
     InventoryProductCardServiceImportJobProviderTypeModule,
     //System Modules;
     UtilScheduleTaskPriceModule,
-    ErrorMessageModule,
     //TCGdb API Util Module;
     TCGdbAPIUtilModule,
   ],

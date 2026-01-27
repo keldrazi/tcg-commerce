@@ -12,7 +12,7 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
         @InjectRepository(CommerceAccountSettingsPOSVendorServiceShopify) private commerceAccountSettingsPOSVendorServiceShopifyRepository: Repository<CommerceAccountSettingsPOSVendorServiceShopify>,
     ) { }
 
-    async getCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountSettingsPOSVendorServiceShopifyId: string): Promise<CommerceAccountSettingsPOSVendorServiceShopifyDTO> {
         let commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.findOneOrFail({ 
             where: { 
                 commerceAccountSettingsPOSVendorServiceShopifyId : commerceAccountSettingsPOSVendorServiceShopifyId
@@ -25,7 +25,7 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
         
     }
 
-    async getCommerceAccountSettingsPOSVendorServiceShopifyByCommerceAccountId(commerceAccountId: string) {
+    async getCommerceAccountSettingsPOSVendorServiceShopifyByCommerceAccountId(commerceAccountId: string): Promise<CommerceAccountSettingsPOSVendorServiceShopifyDTO> {
         let commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
@@ -38,7 +38,7 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
         
     }
 
-    async createCommerceAccountSettingsPOSVendorServiceShopify(createCommerceAccountSettingsPOSVendorServiceShopifyDTO: CreateCommerceAccountSettingsPOSVendorServiceShopifyDTO) {   
+    async createCommerceAccountSettingsPOSVendorServiceShopify(createCommerceAccountSettingsPOSVendorServiceShopifyDTO: CreateCommerceAccountSettingsPOSVendorServiceShopifyDTO): Promise<CommerceAccountSettingsPOSVendorServiceShopifyDTO> {   
         let commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.findOne({ 
             where: {
                 commerceAccountId : createCommerceAccountSettingsPOSVendorServiceShopifyDTO.commerceAccountId, 
@@ -57,7 +57,7 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
         return commerceAccountSettingsPOSVendorServiceShopifyDTO;
     }
 
-    async updateCommerceAccountSettingsPOSVendorServiceShopify(updateCommerceAccountSettingsPOSVendorServiceShopifyDTO: UpdateCommerceAccountSettingsPOSVendorServiceShopifyDTO) {
+    async updateCommerceAccountSettingsPOSVendorServiceShopify(updateCommerceAccountSettingsPOSVendorServiceShopifyDTO: UpdateCommerceAccountSettingsPOSVendorServiceShopifyDTO): Promise<CommerceAccountSettingsPOSVendorServiceShopifyDTO> {
         let commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.findOneOrFail({
             where: {
                 commerceAccountSettingsPOSVendorServiceShopifyId: updateCommerceAccountSettingsPOSVendorServiceShopifyDTO.commerceAccountSettingsPOSVendorServiceShopifyId
@@ -77,7 +77,7 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
         return commerceAccountSettingsPOSVendorServiceShopifyDTO;
     }
 
-    async updateCommerceAccountSettingsPOSVendorServiceShopifyLocation(commerceAccountSettingsPOSVendorServiceShopifyId: string, location: any) {
+    async updateCommerceAccountSettingsPOSVendorServiceShopifyLocation(commerceAccountSettingsPOSVendorServiceShopifyId: string, location: any): Promise<void> {
         let commerceAccountSettingsPOSVendorServiceShopify = await this.commerceAccountSettingsPOSVendorServiceShopifyRepository.findOneOrFail({
             where: {
                 commerceAccountSettingsPOSVendorServiceShopifyId: commerceAccountSettingsPOSVendorServiceShopifyId
@@ -88,7 +88,7 @@ export class CommerceAccountSettingsPOSVendorServiceShopifyService {
 
     }
 
-    async verifyCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountId: string) {
+    async verifyCommerceAccountSettingsPOSVendorServiceShopifyById(commerceAccountId: string): Promise<void> {
         
     }
 }

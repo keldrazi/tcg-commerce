@@ -8,7 +8,7 @@ export class AwsUtilTextractService {
         private readonly configService: ConfigService,
     ){}
 
-    async processTextractData(response) {
+    async processTextractData(response): Promise<any> {
         let data = this.getTableJSONResults(response);
       
         
