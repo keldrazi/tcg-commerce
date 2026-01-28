@@ -13,23 +13,19 @@ export class PriceRuleProductCardBaseService {
 
 
     async getPriceRuleProductCardBaseById(priceRuleProductCardBaseId: string): Promise<PriceRuleProductCardBaseDTO> {
-        let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
+        let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOneOrFail({
             where: {
                 priceRuleProductCardBaseId: priceRuleProductCardBaseId,
             }
         });
         
-        if(priceRuleProductCardBase == null) {
-            throw new NotFoundException('Price rule product card base was not found');
-        }
-
         let priceRuleProductCardBaseDTO: PriceRuleProductCardBaseDTO = ({ ...priceRuleProductCardBase})
 
         return priceRuleProductCardBaseDTO;
     }
 
     async getPriceRuleProductCardBaseByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string): Promise<PriceRuleProductCardBaseDTO> {
-        let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
+        let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOneOrFail({
             where: {
                 commerceAccountId: commerceAccountId,
                 productVendorId: productVendorId,
@@ -38,10 +34,6 @@ export class PriceRuleProductCardBaseService {
             }
         });
         
-        if(priceRuleProductCardBase == null) {
-            throw new NotFoundException('Price rule product card base was not found');
-        }
-
         let priceRuleProductCardBaseDTO: PriceRuleProductCardBaseDTO = ({ ...priceRuleProductCardBase})
 
         return priceRuleProductCardBaseDTO;
@@ -76,17 +68,12 @@ export class PriceRuleProductCardBaseService {
     async updatePriceRuleProductCardBase(updatePriceRuleProductCardBaseDTO: UpdatePriceRuleProductCardBaseDTO): Promise<PriceRuleProductCardBaseDTO> {
 
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
-        let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOne({
+        let priceRuleProductCardBase = await this.priceRuleProductCardBaseRepository.findOneOrFail({
             where: {
                 priceRuleProductCardBaseId: updatePriceRuleProductCardBaseDTO.priceRuleProductCardBaseId
             }
         });
         
-        if (priceRuleProductCardBase == null) {
-            throw new NotFoundException('Price rule product card base was not found');
-        }
-
-        priceRuleProductCardBase.priceRuleProductCardBaseId = updatePriceRuleProductCardBaseDTO.priceRuleProductCardBaseId;
         priceRuleProductCardBase.priceRuleProductCardBaseOption = updatePriceRuleProductCardBaseDTO.priceRuleProductCardBaseOption;
         priceRuleProductCardBase.priceRuleProductCardBaseNMPercentage = updatePriceRuleProductCardBaseDTO.priceRuleProductCardBaseNMPercentage;
         priceRuleProductCardBase.priceRuleProductCardBaseLPPercentage = updatePriceRuleProductCardBaseDTO.priceRuleProductCardBaseLPPercentage;

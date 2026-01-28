@@ -1,4 +1,4 @@
-export interface InventoryProductCardItemDTO {
+export class InventoryProductCardItemDTO {
     inventoryProductCardItemId: string;
     inventoryProductCardId: string;
     productCardPrintingId: string;
@@ -16,5 +16,7 @@ export interface InventoryProductCardItemDTO {
     inventoryProductCardItemCost: number;
     inventoryProductCardItemOverridePriceEnabled: boolean;
     inventoryProductCardItemOverridePrice: number;
+    inventoryProductCardItemCreateDate: Date;
+    inventoryProductCardItemUpdateDate: Date;
 }
     

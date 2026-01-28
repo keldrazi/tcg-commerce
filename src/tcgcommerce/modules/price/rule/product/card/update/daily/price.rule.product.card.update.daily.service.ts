@@ -13,16 +13,12 @@ export class PriceRuleProductCardUpdateDailyService {
 
 
     async getPriceRuleProductCardUpdateDailyById(priceRuleProductCardUpdateDailyId: string): Promise<PriceRuleProductCardUpdateDailyDTO> {
-        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOne({
+        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOneOrFail({
             where: {
                 priceRuleProductCardUpdateDailyId: priceRuleProductCardUpdateDailyId,
             }
         });
         
-        if(priceRuleProductCardUpdateDaily == null) {
-            throw new NotFoundException('Price rule product card update daily was not found');
-        }
-
         let priceRuleProductCardUpdateDailyDTO: PriceRuleProductCardUpdateDailyDTO = ({ ...priceRuleProductCardUpdateDaily});
         priceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyCommerceLocationIds = JSON.parse(priceRuleProductCardUpdateDaily.priceRuleProductCardUpdateDailyCommerceLocationIds);
 
@@ -35,13 +31,13 @@ export class PriceRuleProductCardUpdateDailyService {
                 commerceAccountId: commerceAccountId
             }
         });
-        
-        if(priceRuleProductCardUpdateDaily == null) {
-            [];
-        }
 
         let priceRuleProductCardUpdateDailyDTOs: PriceRuleProductCardUpdateDailyDTO[] = [];
         
+        if(priceRuleProductCardUpdateDaily == null) {
+            priceRuleProductCardUpdateDailyDTOs;
+        }
+
         for(let i=0; i < priceRuleProductCardUpdateDaily.length; i++) {
             let priceRuleProductCardUpdateDailyDTO: PriceRuleProductCardUpdateDailyDTO = ({ ...priceRuleProductCardUpdateDaily[i]})
             priceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyCommerceLocationIds = JSON.parse(priceRuleProductCardUpdateDaily[i].priceRuleProductCardUpdateDailyCommerceLocationIds);
@@ -52,7 +48,7 @@ export class PriceRuleProductCardUpdateDailyService {
     }
 
     async getPriceRuleProductCardUpdateDailyByCommerceAccountIdAndVendorId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string): Promise<PriceRuleProductCardUpdateDailyDTO> {
-        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOne({
+        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOneOrFail({
             where: {
                 commerceAccountId: commerceAccountId,
                 productVendorId: productVendorId,
@@ -61,10 +57,6 @@ export class PriceRuleProductCardUpdateDailyService {
             }
         });
         
-        if(priceRuleProductCardUpdateDaily == null) {
-            throw new NotFoundException('Price rule product card update daily was not found');
-        }
-
         let priceRuleProductCardUpdateDailyDTO: PriceRuleProductCardUpdateDailyDTO = ({ ...priceRuleProductCardUpdateDaily})
         priceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyCommerceLocationIds = JSON.parse(priceRuleProductCardUpdateDaily.priceRuleProductCardUpdateDailyCommerceLocationIds);
 
@@ -82,8 +74,8 @@ export class PriceRuleProductCardUpdateDailyService {
             }
         });
         
-        if (priceRuleProductCardUpdateDaily != null) {
-            throw new ConflictException('Price rule product card update daily already exists for this commerce account and product');
+        if (!priceRuleProductCardUpdateDaily) {
+            throw new ConflictException('Price rule product card update daily already exists');
         }
 
         priceRuleProductCardUpdateDaily = this.priceRuleProductCardUpdateDailyRepository.create({ ...createPriceRuleProductCardUpdateDailyDTO });
@@ -96,15 +88,11 @@ export class PriceRuleProductCardUpdateDailyService {
 
     async updatePriceRuleProductCardUpdateDaily(updatePriceRuleProductCardUpdateDailyDTO: UpdatePriceRuleProductCardUpdateDailyDTO): Promise<PriceRuleProductCardUpdateDailyDTO> {
 
-        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOne({
+        let priceRuleProductCardUpdateDaily = await this.priceRuleProductCardUpdateDailyRepository.findOneOrFail({
             where: {
                 priceRuleProductCardUpdateDailyId: updatePriceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyId,
             }
         });
-
-        if(priceRuleProductCardUpdateDaily == null) {
-            throw new NotFoundException('Price rule product card update daily was not found');
-        }
 
         priceRuleProductCardUpdateDaily.priceRuleProductCardUpdateDailyCommerceLocationIds = updatePriceRuleProductCardUpdateDailyDTO.priceRuleProductCardUpdateDailyCommerceLocationIds;
         priceRuleProductCardUpdateDaily.priceRuleProductCardUpdateDailyUpdateDate = new Date();
