@@ -31,11 +31,11 @@ export class CustomerModuleService {
             } 
         });
 
-        if (customerModules == null) {
-            return [];
-        }
-
         let customerModuleDTOs: CustomerModuleDTO[] = [];
+
+        if (!customerModules) {
+            return customerModuleDTOs;
+        }
 
         for (let i = 0; i < customerModules.length; i++) {
             let customerModule = customerModules[i];
@@ -51,11 +51,11 @@ export class CustomerModuleService {
     async getCustomerModules(): Promise<CustomerModuleDTO[]> {
         let customerModules = await this.customerModuleRepository.find();
         
-        if (customerModules == null) {
-            return [];
-        }
-
         let customerModuleDTOs: CustomerModuleDTO[] = [];
+
+        if (!customerModules) {
+            return customerModuleDTOs;
+        }
 
         for (let i = 0; i < customerModules.length; i++) {
             let customerModule = customerModules[i];
@@ -77,7 +77,7 @@ export class CustomerModuleService {
             } 
         });
 
-        if (customerModule != null) {
+        if (!customerModule) {
             throw new ConflictException('Customer module already exists');
         }
         

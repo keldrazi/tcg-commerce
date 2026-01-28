@@ -47,7 +47,7 @@ export class CustomerUserVerificationService {
 
     async verifyCustomerUserVerification(commerceAccountId: string, customerUserId: string, customerUserVerificationCode: string, customerUserVerificationType: string): Promise<boolean> {
 
-        let customerUserVerification = await this.customerUserVerificationRepository.findOne({ 
+        let customerUserVerification = await this.customerUserVerificationRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: commerceAccountId, 
                 customerUserId: customerUserId, 
@@ -57,10 +57,7 @@ export class CustomerUserVerificationService {
         });
 
         let now = new Date();
-        if (customerUserVerification == null || customerUserVerification.customerUserVerificationCodeIsValid == false || customerUserVerification.customerUserVerificationCodeExpires < now) {
-            return false;
-        }
-
+        
         customerUserVerification.customerUserVerificationCodeIsValid = false;
         customerUserVerification.customerUserVerificationUpdateDate = new Date();
 

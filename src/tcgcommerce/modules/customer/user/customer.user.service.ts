@@ -61,7 +61,7 @@ export class CustomerUserService {
             } 
         });
 
-        if(customerUser != null) {
+        if(!customerUser) {
             throw new ConflictException('Customer user already exists');
         }
 
