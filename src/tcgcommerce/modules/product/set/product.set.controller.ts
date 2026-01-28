@@ -1,9 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, InternalServerErrorException, ConflictException, NotFoundException } from '@nestjs/common';
-import { CreateProductSetDTO, UpdateProductSetDTO, ProductSetDTO } from './dto/product.set.dto';
+import { UpdateProductSetDTO } from './dto/product.set.dto';
 import { ProductSetService } from './product.set.service';
 import { EntityNotFoundError } from 'typeorm';
-
-
 
 @Controller('product/set')
 export class ProductSetController {
@@ -22,7 +20,7 @@ export class ProductSetController {
         }
     }
 
-    @Get('/create/plc/:productLineCode')
+    @Post('/create/plc/:productLineCode')
     async createProductSetsByProductLineCode(@Param('productLineCode') productLineCode: string) {
         try {
         return await this.productSetService.createProductSetsByProductLineCode(productLineCode.toUpperCase());
@@ -46,7 +44,4 @@ export class ProductSetController {
             throw new InternalServerErrorException('Failed to update product set');
         }
     }
-
-    
-
 }

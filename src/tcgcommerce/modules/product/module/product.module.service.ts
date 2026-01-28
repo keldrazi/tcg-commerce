@@ -12,16 +12,12 @@ export class ProductModuleService {
     ) { }
 
     async getProductModuleById(productModuleId: string): Promise<ProductModuleDTO> {
-        let productModule = await this.productModuleRepository.findOne({ 
+        let productModule = await this.productModuleRepository.findOneOrFail({ 
             where: { 
                 productModuleId : productModuleId
             } 
         });
         
-        if (productModule == null) {
-            throw new NotFoundException('Product module not found');
-        }
-
         let productModuleDTO: ProductModuleDTO = ({ ...productModule });
 
         return productModuleDTO;
@@ -29,16 +25,12 @@ export class ProductModuleService {
     }
 
     async getProductModuleByCommerceAccountId(commerceAccountId: string): Promise<ProductModuleDTO> {
-        let productModule = await this.productModuleRepository.findOne({ 
+        let productModule = await this.productModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
         
-        if (!productModule) {
-            throw new NotFoundException('Product module not found for this commerce account');
-        }
-
         let productModuleDTO: ProductModuleDTO = ({ ...productModule });
 
         return productModuleDTO;
@@ -49,11 +41,11 @@ export class ProductModuleService {
     async getProductModules(): Promise<ProductModuleDTO[]> {
         let productModules = await this.productModuleRepository.find();
         
-        if (productModules == null) {
-            return [];
-        }
-
         let productModuleDTOs: ProductModuleDTO[] = [];
+
+        if (productModules == null) {
+            return productModuleDTOs;
+        }
 
         for(let i = 0; i < productModules.length; i++) {
             let productModule = productModules[i];
@@ -74,7 +66,7 @@ export class ProductModuleService {
             } 
         });
 
-        if (productModule != null) {
+        if (productModule) {
             throw new ConflictException('Product module already exists');
         }
         
@@ -88,15 +80,11 @@ export class ProductModuleService {
 
     async updateProductModule(updateProductModuleDTO: UpdateProductModuleDTO): Promise<ProductModuleDTO> {
         
-        let productModule = await this.productModuleRepository.findOne({ 
+        let productModule = await this.productModuleRepository.findOneOrFail({ 
             where: { 
                 productModuleId: updateProductModuleDTO.productModuleId
             } 
         });
-
-        if (!productModule) {
-            throw new NotFoundException('Product module not found');
-        }
 
         productModule.productModuleSettings = updateProductModuleDTO.productModuleSettings;
         productModule.productModuleRoles = updateProductModuleDTO.productModuleRoles;

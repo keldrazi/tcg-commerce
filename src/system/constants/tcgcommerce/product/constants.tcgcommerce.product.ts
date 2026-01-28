@@ -10,3 +10,7 @@ export const PRODUCT_VENDOR_CODE = {
 export const PRODUCT_TYPE_CODE = {
     SINGLE: 'SGL',
 }
+
+export const PRODUCT_LANGUAGE_CODE = {
+    ENGLISH: 'EN',
+}

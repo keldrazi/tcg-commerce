@@ -7,6 +7,7 @@ import { ProductSetModule } from 'src/tcgcommerce/modules/product/set/product.se
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductTypeModule } from 'src/tcgcommerce/modules/product/type/product.type.module';
+import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/product.language.module';
 import { ProductCardRarityModule } from 'src/tcgcommerce/modules/product/card/rarity/product.card.rarity.module';
 import { TCGdbMTGCardModule } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.module';
 
@@ -18,6 +19,7 @@ import { TCGdbMTGCardModule } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.m
         ProductLineModule,
         ProductVendorModule,
         ProductTypeModule,
+        ProductLanguageModule,
         ProductCardRarityModule,
         TCGdbMTGCardModule,
     ],

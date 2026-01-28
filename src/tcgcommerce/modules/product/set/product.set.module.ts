@@ -5,6 +5,7 @@ import { ProductSetController } from './product.set.controller';
 import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set/product.set.entity';
 import { ProductVendorModule } from 'src/tcgcommerce/modules/product/vendor/product.vendor.module';
 import { ProductLineModule } from 'src/tcgcommerce/modules/product/line/product.line.module';
+import { ProductLanguageModule } from 'src/tcgcommerce/modules/product/language/product.language.module';
 import { TCGdbMTGSetModule } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { TCGdbMTGSetModule } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg
         TCGdbMTGSetModule,
         ProductVendorModule,
         ProductLineModule,
+        ProductLanguageModule,
     ],
     controllers: [ProductSetController],
     providers: [ProductSetService],

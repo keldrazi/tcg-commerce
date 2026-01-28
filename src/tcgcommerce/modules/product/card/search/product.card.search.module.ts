@@ -7,8 +7,6 @@ import { ProductCardSearchService } from './product.card.search.service';
 import { ProductCardSearchController } from './product.card.search.controller';
 import { AiImageCardServiceXimilarModule } from 'src/system/modules/ai/image/card/service/ximilar/ai.image.card.service.ximilar.module';
 
-
-
 @Module({
     imports: [
         TypeOrmModule.forFeature([ProductCard]),

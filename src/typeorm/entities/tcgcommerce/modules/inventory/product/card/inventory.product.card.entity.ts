@@ -15,25 +15,9 @@ export class InventoryProductCard {
     @Column()
     commerceLocationId: string;
     @Column()
-    productVendorId: string;
-    @Column()
-    productLineId: string;
-    @Column()
-    productTypeId: string;
-    @Column()
-    productLanguageId: string;
-    @Column()
-    productLanguageCode: string;
-    @Column()
     productSetId: string;
     @Column()
-    productSetCode: string;
-    @Column()
-    productCardPrintingId: string;
-    @Column()
-    productCardPrintingName: string;
-    @Column('jsonb')
-    inventoryProductCardItems: string;
+    productLanguageId: string;
     @Column({ default: false })
     inventoryProductCardIsVerified: boolean;
     @Column({ default: true })

@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateProductCardDTO, UpdateProductCardDTO, ProductCardDTO } from './dto/product.card.dto';
 import { ProductCardService } from './product.card.service';
 
 
@@ -12,7 +11,7 @@ export class ProductCardController {
     ) { }
     
     
-    @Get('/create/plc/:productLineCode')
+    @Post('/create/plc/:productLineCode')
     async createProductCards(@Param('productLineCode') productLineCode: string) {
         return await this.productCardService.createProductCardsByProductLineCode(productLineCode.toUpperCase());
     }
@@ -24,7 +23,7 @@ export class ProductCardController {
     }
     */
 
-    @Get('update/mtg/scryfall/data')
+    @Put('update/mtg/scryfall/data')
     async updateTCGdbMTGProductCardsWithScryfallData() {
         return await this.productCardService.updateTCGdbMTGProductCardsWithScryfallData();
     }
@@ -33,10 +32,4 @@ export class ProductCardController {
     async getProductCardsByProductSetId(@Param('productSetId') productSetId: string) {
         return await this.productCardService.getProductCardsByProductSetId(productSetId);
     }
-
-    @Get('/mtg/set/code/:setCode')
-    async getMTGProductCardsByProductSetCode(@Param('setCode') setCode: string) {
-        return await this.productCardService.getMTGProductCardsByProductSetCode(setCode.toUpperCase());
-    }
-
 }   

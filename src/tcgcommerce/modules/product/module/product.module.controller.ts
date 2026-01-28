@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { ProductModuleService } from './product.module.service';
 import { CreateProductModuleDTO, UpdateProductModuleDTO } from './dto/product.module.dto';
+import { Entity, EntityNotFoundError } from 'typeorm';
 
 @Controller('product/module')
 export class ProductModuleController {
@@ -23,8 +24,8 @@ export class ProductModuleController {
         try {
             return await this.productModuleService.getProductModuleById(productModuleId);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Product module not found');
             }
             throw new InternalServerErrorException('Failed to get product module');
         }
@@ -35,8 +36,8 @@ export class ProductModuleController {
         try {
             return await this.productModuleService.getProductModuleByCommerceAccountId(commerceAccountId);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Product module not found');
             }
             throw new InternalServerErrorException('Failed to get product module by commerce account');
         }
@@ -61,8 +62,8 @@ export class ProductModuleController {
         try {
             return await this.productModuleService.updateProductModule(updateProductModuleDTO);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Product module not found');
             }
             throw new InternalServerErrorException('Failed to update product module');
         }

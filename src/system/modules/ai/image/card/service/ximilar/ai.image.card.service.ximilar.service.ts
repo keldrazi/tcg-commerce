@@ -1,10 +1,11 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs/internal/operators/map';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { AiImageCardServiceXimilarDTO } from './dto/ai.image.card.service.ximilar.dto';
+import { PRODUCT_LINE_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
 export class AiImageCardServiceXimilarService {
@@ -15,9 +16,19 @@ export class AiImageCardServiceXimilarService {
     ) {}
     
 
-    async analyzeCardImage(imageBase64: string, cardPrinting: string): Promise<AiImageCardServiceXimilarDTO | null> {
+    async analyzeCardImage(imageBase64: string, cardPrinting: string, cardType: string) {
         const ximilarAPIURL = this.configService.get('XIMILAR_API_URL');
         const ximilarAccessToken = this.configService.get('XIMILAR_ACCESS_TOKEN');
+
+        let subcategory = '';
+        switch(cardType) {
+            case PRODUCT_LINE_CODE.MAGIC_THE_GATHERING:
+                subcategory = "Magic The Gathering";
+                break;
+            case PRODUCT_LINE_CODE.POKEMON:
+                subcategory = "Pokemon";
+                break;
+        }
 
         const headers = {
             'Content-Type': 'application/json',
@@ -32,18 +43,19 @@ export class AiImageCardServiceXimilarService {
                     "Side": "front",
                     "Alphabet": "latin",
                     "Category": "Card/Trading Card Game",
-                    "Subcategory": "Magic The Gathering",
+                    "Subcategory": subcategory,
                     "Foil/Holo": cardPrinting,
                     "Rotation": "rotation_ok",
                     "Graded": "no"
                 }
             ]
         };
+        
         console.time('Ximilar Request');
         const response = this.httpService.post(ximilarAPIURL, body, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -54,22 +66,19 @@ export class AiImageCardServiceXimilarService {
         if(cardData) {
             let aiImageCardServiceXimilarDTO: AiImageCardServiceXimilarDTO = {
                 aiImageCardServiceXimilarCardNumber: cardData.card_number || '',
+                aiImageCardServiceXimilarCardNumberOutOf: cardData.out_of || '',
                 aiImageCardServiceXimilarCardName: cardData.name || '',
                 aiImageCardServiceXimilarSetCode: cardData.set_code || '',
+                aiImageCardServiceXimilarSetSeriesCode: cardData.set_series_code || '',
                 aiImageCardServiceXimilarSetName: cardData.set || '',
             };
 
             return aiImageCardServiceXimilarDTO;
         }
         else {
-            return null;
+            throw new NotFoundException('Card not found by Ximilar AI Image Analysis');
         }
-    
     }
-
-    
-   
-
 }
 
 

@@ -3,7 +3,6 @@ export class ProductCardSearchResultDTO {
     productCardSearchResults: ProductCardSearchDTO[];
 }
 
-
 export class ProductCardSearchDTO {
     productCardId: string;
     productCardTCGdbId: string;

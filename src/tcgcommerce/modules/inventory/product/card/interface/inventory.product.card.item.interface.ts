@@ -1,4 +1,9 @@
 export interface InventoryProductCardItem {
+    inventoryProductCardItemId: string;
+    inventoryProductCardId: string;
+    productCardPrintingId: string;
+    productCardPrintingName: string;
+    productCardConditionId: string;
     productCardConditionCode: string;
     inventoryProductCardItemTCGPlayerSKU: number;
     inventoryProductCardItemSKU: string;

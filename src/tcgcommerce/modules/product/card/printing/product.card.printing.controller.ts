@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateProductCardPrintingDTO, UpdateProductCardPrintingDTO, ProductCardPrintingDTO } from './dto/product.card.printing.dto';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe, InternalServerErrorException, NotFoundException, ConflictException } from '@nestjs/common';
+import { CreateProductCardPrintingDTO, UpdateProductCardPrintingDTO } from './dto/product.card.printing.dto';
 import { ProductCardPrintingService } from './product.card.printing.service';
+import { EntityNotFoundError } from 'typeorm';
+
 
 @Controller('product/card/printing')
 export class ProductCardPrintingController {
@@ -12,29 +14,55 @@ export class ProductCardPrintingController {
     
     @Get()
     async getProductCardPrintings() {
-        return await this.productCardPrintingService.getProductCardPrintings();
+        try {
+            return await this.productCardPrintingService.getProductCardPrintings();
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get product card printings');
+        }
     }
 
     @Get('/plc/:productLineCode')
     async getProductCardPrintingsByProductLineCode(@Param('productLineCode') productLineCode: string) {
-        return await this.productCardPrintingService.getProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
+        try {
+            return await this.productCardPrintingService.getProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get product card printings by product line code');
+        }
     }
     
-    @Get('/create/:productLineCode')
+    @Post('/create/:productLineCode')
     async createProductCardPrintingsByProductLineCode(@Param('productLineCode') productLineCode: string) {
-        return await this.productCardPrintingService.createProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
+        try {
+            return await this.productCardPrintingService.createProductCardPrintingsByProductLineCode(productLineCode.toUpperCase());
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to create product card printings by product line code');
+        }
     }  
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createProductCardPrinting(@Body() createProductCardPrintingDTO: CreateProductCardPrintingDTO) {
-        return await this.productCardPrintingService.createProductCardPrinting(createProductCardPrintingDTO);
+        try {
+            return await this.productCardPrintingService.createProductCardPrinting(createProductCardPrintingDTO);
+        } catch (e) {
+            if(e instanceof ConflictException) {
+                throw e;
+            }
+            throw new InternalServerErrorException('Failed to create product card printing');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateProductCardPrinting(@Body() updateProductCardPrintingDTO: UpdateProductCardPrintingDTO) {
-        return await this.productCardPrintingService.updateProductCardPrinting(updateProductCardPrintingDTO);
+        try {
+            return await this.productCardPrintingService.updateProductCardPrinting(updateProductCardPrintingDTO);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Product card printing not found');
+            }
+            throw new InternalServerErrorException('Failed to update product card printing');
+        }
     }
 
 

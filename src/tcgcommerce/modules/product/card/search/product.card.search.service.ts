@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, ILike, Not, Repository } from 'typeorm';
 import { ProductCardSearchResultDTO, ProductCardSearchDTO } from './dto/product.card.search.dto';
@@ -10,7 +10,7 @@ import { AiImageCardServiceXimilarDTO } from 'src/system/modules/ai/image/card/s
 
 
 @Injectable()
-export class ProductCardSearchService implements OnModuleInit {
+export class ProductCardSearchService {
 
     constructor(
         @InjectRepository(ProductCard) private productCardRepository: Repository<ProductCard>,
@@ -19,25 +19,10 @@ export class ProductCardSearchService implements OnModuleInit {
         private aiImageCardServiceXimilarService: AiImageCardServiceXimilarService
     ) { }
 
-    private mtgProductLine: any;
-    private mtgProductLineId: string;
-
-    async onModuleInit(): Promise<void> {
-
-        this.mtgProductLine = await this.productLineService.getProductLineByCode('MTG');
-        this.mtgProductLineId = this.mtgProductLine.productLineId;
-
-    }
-
-    async searchProductCardsByName(productLineCode: string, query: string): Promise<ProductCardSearchResultDTO> {
+    async searchProductCardsByName(productLineId: string, query: string): Promise<ProductCardSearchResultDTO> {
 
         if(query == null || query.trim() == '') {
             throw new BadRequestException('Product card search query cannot be empty.');
-        }
-
-        let productLineId = this.getProductLineIdByCode(productLineCode);
-        if(productLineId == "0") {
-            throw new NotFoundException('Product line was not found for productLineCode: ' + productLineCode);
         }
 
         let productCardSearchResultDTO: ProductCardSearchResultDTO = {
@@ -62,21 +47,21 @@ export class ProductCardSearchService implements OnModuleInit {
         }
 
         productCardSearchDTOs = productCards.map(card => {
-            const dto = new ProductCardSearchDTO();
-            dto.productCardId = card.productCardId;
-            dto.productCardTCGdbId = card.productCardTCGdbId;
-            dto.productCardTCGPlayerId = card.productCardTCGPlayerId;
-            dto.productVendorId = card.productVendorId;
-            dto.productLineId = card.productLineId;
-            dto.productSetId = card.productSetId;
-            dto.productSetCode = card.productSetCode;
-            dto.productCardRarityCode = card.productCardRarityCode;
-            dto.productCardNumber = card.productCardNumber;
-            dto.productCardName = card.productCardName;
-            dto.productCardCleanName = card.productCardCleanName;
-            dto.productCardImage = card.productCardImage;
+            const productCardSearchDTO = new ProductCardSearchDTO();
+            productCardSearchDTO.productCardId = card.productCardId;
+            productCardSearchDTO.productCardTCGdbId = card.productCardTCGdbId;
+            productCardSearchDTO.productCardTCGPlayerId = card.productCardTCGPlayerId;
+            productCardSearchDTO.productVendorId = card.productVendorId;
+            productCardSearchDTO.productLineId = card.productLineId;
+            productCardSearchDTO.productSetId = card.productSetId;
+            productCardSearchDTO.productSetCode = card.productSetCode;
+            productCardSearchDTO.productCardRarityCode = card.productCardRarityCode;
+            productCardSearchDTO.productCardNumber = card.productCardNumber;
+            productCardSearchDTO.productCardName = card.productCardName;
+            productCardSearchDTO.productCardCleanName = card.productCardCleanName;
+            productCardSearchDTO.productCardImage = card.productCardImage;
         
-            return dto;
+            return productCardSearchDTO;
         });
 
         productCardSearchResultDTO = {
@@ -88,14 +73,9 @@ export class ProductCardSearchService implements OnModuleInit {
 
     }
 
-    async searchProductCardsBySetCode(productLineCode: string, setCode: string): Promise<ProductCardSearchResultDTO> {
+    async searchProductCardsBySetCode(productLineId: string, setCode: string): Promise<ProductCardSearchResultDTO> {
         
-        let productLineId = this.getProductLineIdByCode(productLineCode);
-        
-        if(productLineId == "0") {
-            throw new NotFoundException('Product line was not found for productLineCode: ' + productLineCode);
-        }
-
+       
         let productSet = await this.productSetService.getProductSetByProductSetCode(productLineId, setCode);
 
         if(productSet == null) {
@@ -123,21 +103,21 @@ export class ProductCardSearchService implements OnModuleInit {
         }
 
         productCardSearchDTOs = productCards.map(card => {
-            const dto = new ProductCardSearchDTO();
-            dto.productCardId = card.productCardId;
-            dto.productCardTCGdbId = card.productCardTCGdbId;
-            dto.productCardTCGPlayerId = card.productCardTCGPlayerId;
-            dto.productVendorId = card.productVendorId;
-            dto.productLineId = card.productLineId;
-            dto.productSetId = card.productSetId;
-            dto.productSetCode = card.productSetCode;
-            dto.productCardRarityCode = card.productCardRarityCode;
-            dto.productCardNumber = card.productCardNumber;
-            dto.productCardName = card.productCardName;
-            dto.productCardCleanName = card.productCardCleanName;
-            dto.productCardImage = card.productCardImage;
+            const productCardSearchDTO = new ProductCardSearchDTO();
+            productCardSearchDTO.productCardId = card.productCardId;
+            productCardSearchDTO.productCardTCGdbId = card.productCardTCGdbId;
+            productCardSearchDTO.productCardTCGPlayerId = card.productCardTCGPlayerId;
+            productCardSearchDTO.productVendorId = card.productVendorId;
+            productCardSearchDTO.productLineId = card.productLineId;
+            productCardSearchDTO.productSetId = card.productSetId;
+            productCardSearchDTO.productSetCode = card.productSetCode;
+            productCardSearchDTO.productCardRarityCode = card.productCardRarityCode;
+            productCardSearchDTO.productCardNumber = card.productCardNumber;
+            productCardSearchDTO.productCardName = card.productCardName;
+            productCardSearchDTO.productCardCleanName = card.productCardCleanName;
+            productCardSearchDTO.productCardImage = card.productCardImage;
         
-            return dto;
+            return productCardSearchDTO;
         });
 
         productCardSearchResultDTO = {
@@ -148,54 +128,39 @@ export class ProductCardSearchService implements OnModuleInit {
         return productCardSearchResultDTO;
     }
 
-    async searchProductCardByImage(productLineCode: string,productCardImageBase64: string, productCardPrintingType: string): Promise<ProductCardSearchDTO | undefined> {
-        
-        let productLineId = this.getProductLineIdByCode(productLineCode);
-        
-        if(productLineId == "0") {
-            throw new NotFoundException('Product line was not found for productLineCode: ' + productLineCode);
+    async searchProductCardByImage(productLineCode: string, productCardImageBase64: string, productCardPrintingType: string): Promise<ProductCardSearchDTO> {
+        let aiImageCardServiceXimilarDTO: AiImageCardServiceXimilarDTO;
+        try {
+            aiImageCardServiceXimilarDTO = await this.aiImageCardServiceXimilarService.analyzeCardImage(productCardImageBase64, productCardPrintingType, productLineCode);
+        } catch (e) {
+            throw e;
         }
 
-        let aiImageCardServiceXimilarDTO: AiImageCardServiceXimilarDTO | null = await this.aiImageCardServiceXimilarService.analyzeCardImage(productCardImageBase64, productCardPrintingType);
-
-        if(aiImageCardServiceXimilarDTO != null) {
-            
-            let productCard = await this.productCardRepository.findOne({ 
-                where: { 
-                    productSetCode: aiImageCardServiceXimilarDTO.aiImageCardServiceXimilarSetCode,
-                    productCardNumber: aiImageCardServiceXimilarDTO.aiImageCardServiceXimilarCardNumber,
-                    productCardRarityCode: Not(Equal('T'))
-                }
-            });
-
-            if(productCard != null) {
-                const productCardSearchDTO = new ProductCardSearchDTO();
-                productCardSearchDTO.productCardId = productCard.productCardId;
-                productCardSearchDTO.productCardTCGdbId = productCard.productCardTCGdbId;
-                productCardSearchDTO.productCardTCGPlayerId = productCard.productCardTCGPlayerId;
-                productCardSearchDTO.productVendorId = productCard.productVendorId;
-                productCardSearchDTO.productLineId = productCard.productLineId;
-                productCardSearchDTO.productSetId = productCard.productSetId;
-                productCardSearchDTO.productSetCode = productCard.productSetCode;
-                productCardSearchDTO.productCardRarityCode = productCard.productCardRarityCode;
-                productCardSearchDTO.productCardNumber = productCard.productCardNumber;
-                productCardSearchDTO.productCardName = productCard.productCardName;
-                productCardSearchDTO.productCardCleanName = productCard.productCardCleanName;
-                productCardSearchDTO.productCardImage = productCard.productCardImage;
-
-                return productCardSearchDTO;
+       let productCard = await this.productCardRepository.findOneOrFail({ 
+            where: { 
+                productSetCode: aiImageCardServiceXimilarDTO.aiImageCardServiceXimilarSetCode,
+                productCardNumber: aiImageCardServiceXimilarDTO.aiImageCardServiceXimilarCardNumber,
+                productCardRarityCode: Not(Equal('T'))
             }
+        });
 
-        }
-    }  
-      
-    private getProductLineIdByCode(productLineCode: string): string {
-        switch(productLineCode.toUpperCase()) {
-            case 'MTG':
-                return this.mtgProductLineId;
-            default:
-                return "0";
-        }
+
+        const productCardSearchDTO = new ProductCardSearchDTO();
+        productCardSearchDTO.productCardId = productCard.productCardId;
+        productCardSearchDTO.productCardTCGdbId = productCard.productCardTCGdbId;
+        productCardSearchDTO.productCardTCGPlayerId = productCard.productCardTCGPlayerId;
+        productCardSearchDTO.productVendorId = productCard.productVendorId;
+        productCardSearchDTO.productLineId = productCard.productLineId;
+        productCardSearchDTO.productSetId = productCard.productSetId;
+        productCardSearchDTO.productSetCode = productCard.productSetCode;
+        productCardSearchDTO.productCardRarityCode = productCard.productCardRarityCode;
+        productCardSearchDTO.productCardNumber = productCard.productCardNumber;
+        productCardSearchDTO.productCardName = productCard.productCardName;
+        productCardSearchDTO.productCardCleanName = productCard.productCardCleanName;
+        productCardSearchDTO.productCardImage = productCard.productCardImage;
+
+        return productCardSearchDTO;
+          
     }
 }
 

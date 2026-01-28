@@ -6,6 +6,7 @@ export class ProductSetDTO {
     productSetTCGPlayerId: number;
     productVendorId: string;
     productLineId: string;
+    productLanguageId: string;
     productSetName: string;
     productSetCode: string;
     productSetReleaseDate: Date;
@@ -13,25 +14,6 @@ export class ProductSetDTO {
     productSetIsActive: boolean;
     productSetCreateDate: Date;
     productSetUpdateDate: Date; 
-}
-
-export class CreateProductSetDTO {
-    @IsString()
-    productSetTCGdbId: string;
-    @IsNumber()
-    productSetTCGPlayerId: number;
-    @IsString()
-    productVendorId: string;
-    @IsString()
-    productLineId: string;
-    @IsString()
-    productSetName: string;
-    @IsString()
-    productSetCode: string;  
-    @IsNumber()
-    productSetTotalCards: number;
-    @IsDate()
-    productSetReleaseDate: Date;
 }
 
 export class UpdateProductSetDTO {

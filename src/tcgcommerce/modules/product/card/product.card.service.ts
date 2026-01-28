@@ -1,15 +1,16 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProductCardDTO, CreateProductCardDTO, UpdateProductCardDTO } from './dto/product.card.dto';
+import { ProductCardDTO } from './dto/product.card.dto';
 import { ProductCard } from 'src/typeorm/entities/tcgcommerce/modules/product/card/product.card.entity';
 import { TCGdbMTGCardService } from 'src/tcgdb/modules/tcgdb/api/mtg/card/tcgdb.mtg.card.service';
 import { ProductSetService } from 'src/tcgcommerce/modules/product/set/product.set.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductTypeService } from 'src/tcgcommerce/modules/product/type/product.type.service';
+import { ProductLanguageService } from 'src/tcgcommerce/modules/product/language/product.language.service';
 import { ProductCardRarityService } from 'src/tcgcommerce/modules/product/card/rarity/product.card.rarity.service';
-import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE, PRODUCT_TYPE_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
+import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE, PRODUCT_TYPE_CODE, PRODUCT_LANGUAGE_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
 export class ProductCardService {
@@ -21,6 +22,7 @@ export class ProductCardService {
         private productLineService: ProductLineService,
         private productVendorService: ProductVendorService,
         private productTypeService: ProductTypeService,
+        private productLanguageService: ProductLanguageService,
         private productCardRarityService: ProductCardRarityService,
     ) { }
 
@@ -74,8 +76,6 @@ export class ProductCardService {
         if(!productCards) {
             return productCardDTOs
         }
-
-        
 
         for(let i = 0; i < productCards.length; i++) {
             let productCard = productCards[i];
@@ -158,59 +158,7 @@ export class ProductCardService {
             
         return productCardDTO;
     }
-
-
-    async createProductCard(createProductCardDTO: CreateProductCardDTO): Promise<ProductCardDTO> {
-
-        //CHECK TO SEE IF THE PRODUCT CARD ITEM ALREADY EXISTS;
-        let productCard = await this.productCardRepository.findOne({ 
-            where: {
-                productCardTCGdbId: createProductCardDTO.productCardTCGdbId, 
-            }
-        });
-        
-        if(productCard) {
-            throw new ConflictException('Product card already exists');
-        }
-
-        productCard = this.productCardRepository.create({ ...createProductCardDTO });
-        productCard = await this.productCardRepository.save(productCard);
-
-        let productCardDTO = await this.getProductCardByProductCardId(productCard.productCardId);
-       
-        return productCardDTO;
-    } 
-
-    async updateProductCard(updateProductCardDTO: UpdateProductCardDTO) : Promise<ProductCardDTO> {
-                                
-        let productCard = await this.productCardRepository.findOneOrFail({ 
-            where: { 
-                productCardId: updateProductCardDTO.productCardId
-            } 
-        });
-
-        if (!productCard) {
-            throw new NotFoundException('Product card was not found');
-        }
-
-        productCard.productSetCode = updateProductCardDTO.productSetCode;
-        productCard.productCardNumber = updateProductCardDTO.productCardNumber;
-        productCard.productCardName = updateProductCardDTO.productCardName;
-        productCard.productCardCleanName = updateProductCardDTO.productCardCleanName;
-        productCard.productCardImage = updateProductCardDTO.productCardImage;
-        productCard.productCardExtendedData = updateProductCardDTO.productCardExtendedData;
-        productCard.productCardMetadata = updateProductCardDTO.productCardMetadata;
-        productCard.productCardSKUs = updateProductCardDTO.productCardSKUs;
-        productCard.productCardIsActive = updateProductCardDTO.productCardIsActive;
-        productCard.productCardUpdateDate = new Date();
-        
-        await this.productCardRepository.save(productCard);
-
-        let productCardDTO = await this.getProductCardByProductCardId(productCard.productCardId);
-       
-        return productCardDTO;
-    } 
-
+    
     //CREATE PRODUCT CARDS;
     async createProductCardsByProductLineCode(productLineCode: string): Promise<number> {
         
@@ -228,6 +176,7 @@ export class ProductCardService {
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING); 
         let productType = await this.productTypeService.getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendor.productVendorId, productLine.productLineId, PRODUCT_TYPE_CODE.SINGLE);
+        let productLanguage = await this.productLanguageService.getProductLanguageByCodeAndProductLineId(PRODUCT_LANGUAGE_CODE.ENGLISH, productLine.productLineId);
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
         
         let productCardRecordCount = 0;
@@ -246,7 +195,7 @@ export class ProductCardService {
                 let tcgdbMTGCard = productCardsBySet.tcgdbMTGCards[j];
                 let productCardRarity = await this.productCardRarityService.getProductCardRarityByCodeAndProductLineId(tcgdbMTGCard.tcgdbMTGCardRarityCode, productLine.productLineId);
                 
-                let productCard = await this.productCardRepository.findOneOrFail({ 
+                let productCard = await this.productCardRepository.findOne({ 
                     where: {
                         productCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId, 
                     }
@@ -259,17 +208,15 @@ export class ProductCardService {
                         productCardMetadata = tcgdbMTGCard.tcgdbMTGCardScryfallData;
                     }
 
-                    
                     let productCardExtendedData = tcgdbMTGCard.tcgdbMTGCardTCGPlayerData.extendedData;
-                    let productCardSKUs = tcgdbMTGCard.tcgdbMTGCardTCGPlayerData.skus;
                     
-                    
-                    const newProductCard = this.productCardRepository.create({
+                    productCard = this.productCardRepository.create({
                         productCardTCGdbId: tcgdbMTGCard.tcgdbMTGCardId,
                         productCardTCGPlayerId: tcgdbMTGCard.tcgdbMTGCardTCGPlayerId,
                         productVendorId: productVendor.productVendorId,
                         productLineId: productLine.productLineId,
                         productTypeId: productType.productTypeId,
+                        productLanguageId: productLanguage.productLanguageId,
                         productSetId: productSet.productSetId,
                         productSetCode: productSet.productSetCode,
                         productCardRarityId: productCardRarity.productCardRarityId,
@@ -279,12 +226,12 @@ export class ProductCardService {
                         productCardCleanName: tcgdbMTGCard.tcgdbMTGCardCleanName,
                         productCardImage: tcgdbMTGCard.tcgdbMTGCardImageURL,
                         productCardExtendedData: productCardExtendedData,
-                        productCardSKUs: productCardSKUs,
                         productCardIsPresale: false,
                         productCardIsActive: true,
                     });
 
-                    await this.productCardRepository.save(newProductCard);
+                    await this.productCardRepository.save(productCard);
+                    
                     console.log(tcgdbMTGCard.tcgdbMTGCardName);
 
                     productCardRecordCount++;
@@ -293,38 +240,18 @@ export class ProductCardService {
             }
 
             //DELAY TO AVOID TCGDB RATE LIMITS;
-            await this.delay(500);
+            await this.delay(200);
         }
 
         return productCardRecordCount;
     }
 
-    //CREATE PRODUCT CARDS (MTG);
+    //UPDATE PRODUCT CARDS (MTG);
     async updateTCGdbMTGProductCardsWithScryfallData(): Promise<number> {
 
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING); 
-        
-
-        if (productVendor == null) {
-            throw new NotFoundException('Product vendor was not found');
-        }
-        
-        if (productLine == null) {
-            throw new NotFoundException('Product line was not found');
-        }
-
-        let productType = await this.productTypeService.getProductTypeByProductVendorIdAndProductLineIdAndProductTypeCode(productVendor.productVendorId, productLine.productLineId, PRODUCT_TYPE_CODE.SINGLE);
-
-        if (productType == null) {
-            throw new NotFoundException('Product type was not found');
-        }
-
         let productSets = await this.productSetService.getProductSetsByProductVendorIdAndProductLineId(productVendor.productVendorId, productLine.productLineId);
-        
-        if(productSets == null) {
-            throw new NotFoundException('No product sets found for vendor and line.');
-        }
         
         let productCardRecordCount = 0;
 
@@ -348,17 +275,17 @@ export class ProductCardService {
                     } 
                 });
                 
-                if (productCard != null) {
+                if (productCard) {
                     productCard.productCardMetadata = tcgdbMTGCard.tcgdbMTGCardScryfallData;
                     await this.productCardRepository.save(productCard);
-                    console.log("Updated existing card: " + tcgdbMTGCard.tcgdbMTGCardId);
+                    console.log("Updated existing card: " + tcgdbMTGCard.tcgdbMTGCardName);
                     productCardRecordCount++;
                 }
                 
             }
 
             //DELAY TO AVOID TCGDB RATE LIMITS;
-            await this.delay(500);
+            await this.delay(200);
         }
 
         return productCardRecordCount;

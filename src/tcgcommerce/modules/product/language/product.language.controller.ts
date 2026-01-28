@@ -28,7 +28,7 @@ export class ProductLanguageController {
         }
     }
 
-    @Get('/create/plc/:productLineCode')
+    @Post('/create/plc/:productLineCode')
     async createProductLanguagesByProductLineCode(@Param('productLineCode') productLineCode: string) {
         try {
             return await this.productCardLanguageService.createProductLanguagesByProductLineCode(productLineCode.toUpperCase());

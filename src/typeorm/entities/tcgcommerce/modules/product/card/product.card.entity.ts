@@ -15,6 +15,8 @@ export class ProductCard {
     @Column()
     productTypeId: string;
     @Column()
+    productLanguageId: string;
+    @Column()
     productSetId: string;
     @Column()
     productSetCode: string;
@@ -36,8 +38,6 @@ export class ProductCard {
     productCardExtendedData: string;
     @Column('jsonb', { default: null })
     productCardMetadata: string;
-    @Column('jsonb')
-    productCardSKUs: string;
     @Column({type: 'boolean', default: true})
     productCardIsActive: boolean;
     @CreateDateColumn()

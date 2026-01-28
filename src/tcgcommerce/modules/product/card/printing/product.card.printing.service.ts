@@ -19,15 +19,11 @@ export class ProductCardPrintingService {
     ) { }
 
     async getProductCardPrintingById(productCardPrintingId: string): Promise<ProductCardPrintingDTO> {
-        let productCardPrinting = await this.productCardPrintingRepository.findOne({
+        let productCardPrinting = await this.productCardPrintingRepository.findOneOrFail({
             where: { 
                 productCardPrintingId: productCardPrintingId 
             } 
         });
-
-        if(productCardPrinting == null) {
-            throw new NotFoundException('Product card printing was not found');
-        }
 
         let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
 
@@ -35,15 +31,11 @@ export class ProductCardPrintingService {
     }
 
     async getProductCardPrintingByName(productCardPrintingName: string): Promise<ProductCardPrintingDTO> {
-        let productCardPrinting = await this.productCardPrintingRepository.findOne({
+        let productCardPrinting = await this.productCardPrintingRepository.findOneOrFail({
             where: { 
                 productCardPrintingName: productCardPrintingName 
             } 
         });
-
-        if(productCardPrinting == null) {
-            throw new NotFoundException('Product card printing was not found');
-        }
 
         let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
 
@@ -55,11 +47,6 @@ export class ProductCardPrintingService {
         productLineCode = productLineCode.toUpperCase();
         
         let productLine = await this.productLineService.getProductLineByCode(productLineCode);
-
-        if(productLine == null) {
-            throw new NotFoundException('Product line was not found');
-        }
-
         let productLineId = productLine.productLineId;
 
         let productCardPrintings = await this.productCardPrintingRepository.find({
@@ -71,12 +58,12 @@ export class ProductCardPrintingService {
             }
         });
         
-        if(productCardPrintings == null) {
-            return [];
-        }
-        
         let productCardPrintingDTOs: ProductCardPrintingDTO[] = [];
 
+        if(!productCardPrintings) {
+            return productCardPrintingDTOs;
+        }
+        
         for(let i = 0; i < productCardPrintings.length; i++) {
             let productCardPrinting = productCardPrintings[i];
             let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
@@ -100,7 +87,7 @@ export class ProductCardPrintingService {
         
         let productCardPrintingDTOs: ProductCardPrintingDTO[] = [];
 
-        if(productCardPrintings == null) {
+        if(!productCardPrintings) {
             return productCardPrintingDTOs;
         }
 
@@ -123,12 +110,12 @@ export class ProductCardPrintingService {
             }
         });
         
-        if(productCardPrintings == null) {
-            return [];
-        }
-        
         let productCardPrintingDTOs: ProductCardPrintingDTO[] = [];
 
+        if(!productCardPrintings) {
+            return productCardPrintingDTOs;
+        }
+        
         for(let i = 0; i < productCardPrintings.length; i++) {
             let productCardPrinting = productCardPrintings[i];
             let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
@@ -140,17 +127,13 @@ export class ProductCardPrintingService {
     }
 
     async getProductCardPrintingByNameAndProductLineId(productCardPrintingName: string, productLineId: string): Promise<ProductCardPrintingDTO> {
-        let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
+        let productCardPrinting = await this.productCardPrintingRepository.findOneOrFail({ 
             where: { 
                 productCardPrintingName: productCardPrintingName,
                 productLineId: productLineId 
             } 
         });
         
-        if(productCardPrinting == null) {
-            throw new NotFoundException('Product card printing was not found');
-        }
-
         let productCardPrintingDTO: ProductCardPrintingDTO = ({ ...productCardPrinting });
 
         return productCardPrintingDTO;
@@ -168,14 +151,14 @@ export class ProductCardPrintingService {
             } 
         });
 
-        if(productCardPrinting != null) {
+        if(productCardPrinting) {
             throw new ConflictException('A product card printing already exists.');
         }
         
         productCardPrinting = this.productCardPrintingRepository.create({ ...createProductCardPrintingDTO });
         productCardPrinting = await this.productCardPrintingRepository.save(productCardPrinting);
 
-        let productCardPrintingDTO = this.getProductCardPrintingById(productCardPrinting.productCardPrintingId);
+        let productCardPrintingDTO = await this.getProductCardPrintingById(productCardPrinting.productCardPrintingId);
         
         return productCardPrintingDTO;
         
@@ -221,46 +204,35 @@ export class ProductCardPrintingService {
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING);
         
-        if(productVendor == null) {
-            throw new NotFoundException('Product vendor was not found');
-        }
-        
-        if(productLine == null) {
-            throw new NotFoundException('Product line was not found');
-        }
-        
         //GET THE PRODUCT CARD PRINTINGS FROM TCGDB;
         let tcgdbMTGProductCardPrintings = await this.tcgdbMTGPrintingService.getTCGdbMTGPrintings();
         
-        if(tcgdbMTGProductCardPrintings == null) {
-            throw new NotFoundException('TCGDB MTG printings were not found.');
-        }
-
         let productCardPrintingRecordCount = 0;
 
         for(let i = 0; i < tcgdbMTGProductCardPrintings.length; i++) {
             let tcgdbMTGProductCardPrinting = tcgdbMTGProductCardPrintings[i];
             
-            try {
-                //IF THE PRODUCT CARD PRINTING ALREADY EXISTS, SKIP TO THE NEXT ONE;
-                await this.getProductCardPrintingByNameAndProductLineId(tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName, productLine.productLineId);
-            } catch (error) {
-                if (error instanceof NotFoundException) {
-                    let createProductCardPrintingDTO = new CreateProductCardPrintingDTO();
-                    createProductCardPrintingDTO.productVendorId = productVendor.productVendorId;
-                    createProductCardPrintingDTO.productLineId = productLine.productLineId;
-                    createProductCardPrintingDTO.productCardPrintingTCGdbId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingId;
-                    createProductCardPrintingDTO.productCardPrintingTCGPlayerId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingTCGPlayerId;
-                    createProductCardPrintingDTO.productCardPrintingName = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName;
-                    createProductCardPrintingDTO.productCardPrintingDisplayOrder = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingDisplayOrder;
-                    createProductCardPrintingDTO.productCardPrintingIsActive = true;
-                    
-                    await this.createProductCardPrinting(createProductCardPrintingDTO);
+            let productCardPrinting = await this.productCardPrintingRepository.findOne({ 
+                where: { 
+                    productCardPrintingName: tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName,
+                    productLineId: productLine.productLineId 
+                } 
+            });
+            
+            if(!productCardPrinting) {
+                productCardPrinting = this.productCardPrintingRepository.create();
+                productCardPrinting.productVendorId = productVendor.productVendorId;
+                productCardPrinting.productLineId = productLine.productLineId;
+                productCardPrinting.productCardPrintingTCGdbId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingId;
+                productCardPrinting.productCardPrintingTCGPlayerId = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingTCGPlayerId;
+                productCardPrinting.productCardPrintingName = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingName;
+                productCardPrinting.productCardPrintingDisplayOrder = tcgdbMTGProductCardPrinting.tcgdbMTGPrintingDisplayOrder;
+                productCardPrinting.productCardPrintingIsActive = true;
+                
+                await this.productCardPrintingRepository.save(productCardPrinting);
 
-                    productCardPrintingRecordCount++;
-                } else {
-                    throw error;
-                }
+                productCardPrintingRecordCount++;
+                
             }
             
         }

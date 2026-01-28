@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Put, Param, InternalServerErrorException } from '@nestjs/common';
-import { InventoryProductCardDTO } from './dto/inventory.product.card.dto';
 import { InventoryProductCardService } from './inventory.product.card.service';
 
 
@@ -21,6 +20,15 @@ export class InventoryProductCardController {
         }
     }
 
+    @Get('/caid/:commerceAccountId/clid/:commerceLocationId')
+    async getInventoryProductCardsByCommerceAccountIdAndCommerceLocationId(@Param('commerceAccountId') commerceAccountId: string, @Param('commerceLocationId') commerceLocationId: string) {
+        try {
+            return await this.inventoryProductCardService.getInventoryProductCardsByCommerceAccountIdAndCommerceLocationId(commerceAccountId, commerceLocationId);
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get inventory product cards');
+        }
+    }
+
     @Get('/caid/:commerceAccountId/clid/:commerceLocationId/psid/:productSetId/plid/:productLanguageId')
     async getInventoryProductCardsByProductSetId(@Param('commerceAccountId') commerceAccountId: string, @Param('commerceLocationId') commerceLocationId: string, @Param('productSetId') productSetId: string, @Param('productLanguageId') productLanguageId: string) {
         try {
@@ -29,16 +37,5 @@ export class InventoryProductCardController {
             throw new InternalServerErrorException('Failed to get inventory product cards');
         }
     }
-
-    @Put('/update')
-    async updateInventoryProductCards(@Body() inventoryProductCards: InventoryProductCardDTO[]) {
-        try {
-            let inventoryProductCardUpdateRecordCount = await this.inventoryProductCardService.updateInventoryProductCards(inventoryProductCards);
-            return inventoryProductCardUpdateRecordCount;
-        } catch (e) {
-            throw new InternalServerErrorException('Failed to update inventory product cards');
-        }
-    }
-   
 
 }

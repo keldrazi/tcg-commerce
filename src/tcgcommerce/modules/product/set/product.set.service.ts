@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThanOrEqual, Not, Repository } from 'typeorm';
-import { ProductSetDTO, CreateProductSetDTO, UpdateProductSetDTO } from './dto/product.set.dto';
+import { ProductSetDTO, UpdateProductSetDTO } from './dto/product.set.dto';
 import { ProductSet } from 'src/typeorm/entities/tcgcommerce/modules/product/set/product.set.entity';
 import { TCGdbMTGSetService } from 'src/tcgdb/modules/tcgdb/api/mtg/set/tcgdb.mtg.set.service';
 import { ProductVendorService } from 'src/tcgcommerce/modules/product/vendor/product.vendor.service';
 import { ProductLineService } from 'src/tcgcommerce/modules/product/line/product.line.service';
-import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
+import { ProductLanguageService } from 'src/tcgcommerce/modules/product/language/product.language.service';
+import { PRODUCT_LINE_CODE, PRODUCT_VENDOR_CODE, PRODUCT_LANGUAGE_CODE } from 'src/system/constants/tcgcommerce/product/constants.tcgcommerce.product';
 
 @Injectable()
 export class ProductSetService {
@@ -16,6 +17,7 @@ export class ProductSetService {
         private tcgdbMTGSetService: TCGdbMTGSetService,
         private productVendorService: ProductVendorService,
         private productLineService: ProductLineService,
+        private productLanguageService: ProductLanguageService
     ) { }
 
     async getProductSetById(productSetId: string): Promise<ProductSetDTO> {
@@ -179,7 +181,9 @@ export class ProductSetService {
 
         let productVendor = await this.productVendorService.getProductVendorByCode(PRODUCT_VENDOR_CODE.WIZARDS_OF_THE_COAST);
         let productLine = await this.productLineService.getProductLineByCode(PRODUCT_LINE_CODE.MAGIC_THE_GATHERING);
+        let productLanguage = await this.productLanguageService.getProductLanguageByCodeAndProductLineId(PRODUCT_LANGUAGE_CODE.ENGLISH, productLine.productLineId);
 
+        //GET THE PRODUCT SETS FROM TCGdb;
         let tcgdbMTGSets = await this.tcgdbMTGSetService.getTCGdbMTGSets();
         let productSetDTOs: ProductSetDTO[] = [];
 
@@ -198,6 +202,7 @@ export class ProductSetService {
                     productSetTCGPlayerId: tcgdbMTGSet.tcgdbMTGSetTCGPlayerId,
                     productVendorId: productVendor.productVendorId,
                     productLineId: productLine.productLineId,
+                    productLanguageId: productLanguage.productLanguageId,
                     productSetName: tcgdbMTGSet.tcgdbMTGSetName,
                     productSetCode: tcgdbMTGSet.tcgdbMTGSetCode,
                     productSetTotalCards: tcgdbMTGSet.tcgdbMTGSetTotalCards,

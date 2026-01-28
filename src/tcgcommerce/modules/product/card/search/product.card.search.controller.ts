@@ -8,10 +8,13 @@ export class ProductCardSearchController {
         private productCardSearchService: ProductCardSearchService,
     ) { }
     
-    
     @Get('/name/plc/:productLineCode/query:query')
     async searchProductCardsByName(@Param('productLineCode') productLineCode: string, @Param('query') query: string) {
-        return await this.productCardSearchService.searchProductCardsByName(productLineCode, query);
+        try {
+            return await this.productCardSearchService.searchProductCardsByName(productLineCode, query);
+        } catch (e) {
+            throw e;
+        }
     }
 
     @Post('/image')
@@ -19,8 +22,10 @@ export class ProductCardSearchController {
         let productLineCode = cardImageSearchData.productLineCode;
         let productCardImageBase64 = cardImageSearchData.cardImageBase64;
         let productCardPrintingType = cardImageSearchData.cardPrintingType;
-        
-        return this.productCardSearchService.searchProductCardByImage(productLineCode, productCardImageBase64, productCardPrintingType);
+        try {
+            return await this.productCardSearchService.searchProductCardByImage(productLineCode, productCardImageBase64, productCardPrintingType);
+        } catch (e) {
+            throw e;
+        }
     }
-
 }   

@@ -13,6 +13,8 @@ export class ProductSet {
     @Column()
     productLineId: string;
     @Column()
+    productLanguageId: string;
+    @Column()
     productSetName: string;
     @Column()
     productSetCode: string;
