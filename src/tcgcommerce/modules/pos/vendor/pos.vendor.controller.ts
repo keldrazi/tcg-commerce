@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { CreatePOSVendorDTO, UpdatePOSVendorDTO, POSVendorDTO } from './dto/pos.vendor.dto';
 import { POSVendorService } from './pos.vendor.service';
+import { EntityNotFoundError } from 'typeorm';
 
 @Controller('pos/vendor')
 export class POSVendorController {
@@ -15,14 +16,14 @@ export class POSVendorController {
         try {
             return await this.posVendorService.getPOSVendor(posVendorId);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('POS vendor was not found');
             }
             throw new InternalServerErrorException('Failed to get POS vendor');
         }
     }
 
-    @Get('/all')
+    @Get()
     async getPOSVendors() {
         try {
             return await this.posVendorService.getPOSVendors();
@@ -50,8 +51,8 @@ export class POSVendorController {
         try {
             return await this.posVendorService.updatePOSVendor(updatePOSVendorDTO);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('POS vendor was not found');
             }
             throw new InternalServerErrorException('Failed to update POS vendor');
         }

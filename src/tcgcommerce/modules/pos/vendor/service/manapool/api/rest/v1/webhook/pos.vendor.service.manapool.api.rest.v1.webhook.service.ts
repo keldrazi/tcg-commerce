@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
@@ -25,7 +25,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -42,7 +42,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -62,7 +62,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
         const response = this.httpService.put(url, webhook, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -79,7 +79,7 @@ export class POSVendorServiceManaPoolAPIRestV1WebhookService {
         const response = this.httpService.delete(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 

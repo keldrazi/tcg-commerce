@@ -17,10 +17,6 @@ export class POSVendorServiceManaPoolAdminService {
     async getManaPoolAccount(commerceAccountId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
         
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
-            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
-        }
-
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
 
@@ -38,10 +34,6 @@ export class POSVendorServiceManaPoolAdminService {
     async getManaPoolSellerOrders(commerceAccountId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
-            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
-        }
-
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
 
@@ -50,10 +42,6 @@ export class POSVendorServiceManaPoolAdminService {
 
     async getManaPoolSellerOrderById(commerceAccountId: string, orderId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
-
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
-            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
-        }
 
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;

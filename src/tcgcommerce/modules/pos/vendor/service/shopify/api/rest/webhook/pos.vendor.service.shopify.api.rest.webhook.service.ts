@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
@@ -42,10 +42,10 @@ export class POSVendorServiceShopifyAPIRestWebhookService {
         const request = this.httpService.post(shopifyShopURI, shopifyWebhookObject, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyShopURI + 'Error: ' + e);
+                catchError(error => {
+                    throw new InternalServerErrorException(error.response.data);
                 }),
-              );
+            );
 
         const data = await lastValueFrom(request);
 

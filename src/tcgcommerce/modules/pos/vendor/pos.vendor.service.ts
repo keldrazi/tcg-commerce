@@ -12,16 +12,12 @@ export class POSVendorService {
     ) { }
 
     async getPOSVendor(posVendorId: string): Promise<POSVendorDTO> {
-        let posVendor = await this.posVendorRepository.findOne({ 
+        let posVendor = await this.posVendorRepository.findOneOrFail({ 
             where: { 
                 posVendorId: posVendorId
             } 
         });
         
-        if (posVendor == null) {
-            throw new NotFoundException('POS vendor was not found');
-        }
-
         let posVendorDTO:POSVendorDTO = ({ ...posVendor });        
         
         return posVendorDTO;
@@ -40,7 +36,7 @@ export class POSVendorService {
         
         let posVendorDTOs: POSVendorDTO[] = [];
         
-        if(posVendors == null) {
+        if(!posVendors) {
             return posVendorDTOs;
         }
         
@@ -55,16 +51,12 @@ export class POSVendorService {
     }
     
     async getPOSVendorByName(name: string): Promise<POSVendorDTO> {
-        let posVendor = await this.posVendorRepository.findOne({ 
+        let posVendor = await this.posVendorRepository.findOneOrFail({ 
             where: { 
                 posVendorName: name 
             } 
         });
         
-        if (posVendor == null) {
-            throw new NotFoundException('POS vendor was not found');
-        }
-
         let posVendorDTO:POSVendorDTO = ({ ...posVendor });   
         
         return posVendorDTO;
@@ -72,15 +64,11 @@ export class POSVendorService {
     }
 
     async getPOSVendorByCode(code: string): Promise<POSVendorDTO> {
-        let posVendor = await this.posVendorRepository.findOne({ 
+        let posVendor = await this.posVendorRepository.findOneOrFail({ 
             where: { 
                 posVendorCode: code 
             } 
         });
-        
-        if (posVendor == null) {
-            throw new NotFoundException('POS vendor was not found');
-        }
 
         let posVendorDTO:POSVendorDTO = ({ ...posVendor });   
         
@@ -112,15 +100,11 @@ export class POSVendorService {
 
     async updatePOSVendor(updatePOSVendorDTO: UpdatePOSVendorDTO): Promise<POSVendorDTO> {
                 
-        let posVendor = await this.posVendorRepository.findOne({ 
+        let posVendor = await this.posVendorRepository.findOneOrFail({ 
             where: { 
                 posVendorId: updatePOSVendorDTO.posVendorId
             } 
         });
-
-        if (!posVendor) {
-            throw new NotFoundException('POS vendor was not found');
-        }
 
         posVendor.posVendorName = updatePOSVendorDTO.posVendorName;
         posVendor.posVendorDescription = updatePOSVendorDTO.posVendorDescription;

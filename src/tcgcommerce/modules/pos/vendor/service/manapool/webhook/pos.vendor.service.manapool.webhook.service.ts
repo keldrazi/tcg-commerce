@@ -19,10 +19,6 @@ export class POSVendorServiceManaPoolWebhookService {
     async getManaPoolWebhooks(commerceAccountId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
-            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
-        }
-
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
 
@@ -33,10 +29,6 @@ export class POSVendorServiceManaPoolWebhookService {
     async getManaPoolWebhookById(commerceAccountId: string, webhookId: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
 
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
-            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
-        }
-
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;
         
@@ -46,10 +38,6 @@ export class POSVendorServiceManaPoolWebhookService {
 
     async createManaPoolWebhook(commerceAccountId, webhookType: string): Promise<any> {
         let commerceAccountSettingsPOSVendorServiceManaPool = await this.getCommerceAccountSettingsPOSVendorServiceManaPoolByCommerceAccountId(commerceAccountId);
-
-        if(commerceAccountSettingsPOSVendorServiceManaPool == null) {
-            throw new NotFoundException('Commerce account settings POS vendor service Manapool was not found');
-        }
 
         let email = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolEmail;
         let accessToken = commerceAccountSettingsPOSVendorServiceManaPool.commerceAccountSettingsPOSVendorServiceManaPoolAccessToken;

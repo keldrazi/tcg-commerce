@@ -9,6 +9,12 @@ export class POSVendorServiceTCGPlayerAdminController {
         private posVendorServiceTCGPlayerAdminService: POSVendorServiceTCGPlayerAdminService,
     ) { }
     
+    
+    @Post('/create/caid/:commerceAccountId')
+    async createTCGPlayerInventoryAndPricesCSV(@Param('commerceAccountId') commerceAccountId: string) {
+        return await this.posVendorServiceTCGPlayerAdminService.createTCGPlayerInventoryAndPricesCSV(commerceAccountId);
+    }
+    
     @Put('/process')
     @UseInterceptors(FileInterceptor('file'))
     async createBuylistImportProductCard(

@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
 import { ForbiddenException } from '@nestjs/common';
+import { InternalServerError } from '@aws-sdk/client-textract';
 
 @Injectable()
 export class POSVendorServiceManaPoolAPIRestV1AdminService {
@@ -25,7 +26,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -42,7 +43,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -57,7 +58,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         const response = this.httpService.post(url, inventory, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -74,7 +75,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         const response = this.httpService.put(url, inventory, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -90,7 +91,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         const response = this.httpService.delete(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -106,7 +107,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 
@@ -122,7 +123,7 @@ export class POSVendorServiceManaPoolAPIRestV1AdminService {
         const response = this.httpService.get(url, { headers }).pipe(
             map(response => response.data),
             catchError(error => {
-                throw new ForbiddenException(error.response.data);
+                throw new InternalServerErrorException(error.response.data);
             })
         );
 

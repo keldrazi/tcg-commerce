@@ -12,16 +12,12 @@ export class POSVendorOptionPriceTypeService {
     ) { }
 
     async getPOSVendorOptionPriceType(posVendorOptionPriceTypeId: string): Promise<POSVendorOptionPriceTypeDTO> {
-        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
+        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOneOrFail({ 
             where: { 
                 posVendorOptionPriceTypeId: posVendorOptionPriceTypeId
             } 
         });
         
-        if (posVendorOptionPriceType == null) {
-            throw new NotFoundException('POS vendor option price type was not found');
-        }
-
         let posVendorOptionPriceTypeDTO:POSVendorOptionPriceTypeDTO = ({ ...posVendorOptionPriceType });        
         
         return posVendorOptionPriceTypeDTO;
@@ -56,17 +52,13 @@ export class POSVendorOptionPriceTypeService {
     }
     
     async getPOSVendorOptionPriceTypeByName(posVendorId: string, posVendorOptionPriceTypeName: string): Promise<POSVendorOptionPriceTypeDTO> {
-        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
+        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOneOrFail({ 
             where: { 
                 posVendorId: posVendorId,
                 posVendorOptionPriceTypeName: posVendorOptionPriceTypeName 
             } 
         });
         
-        if (posVendorOptionPriceType == null) {
-            throw new NotFoundException('POS vendor option price type was not found');
-        }
-
         let posVendorOptionPriceTypeDTO:POSVendorOptionPriceTypeDTO = ({ ...posVendorOptionPriceType });   
         
         return posVendorOptionPriceTypeDTO;
@@ -74,17 +66,13 @@ export class POSVendorOptionPriceTypeService {
     }
 
     async getPOSVendorOptionPriceTypeByCode(posVendorId: string, posVendorOptionPriceTypeCode: string): Promise<POSVendorOptionPriceTypeDTO> {
-        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
+        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOneOrFail({ 
             where: { 
                 posVendorId: posVendorId,
                 posVendorOptionPriceTypeCode: posVendorOptionPriceTypeCode 
             } 
         });
         
-        if (posVendorOptionPriceType == null) {
-            throw new NotFoundException('POS vendor option price type was not found');
-        }
-
         let posVendorOptionPriceTypeDTO:POSVendorOptionPriceTypeDTO = ({ ...posVendorOptionPriceType });   
         
         return posVendorOptionPriceTypeDTO;
@@ -100,7 +88,7 @@ export class POSVendorOptionPriceTypeService {
             } 
         });
         
-        if (posVendorOptionPriceType != null) {
+        if (!posVendorOptionPriceType) {
             throw new ConflictException('POS vendor option price type already exists');
         }
         
@@ -115,15 +103,11 @@ export class POSVendorOptionPriceTypeService {
 
     async updatePOSVendorOptionPriceType(updatePOSVendorOptionPriceTypeDTO: UpdatePOSVendorOptionPriceTypeDTO): Promise<POSVendorOptionPriceTypeDTO> {
                 
-        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOne({ 
+        let posVendorOptionPriceType = await this.posVendorOptionPriceTypeRepository.findOneOrFail({ 
             where: { 
                 posVendorOptionPriceTypeId: updatePOSVendorOptionPriceTypeDTO.posVendorOptionPriceTypeId
             } 
         });
-
-        if (!posVendorOptionPriceType) {
-            throw new NotFoundException('POS vendor option price type was not found');
-        }
 
         posVendorOptionPriceType.posVendorOptionPriceTypeName = updatePOSVendorOptionPriceTypeDTO.posVendorOptionPriceTypeName;
         posVendorOptionPriceType.posVendorOptionPriceTypeCode = updatePOSVendorOptionPriceTypeDTO.posVendorOptionPriceTypeCode;

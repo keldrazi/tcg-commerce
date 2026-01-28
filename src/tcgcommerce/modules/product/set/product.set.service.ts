@@ -70,7 +70,7 @@ export class ProductSetService {
         });
         
         let productSetDTOs: ProductSetDTO[] = [];
-        if(productSets == null) {
+        if(!productSets) {
             return productSetDTOs;    
         }
         

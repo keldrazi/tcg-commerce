@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
@@ -36,8 +36,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyShopURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyShopURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -63,8 +63,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyProductTypeURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyProductTypeURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -87,8 +87,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyProductHandleURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyProductHandleURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -111,8 +111,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.post(shopifyCreateProductURI, shopifyProduct, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyCreateProductURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -134,8 +134,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.put(shopifyCreateProductURI, shopifyProduct, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyCreateProductURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -160,8 +160,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyMetafieldURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyMetafieldURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -184,8 +184,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyMetafieldURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyMetafieldURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -208,8 +208,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.post(shopifyCreateProductMetafieldURI, shopifyProductMetafield, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyCreateProductMetafieldURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -231,8 +231,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.put(shopifyUpdateProductMetafieldURI, shopifyProductMetafield, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyUpdateProductMetafieldURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -257,8 +257,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyProductVariantURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyProductVariantURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -301,8 +301,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.put(shopifyProductVariantUpdateURI, productVariantObject, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyProductVariantUpdateURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -335,8 +335,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyInventoryItemURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyInventoryItemURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -372,8 +372,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyInventoryItemURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyInventoryItemURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
@@ -401,10 +401,10 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyInventoryLevelURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                throw new ForbiddenException('API not available: ' + shopifyInventoryLevelURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
-            );
+              );
 
         const data = await lastValueFrom(request);
 
@@ -446,10 +446,10 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.put(shopifyInventoryItemURI, data, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                throw new ForbiddenException('API not available: ' + shopifyInventoryItemURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
-            );
+              );
 
         await lastValueFrom(request);
         
@@ -475,10 +475,10 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.post(shopifyInventoryLevelURI, data, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                throw new ForbiddenException('API not available: ' + shopifyInventoryLevelURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
-            );
+              );
 
         await lastValueFrom(request);
         
@@ -498,11 +498,10 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.delete(shopifyInventoryLevelURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                console.log(e);
-                throw new ForbiddenException('API not available: ' + shopifyInventoryLevelURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
-            );
+              );
 
         await lastValueFrom(request);
         
@@ -527,10 +526,10 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.post(shopifyInventoryLevelURI, data, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                throw new ForbiddenException('API not available: ' + shopifyInventoryLevelURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
-            );
+              );
 
         await lastValueFrom(request);
         
@@ -554,8 +553,8 @@ export class POSVendorServiceShopifyAPIRestAdminService {
         const request = this.httpService.get(shopifyLocationURI, {headers: headers})
             .pipe(map((response) => response.data))
             .pipe(
-                catchError(e => {
-                  throw new ForbiddenException('API not available: ' + shopifyLocationURI + 'Error: ' + e);
+                catchError(error => {
+                  throw new InternalServerErrorException(error.response.data);
                 }),
               );
 
