@@ -12,16 +12,12 @@ export class POSModuleService {
     ) { }
 
     async getPOSModule(posModuleId: string): Promise<POSModuleDTO> {
-        let posModule = await this.posModuleRepository.findOne({ 
+        let posModule = await this.posModuleRepository.findOneOrFail({ 
             where: { 
                 posModuleId : posModuleId
             } 
         });
         
-        if (!posModule) {
-            throw new NotFoundException('POS module not found');
-        }
-
         let posModuleDTO = new POSModuleDTO();
         posModuleDTO.posModuleId = posModule.posModuleId;
         posModuleDTO.applicationModuleId = posModule.applicationModuleId;
@@ -37,15 +33,11 @@ export class POSModuleService {
     }
 
     async getPOSModuleByCommerceAccountId(commerceAccountId: string): Promise<POSModuleDTO> {
-        let posModule = await this.posModuleRepository.findOne({ 
+        let posModule = await this.posModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
-        
-        if (!posModule) {
-            throw new NotFoundException('POS module not found for this commerce account');
-        }
 
         let posModuleDTO = new POSModuleDTO();
         posModuleDTO.posModuleId = posModule.posModuleId;
@@ -63,24 +55,16 @@ export class POSModuleService {
 
     async getPOSModules(): Promise<POSModuleDTO[]> {
         let posModules = await this.posModuleRepository.find();
-        
-        if (posModules == null) {
-            return [];
-        }
 
         let posModuleDTOs: POSModuleDTO[] = [];
 
+        if(!posModules) {
+            return posModuleDTOs;
+        }
+
         for(let i = 0; i < posModules.length; i++) {
             let posModule = posModules[i];
-            let posModuleDTO = new POSModuleDTO();
-            posModuleDTO.posModuleId = posModule.posModuleId;
-            posModuleDTO.applicationModuleId = posModule.applicationModuleId;
-            posModuleDTO.commerceAccountId = posModule.commerceAccountId;
-            posModuleDTO.posModuleSettings = posModule.posModuleSettings;
-            posModuleDTO.posModuleRoles = posModule.posModuleRoles;
-            posModuleDTO.posModuleIsActive = posModule.posModuleIsActive;
-            posModuleDTO.posModuleCreateDate = posModule.posModuleCreateDate;
-            posModuleDTO.posModuleUpdateDate = posModule.posModuleUpdateDate;
+            let posModuleDTO = ({ ...posModule });
 
             posModuleDTOs.push(posModuleDTO);
 
@@ -91,34 +75,41 @@ export class POSModuleService {
     }
 
     async createPOSModule(createPOSModuleDTO: CreatePOSModuleDTO): Promise<POSModuleDTO> {
-        let newPOSModule = this.posModuleRepository.create({ ...createPOSModuleDTO });
-        newPOSModule = await this.posModuleRepository.save(newPOSModule);
+        
+        let posModule = await this.posModuleRepository.findOne({
+            where: {
+                commerceAccountId : createPOSModuleDTO.commerceAccountId
+            } 
+        });
 
-        let posModuleDTO = await this.getPOSModule(newPOSModule.posModuleId);
+        if(posModule) {
+            throw new ConflictException('POS module already exists');
+        }
+
+        posModule = this.posModuleRepository.create({ ...createPOSModuleDTO });
+        await this.posModuleRepository.save(posModule);
+
+        let posModuleDTO = await this.getPOSModule(posModule.posModuleId);
 
         return posModuleDTO;
     }
 
     async updatePOSModule(updatePOSModuleDTO: UpdatePOSModuleDTO): Promise<POSModuleDTO> {
             
-        let existingPOSModule = await this.posModuleRepository.findOne({ 
+        let posModule = await this.posModuleRepository.findOneOrFail({ 
             where: { 
                 posModuleId: updatePOSModuleDTO.posModuleId
             } 
         });
 
-        if (!existingPOSModule) {
-            throw new NotFoundException('POS module not found');
-        }
-
-        existingPOSModule.posModuleSettings = updatePOSModuleDTO.posModuleSettings;
-        existingPOSModule.posModuleRoles = updatePOSModuleDTO.posModuleRoles;
-        existingPOSModule.posModuleIsActive = updatePOSModuleDTO.posModuleIsActive;
-        existingPOSModule.posModuleUpdateDate = new Date();
+        posModule.posModuleSettings = updatePOSModuleDTO.posModuleSettings;
+        posModule.posModuleRoles = updatePOSModuleDTO.posModuleRoles;
+        posModule.posModuleIsActive = updatePOSModuleDTO.posModuleIsActive;
+        posModule.posModuleUpdateDate = new Date();
         
-        await this.posModuleRepository.save(existingPOSModule);
+        await this.posModuleRepository.save(posModule);
 
-        let posModuleDTO = await this.getPOSModule(existingPOSModule.posModuleId);
+        let posModuleDTO = await this.getPOSModule(posModule.posModuleId);
         
         return posModuleDTO;
     }

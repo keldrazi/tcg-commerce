@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Delete, UseGuards, UsePipes, ValidationPipe, NotFoundException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { POSModuleService } from './pos.module.service';
 import { CreatePOSModuleDTO, UpdatePOSModuleDTO } from './dto/pos.module.dto';
+import { EntityNotFoundError } from 'typeorm';
 
 @Controller('pos/module')
 export class POSModuleController {
@@ -9,7 +10,7 @@ export class POSModuleController {
         private posModuleService: POSModuleService,
     ) { }
     
-    @Get('/all')
+    @Get()
     async getPOSModules() {
         try {
             return await this.posModuleService.getPOSModules();
@@ -18,25 +19,25 @@ export class POSModuleController {
         }
     }
 
-    @Get('/:posModuleId')
-    async getPOSModule(@Param('posModuleId') posModuleId: string) {
+    @Get('/id/:posModuleId')
+    async getPOSModuleById(@Param('posModuleId') posModuleId: string) {
         try {
             return await this.posModuleService.getPOSModule(posModuleId);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('POS module not found');
             }
             throw new InternalServerErrorException('Failed to get POS module');
         }
     }
 
-    @Get('/commerceAccount/:commerceAccountId')
+    @Get('/caid/:commerceAccountId')
     async getPOSModuleByCommerceAccountId(@Param('commerceAccountId') commerceAccountId: string) {
         try {
             return await this.posModuleService.getPOSModuleByCommerceAccountId(commerceAccountId);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('POS module not found');
             }
             throw new InternalServerErrorException('Failed to get POS module by commerce account');
         }
@@ -61,8 +62,8 @@ export class POSModuleController {
         try {
             return await this.posModuleService.updatePOSModule(updatePOSModuleDTO);
         } catch (e) {
-            if (e instanceof NotFoundException) {
-                throw e;
+            if (e instanceof EntityNotFoundError) {
+                throw new NotFoundException('POS module not found');
             }
             throw new InternalServerErrorException('Failed to update POS module');
         }
