@@ -12,16 +12,12 @@ export class BuylistProductCardNoteService {
     ) { }
 
     async getBuylistProductCardNoteById(buylistProductCardNoteId: string): Promise<BuylistProductCardNoteDTO> {
-        let buylistProductCardNote = await this.buylistProductCardNoteRepository.findOne({ 
+        let buylistProductCardNote = await this.buylistProductCardNoteRepository.findOneOrFail({ 
             where: { 
                 buylistProductCardNoteId: buylistProductCardNoteId 
             } 
         });
         
-        if (buylistProductCardNote == null) {
-            throw new NotFoundException('Buylist status was not found');
-        }
-
         let buylistProductCardNoteDTO: BuylistProductCardNoteDTO = ({ ...buylistProductCardNote });
 
         return buylistProductCardNoteDTO;

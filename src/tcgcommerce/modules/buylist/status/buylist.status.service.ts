@@ -12,16 +12,12 @@ export class BuylistStatusService {
     ) { }
 
     async getBuylistStatusById(buylistStatusId: string): Promise<BuylistStatusDTO> {
-        let buylistStatus = await this.buylistStatusRepository.findOne({ 
+        let buylistStatus = await this.buylistStatusRepository.findOneOrFail({ 
             where: { 
                 buylistStatusId: buylistStatusId 
             } 
         });
         
-        if (buylistStatus == null) {
-            throw new NotFoundException('Buylist status was not found');
-        }
-
         let buylistStatusDTO: BuylistStatusDTO = ({ ...buylistStatus });
 
         return buylistStatusDTO;
@@ -33,7 +29,7 @@ export class BuylistStatusService {
         
         let buylistStatusDTOs: BuylistStatusDTO[] = [];
 
-        if(buylistStatuses == null) {
+        if(!buylistStatuses) {
             return buylistStatusDTOs;
         }
         
@@ -48,16 +44,12 @@ export class BuylistStatusService {
     }
     
     async getBuylistStatusByName(buylistStatusName: string): Promise<BuylistStatusDTO> {
-        let buylistStatus = await this.buylistStatusRepository.findOne({ 
+        let buylistStatus = await this.buylistStatusRepository.findOneOrFail({ 
             where: { 
                 buylistStatusName: buylistStatusName 
             } 
         });
         
-        if (buylistStatus == null) {
-            throw new NotFoundException('Buylist status was not found');
-        }
-
         let buylistStatusDTO: BuylistStatusDTO = ({ ...buylistStatus });
 
         return buylistStatusDTO;
@@ -72,7 +64,7 @@ export class BuylistStatusService {
             } 
         });
 
-        if (buylistStatus != null) {
+        if (buylistStatus) {
             throw new ConflictException('Buylist status already exists');
         }
         
@@ -87,16 +79,12 @@ export class BuylistStatusService {
 
     async updateBuylistStatus(updateBuylistStatusDTO: UpdateBuylistStatusDTO): Promise<BuylistStatusDTO> {
                     
-        let buylistStatus = await this.buylistStatusRepository.findOne({ 
+        let buylistStatus = await this.buylistStatusRepository.findOneOrFail({ 
             where: { 
                 buylistStatusId: updateBuylistStatusDTO.buylistStatusId 
             } 
         });
             
-        if (!buylistStatus) {
-            throw new NotFoundException('Buylist status was not found');
-        }
-
         buylistStatus.buylistStatusName = updateBuylistStatusDTO.buylistStatusName;
         buylistStatus.buylistStatusCode = updateBuylistStatusDTO.buylistStatusCode;
         buylistStatus.buylistStatusIsActive = updateBuylistStatusDTO.buylistStatusIsActive;

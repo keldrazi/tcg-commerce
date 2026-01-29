@@ -13,16 +13,12 @@ export class BuylistProductCardService {
     ) { }
 
     async getBuylistProductCardById(buylistProductCardId: string): Promise<BuylistProductCardDTO> {
-        let buylistProductCard = await this.buylistProductCardRepository.findOne({ 
+        let buylistProductCard = await this.buylistProductCardRepository.findOneOrFail({ 
             where: { 
                 buylistProductCardId: buylistProductCardId 
             } 
         });
         
-        if (buylistProductCard == null) {
-            throw new NotFoundException('Buylist product card was not found');
-        }
-
         let buylistProductCardDTO: BuylistProductCardDTO = ({ ...buylistProductCard });
 
         return buylistProductCardDTO;
@@ -38,7 +34,7 @@ export class BuylistProductCardService {
         
         let buylistProductCardDTOs: BuylistProductCardDTO[] = [];
        
-        if(buylistProductCards == null) {
+        if(!buylistProductCards) {
             return buylistProductCardDTOs;
         }
         
@@ -73,16 +69,12 @@ export class BuylistProductCardService {
 
     async updateBuylistProductCard(updateBuylistProductCardDTO: UpdateBuylistProductCardDTO): Promise<BuylistProductCardDTO> {
                     
-        let buylistProductCard = await this.buylistProductCardRepository.findOne({ 
+        let buylistProductCard = await this.buylistProductCardRepository.findOneOrFail({ 
             where: { 
                 buylistProductCardId: updateBuylistProductCardDTO.buylistProductCardId 
             } 
         });
             
-        if (!buylistProductCard) {
-            throw new NotFoundException('Buylist product card was not found'); 
-        }
-
         buylistProductCard.customerAccountUserId = updateBuylistProductCardDTO.customerAccountUserId;
         buylistProductCard.buylistLocationId = updateBuylistProductCardDTO.buylistLocationId;
         buylistProductCard.buylistLocationName = updateBuylistProductCardDTO.buylistLocationName;
@@ -108,8 +100,10 @@ export class BuylistProductCardService {
         return `BPC-${productVendorCode}-${productLineCode}-${productTypeCode}-${productLanguageCode}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     }
 
+    //TO DO:
     //DELETE BUYLIST PRODUCT CARD, ONLY IF IT HASN'T BEEN SUBMITTED;
 
+    
     @OnEvent('buylist.product.card.update.count')
     async updateBuylistProductCardCount(payload: any): Promise<void> {
         let buylistProductCard = await this.getBuylistProductCardById(payload.buylistProductCardId);

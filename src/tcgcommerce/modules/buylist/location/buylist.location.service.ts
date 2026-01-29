@@ -12,16 +12,12 @@ export class BuylistLocationService {
     ) { }
 
     async getBuylistLocationById(buylistLocationId: string): Promise<BuylistLocationDTO> {
-        let buylistLocation = await this.buylistLocationRepository.findOne({ 
+        let buylistLocation = await this.buylistLocationRepository.findOneOrFail({ 
             where: { 
                 buylistLocationId: buylistLocationId 
             } 
         });
         
-        if (buylistLocation == null) {
-            throw new NotFoundException('Buylist location was not found');
-        }
-
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
 
         return buylistLocationDTO;
@@ -52,16 +48,12 @@ export class BuylistLocationService {
     }
     
     async getBuylistLocationByName(name: string): Promise<BuylistLocationDTO> {
-        let buylistLocation = await this.buylistLocationRepository.findOne({ 
+        let buylistLocation = await this.buylistLocationRepository.findOneOrFail({ 
             where: { 
                 buylistLocationName: name 
             } 
         });
         
-        if (buylistLocation == null) {
-            throw new NotFoundException('Buylist location was not found');
-        }
-
         let buylistLocationDTO: BuylistLocationDTO = ({ ...buylistLocation });
 
         return buylistLocationDTO;
@@ -73,11 +65,12 @@ export class BuylistLocationService {
         //CHECK TO SEE IF THE BUYLIST LOCATION ALREADY EXISTS;
         let buylistLocation = await this.buylistLocationRepository.findOne({ 
             where: { 
+                commerceAccountId: createBuylistLocationDTO.commerceAccountId,
                 buylistLocationName: createBuylistLocationDTO.buylistLocationName 
             } 
         });
         
-        if (buylistLocation != null) {
+        if (!buylistLocation) {
             throw new ConflictException('Buylist location with name already exists');
         }
         
@@ -92,16 +85,12 @@ export class BuylistLocationService {
 
     async updateBuylistLocation(updateBuylistLocationDTO: UpdateBuylistLocationDTO): Promise<BuylistLocationDTO> {
                     
-        let buylistLocation = await this.buylistLocationRepository.findOne({ 
+        let buylistLocation = await this.buylistLocationRepository.findOneOrFail({ 
             where: { 
                 buylistLocationId: updateBuylistLocationDTO.buylistLocationId 
             } 
         });    
         
-        if (!buylistLocation) {
-            throw new NotFoundException('Buylist location was not found');
-        }
-
         buylistLocation.buylistLocationName = updateBuylistLocationDTO.buylistLocationName;
         buylistLocation.buylistLocationCode = updateBuylistLocationDTO.buylistLocationCode;
         buylistLocation.buylistLocationIsActive = updateBuylistLocationDTO.buylistLocationIsActive;

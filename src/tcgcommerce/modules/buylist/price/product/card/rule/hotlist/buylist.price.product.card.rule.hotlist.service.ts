@@ -13,23 +13,19 @@ export class BuylistPriceProductCardRuleHotlistService {
 
 
     async getBuylistPriceProductCardRuleHotlistById(buylistPriceProductCardRuleHotlistId: string): Promise<BuylistPriceProductCardRuleHotlistDTO> {
-        let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
+        let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOneOrFail({
             where: {
                 buylistPriceProductCardRuleHotlistId: buylistPriceProductCardRuleHotlistId,
             }
         });
         
-        if(buylistPriceProductCardRuleHotlist == null) {
-            throw new NotFoundException('Buylist price product card rule hotlist was not found');
-        }
-
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
 
         return buylistPriceProductCardRuleHotlistDTO;
     }
 
     async getBuylistPriceProductCardRuleHotlistByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string): Promise<BuylistPriceProductCardRuleHotlistDTO> {
-        let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
+        let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOneOrFail({
             where: {
                 commerceAccountId: commerceAccountId,
                 productVendorId: productVendorId,
@@ -38,10 +34,6 @@ export class BuylistPriceProductCardRuleHotlistService {
             }
         });
         
-        if(buylistPriceProductCardRuleHotlist == null) {
-            throw new NotFoundException('Buylist price product card rule hotlist was not found');
-        }
-
         let buylistPriceProductCardRuleHotlistDTO: BuylistPriceProductCardRuleHotlistDTO = ({ ...buylistPriceProductCardRuleHotlist})
 
         return buylistPriceProductCardRuleHotlistDTO;
@@ -61,14 +53,14 @@ export class BuylistPriceProductCardRuleHotlistService {
             }
         });
         
-        if (buylistPriceProductCardRuleHotlist != null) {
+        if (buylistPriceProductCardRuleHotlist) {
            throw new ConflictException('Buylist price product card rule hotlist already exists');
         }
 
-        let newBuylistPriceProductCardRuleHotlist = this.buylistPriceProductCardRuleHotlistRepository.create({ ...createBuylistPriceProductCardRuleHotlistDTO });
-        newBuylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.save(newBuylistPriceProductCardRuleHotlist);
+        buylistPriceProductCardRuleHotlist = this.buylistPriceProductCardRuleHotlistRepository.create({ ...createBuylistPriceProductCardRuleHotlistDTO });
+        buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.save(buylistPriceProductCardRuleHotlist);
 
-        let buylistPriceProductCardRuleHotlistDTO = await this.getBuylistPriceProductCardRuleHotlistById(newBuylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistId);
+        let buylistPriceProductCardRuleHotlistDTO = await this.getBuylistPriceProductCardRuleHotlistById(buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistId);
 
         return buylistPriceProductCardRuleHotlistDTO;
     }   
@@ -76,17 +68,12 @@ export class BuylistPriceProductCardRuleHotlistService {
     async updateBuylistPriceProductCardRuleHotlist(updateBuylistPriceProductCardRuleHotlistDTO: UpdateBuylistPriceProductCardRuleHotlistDTO): Promise<BuylistPriceProductCardRuleHotlistDTO> {
 
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
-        let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOne({
+        let buylistPriceProductCardRuleHotlist = await this.buylistPriceProductCardRuleHotlistRepository.findOneOrFail({
             where: {
                 buylistPriceProductCardRuleHotlistId: updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistId
             }
         });
         
-        if (buylistPriceProductCardRuleHotlist == null) {
-            throw new NotFoundException('Buylist price product card rule hotlist was not found');
-        }
-
-        buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistId = updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistId;
         buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistOption = updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistOption;
         buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistCashPercentage = updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistCashPercentage;
         buylistPriceProductCardRuleHotlist.buylistPriceProductCardRuleHotlistCreditPercentage = updateBuylistPriceProductCardRuleHotlistDTO.buylistPriceProductCardRuleHotlistCreditPercentage;

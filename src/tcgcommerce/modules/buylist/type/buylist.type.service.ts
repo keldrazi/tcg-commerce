@@ -12,16 +12,12 @@ export class BuylistTypeService {
     ) { }
 
     async getBuylistTypeById(buylistTypeId: string): Promise<BuylistTypeDTO> {
-        let buylistType = await this.buylistTypeRepository.findOne({ 
+        let buylistType = await this.buylistTypeRepository.findOneOrFail({ 
             where: { 
                 buylistTypeId: buylistTypeId 
             } 
         });
         
-        if (buylistType == null) {
-            throw new NotFoundException('Buylist type was not found');
-        }
-
         let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
 
         return buylistTypeDTO;
@@ -33,7 +29,7 @@ export class BuylistTypeService {
         
         let buylistTypeDTOs: BuylistTypeDTO[] = [];
 
-        if(buylistTypes == null) {
+        if(!buylistTypes) {
             return buylistTypeDTOs;
         }
         
@@ -48,16 +44,12 @@ export class BuylistTypeService {
     }
     
     async getBuylistTypeByName(buylistTypeName: string): Promise<BuylistTypeDTO> {
-        let buylistType = await this.buylistTypeRepository.findOne({ 
+        let buylistType = await this.buylistTypeRepository.findOneOrFail({ 
             where: { 
                 buylistTypeName: buylistTypeName 
             } 
         });
         
-        if (buylistType == null) {
-            throw new NotFoundException('Buylist type was not found');
-        }
-
         let buylistTypeDTO: BuylistTypeDTO = ({ ...buylistType });
 
         return buylistTypeDTO;
@@ -72,7 +64,7 @@ export class BuylistTypeService {
             } 
         });
 
-        if (buylistType != null) {
+        if (buylistType) {
             throw new ConflictException('Buylist type already exists');
         }
         
@@ -87,16 +79,12 @@ export class BuylistTypeService {
 
     async updateBuylistType(updateBuylistTypeDTO: UpdateBuylistTypeDTO): Promise<BuylistTypeDTO> {
                     
-        let buylistType = await this.buylistTypeRepository.findOne({ 
+        let buylistType = await this.buylistTypeRepository.findOneOrFail({ 
             where: { 
                 buylistTypeId: updateBuylistTypeDTO.buylistTypeId 
             } 
         });
             
-        if (!buylistType) {
-            throw new NotFoundException('Buylist type was not found');
-        }
-
         buylistType.buylistTypeName = updateBuylistTypeDTO.buylistTypeName;
         buylistType.buylistTypeCode = updateBuylistTypeDTO.buylistTypeCode;
         buylistType.buylistTypeIsActive = updateBuylistTypeDTO.buylistTypeIsActive;

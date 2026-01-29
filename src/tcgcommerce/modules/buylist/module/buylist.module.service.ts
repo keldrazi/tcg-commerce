@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BuylistModule } from 'src/typeorm/entities/tcgcommerce/modules/buylist/module/buylist.module.entity';
@@ -12,16 +12,12 @@ export class BuylistModuleService {
     ) { }
 
     async getBuylistModuleById(buylistModuleId: string): Promise<BuylistModuleDTO> {
-        let buylistModule = await this.buylistModuleRepository.findOne({ 
+        let buylistModule = await this.buylistModuleRepository.findOneOrFail({ 
             where: { 
                 buylistModuleId : buylistModuleId
             } 
         });
         
-        if (buylistModule == null) {
-            throw new NotFoundException('Buylist module was not found');
-        }
-
         let buylistModuleDTO :BuylistModuleDTO = ({ ...buylistModule})
 
         return buylistModuleDTO;
@@ -29,16 +25,12 @@ export class BuylistModuleService {
     }
 
     async getBuylistModuleByCommerceAccountId(commerceAccountId: string): Promise<BuylistModuleDTO> {
-        let buylistModule = await this.buylistModuleRepository.findOne({ 
+        let buylistModule = await this.buylistModuleRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId : commerceAccountId
             } 
         });
         
-        if (buylistModule == null) {
-            throw new NotFoundException('Buylist module was not found');
-        }
-
         let buylistModuleDTO :BuylistModuleDTO = ({ ...buylistModule})
 
         return buylistModuleDTO;
@@ -48,11 +40,11 @@ export class BuylistModuleService {
     async getBuylistModules(): Promise<BuylistModuleDTO[]> {
         let buylistModules = await this.buylistModuleRepository.find();
         
-        if (buylistModules == null) {
-            return [];
-        }
-
         let buylistModuleDTOs: BuylistModuleDTO[] = [];
+
+        if (buylistModules == null) {
+            return buylistModuleDTOs;
+        }
 
         for(let i = 0; i < buylistModules.length; i++) {
             let buylistModule = buylistModules[i];
@@ -74,6 +66,10 @@ export class BuylistModuleService {
             } 
         });
 
+        if (buylistModule) {
+            throw new ConflictException('Buylist module already exists');
+        }
+
         buylistModule = this.buylistModuleRepository.create({ ...createBuylistModuleDTO });
         buylistModule = await this.buylistModuleRepository.save(buylistModule);
 
@@ -84,15 +80,11 @@ export class BuylistModuleService {
 
     async updateBuylistModule(updateBuylistModuleDTO: UpdateBuylistModuleDTO): Promise<BuylistModuleDTO> {
             
-        let buylistModule = await this.buylistModuleRepository.findOne({ 
+        let buylistModule = await this.buylistModuleRepository.findOneOrFail({ 
             where: { 
                 buylistModuleId: updateBuylistModuleDTO.buylistModuleId
             } 
         });
-
-        if (buylistModule == null) {
-            throw new NotFoundException('Buylist module was not found');
-        }
 
         buylistModule.buylistModuleSettings = updateBuylistModuleDTO.buylistModuleSettings;
         buylistModule.buylistModuleRoles = updateBuylistModuleDTO.buylistModuleRoles;

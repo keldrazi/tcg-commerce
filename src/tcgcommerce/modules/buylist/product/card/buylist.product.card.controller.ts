@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, UsePipes, ValidationPipe, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { CreateBuylistProductCardDTO, UpdateBuylistProductCardDTO } from './dto/buylist.product.card.dto';
 import { BuylistProductCardService } from './buylist.product.card.service';
-
-
+import { EntityNotFoundError } from 'typeorm';
 
 @Controller('buylist/product/card')
 export class BuylistProductCardController {
@@ -14,24 +13,46 @@ export class BuylistProductCardController {
     
     @Get('/id/:buylistProductCardId')
     async getBuylistProductCardById(@Param('buylistProductCardId') buylistProductCardId: string) {
-        return await this.buylistProductCardService.getBuylistProductCardById(buylistProductCardId);
+        try {
+            return await this.buylistProductCardService.getBuylistProductCardById(buylistProductCardId);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Buylist product card was not found');
+            }
+            throw new InternalServerErrorException('Failed to get buylist product card');
+        }
     }
 
     @Get('/caid/:commerceAccountId')
     async getBuylistProductCards(@Param('commerceAccountId') commerceAccountId: string) {
-        return await this.buylistProductCardService.getBuylistProductCardsByCommerceAccountId(commerceAccountId);
+        try {
+            return await this.buylistProductCardService.getBuylistProductCardsByCommerceAccountId(commerceAccountId);
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to get buylist product cards');
+        }
     }
 
     @Post('/create')
     @UsePipes(new ValidationPipe())
     async createBuylistProductCard(@Body() createBuylistProductCardDTO: CreateBuylistProductCardDTO) {
-        return await this.buylistProductCardService.createBuylistProductCard(createBuylistProductCardDTO);
+        try {
+            return await this.buylistProductCardService.createBuylistProductCard(createBuylistProductCardDTO);
+        } catch (e) {
+            throw new InternalServerErrorException('Failed to create buylist product card');
+        }
     }
 
     @Put('/update')
     @UsePipes(new ValidationPipe())
     async updateBuylistProductCard(@Body() updateBuylistProductCardDTO: UpdateBuylistProductCardDTO) {
-        return await this.buylistProductCardService.updateBuylistProductCard(updateBuylistProductCardDTO);
+        try {
+            return await this.buylistProductCardService.updateBuylistProductCard(updateBuylistProductCardDTO);
+        } catch (e) {
+            if(e instanceof EntityNotFoundError) {
+                throw new NotFoundException('Buylist product card was not found');
+            }
+            throw new InternalServerErrorException('Failed to update buylist product card');
+        }
     }
 
 }

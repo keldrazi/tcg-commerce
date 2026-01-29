@@ -19,16 +19,12 @@ export class BuylistProductCardItemService {
     ) { }
 
     async getBuylistProductCardItemById(buylistProductCardItemId: string): Promise<BuylistProductCardItemDTO> {
-        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOneOrFail({ 
             where: { 
                 buylistProductCardItemId: buylistProductCardItemId 
             } 
         });
         
-        if (buylistProductCardItem == null) {
-            throw new NotFoundException('Buylist product card item was not found');
-        }
-
         let buylistProductCardItemDTO: BuylistProductCardItemDTO = ({ ...buylistProductCardItem });
 
         return buylistProductCardItemDTO;
@@ -42,11 +38,11 @@ export class BuylistProductCardItemService {
             } 
         });
         
-        if (buylistProductCardItems == null) {
-            return [];
-        }
-
         let buylistProductCardItemDTOs: BuylistProductCardItemDTO[] = [];
+
+        if (buylistProductCardItems == null) {
+            return buylistProductCardItemDTOs;
+        }
 
         for(let i = 0; i < buylistProductCardItems.length; i++) {
             let buylistProductCardItem = buylistProductCardItems[i];
@@ -68,13 +64,14 @@ export class BuylistProductCardItemService {
             } 
         });
         
-        if (buylistProductCardItem != null) {
+        if (buylistProductCardItem) {
             throw new ConflictException('Buylist product card item exists');
         }
         
         buylistProductCardItem = this.buylistProductCardItemRepository.create({ ...createBuylistProductCardItemDTO });
         buylistProductCardItem = await this.buylistProductCardItemRepository.save(buylistProductCardItem);
 
+        //TO DO:
         //NEED TO EMIT EVENT TO UPDATE THE BUYLIST QTY COUNT;
 
         let buylistProductCardItemDTO = this.getBuylistProductCardItemById(buylistProductCardItem.buylistProductCardItemId);
@@ -85,17 +82,16 @@ export class BuylistProductCardItemService {
 
     async updateBuylistProductCardItem(updateBuylistProductCardItemDTO: UpdateBuylistProductCardItemDTO): Promise<BuylistProductCardItemDTO> {
                     
-        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({ 
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOneOrFail({ 
             where: { 
                 buylistProductCardItemId: updateBuylistProductCardItemDTO.buylistProductCardItemId 
             } 
         });   
         
-        if (!buylistProductCardItem) {
-            throw new NotFoundException('Buylist product card item was not found'); 
-        }
+        
         let buylistProductCardItemQtyUpdateCount = 0;
         let countType = "";
+        
         if(buylistProductCardItem.buylistProductCardItemQty > updateBuylistProductCardItemDTO.buylistProductCardItemQty) {
             buylistProductCardItemQtyUpdateCount = buylistProductCardItem.buylistProductCardItemQty - updateBuylistProductCardItemDTO.buylistProductCardItemQty;
             countType = "REMOVE";
@@ -126,15 +122,11 @@ export class BuylistProductCardItemService {
 
     async deleteBuylistProductCardItemById(buylistProductCardItemId: string): Promise<boolean> {
 
-        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOne({
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOneOrFail({
             where: {
                 buylistProductCardItemId: buylistProductCardItemId
             }
         });
-
-        if (!buylistProductCardItem) {
-            throw new NotFoundException('Buylist product card item was not found');
-        }
 
         //NEED TO EMIT EVENT TO UPDATE THE BUYLIST QTY COUNT;
         this.eventEmitter.emit('buylist.product.card.update.count', {
@@ -151,11 +143,21 @@ export class BuylistProductCardItemService {
 
     @OnEvent('buylist.import.product.card.approved')
     async createBuylistProductCardItemsFromImport(payload: any): Promise<void> {
+        
+        //TO DO:
+        //REFACTOR THIS;
         let buylistImportProductCardDTO = await this.buylistImportProductCardService.getBuylistImportProductCardById(payload.buylistImportProductCardId);
 
         if(buylistImportProductCardDTO == null) {
             throw new NotFoundException('Buylist import product card not found');
         }
+
+        let buylistProductCardItem = await this.buylistProductCardItemRepository.findOneOrFail({ 
+            where: { 
+                buylistProductCardItemId: payload.buylistImportProductCardId 
+            } 
+        });
+
         let buylistImportProductCardItemDTOs = await this.buylistImportProductCardItemService.getBuylistImportProductCardItemsByBuylistId(payload.buylistImportProductCardId);
 
         let buylistProductCardItemCount = 0;

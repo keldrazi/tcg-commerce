@@ -13,23 +13,19 @@ export class BuylistPriceProductCardRuleBaseService {
 
 
     async getBuylistPriceProductCardRuleBaseById(buylistPriceProductCardRuleBaseId: string): Promise<BuylistPriceProductCardRuleBaseDTO> {
-        let buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.findOne({
+        let buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.findOneOrFail({
             where: {
                 buylistPriceProductCardRuleBaseId: buylistPriceProductCardRuleBaseId,
             }
         });
        
-        if(buylistPriceProductCardRuleBase == null) {
-            throw new NotFoundException('Buylist price product card rule base was not found');
-        }
-
         let buylistPriceProductCardRuleBaseDTO: BuylistPriceProductCardRuleBaseDTO = ({ ...buylistPriceProductCardRuleBase})
 
         return buylistPriceProductCardRuleBaseDTO;
     }
 
     async getBuylistPriceProductCardRuleBaseByCommerceAccountId(commerceAccountId: string, productVendorId: string, productLineId: string, productTypeId: string): Promise<BuylistPriceProductCardRuleBaseDTO> {
-        let buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.findOne({
+        let buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.findOneOrFail({
             where: {
                 commerceAccountId: commerceAccountId,
                 productVendorId: productVendorId,
@@ -38,10 +34,6 @@ export class BuylistPriceProductCardRuleBaseService {
             }
         });
         
-        if(buylistPriceProductCardRuleBase == null) {
-            throw new NotFoundException('Buylist price product card rule base was not found');
-        }
-
         let buylistPriceProductCardRuleBaseDTO: BuylistPriceProductCardRuleBaseDTO = ({ ...buylistPriceProductCardRuleBase})
 
         return buylistPriceProductCardRuleBaseDTO;
@@ -59,7 +51,7 @@ export class BuylistPriceProductCardRuleBaseService {
             }
         });
         
-        if (buylistPriceProductCardRuleBase != null) {
+        if (buylistPriceProductCardRuleBase) {
             throw new ConflictException('Buylist price product card rule base already exists');
         }
 
@@ -74,17 +66,12 @@ export class BuylistPriceProductCardRuleBaseService {
     async updateBuylistPriceProductCardRuleBase(updateBuylistPriceProductCardRuleBaseDTO: UpdateBuylistPriceProductCardRuleBaseDTO): Promise<BuylistPriceProductCardRuleBaseDTO> {
 
         //CHECK TO SEE IF THE PRODUCT CARD BASE ALREADY EXISTS;
-        let buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.findOne({
+        let buylistPriceProductCardRuleBase = await this.buylistPriceProductCardRuleBaseRepository.findOneOrFail({
             where: {
                 buylistPriceProductCardRuleBaseId: updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseId
             }
         });
         
-        if (buylistPriceProductCardRuleBase == null) {
-            throw new NotFoundException('Buylist price product card rule base was not found');
-        }
-
-        buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseId = updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseId;
         buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseOption = updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseOption;
         buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseCashPercentage = updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseCashPercentage;
         buylistPriceProductCardRuleBase.buylistPriceProductCardRuleBaseCreditPercentage = updateBuylistPriceProductCardRuleBaseDTO.buylistPriceProductCardRuleBaseCreditPercentage;

@@ -12,16 +12,12 @@ export class BuylistHotlistProductCardService {
     ) { }
 
     async getBuylistHotlistProductCardById(buylistHotlistProductCardId: string): Promise<BuylistHotlistProductCardDTO> {
-        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOne({ 
+        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOneOrFail({ 
             where: { 
                 buylistHotlistProductCardId: buylistHotlistProductCardId 
             } 
         });
         
-        if(buylistHotlistProductCard == null) {
-            throw new NotFoundException('Buylist hotlist product card was not found');
-        }
-
         let buylistHotlistProductCardDTO: BuylistHotlistProductCardDTO = ({ ...buylistHotlistProductCard });
 
         return buylistHotlistProductCardDTO;
@@ -54,7 +50,7 @@ export class BuylistHotlistProductCardService {
     
     async createBuylistHotlistProductCard(createBuylistHotlistProductCardDTO: CreateBuylistHotlistProductCardDTO): Promise<BuylistHotlistProductCardDTO> {
 
-        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOne({ 
+        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOneOrFail({ 
             where: { 
                 commerceAccountId: createBuylistHotlistProductCardDTO.commerceAccountId,
                 buylistLocationId: createBuylistHotlistProductCardDTO.buylistLocationId,
@@ -66,10 +62,6 @@ export class BuylistHotlistProductCardService {
             } 
         });
         
-        if(buylistHotlistProductCard != null) {
-            throw new ConflictException('Buylist hotlist product card already exists');
-        }
-
         buylistHotlistProductCard = this.buylistHotlistProductCardRepository.create({ ...createBuylistHotlistProductCardDTO });
         buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.save(buylistHotlistProductCard);
 
@@ -87,7 +79,7 @@ export class BuylistHotlistProductCardService {
             } 
         });
         
-        if(buylistHotlistProductCard == null) {
+        if(!buylistHotlistProductCard) {
             throw new NotFoundException('Buylist hotlist product card was not found');
         }
 
@@ -107,15 +99,11 @@ export class BuylistHotlistProductCardService {
 
     async deleteBuylistHotlistProductCard(buylistHotlistProductCardId: string): Promise<boolean> {
 
-        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOne({ 
+        let buylistHotlistProductCard = await this.buylistHotlistProductCardRepository.findOneOrFail({ 
             where: { 
                 buylistHotlistProductCardId: buylistHotlistProductCardId 
             } 
         });
-
-        if (buylistHotlistProductCard == null) {
-            throw new NotFoundException('Buylist hotlist product card was not found');
-        }
 
         await this.buylistHotlistProductCardRepository.delete({buylistHotlistProductCardId: buylistHotlistProductCardId});
 

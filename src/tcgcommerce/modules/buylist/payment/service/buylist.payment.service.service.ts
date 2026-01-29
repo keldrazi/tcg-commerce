@@ -12,20 +12,15 @@ export class BuylistPaymentServiceService {
     ) { }
 
     async getBuylistPaymentServiceById(buylistPaymentServiceId: string): Promise<BuylistPaymentServiceDTO> {
-        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOne({ 
+        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOneOrFail({ 
             where: { 
                 buylistPaymentServiceId: buylistPaymentServiceId 
             } 
         });
         
-        if (buylistPaymentService == null) {
-            throw new NotFoundException('Buylist payment service was not found');
-        }
-
         let buylistPaymentServiceDTO: BuylistPaymentServiceDTO = ({ ...buylistPaymentService });
 
-        return buylistPaymentServiceDTO;
-        
+        return buylistPaymentServiceDTO; 
     }
 
     async getBuylistPaymentServices(): Promise<BuylistPaymentServiceDTO[]> {
@@ -48,16 +43,12 @@ export class BuylistPaymentServiceService {
     }
     
     async getBuylistPaymentServiceByName(name: string): Promise<BuylistPaymentServiceDTO> {
-        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOne({ 
+        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOneOrFail({ 
             where: { 
                 buylistPaymentServiceName: name 
             } 
         });
         
-        if (buylistPaymentService == null) {
-            throw new NotFoundException('Buylist payment service was not found');
-        }
-
         let buylistPaymentServiceDTO: BuylistPaymentServiceDTO = ({ ...buylistPaymentService });
 
         return buylistPaymentServiceDTO;
@@ -73,8 +64,8 @@ export class BuylistPaymentServiceService {
             } 
         });
         
-        if (buylistPaymentService != null) {
-            throw new ConflictException('Buylist payment service with name already exists');
+        if (!buylistPaymentService) {
+            throw new ConflictException('Buylist payment service exists');
         }
         
         buylistPaymentService = this.buylistPaymentServiceRepository.create({ ...createBuylistPaymentServiceDTO });
@@ -88,16 +79,12 @@ export class BuylistPaymentServiceService {
 
     async updateBuylistPaymentService(updateBuylistPaymentServiceDTO: UpdateBuylistPaymentServiceDTO): Promise<BuylistPaymentServiceDTO> {
                     
-        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOne({ 
+        let buylistPaymentService = await this.buylistPaymentServiceRepository.findOneOrFail({ 
             where: { 
                 buylistPaymentServiceId: updateBuylistPaymentServiceDTO.buylistPaymentServiceId 
             } 
         });
             
-        if (!buylistPaymentService) {
-            throw new NotFoundException('Buylist payment service was not found');
-        }
-
         buylistPaymentService.buylistPaymentServiceName = updateBuylistPaymentServiceDTO.buylistPaymentServiceName;
         buylistPaymentService.buylistPaymentServiceCode = updateBuylistPaymentServiceDTO.buylistPaymentServiceCode;
         buylistPaymentService.buylistPaymentServiceIsActive = updateBuylistPaymentServiceDTO.buylistPaymentServiceIsActive;

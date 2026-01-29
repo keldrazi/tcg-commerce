@@ -12,16 +12,12 @@ export class BuylistPaymentTypeService {
     ) { }
 
     async getBuylistPaymentTypeById(buylistPaymentTypeId: string): Promise<BuylistPaymentTypeDTO> {
-        let buylistPaymentType = await this.buylistPaymentTypeRepository.findOne({ 
+        let buylistPaymentType = await this.buylistPaymentTypeRepository.findOneOrFail({ 
             where: { 
                 buylistPaymentTypeId: buylistPaymentTypeId 
             } 
         });
         
-        if (buylistPaymentType == null) {
-            throw new NotFoundException('Buylist payment type was not found');
-        }
-
         let buylistPaymentTypeDTO: BuylistPaymentTypeDTO = ({ ...buylistPaymentType });
 
         return buylistPaymentTypeDTO;
@@ -33,7 +29,7 @@ export class BuylistPaymentTypeService {
         
         let buylistPaymentTypeDTOs: BuylistPaymentTypeDTO[] = [];
         
-        if(buylistPaymentTypes == null) {
+        if(!buylistPaymentTypes) {
             return buylistPaymentTypeDTOs;
         }
         
@@ -48,16 +44,12 @@ export class BuylistPaymentTypeService {
     }
     
     async getBuylistPaymentTypeByName(name: string): Promise<BuylistPaymentTypeDTO> {
-        let buylistPaymentType = await this.buylistPaymentTypeRepository.findOne({ 
+        let buylistPaymentType = await this.buylistPaymentTypeRepository.findOneOrFail({ 
             where: { 
                 buylistPaymentTypeName: name 
             } 
         });
         
-        if (buylistPaymentType == null) {
-            throw new NotFoundException('Buylist payment type was not found');
-        }
-
         let buylistPaymentTypeDTO: BuylistPaymentTypeDTO = ({ ...buylistPaymentType });
 
         return buylistPaymentTypeDTO;
@@ -73,7 +65,7 @@ export class BuylistPaymentTypeService {
             } 
         });
         
-        if (buylistPaymentType != null) {
+        if (buylistPaymentType) {
             throw new ConflictException('Buylist payment type with name already exists');
         }
         
@@ -88,16 +80,12 @@ export class BuylistPaymentTypeService {
 
     async updateBuylistPaymentType(updateBuylistPaymentTypeDTO: UpdateBuylistPaymentTypeDTO): Promise<BuylistPaymentTypeDTO> {
                     
-        let buylistPaymentType = await this.buylistPaymentTypeRepository.findOne({ 
+        let buylistPaymentType = await this.buylistPaymentTypeRepository.findOneOrFail({ 
             where: { 
                 buylistPaymentTypeId: updateBuylistPaymentTypeDTO.buylistPaymentTypeId 
             } 
         });
         
-        if (!buylistPaymentType) {
-            throw new NotFoundException('Buylist payment type was not found');
-        }
-
         buylistPaymentType.buylistPaymentTypeName = updateBuylistPaymentTypeDTO.buylistPaymentTypeName;
         buylistPaymentType.buylistPaymentTypeCode = updateBuylistPaymentTypeDTO.buylistPaymentTypeCode;
         buylistPaymentType.buylistPaymentTypeIsActive = updateBuylistPaymentTypeDTO.buylistPaymentTypeIsActive;

@@ -26,15 +26,11 @@ export class BuylistImportProductCardService {
     ) { }
 
     async getBuylistImportProductCardById(buylistImportProductCardId: string): Promise<BuylistImportProductCardDTO> {
-        let buylistImportProductCard = await this.buylistImportProductCardRepository.findOne({
+        let buylistImportProductCard = await this.buylistImportProductCardRepository.findOneOrFail({
             where: {
                 buylistImportProductCardId: buylistImportProductCardId
             }
         });
-
-        if(buylistImportProductCard == null) {
-            throw new NotFoundException('Buylist import product card not found');
-        }
 
         let buylistImportProductCardDTO: BuylistImportProductCardDTO = ({ ...buylistImportProductCard });
 
@@ -69,17 +65,12 @@ export class BuylistImportProductCardService {
     }
 
     async getBuylistImportProductCardDetailsById(buylistImportProductCardId: string): Promise<{ buylistImportProductCardDTO: BuylistImportProductCardDTO; buylistImportProductCardItemDTOs: any }> {
-        let buylistImportProductCard = await this.buylistImportProductCardRepository.findOne({
+        let buylistImportProductCard = await this.buylistImportProductCardRepository.findOneOrFail({
             where: {
                 buylistImportProductCardId: buylistImportProductCardId
             }
         });
-
-        if(buylistImportProductCard == null) {
-            throw new NotFoundException('Buylist import product card not found');
-        }
-
-        //MAP TO DTO;
+        
         let buylistImportProductCardDTO: BuylistImportProductCardDTO = ({ ...buylistImportProductCard});
         let buylistImportProductCardItemDTOs = await this.buylistImportProductCardItemService.getBuylistImportProductCardItemsByBuylistId(buylistImportProductCardDTO.buylistImportProductCardId);
 
@@ -96,49 +87,40 @@ export class BuylistImportProductCardService {
 
     }
     
-    async getBuylistImportProductCardByOriginalFileName(buylistProductCardId: string, buylistImportProductCardFileOriginalName: string): Promise<BuylistImportProductCard | null> {
-        return await this.buylistImportProductCardRepository.findOne({
+    async getBuylistImportProductCardByOriginalFileName(buylistProductCardId: string, buylistImportProductCardFileOriginalName: string): Promise<BuylistImportProductCard> {
+        let buylistImportProductCard = await this.buylistImportProductCardRepository.findOneOrFail({
             where: { 
                 buylistProductCardId: buylistProductCardId,
                 buylistImportProductCardFileOriginalName: buylistImportProductCardFileOriginalName 
             }
         });
+
+        return buylistImportProductCard;
     }
 
-    async createBuylistImportProductCard(buylistImportProductCardFile: Express.Multer.File, createBuylistImportProductCardDTO: CreateBuylistImportProductCardDTO): Promise<string> {
+    async createBuylistImportProductCard(buylistImportProductCardFile: Express.Multer.File, createBuylistImportProductCardDTO: CreateBuylistImportProductCardDTO): Promise<BuylistImportProductCardDTO> {
 
-        //CHECK TO SEE IF A FILE WITH THE SAME NAME EXISTS;
-        let existingImportJobCard = await this.getBuylistImportProductCardByOriginalFileName(createBuylistImportProductCardDTO.buylistProductCardId, buylistImportProductCardFile.originalname);
-
-        if(existingImportJobCard != null) {
+        let buylistImportProductCard = await this.buylistImportProductCardRepository.findOne({
+            where: { 
+                buylistProductCardId: createBuylistImportProductCardDTO.buylistProductCardId,
+                buylistImportProductCardFileOriginalName: buylistImportProductCardFile.originalname 
+            }
+        });
+        
+        if(buylistImportProductCard) {
             throw new ConflictException('A buylist import job with the same file name already exists. Please rename the file and try again.');
         }
 
         let buylistImportProductCardProviderTypeDTO = await this.buylistImportProductCardProviderTypeService.getBuylistImportProductCardProviderTypeByName(createBuylistImportProductCardDTO.buylistImportProductCardProviderTypeName);
-
-        if(buylistImportProductCardProviderTypeDTO == null) {
-            throw new NotFoundException('Buylist import product card service provider type not found');
-        }
-
         let buylistProductCardDTO = await this.buylistProductCardService.getBuylistProductCardById(createBuylistImportProductCardDTO.buylistProductCardId);
-
-        if(buylistProductCardDTO == null) {
-            throw new NotFoundException('Buylist product card not found');
-        }
-
         let productLineDTO = await this.productLineService.getProductLineById(buylistProductCardDTO.productLineId);
-
-        if(productLineDTO == null) {
-            throw new NotFoundException('Product line not found');
-        }
-
 
         let buylistImportProductCardCode = await this.createBuylistImportProductCardCode(productLineDTO.productLineCode, createBuylistImportProductCardDTO.buylistImportProductCardProviderTypeName);
 
         //UPLOAD THE FILE TO S3
         let buylistImportProductCardFileURL = await this.uploadBuylistImportProductCardFile(buylistProductCardDTO.commerceAccountId, buylistImportProductCardFile, buylistImportProductCardCode, buylistImportProductCardProviderTypeDTO);
 
-        let buylistImportProductCard = this.buylistImportProductCardRepository.create({ ...createBuylistImportProductCardDTO });
+        buylistImportProductCard = this.buylistImportProductCardRepository.create({ ...createBuylistImportProductCardDTO });
         buylistImportProductCard.buylistImportProductCardCode = buylistImportProductCardCode;
         buylistImportProductCard.buylistImportProductCardStatus = 'PENDING APPROVAL';
         buylistImportProductCard.buylistImportProductCardFileURL = buylistImportProductCardFileURL;
@@ -149,11 +131,7 @@ export class BuylistImportProductCardService {
 
         let buylistImportProductCardDTO = await this.getBuylistImportProductCardById(buylistImportProductCard.buylistImportProductCardId);
 
-        if(buylistImportProductCardDTO == undefined) {
-            throw new ConflictException('Failed to create buylist import product card.');
-        }
-
-        return buylistImportProductCardCode;
+        return buylistImportProductCardDTO;
 
     }
 
@@ -212,9 +190,7 @@ export class BuylistImportProductCardService {
 
         await this.buylistImportProductCardItemService.deleteBuylistImportProductCardItemsByJobId(buylistImportProductCardDTO.buylistImportProductCardId);
 
-        await this.buylistImportProductCardRepository.delete({ 
-            buylistImportProductCardId: buylistImportProductCardId 
-        });
+        await this.buylistImportProductCardRepository.delete({ buylistImportProductCardId: buylistImportProductCardId });
 
         return buylistImportProductCardDTO;
     }
